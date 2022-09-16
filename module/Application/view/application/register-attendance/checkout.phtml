@@ -1,0 +1,78 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/application/check-in/index.js'));
+    $lableData='';
+if($type=='IN'){
+    $lableData='You are Late! Fill Up The Remarks';
+}else if($type=='OUT'){
+    $lableData='You are trying to Checkout early Please!! Fill Up the Remarks';
+}
+?>
+
+<div class='font-Size-12px'>
+
+<div class="row">
+    <div class="col-xs-6">
+        <label>Check In Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($shiftDetails)?$shiftDetails['CHECKIN_TIME']:"";  ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Check Out Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($shiftDetails)?$shiftDetails['CHECKOUT_TIME']:"";  ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Logged in  Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($attendanceDetails)?$attendanceDetails['IN_TIME']:"";  ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Current Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($shiftDetails)?$shiftDetails['CURRENT_TIME']:"";  ?>
+    </div>
+</div>
+    
+    </br>
+<div>
+    <form action="<?php echo $this->url('registerAttendance', ['action' => 'checkout']); ?>"  method="post" id="registerAttendanceForm">
+    <label><?=$lableData?></label>   
+    <div class="row">
+        <div class="col-sm-12">
+            <textarea class="width-100" rows="4" cols="30" name="remarks" id="remarks" required="required"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <input class="btn btn-primary" type="submit" value="submit">
+            <a href="<?php echo $this->url('dashboard'); ?>" class="btn btn-danger pull-right"> Cancel </a>
+        </div>
+    </div>
+    </form>
+</div>
+
+    
+</div>
+

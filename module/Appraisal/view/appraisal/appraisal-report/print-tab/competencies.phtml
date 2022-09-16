@@ -1,0 +1,64 @@
+<?php if ($assignedAppraisalDetail['COMPETENCIES_SETTING'] == 'Y') : ?>
+    <div>
+        <h6 class="appHeading">
+            COMPETENCIES AND COMMENT
+        </h6>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:5%;">S.N.</th>
+                    <th>Competencies</th>
+                    <?php if ($appCompetenciesRatingDtlNum > 0) { ?>
+                        <th>Rating</th>
+                        <th>Appraiser's Comments</th>
+                    <?php } ?>
+                </tr>
+            </thead>
+            <?php foreach ($competenciesList as $competencies): ?>
+                <tr>
+                    <td><span><?php echo $competencies['SNO']; ?></span></td>
+                    <td>
+                        <div>
+                            <textarea cols="25" rows="20" class="form-control" style="height:25px!important" disabled=""> <?php echo $competencies['TITLE']; ?></textarea>
+                        </div>
+                    </td>
+                    <?php if ($appCompetenciesRatingDtlNum > 0) : ?>
+                        <td width='10%'>
+                            <div>
+                                <select disabled='disabled'>
+                                    <option <?php echo $competencies['RATING'] == 'A' ? 'selected' : ''; ?>>A</option>
+                                    <option <?php echo $competencies['RATING'] == 'B' ? 'selected' : ''; ?>>B</option>
+                                    <option <?php echo $competencies['RATING'] == 'C' ? 'selected' : ''; ?>>C</option>
+                                </select>
+                            </div>
+                        </td>
+                        <td>
+                            <div>
+                                <textarea cols="25" rows="20" class="form-control" style="height:150px!important" disabled='disabled'><?php echo $competencies['COMMENTS'] ?></textarea>
+                            </div>
+                        </td>
+                    <?php endif; ?>
+                </tr>
+            <?php endforeach; ?>
+
+            <?php if ($appCompetenciesRatingDtlNum > 0) : ?>
+                <tr>
+                    <td colspan="2">
+                        ANNUAL RATING ON COMPETENCIES:
+                    </td>
+                    <td>
+                        <div>
+                            <select name="annualRatingCompetency" id="annualRatingCompetency" disabled='disabled'>
+                                <option <?= ($assignedAppraisalDetail['ANNUAL_RATING_COMPETENCY'] == "A") ? "selected" : "" ?>>A</option>
+                                <option <?= ($assignedAppraisalDetail['ANNUAL_RATING_COMPETENCY'] == "B") ? "selected" : "" ?>>B</option>
+                                <option <?= ($assignedAppraisalDetail['ANNUAL_RATING_COMPETENCY'] == "C") ? "selected" : "" ?>>C</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+            <?php endif; ?>
+        </table>
+        <?php print $this->partial('appraisal/layout/competency-remarks.phtml'); ?>
+    </div>
+<?php endif; ?>

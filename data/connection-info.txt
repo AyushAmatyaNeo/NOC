@@ -1,0 +1,5 @@
+
+host: 192.168.2.9:8090/neo-hris/public
+smb://192.168.2.9
+username: administrator
+password: Czechkoslovakia

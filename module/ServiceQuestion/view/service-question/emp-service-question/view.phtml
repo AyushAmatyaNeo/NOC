@@ -1,0 +1,125 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('js/service-question/emp-service-question/serviceQuestionList.js'))
+        ->appendFile($this->basePath('js/service-question/emp-service-question/print.js'));
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\empServiceQuestion')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb'); ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.pullServiceQuestionListLink = '<?php echo $this->url('empServiceQuestion', ['action' => 'pullServiceQuestionList']); ?>';
+</script>
+<div class="row margin-top-20" ng-app="hris" ng-controller="serviceQuestionList">
+    <div class="col-sm-12">
+        <script type="text/ng-template" id="serviceQuestionTree">
+            <div class="form-group serviceQuestionList" ng-style="serviceQuestion.subQuestion === true && {'margin-bottom': '0px'}">
+            {{serviceQuestion.sn}}. <span ng-bind="serviceQuestion.questionEdesc"></span><br/>
+            <div class="serviceQuestionList1"><span ng-if="serviceQuestion.subQuestion==false" ng-bind="serviceQuestion.answer"></span></div>
+            </div>
+            <div ng-repeat="serviceQuestion in serviceQuestion.subQuestionList" ng-include="'serviceQuestionTree'">
+            </div>
+        </script>
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i><?php echo $detail['SERVICE_EVENT_TYPE_NAME']; ?> FORM
+                </div>
+                <div class="actions">
+                    <a class="btn btn-success" href="<?= $this->url("empServiceQuestion", ["action" => "edit", "id" => $detail['EMP_QA_ID']]) ?>"> Edit</a>
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body font-common" id="printableArea">
+                <div class="wrapper">
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <ul id="headingList">
+                            <li>
+                                <?php if ($empDetail['COMPANY_FILE_PATH'] != null || $empDetail['COMPANY_FILE_PATH'] != "") { ?>
+                                    <img src="<?= $this->basePath() . "/uploads/" . $empDetail['COMPANY_FILE_PATH']; ?>" style="float:left;" height="50" width="50"/>
+                                <?php } ?>
+                                <h2><?= strtoupper($empDetail['COMPANY_NAME']); ?></h2></li>
+                            <li><h3><?php echo $detail['SERVICE_EVENT_TYPE_NAME']; ?> FORM</h3></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="wrapper font-common">
+                    <div class="formNo">
+                        <ul>
+                            <li>Form No: HRM-07</li>
+                        </ul>
+                    </div>
+                    <div class="dateDtl">
+                        <ul>
+                            <li>EIF No:<?= $detail['EMP_QA_ID']; ?></li>
+                            <li>Date: <?= $detail['QA_DATE']; ?></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    CONFIDENTIAL
+                </div>
+                <div class="form-group">
+                    <div class="row wrapper" style="margin-top:1.5%; margin-bottom:1.5%;">
+                        <div class="col-sm-4 div-3-name">
+                            <div class="form-group">
+                                Name:
+                                <?php echo $empDetail['FIRST_NAME'] . " " . $empDetail['MIDDLE_NAME'] . " " . $empDetail['LAST_NAME']; ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 div-3-designation">
+                            <div class="form-group">
+                                Designation:<?php echo $empDetail['DESIGNATION']; ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4 div-3-department">
+                            <div class="form-group" style="float:right;">
+                                Department:<?php echo $empDetail['DEPARTMENT']; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <form>
+                    <input type="hidden" id="empQaId" value="<?php echo $detail['EMP_QA_ID'] ?>"/>
+                    <input type="hidden" id="employeeId" value="<?php echo $detail['EMPLOYEE_ID'] ?>"/>
+                    <input type="hidden" id="serviceEventTypeId" value="<?php echo $detail['SERVICE_EVENT_TYPE_ID'] ?>"/>
+                    <div class="row">
+                        <div class="col-sm-12" ng-repeat="serviceQuestion in serviceQuestionList" ng-include="'serviceQuestionTree'">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12 wrapper" style="margin-top:4%;">
+                            Signature:...........................
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12" style="text-align:center;">
+        <a class="btn btn-success" ng-click="printDiv('printableArea');"> Print</a>
+    </div>
+</div>

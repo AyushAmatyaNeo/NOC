@@ -1,0 +1,72 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/asset/group/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'assetGroup-form');
+$form->setAttribute('action', $this->url('assetGroup', ['action' => 'add']));
+
+$groupEdesc = $form->get('assestGroupEdesc');
+$groupNdesc = $form->get('assetGroupNdesc');
+$remarks = $form->get('remarks');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->prepare();
+?>
+
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\assetGroup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+                    <div class="col-sm-4">  
+                        <div class="form-group">
+                            <?php print $this->formLabel($groupEdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($groupEdesc); ?>
+                            <?php print $this->formElementErrors()->render($groupEdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">  
+                        <div class="form-group">
+                            <?php print $this->formLabel($groupNdesc); ?>
+                            <?php print $this->formElement($groupNdesc); ?>
+                            <?php print $this->formElementErrors()->render($groupNdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">  
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

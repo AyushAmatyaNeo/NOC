@@ -1,0 +1,397 @@
+<?php
+$allowSystemAttendance = $form->get('allowSystemAttendance');
+$needApprovalForLateCheckIn = $form->get('needApprovalForLateCheckIn');
+$allowAccountLock = $form->get('allowAccountLock');
+$accountLockTryNumber = $form->get('accountLockTryNumber');
+$accountLockTrySecond = $form->get('accountLockTrySecond');
+$forcePasswordRenew = $form->get('forcePasswordRenew');
+$forcePasswordRenewDay = $form->get('forcePasswordRenewDay');
+$showAddressBook = $form->get('showAddressBook');
+$noticeType = $form->get('noticeType');
+$oldPayslipType = $form->get('oldPayslipType');
+$latePenaltyLeaveDeduction = $form->get('latePenaltyLeaveDeduction');
+$enablePrevMthLeaveReq = $form->get('enablePrevMthLeaveReq');
+$includeDayoffAsLeave = $form->get('includeDayoffAsLeave');
+$includeHolidayAsLeave = $form->get('includeHolidayAsLeave');
+$includeEmployeeCode = $form->get('includeEmployeeCode');
+$includeCompany = $form->get('includeCompany');
+$includeBranch = $form->get('includeBranch');
+$firstTimePwdRenew = $form->get('firstTimePwdRenew');
+$orderByName = $form->get('orderByName');
+$orderByPosition = $form->get('orderByPosition');
+$orderByDesignation = $form->get('orderByDesignation');
+$orderByJoinDate = $form->get('orderByJoinDate');
+$orderBySeniority = $form->get('orderBySeniority');
+$calendarView = $form->get('calendarView');
+$attAppShiftChangeable = $form->get('attAppShiftChangeable');
+$attAppTimeChangeable = $form->get('attAppTimeChangeable');
+$travelSubCycle = $form->get('travelSubCycle');
+$subLeaveReference = $form->get('subLeaveReference');
+$subLeaveMaxDays = $form->get('subLeaveMaxDays');
+$leaveEncashMaxDays = $form->get('leaveEncashMaxDays');
+$provinceWiseBranchFilter = $form->get('provinceWiseBranchFilter');
+$companyName = $form->get('companyName');
+$companyAddress = $form->get('companyAddress');
+$companyAccountNo = $form->get('companyAccountNo');
+$displayHrApproved = $form->get('displayHrApproved');
+
+$submit = $form->get('submit');
+
+$form->setAttribute('action', $this->url('system-setting', ['action' => 'index']));
+$form->prepare();
+?>
+<?php if ($this->messages): ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php endif; ?>
+<?php
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\system-setting')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-30">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-edit"></i>
+                    Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyName); ?>
+                            <?php print $this->formElement($companyName); ?>
+                            <?php print $this->formElementErrors()->render($companyName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyAddress); ?>
+                            <?php print $this->formElement($companyAddress); ?>
+                            <?php print $this->formElementErrors()->render($companyAddress, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyAccountNo); ?>
+                            <?php print $this->formElement($companyAccountNo); ?>
+                            <?php print $this->formElementErrors()->render($companyAccountNo, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($allowSystemAttendance); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowSystemAttendance); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($allowSystemAttendance, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($needApprovalForLateCheckIn); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($needApprovalForLateCheckIn); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($needApprovalForLateCheckIn, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($allowAccountLock); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowAccountLock); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($allowAccountLock, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($accountLockTryNumber); ?>
+                            <?php print $this->formElement($accountLockTryNumber); ?>
+                            <?php print $this->formElementErrors()->render($accountLockTryNumber, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($accountLockTrySecond); ?>
+                            <?php print $this->formElement($accountLockTrySecond); ?>
+                            <?php print $this->formElementErrors()->render($accountLockTrySecond, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($forcePasswordRenew); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($forcePasswordRenew); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($forcePasswordRenew, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($forcePasswordRenewDay); ?>
+                            <?php print $this->formElement($forcePasswordRenewDay); ?>
+                            <?php print $this->formElementErrors()->render($forcePasswordRenewDay, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($showAddressBook); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($showAddressBook); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($showAddressBook, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($noticeType); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($noticeType); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($noticeType, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($oldPayslipType); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($oldPayslipType); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($oldPayslipType, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($latePenaltyLeaveDeduction); ?>
+                            <?php print $this->formElement($latePenaltyLeaveDeduction); ?>
+                            <?php print $this->formElementErrors()->render($latePenaltyLeaveDeduction, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($enablePrevMthLeaveReq); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($enablePrevMthLeaveReq); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($enablePrevMthLeaveReq, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($includeDayoffAsLeave); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeDayoffAsLeave); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($includeDayoffAsLeave, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($includeHolidayAsLeave); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeHolidayAsLeave); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($includeHolidayAsLeave, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($firstTimePwdRenew); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($firstTimePwdRenew); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($includeHolidayAsLeave, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($travelSubCycle); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($travelSubCycle); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($travelSubCycle, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($subLeaveReference); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($subLeaveReference); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($subLeaveReference, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($subLeaveMaxDays); ?>
+                            <?php print $this->formElement($subLeaveMaxDays); ?>
+                            <?php print $this->formElementErrors()->render($subLeaveMaxDays, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($leaveEncashMaxDays); ?>
+                            <?php print $this->formElement($leaveEncashMaxDays); ?>
+                            <?php print $this->formElementErrors()->render($leaveEncashMaxDays, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($provinceWiseBranchFilter); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($provinceWiseBranchFilter); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($provinceWiseBranchFilter, ['class' => 'help-block error']); ?>
+                    </div>
+
+                </div>
+                    <h3 class="form-section">Report</h3>
+                <div class="row">
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($calendarView); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($calendarView); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($calendarView, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($attAppShiftChangeable); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($attAppShiftChangeable); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($attAppShiftChangeable, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($attAppTimeChangeable); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($attAppTimeChangeable); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($attAppTimeChangeable, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($includeEmployeeCode); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeEmployeeCode); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($includeEmployeeCode, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($includeCompany); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeCompany); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($includeCompany, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($includeBranch); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeBranch); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($includeBranch, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($orderByName); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($orderByName); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($orderByName, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($orderByPosition); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($orderByPosition); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($orderByPosition, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($orderByDesignation); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($orderByDesignation); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($orderByDesignation, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($orderByJoinDate); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($orderByJoinDate); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($orderByJoinDate, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($orderBySeniority); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($orderBySeniority); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($orderBySeniority, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($displayHrApproved); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($displayHrApproved); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($displayHrApproved, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    
+                </div>
+                <div class="">
+                    <?php print $this->formSubmit($submit); ?>
+                </div>
+
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

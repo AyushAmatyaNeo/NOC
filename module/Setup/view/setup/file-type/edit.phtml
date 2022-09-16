@@ -1,0 +1,61 @@
+<?php
+
+$this->headScript()->appendFile($this->basePath('js/setup/branch/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'filtType-form');
+
+$name = $form->get('name');
+$remarks = $form->get('remarks');
+
+
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$form->setAttribute('action', $this->url('fileType', ['action' => 'edit']));
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\fileType')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-edit"></i>
+                    Update File Type
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($name->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($name); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($name); ?>
+                            <?php print $this->formElementErrors()->render($name, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($remarks->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

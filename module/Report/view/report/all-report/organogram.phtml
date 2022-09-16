@@ -1,0 +1,293 @@
+<?php 
+$this->headLink()->appendStylesheet($this->basePath('css/organogram.css'));
+$this->headScript()
+        ->appendFile($this->basePath('js/html2canvas.js'))
+        ->appendFile($this->basePath('js/Report/AllReport/organogram.js'));
+?>
+<div class="portlet-body">
+    <div class = row>
+        <div class="col-sm-10">
+            <div class = "chooseOption">
+                <h3>English</h3>
+                <div class = "toggle-btn">
+                    <label class="switch" >
+                        <input type = "checkbox" id="nepaliBtn" >
+                        <span class="slider" ></span>
+                    </label>
+                </div>
+                <h3>नेपाली</h3>
+            </div>
+        </div>
+        <div class="col-sm-2 ">
+            <button id="btnDownloadImage" class="btn btn-success pull-right">Download Image</button>
+        </div>
+    </div>
+    <div id='previewImage'>
+    <?php
+        foreach($masterArray as $key=>$value){ 
+    ?>  
+
+    <div class="margin-top-10 scrollbar-horizantal" style="padding:20px;" id = "englishChart">
+        <div class = "tree">
+            <ul>
+                <li>
+                    <div class ='highestClass'>
+                        <div class = "departmentBox">
+                            <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $key] ); ?>"><?= $departmentDetailArray[$key] ?></a>
+                        </div>
+                    </div>
+                    <ul id="highClassLine">
+                        <?php foreach($value as $k1=>$v1){ ?>
+                        <li>
+                            <?php if($v1==-1){ ?>
+                            <div class = "departmentBox">
+                                <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k1] ); ?>"><?= $departmentDetailArray[$k1] ?></a>
+                            </div>
+                            <?php }else{ ?>
+                            <div class="rightBranchParent">
+                                <div class = "departmentBox">
+                                    <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k1] ); ?>"><?= $departmentDetailArray[$k1] ?></a>
+                                </div>
+                            </div>
+                            <?php if($rightSideDepartments){ ?>
+                            <div id= "rightFloat" class = "rightFloatDiv">
+                                <ul class = "verticalListParent" id="rightFloat-content">
+                                    <li>
+                                        <div class='verticalList rightBranch'>  
+                                            <ul>
+                                                <?php foreach($rightSideDepartments as $key => $value){ ?>
+                                                <li>
+                                                    <div class = "rightFloatLine">
+                                                        <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $key] ); ?>"><?= $departmentDetailArray[$key] ?></a>
+                                                    </div>
+                                                </li>
+                                                <?php } ?>
+                                            </ul> 
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <?php } ?>
+                            <ul id="highClassLine2">
+                                <?php foreach($leftSkipDepartment as $lsd){ ?>
+                                <li id='skipLevelLi'>
+                                    <div class = "departmentBox skipLevel">
+                                        <a href="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $lsd['DEPARTMENT_ID']] ); ?>"><?=$departmentDetailArray[$lsd['DEPARTMENT_ID']]?></a>
+                                    </div>
+                                </li>
+                                <?php } ?>
+                                <?php foreach($v1 as $k2=>$v2){ ?>
+                                <li>
+                                    <?php if($v2==-1){ ?>
+                                    <div class = "departmentBox">
+                                        <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k2] ); ?>"><?= $departmentDetailArray[$k2] ?></a>
+                                    </div>
+                                    <?php }else{ ?>
+                                    <div class = "departmentBox">
+                                        <a href ="<?= $this->url('workforce', ['action' => 'headOffice', 'id' => $k2]); ?>"><?= $departmentDetailArray[$k2] ?></a>
+                                    </div>
+
+                                    <ul>
+                                        <?php foreach($v2 as $k3=>$v3){ ?>
+                                        <li <?php if($v3 != -1){ ?>class = 'mannualwidth' <?php } ?>>
+                                            <?php if($v3==-1){ ?>
+                                            <div class = "departmentBox">
+                                                <a href="<?= $this->url('workforce', ['action' => 'headOffice', 'id' => $k3]); ?>"><?= $departmentDetailArray[$k3] ?></a>
+                                            </div>
+                                            <?php }else{ ?>
+                                            <span class = "twinsChild">
+                                                <?php foreach(explode(',',$k3) as $k){ ?>
+                                                <div class = "departmentBox">
+                                                    <a href ="<?= $this->url('workforce', ['action' => 'headOffice', 'id' => $k]); ?>"><?= $departmentDetailArray[$k] ?></a>
+                                                </div>
+                                                <?php } ?>
+                                            </span>
+                                            <ul class = "verticalListParent branchesMannualSize">
+                                                
+                                                <?php foreach($v3 as $k4=>$v4){ ?>
+                                                <li>
+                                                    <?php if($v4==-1){ ?>
+                                                    <div class='verticalList'>  
+                                                        <a href ="<?= $this->url('workforce', ['action' => 'branchOffice', 'id' => $k4]); ?>"><?= $branchDetailArray[$k4] ?> </a>
+                                                    </div>
+                                                    <?php }else{ ?>
+                                                    <div class='verticalList'>
+                                                        <div class = "verticleParentBox">  
+                                                            <a href ="<?= $this->url('workforce', ['action' => 'branchOffice', 'id' => $k4]); ?>"><b><?= $branchDetailArray[$k4] ?></b> </a>
+                                                        </div>
+                                                        <ul>
+                                                            <?php foreach ($v4 as $v5){ ?>
+                                                            <li>
+                                                                <div class = "verticleBox">
+                                                                    <a href ="<?= $this->url('workforce', ['action' => 'locationOffice', 'id' => $v5]); ?>"><?= $locationDetailArray[$v5] ?> </a>
+                                                                </div>
+                                                            </li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    </div>
+                                                    <?php } ?>
+                                                </li>
+                                                <?php } ?>
+                                            </ul> 
+                                            <?php } ?>
+                                        </li>
+                                        <?php } ?>
+                                    </ul>
+                                    <?php } ?>
+                                </li>
+                                <?php } ?>
+                                <?php foreach($rightSkipDepartment as $rsd){ ?>
+                                <li id='skipLevelLi'>
+                                    <div class = "departmentBox skipLevel">
+                                        <a href="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $rsd['DEPARTMENT_ID']] ); ?>"><?=$departmentDetailArray[$rsd['DEPARTMENT_ID']]?></a>
+                                    </div>
+                                </li>
+                                <?php } ?>
+                            </ul>
+                            <?php } ?>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <?php
+        }
+    ?>
+    </div>
+
+    <div id='previewImageNep'>
+    <?php
+        foreach($masterArray as $key=>$value){ 
+    ?>  
+    <div class="margin-top-10 scrollbar-horizantal" style="padding:20px;" id = "nepaliChart">
+        <div class = "tree">
+            <ul>
+                <li>
+                    <div class ='highestClass'>
+                        <div class = "departmentBox">
+                            <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $key] ); ?>"><?= $departmentNepDetailArray[$key] ?></a>
+                        </div>
+                    </div>
+                    <ul id="highClassLine">
+                        <?php foreach($value as $k1=>$v1){ ?>
+                        <li>
+                            <?php if($v1==-1){ ?>
+                            <div class = "departmentBox">
+                                <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k1] ); ?>"><?= $departmentNepDetailArray[$k1] ?></a>
+                            </div>
+                            <?php }else{ ?>
+                            <div class="rightBranchParent">
+                                <div class = "departmentBox">
+                                    <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k1] ); ?>"><?= $departmentNepDetailArray[$k1] ?></a>
+                                </div>
+                            </div>
+                            <?php if($rightSideDepartments){ ?>
+                            <div id= "rightFloat" class = "rightFloatDiv">
+                                <ul class = "verticalListParent" id="rightFloat-content">
+                                    <li>
+                                        <div class='verticalList rightBranch'>  
+                                            <ul>
+                                                <?php foreach($rightSideDepartments as $key => $value){ ?>
+                                                <li>
+                                                    <div class = "rightFloatLine">
+                                                        <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $key] ); ?>"><?= $departmentNepDetailArray[$key] ?></a>
+                                                    </div>
+                                                </li>
+                                                <?php } ?>
+                                            </ul> 
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <?php } ?>
+                            <ul id="highClassLine2">
+                                <?php foreach($leftSkipDepartment as $lsd){ ?>
+                                <li id='skipLevelLi'>
+                                    <div class = "departmentBox skipLevel">
+                                        <a href="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $lsd['DEPARTMENT_ID']] ); ?>"><?=$departmentNepDetailArray[$lsd['DEPARTMENT_ID']]?></a>
+                                    </div>
+                                </li>
+                                <?php } ?>
+                                <?php foreach($v1 as $k2=>$v2){ ?>
+                                <li>
+                                    <?php if($v2==-1){ ?>
+                                    <div class = "departmentBox">
+                                        <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k2] ); ?>"><?= $departmentNepDetailArray[$k2] ?></a>
+                                    </div>
+                                    <?php }else{ ?>
+                                    <div class = "departmentBox">
+                                        <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k2] ); ?>"><?= $departmentNepDetailArray[$k2] ?></a>
+                                    </div>
+
+                                    <ul>
+                                        <?php foreach($v2 as $k3=>$v3){ ?>
+                                        <li <?php if($v3 != -1){ ?>class = 'mannualwidth' <?php } ?>>
+                                            <?php if($v3==-1){ ?>
+                                            <div class = "departmentBox">
+                                                <a href="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k3] ); ?>"><?= $departmentNepDetailArray[$k3] ?></a>
+                                            </div>
+                                            <?php }else{ ?>
+                                            <span class = "twinsChild">
+                                                <?php foreach(explode(',',$k3) as $k){ ?>
+                                                <div class = "departmentBox">
+                                                    <a href ="<?= $this->url('workforce', ['action' => 'headOffice' , 'id' => $k] ); ?>"><?= $departmentNepDetailArray[$k] ?></a>
+                                                </div>
+                                                <?php } ?>
+                                            </span>
+                                            <ul class = "verticalListParent branchesMannualSize">
+                                                
+                                                <?php foreach($v3 as $k4=>$v4){ ?>
+                                                <li>
+                                                    <?php if($v4==-1){ ?>
+                                                    <div class='verticalList'>  
+                                                        <a href ="<?= $this->url('workforce', ['action' => 'branchOffice' , 'id' => $k4] ); ?>"><?= $branchNDetailArray[$k4] ?> </a>
+                                                    </div>
+                                                    <?php }else{ ?>
+                                                    <div class='verticalList'>
+                                                        <div class = "verticleParentBox">  
+                                                            <a href ="<?= $this->url('workforce', ['action' => 'branchOffice' , 'id' => $k4] ); ?>"><b><?= $branchNDetailArray[$k4] ?></b> </a>
+                                                        </div>
+                                                        <ul>
+                                                            <?php foreach ($v4 as $v5){ ?>
+                                                            <li>
+                                                            <div class = "verticleBox">
+                                                            <a href ="<?= $this->url('workforce', ['action' => 'locationOffice' , 'id' => $v5] ); ?>"><?= $locationNepDetailArray[$v5] ?> </a>
+                                                            </div>
+                                                            </li>
+                                                            <?php } ?>
+                                                        </ul>
+                                                    </div>
+                                                    <?php } ?>
+                                                </li>
+                                                <?php } ?>
+                                            </ul> 
+                                            <?php } ?>
+                                        </li>
+                                        <?php } ?>
+                                    </ul>
+                                    <?php } ?>
+                                </li>
+                                <?php } ?>
+                                <?php foreach($rightSkipDepartment as $rsd){ ?>
+                                <li id='skipLevelLi'>
+                                    <div class = "departmentBox skipLevel">
+                                        <a href="<?= $this->url('allreport', ['action' => 'departmentDetail', 'id1' => $rsd['DEPARTMENT_ID']]); ?>"><?=$departmentNepDetailArray[$rsd['DEPARTMENT_ID']]?></a>
+                                    </div>
+                                </li>
+                                <?php } ?>
+                            </ul>
+                            <?php } ?>
+                        </li>
+                        <?php } ?>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <?php
+        }
+    ?> 
+    </div>
+</div>

@@ -1,0 +1,63 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'));
+$this->headScript()->appendFile($this->basePath('js/Report/AllReport/reportone.js'));
+
+?>
+
+<script>
+    document.calenderType ='<?php echo $calenderType; ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\allreport')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Department Wise Monthly</span>
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                    </li>
+                    <li >
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> Export to PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                <?php print $this->formElement($fiscalYearSE); ?>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="report">
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

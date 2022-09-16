@@ -1,0 +1,393 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/search.js'));
+$this->headScript()->appendFile($this->basePath('js/LeaveManagement/LeaveSetup/addForm.js'));
+?>
+
+<?php
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'leaveSetup-form');
+
+$leaveCode = $form->get('leaveCode');
+$leaveEname = $form->get('leaveEname');
+$leaveLname = $form->get('leaveLname');
+$allowHalfday = $form->get('allowHalfday');
+$defaultDays = $form->get('defaultDays');
+$fiscalYear = $form->get('fiscalYear');
+$maxAccumulateDays = $form->get('maxAccumulateDays');
+$carryForward = $form->get('carryForward');
+$paid = $form->get('paid');
+$cashable = $form->get('cashable');
+$allowGraceLeave = $form->get('allowGraceLeave');
+$isMonthly = $form->get('isMonthly');
+$isSubstituteMandatory = $form->get('isSubstituteMandatory');
+$assignOnEmployeeSetup = $form->get('assignOnEmployeeSetup');
+$isProdataBasis = $form->get('isProdataBasis');
+$enableSubstitute = $form->get('enableSubstitute');
+$remarks = $form->get('remarks');
+$dayOffAsLeave = $form->get('dayOffAsLeave');
+$holidayAsLeave = $form->get('holidayAsLeave');
+$applyLimit = $form->get('applyLimit');
+$fiscalYear->setValueOptions($fiscalYears);
+$hrOnly = $form->get('hrOnly');
+$enableOverride = $form->get('enableOverride');
+$viewOrder =$form->get('viewOrder');
+
+$servicePeriodRequired = $form->get('servicePeriodRequired');
+$daysMatured = $form->get('daysMatured');
+$minDaysForEncash = $form->get('minDaysForEncash');
+$impactGrade = $form->get('impactGrade');
+$countAsServicePeriod = $form->get('countAsServicePeriod');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('leavesetup', ['action' => 'edit', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.searchSelectedValues =<?php echo json_encode($searchSelectedValues); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\leavesetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>UPDATE
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group  <?= empty($leaveEname->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($leaveEname); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($leaveEname); ?>
+                            <input type="hidden" id="leaveId" value="<?php echo $id; ?>"/>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($leaveEname, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($fiscalYear->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($fiscalYear); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($fiscalYear); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($fiscalYear, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($leaveCode->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($leaveCode); ?>
+                            <?php print $this->formElement($leaveCode); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($leaveCode, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($defaultDays->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($defaultDays); ?>
+                            <?php print $this->formElement($defaultDays); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($defaultDays, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($maxAccumulateDays->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($maxAccumulateDays); ?>
+                            <?php print $this->formElement($maxAccumulateDays); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($maxAccumulateDays, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($applyLimit->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($applyLimit); ?>
+                            <?php print $this->formElement($applyLimit); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($applyLimit, ['class' => 'help-block error']); ?>
+                    </div>
+
+                </div>
+                <div class="padding-5">
+                    <div class="row  bg-master-lightest">
+                        <div class="col-sm-4">
+                            <div class="form-group padding-0">
+                                <?php print $this->formLabel($paid); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($paid); ?>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($paid, ['class' => 'help-block error']); ?>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group padding-0">
+                                <?php print $this->formLabel($cashable); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($cashable); ?>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($cashable, ['class' => 'help-block error']); ?>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group padding-0">
+                                <?php print $this->formLabel($carryForward); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($carryForward); ?>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($carryForward, ['class' => 'help-block error']); ?>
+                        </div>
+
+
+
+                    </div>
+                    <div class="row bg-master-lightest">
+                        <div class=" col-sm-4 ">
+                            <div class="form-group padding-0">
+                                <?php print $this->formLabel($allowHalfday); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($allowHalfday); ?>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($allowHalfday, ['class' => 'help-block error']); ?>
+                        </div>
+                        <div class=" col-sm-4 ">
+                            <div class="form-group padding-0">
+                                <?php print $this->formLabel($allowGraceLeave); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($allowGraceLeave); ?>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($allowGraceLeave, ['class' => 'help-block error']); ?>
+                        </div>
+                        <div class=" col-sm-4 ">
+                            <div class="form-group padding-0">
+                                <?php print $this->formLabel($isMonthly); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($isMonthly); ?>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($isMonthly, ['class' => 'help-block error']); ?>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($isSubstituteMandatory); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($isSubstituteMandatory); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($isMonthly, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($assignOnEmployeeSetup); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($assignOnEmployeeSetup); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($assignOnEmployeeSetup, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($isProdataBasis); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($isProdataBasis); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($isProdataBasis, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($enableSubstitute); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($enableSubstitute); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($enableSubstitute, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($dayOffAsLeave); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($dayOffAsLeave); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($dayOffAsLeave, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($holidayAsLeave); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($holidayAsLeave); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($holidayAsLeave, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($hrOnly); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($hrOnly); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($hrOnly, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($enableOverride); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($enableOverride); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($enableOverride, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($viewOrder); ?>
+                            <?php print $this->formElement($viewOrder); ?>
+                            <?php print $this->formElementErrors()->render($viewOrder, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($servicePeriodRequired); ?>
+                            <?php print $this->formElement($servicePeriodRequired); ?>
+                            <?php print $this->formElementErrors()->render($servicePeriodRequired, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($daysMatured); ?>
+                            <?php print $this->formElement($daysMatured); ?>
+                            <?php print $this->formElementErrors()->render($daysMatured, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($minDaysForEncash); ?>
+                            <?php print $this->formElement($minDaysForEncash); ?>
+                            <?php print $this->formElementErrors()->render($minDaysForEncash, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($impactGrade); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($impactGrade); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($impactGrade, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($countAsServicePeriod); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($countAsServicePeriod); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($countAsServicePeriod, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Company</label>
+                        <select multiple class="form-control" name="company[]" id="companyId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Branch</label>
+                        <select multiple class="form-control" name="branch[]" id="branchId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Department</label>
+                        <select multiple class="form-control" name="department[]" id="departmentId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Designation</label>
+                        <select multiple class="form-control" name="designation[]" id="designationId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Position</label>
+                        <select multiple class="form-control" name="position[]" id="positionId">
+                        </select>
+                    </div>
+                </div>
+                <div class="row margin-top-10">
+                    <div class="col-sm-2">
+                        <label>Service Type</label>
+                        <select multiple class="form-control" name="serviceType[]" id="serviceTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Service Event Type</label>
+                        <select multiple class="form-control" name="serviceEventType[]" id="serviceEventTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee Type</label>
+                        <select multiple class="form-control" name="employeeType[]" id="employeeTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee</label>
+                        <select multiple class="form-control" name="employee[]" id="employeeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Gender</label>
+                        <select multiple class="form-control" name="gender[]" id="genderId">
+                        </select>
+                    </div>
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+
+            </div>
+        </div>
+
+    </div>
+</div>

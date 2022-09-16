@@ -1,0 +1,273 @@
+<?php
+//echo  '<pre>';
+//print_r($detail);
+//die();
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+
+//$this->headScript()->appendFile($this->basePath('js/LeaveManagement/LeaveRequest/leaveStatus.js'));
+
+$status=$detail['BILL_STATUS'];
+
+$form->setAttribute('role', 'form');
+
+$requestedAmt = $form->get('requestedAmt');
+$approvedAmt = $form->get('approvedAmt');
+$approvedAmt->setValue($detail['APPROVED_AMT_DISPALY']);
+$approvedAmt->setAttribute('max', $detail['REQUESTED_AMT']);
+//$approvedAmt->setAttrib('max',$detail['REQUESTED_AMT']);
+$remarks = $form->get('remarks');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Approve');
+$submit->setAttribute('id', 'approve');
+
+$form->setAttribute('action', $this->url('medicalEntry', ['action' => 'view', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\medicalVerify')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb'); ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>leave Request Detail
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="border-bottom margin-bottom-10">
+                    <div class="form-group">
+                        <div class="row div-font-11">
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            <b>Transcation NO </b> 
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['MEDICAL_ID']; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            <b>Employee Name </b> 
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php
+                                            If ($detail['EMPLOYEE_CODE'] != '') {
+                                                echo $detail['EMPLOYEE_CODE'] . ' - ';
+                                            }
+                                            ?>
+                                            <?php echo $detail['FULL_NAME']; ?>
+                                        </td>
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td>
+                                            <b> CLAIM OF </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['CLAIM_OF_NAME']; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            <b>  Transaction Date </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['TRANSACTION_DT']; ?>
+                                        </td>
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td>
+                                            <b>  Department </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['DEPARTMENT_NAME']; ?>
+                                        </td>
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td>
+                                            <b>   Dependent Name </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['PERSON_NAME']; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            <b> Age </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['AGE']; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td>
+                                            <b>   Functional Type </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['FUNCTIONAL_TYPE_EDESC']; ?>
+                                        </td>
+                                    </tr>
+
+
+                                    <tr height="30" id="availableDaysText">
+                                        <td>
+                                            <b>  Relation </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['RELATION_NAME']; ?>
+                                        </td>
+                                    </tr>
+
+                                    <tr height="30" id="availableDaysText">
+                                        <td>
+                                            <b>  Operation </b>
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $detail['OPERATION_FLAG_NAME']; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                        </div>
+
+
+                        <!--bill table start-->
+                        <div class="row margin-top-20">
+                            <div class="col-sm-6">
+                                <table class="table">
+                                    <tr>
+                                        <th>Bill No</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                    </tr>
+                                    <?php foreach ($billDetail as $bill) { ?>
+                                        <tr>
+                                            <td><?= $bill['BILL_NO'] ?></td>
+                                            <td><?= $bill['BILL_DATE'] ?></td>
+                                            <td><?= $bill['BILL_AMT'] ?></td>
+                                        </tr>
+                                    <?php } ?>
+
+                                </table>
+
+                            </div>
+                        </div>
+
+                        <!--bill table end-->
+
+
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <!--<div class="">-->
+                                <?php print $this->formLabel($requestedAmt); ?>
+                                <?php print $this->formElement($requestedAmt); ?>
+                                <?php print $this->formElementErrors()->render($requestedAmt, ['class' => 'help-block']); ?>
+                                <!--</div>-->
+                            </div>
+
+                            <div class="col-sm-4">
+                                <!--<div class="">-->
+                                <?php print $this->formLabel($approvedAmt); ?>
+                                <?php print $this->formElement($approvedAmt); ?>
+                                <?php print $this->formElementErrors()->render($approvedAmt, ['class' => 'help-block']); ?>
+                                <!--</div>-->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <!--<div class="">-->
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                            <!--</div>-->
+                        </div>
+
+                    </div>
+
+
+
+                </div>
+
+
+                <div class="form-group">
+                    <?php if ($status == 'RQ') { ?>
+                        <input type="submit" name="submit" class="btn btn-success pull-right" value="Cancel">
+                    <?php } ?>
+                </div>
+
+
+
+
+
+            </div>
+
+
+        </div>
+    </div>
+</div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>

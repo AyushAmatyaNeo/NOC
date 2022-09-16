@@ -1,0 +1,135 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+    
+$this->headScript()
+    ->appendFile($this->basePath('js/dartachalani/offices/index.js'));
+
+?>
+
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+
+    document.editLink = '<?= $this->url("offices", ["action" => "edit"]) ?>';
+    document.deleteLink = '<?= $this->url("offices", ["action" => "delete"]) ?>';
+    document.getSearchResults = '<?= $this->url("offices", ["action" => "getSearch"]) ?>';
+</script>
+
+
+
+
+
+<div class="page-bar">
+<?= $this->navigation('Zend\Navigation\shiftassign')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+
+?>
+
+
+
+
+
+
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-paper-plane font-green-haze"></i>
+                <span class="caption-subject bold font-green-haze uppercase"> Search</span>
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+            <a href="<?= $this->url('offices', ['action' => 'add']) ?>" class="btn default btn-sm">
+                        <i class="fa fa-plus-square icon-black"></i>
+                        New 
+                    </a>
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id ="export" class="hris-export-to-excel" hris-export-to-excel-target="branchTable">
+                                <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                        </li>
+                        <li >
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> 
+                                Export to PDF 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-4">
+                    <label>Office Code</label>
+                    <input type="text" class="form-control" id="officeCode" name="officeCode">
+                </div>
+                <div class="col-sm-4">
+                    <label>Office Name</label>
+                    <!-- <input type="text" class="form-control" id="officeEDESC" name="officeEDESC"> -->
+                    <select class="form-control" name="officeEDESC" id="officeEDESC">
+                    <?php  foreach($officeList as $key => $value) {  ?>
+                        <option value='<?=$value?>'><?=$value?></option>
+                    <?php } ?> 
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button id="reset" class="btn default btn-sm pull-right hris-reset-btn" style="margin-top:15px;">
+                        Reset
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                    <button  id="search" class="btn btn-default btn-sm pull-right" style="margin-top:15px;">
+                        Search
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+                <!-- <div class="col-sm-2">
+                    <label>Office Nep. Desc.</label>
+                    <input type="text" class="form-control" id="officeNDESC" name="officeNDESC">
+                </div> -->
+            </div>
+            <!-- <div class="row margin-top-10">
+
+                
+            </div> -->
+        </div>
+
+    </div>    
+
+    <div class="margin-top-20">
+        <div id="officesTable">
+        </div>
+    </div>
+    
+</div>

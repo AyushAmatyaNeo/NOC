@@ -1,0 +1,139 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/position/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'position-form');
+
+$positionCode = $form->get('positionCode');
+$positionName = $form->get('positionName');
+$remarks = $form->get('remarks');
+$roles = $form->get('roles');
+
+$companyId = $form->get('companyId');
+$companyId->setValueOptions($companies);
+
+$levelNo = $form->get('levelNo');
+
+$wohFlag = $form->get('wohFlag');
+
+$shiftAllowance = $form->get('shiftAllowance');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('position', ['action' => 'edit', 'id' => $id]));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+
+$form->prepare();
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Position')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($levelNo->getMessages()) ? "" : "has-error" ?>" >
+                            <?php print $this->formLabel($levelNo); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($levelNo); ?>
+                            <?php print $this->formElementErrors()->render($levelNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($positionCode); ?>
+                            <?php print $this->formElement($positionCode); ?>
+                            <?php print $this->formElementErrors()->render($positionCode, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($positionName->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($positionName); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($positionName); ?>
+                            <?php print $this->formElementErrors()->render($positionName, ['class' => 'help-block']); ?>
+                            <input type="hidden" id="positionId" value="<?php echo $id; ?>"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyId); ?>
+                            <?php print $this->formElement($companyId); ?>
+                            <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($wohFlag->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($wohFlag); ?>
+                            <?php print $this->formElement($wohFlag); ?>
+                            <?php print $this->formElementErrors()->render($wohFlag, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group padding-0 ">
+                            <?php print $this->formLabel($shiftAllowance); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($shiftAllowance); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($shiftAllowance, ['class' => 'help-block error']); ?>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($remarks->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($roles->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($roles); ?>
+                            <?php print $this->formElement($roles); ?>
+                            <?php print $this->formElementErrors()->render($roles, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

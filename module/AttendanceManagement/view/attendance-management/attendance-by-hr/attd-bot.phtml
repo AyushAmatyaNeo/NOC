@@ -1,0 +1,242 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('js/search.js'))
+    ->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'))
+    ->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'))
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('js/AttendanceManagement/by-hr/attd-bot.js'));
+
+?>
+
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.picUrl = '<?= $this->basePath('img/nobody_m.original.jpg'); ?>';
+    document.pullAttendanceWS = '<?php echo $this->url('attendancebyhr', ['action' => 'pullAttendanceBot']); ?>';
+    document.bulkAttendanceWS = '<?php echo $this->url('attendancebyhr', ['action' => 'bulkAttendanceWS']); ?>';
+    document.pullInOutTimeLink = '<?php echo $this->url('attendancebyhr', ['action' => 'pullInOutTime']); ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+    document.allowShiftChange ='<?php echo $allowShiftChange; ?>';
+    document.allowTimeChange ='<?php echo $allowTimeChange; ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\attendancebyhr')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+        </div>
+        <div class="tools">
+            <a href="" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <?php if ($acl['ALLOW_ADD'] == 'Y'): ?>
+                <a href="<?= $this->url('attendancebyhr', ['action' => 'add']) ?>" class="btn default btn-sm">
+                    <i class="fa fa-plus-square icon-black"></i> New </a>
+            <?php endif; ?>
+
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> 
+                            Export to Excel 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF 
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Company</label>
+                <select multiple class="form-control" name="company" id="companyId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Branch</label>
+                <select multiple class="form-control" name="branchId" id="branchId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Department</label>
+                <select multiple class="form-control" name="department" id="departmentId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Designation</label>
+                <select multiple class="form-control" name="designation" id="designationId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Grade</label>
+                <select multiple class="form-control" name="position" id="positionId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Service Type</label>
+                <select multiple class="form-control" name="serviceType" id="serviceTypeId">
+                </select>
+            </div>
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <label>Service Event Type</label>
+                <select multiple class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Employee Type</label>
+                <select multiple class="form-control" name="employeeType" id="employeeTypeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Gender</label>
+                <select multiple class="form-control" name="gender" id="genderId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Functional Type</label>
+                <select multiple class="form-control" name="functionalType" id="functionalTypeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Employee</label>
+                <select multiple class="form-control" name="employee" id="employeeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <?php print $this->formLabel($status); ?>
+                <?php print $this->formElement($status); ?>
+            </div> 
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>From Date(AD)</label>
+                    <input type="text" id="fromDate" name="fromDate"  class="form-control" placeholder="From Date"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>From Date(BS)</label>
+                    <input type="text" id="nepaliFromDate" name="nepaliFromDate" class="form-control" placeholder="From Date Nepali"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>To Date(AD)</label>
+                    <input type="text" id="toDate" name="toDate"  class="form-control" placeholder="To Date"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>To Date(BS)</label>
+                    <input type="text" id="nepaliToDate" name="nepaliToDate" class="form-control" placeholder="To Date Nepali"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <?php print $this->formLabel($presentStatus); ?>
+                <?php print $this->formElement($presentStatus); ?>
+            </div> 
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-4">
+                <label><input id="impact_other_days" type="checkbox">Impact Other Days</label>
+            </div>
+            <div class="col-sm-offset-4 col-sm-4">
+                <button id="reset" class="btn default btn-sm pull-right">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button id="search" class="btn btn-default btn-sm pull-right">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div> 
+  
+
+<div id="table">
+</div>
+<div style="display: none;" class="row margin-top-20" id="acceptRejectDiv" >
+    <div class="col-sm-2 ">
+        <button id="A" class="btn btn-danger btnApproveReject">Absent</button>
+    </div>
+    <div class="col-sm-2 manualShift">
+        <label>Shift</label>
+        <select id="shiftId" name="shiftId">
+        <option value="0" selected="selected">---</option>
+        <?php foreach($shiftList as $shift){ ?>
+            <option value="<?=$shift['SHIFT_ID']?>"><?=$shift['SHIFT_ENAME']?></option>
+        <?php } ?>
+        </select>
+    </div>
+
+    <div class="col-sm-3 manualTime">
+        <div class="form-group ">
+            <label for="inTime">In Time</label>                            
+            <!--<span class="required" aria-required="true">*</span>-->
+            <div class="input-group dropdown-select">
+                <input type="text" name="inTime" id="inTime" data-format="h&#x3A;mm&#x20;a" data-template="hh&#x20;&#x3A;&#x20;mm&#x20;A" class="form-control" value="">     
+            </div>
+        </div>
+    </div>
+
+    <div class="col-sm-3 manualTime">
+        <div class="form-group ">
+            <label for="outTime">Out Time</label>                            
+            <div class="input-group dropdown-select">
+                <input type="text" name="outTime" id="outTime" data-format="h&#x3A;mm&#x20;a" data-template="hh&#x20;&#x3A;&#x20;mm&#x20;A" class="form-control" value="">    
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- <div class="col-sm-2 col-sm-offset-8"> -->
+    <div class="col-sm-2 pull-right">
+        <button id="P" class="btn btn-info btnApproveReject pull-right">Present</button>
+    </div>
+</div>

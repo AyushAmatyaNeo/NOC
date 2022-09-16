@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>NOC-HRIS</title>
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link href="<?= $this->basePath('assets/global/plugins/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet"
+              type="text/css"/>
+	<!-- <link rel="stylesheet" href="assets/css/main.css"> -->
+	<link rel="icon" type="image/gif" sizes="32x32" href="img/favicon-32.png" >
+	<link rel="stylesheet" href="css/login-hris.css">
+</head>
+<body>
+
+	<main class="main-login-hris  sec-padd bg-light">
+		<section class="login-sec sec-padd">
+			<div class="container">
+				<div class="panel-body">
+					<div class="row">
+						<div class="col-lg-4">
+							<div class="noc-logo-sec">
+								<img src="<?= $this->basePath('img/noc-login1.png') ?>" class="img-fluid">
+							</div>
+						</div>
+						<div class="col-lg-6 offset-lg-0 col-md-8 offset-md-2">
+							<img src="<?= $this->basePath('img/noc-hris-logo.png') ?>" class="img-fluid noc-hris-logo">
+							<div class="panel panel-default">
+								
+								<?php
+								print $this->content;
+								?>
+							</div>
+						</div>
+					</div>
+				</div>
+				
+			</div>
+		</section>
+	</main>
+	
+	
+
+
+        <?php
+        print $this->headScript()
+                        ->prependFile($this->basePath('assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/jquery.blockui.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/js.cookie.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/bootstrap/js/bootstrap.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/jquery.min.js'));
+        ?>
+    </body>
+
+</html>

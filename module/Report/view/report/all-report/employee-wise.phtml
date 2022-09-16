@@ -1,0 +1,108 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'));
+$this->headScript()->appendFile($this->basePath('js/Report/AllReport/reportfour.js'));
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<style>
+abbr[title] {
+  border-bottom: none !important;
+  cursor: inherit !important;
+  text-decoration: none !important;
+}
+</style>
+
+<script>
+     document.getFiscalYearMonthLink = '<?php echo $this->url('allreport', ['action' => 'getFiscalYearMonth']); ?>';
+    document.wsEmployeeWiseDailyReport = '<?php echo $this->url('allreport', ['action' => 'employeeWiseDailyReport']); ?>';
+//    document.comBraDepList =<?php // echo json_encode($comBraDepList); ?>;
+    document.employeeList =<?php echo json_encode($employeeList); ?>;
+    document.preference =<?php echo json_encode($preference) ?>;
+//    document.employeeId =<?php // echo $employeeId; ?>;
+</script>
+
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\allreport')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Employee Monthly </span>
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                    </li>
+                    <li >
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> Export to PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    
+    <div class="portlet-body">
+        <div class="row">
+
+
+            <div class="col-sm-3 bottomgap">
+                <select id="employeeList" class="">
+
+                </select> 
+            </div>
+            
+            <div class="col-sm-3">
+    <?php print $this->formElement($fiscalYearSE); ?>
+<!--                <select class="form-control"  id="fiscalYearId" >
+                </select>-->
+            </div>
+            
+            <div class="col-sm-offset-3 col-sm-3 bottomgap">
+                <button id="generateReport" class="btn btn-block btn-customized">
+                    Generate Report
+                </button>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="reportTable" class="kendo-report">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+</div>

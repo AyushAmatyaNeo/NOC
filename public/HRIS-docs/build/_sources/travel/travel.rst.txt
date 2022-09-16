@@ -1,0 +1,12 @@
+Travel 
+*********
+
+Travel advance and settlement management System provides functionality that includes travel records, advance requested and final cash settlement of the employees. Employees are provided with travel request feature under self-service which allow them to apply for travel and request for advance at the same time. After the approval of travel advance request, employees are asked to send their travel expense for approval. And its entire debit, credit balance is maintained in Synergy table.
+
+.. toctree::
+   :maxdepth: 3
+
+   add
+   view
+   applying_from_hr
+   Travel_balance_and_Synergy_integration

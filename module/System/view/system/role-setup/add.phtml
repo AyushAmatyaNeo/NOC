@@ -1,0 +1,180 @@
+
+<?php
+$this->headScript()->appendFile($this->basePath('js/system/role-setup/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'rolesetup-form');
+
+$roleName = $form->get('roleName');
+$control = $form->get('control');
+$allowAdd = $form->get('allowAdd');
+$allowUpdate = $form->get('allowUpdate');
+$allowDelete = $form->get('allowDelete');
+$remarks = $form->get('remarks');
+$selectOptions = $form->get('selectOptions');
+$selectOptionsC = $form->get('selectOptionsC');
+$selectOptionsDS = $form->get('selectOptionsDS');
+$selectOptionsDP = $form->get('selectOptionsDP');
+$selectOptionsB = $form->get('selectOptionsB');
+$selectOptionsP = $form->get('selectOptionsP');
+$selectOptionsL = $form->get('selectOptionsL');
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$hrApprove = $form->get('hrApprove');
+$hrCancel = $form->get('hrCancel');
+$checker = $form->get('checker');
+$maker = $form->get('maker');
+
+$form->setAttribute('action', $this->url('rolesetup', ['action' => 'add']));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+$form->prepare();
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.controls = [];
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\rolesetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group<?= empty($roleName->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($roleName); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($roleName); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($roleName, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                            <?php print $this->formLabel($control); ?>
+                            <div class="form-group">
+                            <?php print $this->formElement($control); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($control, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <select id="controlOptionsSelect"><option value="">----Select One------</option></select>
+                        <div class="form-group selectOptions">
+                            <?php print $this->formElement($selectOptions); ?>
+                        </div>
+                        <div class="form-group selectOptionsC">
+                            <?php print $this->formElement($selectOptionsC); ?>
+                        </div>
+                        <div class="form-group selectOptionsDP">
+                            <?php print $this->formElement($selectOptionsDP); ?>
+                        </div>
+                        <div class="form-group selectOptionsDS">
+                            <?php print $this->formElement($selectOptionsDS); ?>
+                        </div>
+                        <div class="form-group selectOptionsB">
+                            <?php print $this->formElement($selectOptionsB); ?>
+                        </div>
+                        <div class="form-group selectOptionsP">
+                            <?php print $this->formElement($selectOptionsP); ?>
+                        </div>
+                        <div class="form-group selectOptionsL">
+                            <?php print $this->formElement($selectOptionsL); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($allowAdd); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowAdd); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($allowAdd, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($allowUpdate); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowUpdate); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($allowUpdate, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($allowDelete); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowDelete); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($allowDelete, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($hrApprove); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($hrApprove); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($hrApprove, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($hrCancel); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($hrCancel); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($hrCancel, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($checker); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($checker); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($checker, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($maker); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($maker); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($maker, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

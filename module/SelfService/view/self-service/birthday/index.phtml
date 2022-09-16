@@ -1,0 +1,89 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('css/dashboard.employee.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jquery_lazyload-master/jquery.lazyload.min.js'))
+        ->appendFile($this->basePath('js/SelfService/birthday/index.js'));
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\birthday')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="portlet light portlet-fit bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class=" icon-layers font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Today</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="mt-element-card mt-element-overlay">
+            <div class="row">
+                <?php
+                if (isset($employeesBirthday['TODAY'])) {
+                    foreach ($employeesBirthday['TODAY'] as $todayBirthday) :
+                        ?>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="mt-card-item">
+                                <div class="mt-card-avatar mt-overlay-1">
+                                    <img src="<?php print $todayBirthday['FILE_PATH'] ? $this->basePath('uploads/' . $todayBirthday['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>">
+                                    <div class="mt-overlay">
+                                        <ul class="mt-info">
+                                            <li>
+                                                <a class="btn default btn-outline" href="<?php echo $this->url("birthday", ["action" => "wish", "id" => $todayBirthday['EMPLOYEE_ID']]) ?>">
+                                                    Make a wish
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="mt-card-content">
+                                    <h3 class="mt-card-name"><?php print $todayBirthday['FULL_NAME']; ?></h3>
+                                    <p class="mt-card-desc font-grey-mint"><?php print $todayBirthday['DESIGNATION_TITLE']; ?></p>
+
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    endforeach;
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet light portlet-fit bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class=" icon-layers font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Upcoming</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="mt-element-card mt-element-overlay">
+            <div class="row">
+                <?php
+                if (isset($employeesBirthday['UPCOMING'])) {
+                    foreach ($employeesBirthday['UPCOMING'] as $upcomingBirthday) :
+                        ?>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+                            <div class="mt-card-item">
+                                <div class="mt-card-avatar mt-overlay-1">
+                                    <img src="<?php print $upcomingBirthday['FILE_PATH'] ? $this->basePath('uploads/' . $upcomingBirthday['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>">
+                                </div>
+                                <div class="mt-card-content">
+                                    <h3 class="mt-card-name"><?php print $upcomingBirthday['FULL_NAME']; ?></h3>
+                                    <p class="mt-card-desc font-grey-mint"><?php print $upcomingBirthday['DESIGNATION_TITLE']; ?></p>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    endforeach;
+                }
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

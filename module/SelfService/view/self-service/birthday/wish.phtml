@@ -1,0 +1,124 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('css/dashboard.employee.css'));
+
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('class', 'birthday-form');
+
+$message = $form->get('message');
+$message->setAttributes(['required' => 'true']);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('birthday', ['action' => 'wish', 'id' => $id]));
+
+
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\birthday')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="portlet light portlet-fit bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class=" icon-layers font-green"></i>
+            <span class="caption-subject font-green bold uppercase">Birthday Employee</span>
+        </div>
+    </div>
+    <div class="portlet-body portlet-body-birhday">
+        <div class="mt-element-card mt-element-overlay">
+            <div class="row">
+                <div class=" col-sm-3 col-sm-offset-4">
+                    <div class="mt-card-item margin-top-10 margin-bottom-10">
+                        <div class="mt-card-avatar mt-overlay-1">
+                            <img src="<?php print $brithdayEmpDtl['FILE_PATH'] ? $this->basePath('uploads/' . $brithdayEmpDtl['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>">
+                        </div>
+                        <div class="mt-card-content font-green">
+                            <h3 class="mt-card-name"><?php echo $brithdayEmpDtl['FULL_NAME']; ?></h3>
+                            <p class="mt-card-desc"><?php print $brithdayEmpDtl['DESIGNATION_TITLE']; ?></p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<div class="portlet light portlet-fit bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-microphone font-green"></i>
+            <span class="caption-subject bold font-green uppercase">Wishes</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="timeline">
+            <?php if ($showMessageField): ?>
+                <div class="timeline-item">
+                    <div class="timeline-badge">
+                        <img class="timeline-badge-userpic" src="<?php print $wishEmpDetail['FILE_PATH'] ? $this->basePath('uploads/' . $wishEmpDetail['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>"> </div>
+                    <div class="timeline-body">
+                        <div class="timeline-body-arrow"> </div>
+                        <div class="timeline-body-head">
+                            <div class="timeline-body-head-caption">
+                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?= $wishEmpDetail['FULL_NAME'] ?></a>
+                            </div>
+                        </div>
+
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+
+                <div class=" row">
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($message->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($message); ?>
+                            <?php print $this->formElement($message); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($message, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+
+                <div class="">
+                    <?php
+                    print $this->formSubmit($submit);
+                    print $this->form()->closeTag();
+                    ?>
+                </div>
+
+                        <!-- snippet HERE -->
+                    </div>
+                </div>
+
+            <?php endif; ?>
+            <?php foreach ($birthdayMessage as $data): ?>
+                <div class="timeline-item">
+                    <div class="timeline-badge">
+                        <img class="timeline-badge-userpic" src="<?php print $data['FILE_PATH'] ? $this->basePath('uploads/' . $data['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>"> </div>
+                    <div class="timeline-body">
+                        <div class="timeline-body-arrow"> </div>
+                        <div class="timeline-body-head">
+                            <div class="timeline-body-head-caption">
+                                <a href="javascript:;" class="timeline-body-title font-blue-madison"><?= $data['FROM_EMPLOYEE_NAME'] ?></a>
+                                <span class="timeline-body-time font-grey-cascade">Wished at <?php print $data['WISH_DATE']; ?></span>
+                            </div>
+                        </div>
+                        <div class="timeline-body-content">
+                            <span class="font-grey-cascade">
+                                <?= $data['MESSAGE'] ?>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>

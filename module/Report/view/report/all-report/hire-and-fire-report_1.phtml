@@ -1,0 +1,447 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/Report/AllReport/hireReport.js'));
+?>
+<script>
+    document.ids =<?php echo json_encode(["monthsNepali" => "", "fromDate" => "", "nepaliFromDate" => "", "toDate" => "", "nepaliToDate" => ""]) ?>;
+    document.getHireFireReportWS = '<?= $this->url("allreport", ["action" => "getHireFireReport"]) ?>';
+</script>
+
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\allreport')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+<div class="portlet light bg-inverse">
+
+    <div class="row margin-top-30">
+        <div class="col-sm-4" >
+
+            <lable>months</lable>
+            <select name="months" multiple id="monthsNepali">
+                <?php foreach ($nepaliMonth as $data) { ?>
+                    <option  value="<?php echo $data['FROM_DATE'] . ',' . $data['TO_DATE'] ?>"><?= $data['MONTH_NAME'] ?></option>
+                <?php }
+                ?>
+            </select>
+        </div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-sm-6">
+            <table id="dateList" class="table">
+
+            </table>
+        </div>
+    </div>
+
+    <div class="row margin-top-10">
+        <div class="col-sm-2">
+            <div class="form-group">
+                <input type="text" id="fromDate" name="fromDate"  class="form-control reset-field" placeholder="From Date"/>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <input type="text" id="nepaliFromDate" name="nepaliFromDate" class="form-control reset-field" placeholder="From Date Nepali"/>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <input type="text" id="toDate" name="toDate"  class="form-control reset-field" placeholder="To Date"/>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div class="form-group">
+                <input type="text" id="nepaliToDate" name="nepaliToDate" class="form-control reset-field" placeholder="To Date Nepali"/>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
+                Reset
+                <i class="fa fa-refresh"></i>
+            </button>
+            <button  id="search" class="btn btn-default btn-sm pull-right">
+                Search
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </div>
+
+</div>
+
+
+<div class ="infomation-data">
+    <div class="databox"> 
+        <div class="month"><h3>Shrawan</h3></div>
+        <h4 class="title">Hire - 2 </h4>  
+        <div class="infobox">        
+            <label class="name fontbold">
+                Name 
+            </label>            
+            <label class="date fontbold">
+                Join Date
+            </label>           
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+
+
+
+        </div>
+
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+        <h4 class="title">Exit- 2 </h4>
+        <div class="infobox">
+
+            <label class="name fontbold">
+                Name 
+            </label>
+
+            <label class="date fontbold">
+                Join Date
+            </label>
+
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+
+
+    </div>
+
+
+    <div class="changes">
+        <div class="hire-change">
+            Hire :  <span>5%</span>
+        </div>
+
+
+
+        <div class="exit-change">
+            Exit: <span>5%</span>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="databox"> 
+        <div class="month"><h3>Shrawan</h3></div>
+        <h4 class="title">Hire - 2 </h4>  
+        <div class="infobox">        
+            <label class="name fontbold">
+                Name 
+            </label>            
+            <label class="date fontbold">
+                Join Date
+            </label>           
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+
+
+
+        </div>
+
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+        <h4 class="title">Exit- 2 </h4>
+        <div class="infobox">
+
+            <label class="name fontbold">
+                Name 
+            </label>
+
+            <label class="date fontbold">
+                Join Date
+            </label>
+
+        </div>
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+
+
+    </div>
+
+
+    <div class="changes">
+        <div class="hire-change">
+            Hire :  <span>5%</span>
+        </div>
+
+
+
+        <div class="exit-change">
+            Exit: <span>5%</span>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="databox"> 
+        <div class="month"><h3>Shrawan</h3></div>
+        <h4 class="title">Hire - 2 </h4>  
+        <div class="infobox">        
+            <label class="name fontbold">
+                Name 
+            </label>            
+            <label class="date fontbold">
+                Join Date
+            </label>           
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+
+
+
+        </div>
+
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+        <h4 class="title">Exit- 2 </h4>
+        <div class="infobox">
+
+            <label class="name fontbold">
+                Name 
+            </label>
+
+            <label class="date fontbold">
+                Join Date
+            </label>
+
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+    <div class="changes">
+        <div class="hire-change">
+            Hire :  <span>5%</span>
+        </div>
+
+
+
+        <div class="exit-change">
+            Exit: <span>5%</span>
+        </div>
+
+
+
+
+    </div>
+
+    <div class="databox"> 
+        <div class="month"><h3>Shrawan</h3></div>
+        <h4 class="title">Hire - 2 </h4>  
+        <div class="infobox">        
+            <label class="name fontbold">
+                Name 
+            </label>            
+            <label class="date fontbold">
+                Join Date
+            </label>           
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+
+
+
+        </div>
+
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+        <h4 class="title">Exit- 2 </h4>
+        <div class="infobox">
+
+            <label class="name fontbold">
+                Name 
+            </label>
+
+            <label class="date fontbold">
+                Join Date
+            </label>
+
+        </div>
+
+
+
+        <div class="infodata">
+
+            <label class="name">
+                Prabin Maharjan
+            </label>
+
+            <label class="date">
+                2017/12/05
+            </label>
+
+        </div>
+
+
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+
+</div>
+
+

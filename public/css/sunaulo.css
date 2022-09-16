@@ -1,0 +1,19 @@
+<!-- logo start -->
+.logo img
+{
+	max-width:100% !important;
+}
+ .logo-default {
+    margin: 4px 0 0 !important;
+    max-width: 90%;
+	height:40px;
+} 
+
+.logo-default,.page-logo img {
+    margin: 4px 0 0 !important;
+    max-width: 90%;
+    max-height:40px !important;
+    height:40px !important;
+ 
+}
+<!-- logo end -->

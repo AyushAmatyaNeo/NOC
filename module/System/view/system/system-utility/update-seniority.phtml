@@ -1,0 +1,49 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('js/advance/advance-setup/index.js'));
+
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+
+<div class="page-bar">
+<?= $this->navigation('Zend\Navigation\system-utility')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-30">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-edit"></i>
+                    Update Seniority
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <form method="post" action="">
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-5 col-sm-offset-5 col-xs-offset-5">
+                            <input type="submit" class="btn btn-primary" value="UPDATE">  
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+

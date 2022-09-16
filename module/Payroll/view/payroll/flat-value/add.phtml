@@ -1,0 +1,86 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/Payroll/FlatValue/addEdit.js'));
+?>
+<?php
+$flatCode = $form->get('flatCode');
+$flatEdesc = $form->get('flatEdesc');
+$flatLdesc = $form->get('flatLdesc');
+$assignType = $form->get('assignType');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+$form->setAttribute('action', $this->url('flatValue', ['action' => 'add']));
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\flatValue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($flatCode); ?>
+                            <?php print $this->formElement($flatCode); ?>
+                            <?php print $this->formElementErrors()->render($flatCode, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($flatEdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($flatEdesc); ?>
+                            <?php print $this->formElementErrors()->render($flatEdesc, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group ">
+                            <?php print $this->formLabel($flatLdesc); ?>
+                            <?php print $this->formElement($flatLdesc); ?>
+                            <?php print $this->formElementErrors()->render($flatLdesc, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($assignType); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($assignType); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($assignType, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,141 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/Payroll/VarianceSetup/addEdit.js'));
+?>
+<?php
+$varianceName = $form->get('varianceName');
+$payId = $form->get('payId');
+$showDefault = $form->get('showDefault');
+$showDifference = $form->get('showDifference');
+$isSum = $form->get('isSum');
+$variableType = $form->get('variableType');
+$variableType->setValueOptions($variableTypeList);
+$vHeads = $form->get('vHeads');
+$vHeads->setValueOptions($vHeadsList);
+$orderNo = $form->get('orderNo');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+$form->setAttribute('action', $this->url('varianceSetup', ['action' => 'add']));
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\varianceSetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<script>
+    document.payHeads =<?= json_encode($payHeads); ?>;
+</script>
+
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($varianceName); ?>
+                            <?php print $this->formElement($varianceName); ?>
+                            <?php print $this->formElementErrors()->render($varianceName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($payId); ?>
+                            <?php print $this->formElementErrors()->render($payId, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($showDefault); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($showDefault); ?>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+
+
+                    <div class="col-sm-4 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($showDifference); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($showDifference); ?>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="col-sm-4 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($variableType); ?>
+                            <?php print $this->formElement($variableType); ?>
+                            <?php print $this->formElementErrors()->render($variableType, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($orderNo); ?>
+                            <?php print $this->formElement($orderNo); ?>
+                            <?php print $this->formElementErrors()->render($orderNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($isSum); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($isSum); ?>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                    <div class="col-sm-4 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($vHeads); ?>
+                            <?php print $this->formElement($vHeads); ?>
+                            <?php print $this->formElementErrors()->render($vHeads, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+

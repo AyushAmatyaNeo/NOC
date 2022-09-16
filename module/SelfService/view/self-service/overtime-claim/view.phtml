@@ -1,0 +1,184 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'));
+$this->headScript()->appendFile($this->basePath('js/SelfService/overtime-claim/view.js'));
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\overtimeClaim')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<script>
+    document.urlOvertime = '<?= $this->url("overtimeRequest", ["action" => "index"]) ?>';
+    document.id = <?=$id?>;
+    document.subDetails = <?php echo json_encode($subDetails) ?>;
+</script>
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="excelExport">
+                                <i class="fa fa-file-excel-o" ></i>
+                                Export to Excel
+                            </a>
+                        </li>
+                        <li >
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> 
+                                Export to PDF 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="control-label">Employee</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['FULL_NAME']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Date</label>
+                    <input disabled type="text" class="form-control" value="<?php echo ($detail['REQUESTED_DT_AD'] . ' A.D.    |    ' . $detail['REQUESTED_DT_BS'].' B.S.')?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Month</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['MONTH_DESC']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Status</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['STATUS']?>">
+                </div>
+            </div>
+            
+            <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">OT Hours</label>
+                    <input disabled type="text" id = "appOtHours" class="form-control" value="<?php echo $detail['TOTAL_APP_OT_HOURS']?>">
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">OT Days</label>
+                    <input disabled type="text" id = "appOtDays" class="form-control" value="<?php echo $detail['TOTAL_APP_OT_DAYS']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Lunch Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_LUNCH_ALLOWANCE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Night Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_NIGHT_ALLOWANCE']?>">
+                </div>
+            </div>
+
+            <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Locking Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_LOCKING_ALLOWANCE']?>">
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Satta Bida</label>
+                    <input disabled type="text" id="totalLeave" class="form-control" value="<?php echo $detail['TOTAL_APP_SUBSTITUTE_LEAVE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Dashain Tihar Bida</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_DASHAIN_TIHAR_LEAVE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Total Satta Bida</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_GRAND_TOTAL_LEAVE']?>">
+                </div>
+            </div>
+            <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Recommender</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['RECOMMENDER']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Approver</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['APPROVER']?>">
+                </div>
+            </div>
+            
+            <div id="table" style="margin-top:20px;">
+            </div>
+            <div style="display: block;" class="row margin-top-20" id="printBtnDiv" >
+                <div class="col-md-12" style="text-align:center;">
+                <br>
+                <a class="btn btn-success" id="print"> Print</a>
+                </div>
+            </div> 
+        </div>
+
+        <div style="border:1px solid; display: none;" id="printableArea" class="col-md-8">
+        <div style="display:flex;">
+            <img src = "/neo-hris-2021-09-03/neo-hris/public/img/noc-login1.png" class="img-fluid" style="display: block; margin-left: 220px; margin-right: 20px; width: 100px;" align="center">
+            <h1 style = "color: red;padding-top:10px;font-size:50px">Nepal Oil Corportation</h1>       
+        </div>    
+        <table id = "overtimeDetail" width="100%" align="center" class="customTable div-font-10" style="font-size:20px; border: 2px solid black; border-collapse: collapse;">
+                <thead>
+                    <div class = "col-sm-12">
+                        <div style = "display: flex;margin-bottom:-20px;">
+                            <h3 class ="col-sm-2">Employee Code: <?php echo $subDetails[0]['EMPLOYEE_CODE']; ?> </h3>
+                            <h3 class ="col-sm-2" style="margin-left: 200px;">Employee Name: <?php echo $subDetails[0]['FULL_NAME']; ?></h3>
+                            <h3 class ="col-sm-2" style="margin-left: 200px;">Functional level: <?php echo $subDetails[0]['FUNCTIONAL_LEVEL_EDESC']; ?> </h3>
+                            <h3 class ="col-sm-2" style="margin-left: 200px;">Office:  <?php echo $subDetails[0]['BRANCH_NAME'];?></h3>
+                        </div>
+                    </div>
+                        <br>
+                        <tr>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Day Detail</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Attendance Date</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Attendance Date(BS)</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Ot remarks</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">In time</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Out time</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Total Hour</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Overtime Hour</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Lunch Allowance</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Night Allowance</th>
+                            <th style=" border: 1px solid black; border-collapse: collapse;">Locking Allowance</th>
+                        </tr>
+                </thead>
+                <tbody>
+
+
+                    
+                </tbody>
+            </table>
+
+            <div class = "col-sm-12">
+                <br>
+                <div style="display:flex;">
+                    <h3 class = "col-sm-2" style="text-decoration-line: overline;">Signature</h3>
+                    <h3 class = "col-sm-2" style="text-decoration-line: overline; margin-left: 450px;">Recommender</h3>
+                    <h3 class = "col-sm-2" style="text-decoration-line: overline; margin-left: 450px;">Approver</h3>
+
+                </div>
+            </div>
+            <br>
+
+        </div>
+        
+    </div>
+</div>

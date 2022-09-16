@@ -1,0 +1,117 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('css/recruitment.css'))
+    ->appendStylesheet('https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.css')
+    // ->appendStylesheet('https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.6/css/bootstrap.css')
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('js/recruitment/calendar/index.js')) 
+    ->appendFile($this->basePath('js/recruitment/calendar/bikramsambat.js')) 
+    // ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js')
+    // ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
+    ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.min.js')
+    ->appendFile('https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js');
+?>
+
+<script>
+    document.viewLink = '<?= $this->url("calendar", ["action" => "view"]) ?>';
+    document.details = '<?php echo json_encode($detail); ?>';
+    document.openings = '<?php echo json_encode($openings); ?>'; 
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\calendar')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+
+
+<div class="portlet light bg-inverse">
+    <!-- Tools Section  -->
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-calendar font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Monthly Calendar</span>
+        </div>
+        <div class="calendar-colorbox">
+            <ul>
+                <li>
+                    <div class="color-box colorbox-color2"></div>
+                    <span>End to Extended Date</span>
+                </li>
+                <li>
+                    <div class="color-box colorbox-color1"></div>
+                    <span>Start to End Date</span>
+                </li> 
+            </ul>
+        </div>
+    </div>    
+    <!-- Fiter Section  -->
+    <div class="portlet-body">
+        <input type="hidden" name="employeeId" id="employeeId" value="<?php echo $employeeId; ?>"/>
+            <div class="row">          
+                <!-- <div class="col-sm-2">
+                    <div class="form-group">                
+                        <label for="OpeningId">Opening Number</label>
+                        <select class="form-control reset-field" name="OpeningNo" id="OpeningNo"></select>
+                    </div>
+                </div> -->
+                <!-- <div class="col-sm-2">
+                    <div class="form-group">                
+                        <label for="Start_dt">Start Date (English)</label>
+                        <input type="text" id="Start_dt" name="Start_dt"  class="form-control reset-field"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="nepaliFromDate">Start Date (Nepali)</label>
+                        <input type="text" id="nepaliFromDate" name="nepaliFromDate"  class="form-control reset-field"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">                
+                        <label for="End_dt">End Date (English)</label>
+                        <input type="text" id="End_dt" name="End_dt"  class="form-control reset-field"/>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label for="nepaliToDate">End Date (Nepali)</label>
+                        <input type="text"  id="nepaliToDate" name="nepaliToDate" class="form-control reset-field"/>
+                    </div>
+                </div> -->
+            </div>        
+        </div>
+    </div>
+    <div class="container">
+        <div class="margin-top-20">
+        <!-- Calendar View -->
+            <div id="calendarTable">
+            </div>
+        </div>
+    </div>    
+</div>
+
+
+
+
+

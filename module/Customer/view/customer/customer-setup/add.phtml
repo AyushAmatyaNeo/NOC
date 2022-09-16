@@ -1,0 +1,89 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/customer/customer-setup/add.js'));
+?>
+<?php
+$customerEname = $form->get('customerEname');
+$address = $form->get('address');
+$phoneNo = $form->get('phoneNo');
+$contactPersonName = $form->get('contactPersonName');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+$panNo = $form->get('panNo');
+
+$form->setAttribute('action', $this->url('customer-setup', ['action' => 'add']));
+$form->prepare();
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\customer-setup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($customerEname); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($customerEname); ?>
+                            <?php print $this->formElementErrors()->render($customerEname, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($address); ?>
+                            <?php print $this->formElement($address); ?>
+                            <?php print $this->formElementErrors()->render($address, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($panNo); ?>
+                            <?php print $this->formElement($panNo); ?>
+                            <?php print $this->formElementErrors()->render($panNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($contactPersonName); ?>
+                            <?php print $this->formElement($contactPersonName); ?>
+                            <?php print $this->formElementErrors()->render($contactPersonName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($phoneNo); ?>
+                            <?php print $this->formElement($phoneNo); ?>
+                            <?php print $this->formElementErrors()->render($phoneNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

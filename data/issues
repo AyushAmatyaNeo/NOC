@@ -1,0 +1,14 @@
+payroll features
+1. design issues in monthly value detail (done,need discussion)
+2. design issues in flat value detail (done, need discussion)
+3. issue regarding recommender,approver being null on notification (need discussion)
+4. loan deduction in payroll (need discussion)
+5. just include in tax.(need discussion)
+6. check for holidays, leave, travel, training on new request for holiday, leave, travel, training (remaining and need discussion)
+7. check for queries that need joining tables (remaining and need testing)
+8. meaningful notifications (remaining)
+9. maintain order by on all queries. (remaining and need testing)
+
+
+
+

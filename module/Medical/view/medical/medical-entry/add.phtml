@@ -1,0 +1,227 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\advance-request')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('js/medical/medical-entry/add.js'));
+?>
+
+
+<?php
+$form->setAttribute('role', 'form');
+
+$employeeId = $form->get('employeeId');
+$transactionDt = $form->get('transactionDt');
+$claimOf = $form->get('claimOf');
+$eRId = $form->get('eRId');
+$age = $form->get('age');
+$operationFlag = $form->get('operationFlag');
+$requestedAmt = $form->get('requestedAmt');
+$remarks = $form->get('remarks');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Submit');
+$submit->setAttribute('id', 'submit');
+//
+$form->setAttribute('action', $this->url('medicalEntry', ['action' => 'add']));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.employeeList =<?= json_encode($employeeList); ?>;
+    document.pullEmployeeRelationLink = '<?= $this->url("medicalEntry", ["action" => "pullEmployeeRelation"]) ?>';
+    document.pullEmpMedicalDetailLink = '<?= $this->url("medicalEntry", ["action" => "pullEmpMedicalDetail"]) ?>';
+</script>
+
+
+<div class="row margin-top-20" >
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>
+                    Medical Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                <div class="row">
+
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($employeeId); ?>
+                            <?php print $this->formElement($employeeId); ?>
+                            <?php print $this->formElementErrors()->render($employeeId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($transactionDt); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($transactionDt); ?>
+                                    <?php print $this->formElementErrors()->render($transactionDt, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliDate">&nbsp;</label>
+                                    <input type="text" name="nepaliDate" id="nepaliTransactionDt"
+                                           class="form-control" value="">
+                                </div>
+                            </div>     
+                        </div> 
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($claimOf); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($claimOf); ?>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group ">
+
+                            <label for="remaining balance">Remaining Balance</label>                    
+
+                            <input type="number" class="form-control" value="0" 
+                                   id="remainingBalance" readonly>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="dependentDiv">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <?php print $this->formLabel($eRId); ?>
+                                <?php print $this->formElement($eRId); ?>
+                                <?php print $this->formElementErrors()->render($eRId, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+
+                        <!--                        <div class="col-sm-3">
+                        
+                                                </div>-->
+                    </div>                    
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <?php print $this->formLabel($age); ?>
+                                <?php print $this->formElement($age); ?>
+                                <?php print $this->formElementErrors()->render($age, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-3">
+                            <div class="form-group">
+                                <?php print $this->formLabel($operationFlag); ?>
+                                <div class="md-radio-inline">
+                                    <?php $customRenderer($operationFlag); ?>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>                    
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <table id="billTable" class="table">
+                            <thead>
+                                <tr>
+<!--                                    <th>SN</th>       -->
+                                    <th>Bill No</th>       
+                                    <th>Date</th>       
+                                    <th>Amount</th>       
+                                    <!--<th></th>-->       
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input class="billno form-control" type="text" name="billNo[]" required></td>
+                                    <td>
+                                        <input id="billDate" class="billDate form-control" type="text" name="billDate[]" required>
+                                        <!--<input id="nepaliBillDate" class="nepaliBillDate form-control" type="text" name="billDateNepali[]" required>-->
+                                    </td>
+                                    <td><input class="billAmt form-control" type="number" name="billAmt[]" required min="0" step="0.01"></td>
+                                    <!--<td><input class="billDelBtn btn btn-danger" type="button" value="Del -"></td>-->
+                                </tr>
+                            </tbody>
+                            <tfoot></tfoot>
+                        </table>
+
+                    </div>
+                    <div class="col-sm-1">
+                        <input class="billAddBtn btn btn-default" type="button" value="Add +">
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($requestedAmt); ?>
+                            <?php print $this->formElement($requestedAmt); ?>
+                            <?php print $this->formElementErrors()->render($requestedAmt, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                </div>
+
+
+                <?php print $this->formSubmit($submit); ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>

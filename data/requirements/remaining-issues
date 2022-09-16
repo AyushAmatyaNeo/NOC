@@ -1,0 +1,45 @@
+1. remove '/public' from url.(ukesh)(open)
+3. leave: validation in late post.(ukesh)(open)
+4. Wages tracking system for daily basis and contract basis.(ukesh)(open)
+10. Forwardable days in leave table. (ukesh) (open)
+
+
+
+Requirements from Rajkumar.
+4. Travel request
+	→ advance request [advance amount should set on debit and credit]
+	→ need to send account department [should get notification by all employee of under a/c dept]
+	→ department type should be set
+		→ hr
+		→ general
+		→ account
+		→ production
+	→ advance voucher generate option with debit credit
+		→ settlement 
+		→ travel expense request on defined date
+		→ if defined date closed, then employee can’t open the expense request table
+5. recommender and approver assign for loan request [punam]
+
+
+
+JGI_training_session_3
+
+
+1. Shift schedule automation. ukesh
+2. shift overlap management. ['employee can work on different shift on a day. total working stays same.'] ukesh
+3. Staff working as intern trainee, his/her job is to edit hr employee data. this staff should not affect payroll. ukesh
+4. Leave Requirements of JGI. ukesh
+5. Team Status/Report. ukesh
+6. Salary increment notification. prabin[need discussion]
+
+
+
+shift assign issue
+
+Menu names need refactoring, icons should be proper and reordering of menu.
+
+Gender wise Graph or report on Dashboard.
+
+
+
+

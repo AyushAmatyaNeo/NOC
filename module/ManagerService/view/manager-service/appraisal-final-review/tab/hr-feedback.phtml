@@ -1,0 +1,23 @@
+ <div class="tab-pane <?= ($tab==6)?"active":""; ?>" id="portlet_tab2_6">
+    <form method="post"  name="performanceAppraisalForm" id="hrAppraisalReview">
+    <div class="row">
+        <div class="col-md-12 margin-bottom-10">
+            <div style="">
+                <h6 class="appHeading">For Use Of HR</h6>
+                <div class="row questionWrapRow">
+                    <div class="questionWrap">
+                        <div  class="col-md-12 margin-bottom-5 appQuestion"> 
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <label> <h7 style="font-size:12px;">Overall Comment</h7>  </label> 
+                                    <textarea name="hrComment" id="hrComment" class="form-control" style="height:50px!important" required="required" disabled="disabled"><?= $assignedAppraisalDetail['HR_FEEDBACK']; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

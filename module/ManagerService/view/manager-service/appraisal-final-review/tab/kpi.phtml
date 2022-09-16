@@ -1,0 +1,93 @@
+<?php $disabledKPICOM = "disabled"; 
+if($assignedAppraisalDetail['KPI_SETTING']=='Y'){
+?>
+<div class="tab-pane <?= (($assignedAppraisalDetail['KPI_SETTING'] == 'Y')) ? 'active' : '' ?>" id="portlet_tab2_KPI" ng-controller="kpiController">
+    <form name="KPIForm" id="KPIForm" ng-submit="submitKPIForm()" novalidate>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:5%;">S.N.</th>
+                    <th>KPI Detail</th>
+                    <th>Success Criteria</th>
+                    <th style="width:10%;">Weight</th>
+                    <?php if ($keyAchievementDtlNum > 0) { ?>
+                        <th>Key Achievement</th>
+                        <th>Self Rating</th>
+                    <?php } ?>
+                    <?php if ($appraiserRatingDtlNum > 0) { ?>
+                        <th>Appraiser Rating</th>
+                    <?php } ?>
+                </tr>
+            </thead>
+            <tr ng-repeat="KPI in KPIList">
+                <td><span ng-bind="KPI.counter"></span></td>
+                <td>
+                    <textarea cols="25" rows="20" class="form-control" style="height:150px!important" name="title_{{KPI.checkbox}}" ng-model="KPI.title" required="required" <?= $disabledKPICOM; ?>></textarea>
+                    <div ng-show="KPIForm.$submitted || KPIForm.title_{{KPI.checkbox}}.$touched">
+                        <ul ng-show="KPIForm.title_{{KPI.checkbox}}.$error.required" class="help-block error">
+                            <li>KPI Detail is required.</li>
+                        </ul>
+                    </div>
+                </td>
+                <td>
+                    <textarea cols="25" rows="20" class="form-control" style="height:150px!important" name="successCriteria_{{KPI.checkbox}}" ng-model="KPI.successCriteria" required="required" <?= $disabledKPICOM; ?>></textarea>
+                    <div ng-show="KPIForm.$submitted || KPIForm.successCriteria_{{KPI.checkbox}}.$touched">
+                        <ul ng-show="KPIForm.successCriteria_{{KPI.checkbox}}.$error.required" class="help-block error">
+                            <li>Success Criteria is required.</li>
+                        </ul>
+                    </div>
+                </td>
+                <td> 
+                    <input type="number" name="weight_{{KPI.checkbox}}" value="" size="3" ng-model="KPI.weight" required="required" min="0" step='1' <?= $disabledKPICOM; ?> style="width:100%;"/>
+                    <div ng-show="KPIForm.$submitted || KPIForm.weight_{{KPI.checkbox}}.$touched">
+                        <ul ng-show="KPIForm.weight_{{KPI.checkbox}}.$error.required" class="help-block error">
+                            <li>Weight is required.</li>
+                        </ul>
+                    </div>
+                </td>
+                <?php if ($keyAchievementDtlNum > 0) { ?>
+                    <td>
+                        <textarea cols="25" rows="20" class="form-control" style="height:150px!important" name="keyAchievement_{{KPI.checkbox}}" ng-model="KPI.keyAchievement" required="required" disabled="disabled"></textarea>
+                        <div ng-show="KPIForm.$submitted || KPIForm.keyAchievement_{{KPI.checkbox}}.$touched">
+                            <ul ng-show="KPIForm.keyAchievement_{{KPI.checkbox}}.$error.required" class="help-block error">
+                                <li>Key Achievement is required.</li>
+                            </ul>
+                        </div>
+                    </td>
+                    <td style="width: 10%">
+                        <input type="number" name="selfRating_{{KPI.checkbox}}" value="" size="3" ng-model="KPI.selfRating" required="required" min="0" step='1' style=" width:100%;" disabled="disabled" />
+                        <div ng-show="KPIForm.$submitted || KPIForm.selfRating_{{KPI.checkbox}}.$touched">
+                            <ul ng-show="KPIForm.selfRating_{{KPI.checkbox}}.$error.required" class="help-block error">
+                                <li>Self Rating is required.</li>
+                            </ul>
+                        </div>
+                    </td>
+                <?php } ?>
+                <?php if ($appraiserRatingDtlNum > 0) { ?>
+                    <td style="width: 10%">
+                        <input type="number" name="appraiserRating_{{KPI.checkbox}}" value="" size="3" ng-model="KPI.appraiserRating" required="required" min="0" step='1' style=" width:100%;" disabled='disabled'/>
+                        <div ng-show="KPIForm.$submitted || KPIForm.appraiserRating_{{KPI.checkbox}}.$touched">
+                            <ul ng-show="KPIForm.appraiserRating_{{KPI.checkbox}}.$error.required" class="help-block error">
+                                <li>Appraiser Rating is required.</li>
+                            </ul>
+                        </div>
+                    </td>
+                <?php } ?>
+            </tr>
+            <?php if ($appraiserRatingDtlNum > 0) { ?>
+                <tr>
+                    <td colspan="6">
+                        ANNUAL RATING ON KEY PERFORMANCE INDICATOR:
+                    </td>
+                    <td>
+                        <input type="number" disabled="disabled" value="{{calculateAnnualRating(KPIList)}}" name="annualRating" id="annualRating" ng-model="annualRating" style="width:100%;"/>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </form>
+    <?php
+    print $this->partial('appraisal/layout/kpi-remarks.phtml');
+    ?>
+</div>
+<?php } ?>

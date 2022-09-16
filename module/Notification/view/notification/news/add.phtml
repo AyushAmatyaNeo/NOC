@@ -1,0 +1,276 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('js/Notification/news/add.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+ 
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'newsForm');
+$form->setAttribute('action', $this->url('news', ['action' => 'add']));
+
+ 
+
+$newsDate = $form->get('newsDate');
+$newsExpiryDate = $form->get('newsExpiryDate');
+
+$newsType = $form->get('newsType');
+$newsType->setValueOptions($newsTypeValue);
+
+$newsTitle = $form->get('newsTitle');
+
+$newsEdesc = $form->get('newsEdesc');
+
+$newsLdesc = $form->get('newsLdesc');
+
+$remarks = $form->get('remarks');
+
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->prepare();
+?>
+
+<script>
+    document.searchValues =<?php echo json_encode($searchValues) ?>;
+    document.uploadUrl = '<?= $this->url('news', ['action' => 'fileUpload']); ?>';
+    document.pushNewsFileLink = '<?php echo $this->url('news', ['action' => 'pushNewsFile']); ?>';
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\news')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                
+<!--                <input id="fileUploadList" type="hidden" name="fileUploadList[]">-->
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($newsDate); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($newsDate); ?>
+                                    <?php print $this->formElementErrors()->render($newsDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliDate" id="nepaliDate"
+                                               class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>  
+
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($newsType); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($newsType); ?>
+                            <?php print $this->formElementErrors()->render($newsType, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+
+                        <div class="form-group">
+                            <?php print $this->formLabel($newsTitle); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($newsTitle); ?>
+                            <?php print $this->formElementErrors()->render($newsTitle, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <?php print $this->formLabel($newsEdesc); ?>
+                    <span class="required" aria-required="true">*</span>
+                    <?php print $this->formElement($newsEdesc); ?>
+                    <?php print $this->formElementErrors()->render($newsEdesc, ['class' => 'help-block']); ?>
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($newsExpiryDate); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($newsExpiryDate); ?>
+                                    <?php print $this->formElementErrors()->render($newsExpiryDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliDateExpiry">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliDateExpiry" id="nepaliDateExpiry"
+                                               class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>  
+
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <?php print $this->formLabel($remarks); ?>
+                    <?php print $this->formElement($remarks); ?>
+                    <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                </div>
+
+
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Company</label>
+                        <select multiple class="form-control" name="company[]" id="companyId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Branch</label>
+                        <select multiple class="form-control" name="branch[]" id="branchId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Department</label>
+                        <select multiple class="form-control" name="department[]" id="departmentId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Designation</label>
+                        <select multiple class="form-control" name="designation[]" id="designationId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Position</label>
+                        <select multiple class="form-control" name="position[]" id="positionId">
+                        </select>
+                    </div>
+                </div>
+                <div class="row margin-top-10">
+                    <div class="col-sm-2">
+                        <label>Service Type</label>
+                        <select multiple class="form-control" name="serviceType[]" id="serviceTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Service Event Type</label>
+                        <select multiple class="form-control" name="serviceEventType[]" id="serviceEventTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee Type</label>
+                        <select multiple class="form-control" name="employeeType[]" id="employeeTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee</label>
+                        <select multiple class="form-control" name="employee[]" id="employeeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Gender</label>
+                        <select multiple class="form-control" name="gender[]" id="genderId">
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="row margin-top-20">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th> 
+                                <th>&nbsp;</th>
+                                <th>Action</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+
+
+                <div> 
+                    <?php
+                    print $this->formSubmit($submit);
+                    print $this->form()->closeTag();
+                    ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--bootstrap modal-->
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload Image.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>

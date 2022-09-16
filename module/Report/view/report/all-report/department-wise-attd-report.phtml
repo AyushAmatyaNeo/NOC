@@ -1,0 +1,97 @@
+
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/Report/AllReport/departmentWiseAttdReport.js'));
+?>
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+    document.preference =<?php echo json_encode($preference) ?>;
+</script>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase">Select date</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="row margin-top-10">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>From Date(AD)</label>
+                        <input type="text" id="fromDate" name="fromDate" class="input-sm" class="form-control" placeholder="From Date"/>
+                    </div>
+                </div> 
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>From Date(BS)</label>
+                        <input type="text" id="nepaliFromDate" name="nepaliFromDate" class="input-sm" class="form-control" placeholder="From Date Nepali"/>
+                    </div>
+                </div>
+                <div class="col-sm-4"">
+                    <div class="form-group">
+                        <label>Company</label>
+                        <select style="width: 100%;" class="input-sm" class="form-control" name="company" id="company">
+                        <option value="0" selected="selected">All</option>
+                        <?php
+                        foreach($companies as $company){
+                            echo '<option value="'.$company['COMPANY_ID'].'">'.$company['COMPANY_NAME'].'</option>';
+                        }
+                        ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <label>Report</label>
+                    <button id="generate" class="btn btn-default btn-sm pull-right" class="form-control">
+                        Generate Report
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="grid"></div>
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,125 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Vacancy')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/recruitment/vacancyoptions/edit.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'vacancyoptions');
+$VacancyId = $form->get('VacancyId');
+$VacancyId->setAttributes(["disabled" => "disabled"]);
+$VacancyId->setValueOptions($VacancyList);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.OptionLists = '<?= json_encode($OptionList); ?>';
+    document.details = '<?= json_encode($detail['OPEN_INTERNAL']); ?>';
+</script>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Vacancy Detail
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="border-bottom">
+             <!--Vacancy Options details addition-->
+
+                    <div class="row">                    
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                    <?php print $this->formLabel($VacancyId); ?>
+                                    <?php print $this->formElement($VacancyId); ?>
+                                    <?php print $this->formElementErrors()->render($VacancyId, ['class' => 'help-block']); ?>
+                                </div> 
+                        </div>
+                    </div>
+                    <div class="row" >
+                        <div class="col-md-11" >
+                            <table id="vacancyoptionsDetails" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="3">Option Details</th>       
+                                        <th colspan="2">Amount</th>             
+                                        <th colspan="2">Remarks</th>  
+                                    </tr>
+                                    <tr>
+                                        <th>Options List</th>
+                                        <th>Open / Internal</th>
+                                        <th>Quota</th>      
+                                        <th>Normal Amount</th>
+                                        <th>Late Amount</th>        
+                                    </tr>
+                                </thead>
+                                <?php //echo '<pre>'; var_dump($OptionList); die(); ?>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div style="overflow:hidden">
+                                                <select id="ddlViewBy" class='optionId' name='OptionId' required="required">
+                                                    <?php  foreach($optionsdata as $item){ 
+                                                        $selected = ($item['OPTION_ID'] == $detail['OPTION_ID']) ? "selected" : ""; ?>
+                                                    <option <?php echo $selected; ?> value="<?php  echo $item['OPTION_ID']; ?>"><?php echo $item['OPTION_EDESC']; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="overflow:hidden">
+                                                <select class='OpenInternal' name='OpenInternal' required="required">     
+                                                    <option <?php echo (trim($detail['OPEN_INTERNAL']) == 'OPEN') ? "selected" : ""; ?> value="OPEN">OPEN</option>     
+                                                    <option <?php echo (trim($detail['OPEN_INTERNAL']) == 'INTERNAL') ? "selected" : ""; ?> value="INTERNAL">INTERNAL</option>                                        
+                                                </select>
+                                            </div>
+                                        </td>  
+                                        <td>
+                                            <div style="overflow:hidden">
+                                                <input style="width:100%" type="Number" name="Quota" value="<?php echo $detail['QUOTA']; ?>"  class="Quota">       
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="overflow:hidden">
+                                                <input style="width:100%" type="Number" name="NormalAmt" required="required" value="<?php echo $detail['NORMAL_AMT']; ?>" class="NormalAmt">       
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div style="overflow:hidden">
+                                                <input style="width:100%" type="Number" name="LateAmt" required="required" value="<?php echo $detail['LATE_AMT']; ?>" class="LateAmt">       
+                                            </div>
+                                        </td>     
+                                        <td>
+                                            <div style="overflow:hidden">
+                                                <textarea style="width:100%" rows="3" cols="40" name="Remarks" class="Remarks"><?php echo $detail['REMARKS']; ?></textarea>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+print $this->formSubmit($submit);
+print $this->form()->closeTag();
+?>
+

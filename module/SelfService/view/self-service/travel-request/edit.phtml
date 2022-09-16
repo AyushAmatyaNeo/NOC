@@ -1,0 +1,770 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\travelRequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+ 
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'));
+
+$this->headScript()
+        ->appendFile($this->basePath('js/SelfService/travel-request/view.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'travelRequest-form');
+
+$fromDate = $form->get('fromDate');
+$fromDate->setAttributes(["disabled" => "disabled"]);
+
+$toDate = $form->get('toDate');
+$toDate->setAttributes(["disabled" => "disabled"]);
+
+$destination = $form->get('destination');
+$destination->setAttributes(["readonly" => "readonly"]);
+$purpose = $form->get('purpose');
+$purpose->setAttributes(["readonly" => "readonly"]);
+$departure = $form->get('departure');
+$departure->setAttributes(["readonly" => "readonly"]);
+$requestedType = $form->get('requestedType');
+$requestedType->setValueOptions([$detail['REQUESTED_TYPE'] => $detail['REQUESTED_TYPE_DETAIL']]);
+$transportType = $form->get('transportTypeList');
+$transportType->setValueOptions([$detail['TRANSPORT_TYPE'] => $detail['TRANSPORT_TYPE_DETAIL']]);
+$requestedAmount = $form->get('requestedAmount');
+$remarks = $form->get('remarks');
+$recommendedRemarks = $form->get('recommendedRemarks');
+$approvedRemarks = $form->get('approvedRemarks');
+$noOfDays = $form->get('noOfDays');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$form->setAttribute('action', '');
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<?php  $all_data = json_encode(file_get_contents("https://gist.githubusercontent.com/aaronhayes/5fef481815ac75f771d37b16d16d35c9/raw/edbec8eea5cc9ace57a79409cc390b7b9bcf24f6/currencies.json")); ?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.pullFilebyId = '<?php echo $this->url('travelRequest', ['action' => 'pullFilebyId']); ?>';
+    document.urlExpenseAdd = '<?= $this->url("travelRequest", ["action" => "expenseAdd"]) ?>';
+    document.urlExpense = '<?= $this->url("travelRequest", ["action" => "expense"]) ?>';
+    document.urlExpenseDetailList = '<?= $this->url("travelRequest", ["action" => "expenseDetailList"]) ?>';
+    document.currencyList = <?php echo json_decode($all_data) ?>;
+    document.urlDeleteExpenseDetail = '<?= $this->url("travelRequest", ["action" => "deleteExpenseDetail"]) ?>';
+    document.uploadUrl = '<?= $this->url("travelRequest", ["action" => "fileUpload"]); ?>';
+    document.pushDCFileLink = '<?php echo $this->url('travelRequest', ['action' => 'pushDCFileLink']); ?>';
+    document.getLineTotal = '<?php echo $this->url('travelRequest', ['action' => 'getLineTotal']); ?>';
+    document.id = '<?php echo $id; ?>';
+</script>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Travel Request Detail
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="border-bottom">
+                <div class="form-group">
+                    <div class="row div-font-11">
+                        <div class="col-sm-4">
+                            <table width="100%">
+                                <tr height="30">
+                                    <td>
+                                        Requested Date
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $detail['REQUESTED_DATE']; ?>
+                                    </td>
+                                </tr>
+                                <tr height="30">
+                                    <td>
+                                        Status
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $detail['STATUS_DETAIL']; ?>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table width="100%">
+                                <tr height="30">
+                                    <td>
+                                        Recommender
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $recommender; ?>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table width="100%">  
+                                <tr height="30">
+                                    <td>
+                                        Approver
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $approver; ?>
+                                    </td>
+                                </tr>                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" row">
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($fromDate); ?>
+                                    <div class="input-group date" id="fromDate">
+                                        <?php print $this->formElement($fromDate); ?>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($fromDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliStartDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                               class="form-control" value="" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>    
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($toDate); ?>
+                                    <div class="input-group date" id="toDate">
+                                        <?php print $this->formElement($toDate); ?>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($toDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliEndDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                               class="form-control" value="" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>     
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($requestedType); ?>
+                            <?php print $this->formElement($requestedType); ?>
+                            <?php print $this->formElementErrors()->render($requestedType, ['class' => 'help-block']); ?>
+                        </div>   
+                    </div>
+                    
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($departure); ?>
+                            <?php print $this->formElement($departure); ?>
+                            <?php print $this->formElementErrors()->render($departure, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($destination); ?>
+                            <?php print $this->formElement($destination); ?>
+                            <?php print $this->formElementErrors()->render($destination, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($purpose); ?>
+                            <?php print $this->formElement($purpose); ?>
+                            <?php print $this->formElementErrors()->render($purpose, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <br>
+                        <input type="checkbox" id="teamLead" name="teamLead">
+                        <label for="teamLead">Team Leader</label>
+                        </div>
+                    
+                </div>
+
+                  
+
+                <button style="margin-left:10px; margin-top:10px;" class="btn btn-sm btn-primary" id="addDomesticBtn"  type="button">
+                        Add Domestic Config
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button style="margin-left:10px; margin-top:10px;" class="btn btn-sm btn-danger" id="deleteDomesticBtn"  type="button">
+                        Delete Domestic Config
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                    <div class="margin-top-10 scrollbar-horizantal" id="domesticConfigTable">
+                        <div class="row" >
+                            <div style="margin-left: 20px" >
+                                <table id="domesticConfigTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Domestic Configuration</th>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="2">Action</th> 
+                                            <th rowspan="2">Apply Half Day</th>
+                                            <th rowspan="2">Departure</th>       
+                                            <th colspan="2">Location</th>       
+                                            <th rowspan="2">Means of Transport</th>       
+                                            <th rowspan="2">Arrives</th>
+                                            <th rowspan="2">No. of Days</th> 
+                                            <th rowspan="2">KM walked</th>
+                                            <!-- <th rowspan="2">Total</th>     -->
+                                            <th colspan="5">Mode of Transportation</th> 
+                                            <th colspan="2">Petty Expenses</th> 
+                                            <th rowspan="2">Purpose</th> 
+                                            <th rowspan="2">Remarks</th>       
+                                                  
+                                        </tr>
+                                        <tr>      
+                                            <th>From</th>       
+                                            <th>To</th>   
+                                            <th>On foot, Train, Vehicle, Airplane, Cruise etc.</th>       
+                                            <th>Class</th>   
+                                            <th>Rate</th>       
+                                            <th>Miles</th>
+                                            <th>Rate</th> 
+                                            <th>Details</th>
+                                            <th>Total</th>      
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($domesticExpenseDtlList as $domesticExpenseDtlRow) { ?>
+                                            <tr>
+                                                <td><input class="dtlDelBtn btn btn-danger" type="button" value="Del -" style="padding:3px;"></td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                            <input  type="checkbox" <?php if($domesticExpenseDtlRow['HALF_DAY_FLAG']=='Y'){echo('checked');} ?> name="applyHalfDay[]"  class="applyHalfDay" id="applyHalfDay">
+                                                        </div>
+                                                    <!-- <input type="input" id="applyHalfDay" name="applyHalfDay[]"> -->
+                                                </td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" type="text" value="<?= $domesticExpenseDtlRow['DEPARTURE_DT']; ?>" name="depDate[]"  class="depDate">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" value="<?= $domesticExpenseDtlRow['DEPARTURE_PLACE']; ?>" type="text" name="locFrom[]"   class="locFrom">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" value="<?= $domesticExpenseDtlRow['ARRAIVAL_PLACE']; ?>" type="text" name="locto[]"  class="locto">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="overflow:hidden">
+                                                        <select class='mot' name='mot[]' >
+                                                        <?php 
+                                                            foreach ($transportTypes as $key => $value) {
+                                                                $selected = ($key == $domesticExpenseDtlRow['DOMESTIC_TYPE']) ? "selected" : "";
+                                                                ?>
+                                                                <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                                        <?php }?>
+                                                        </select>
+                                                    </div>
+                                                </td>       
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" value="<?= $domesticExpenseDtlRow['ARRAIVAL_DT']; ?>" type="text" name="arrDate[]"   class="arrDate">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:50px">
+                                                        <input style="width:100%" value="<?= $domesticExpenseDtlRow['NOOFDAYS']; ?>" type="number" readonly name="noOfDays[]" required="required"  class="noOfDays">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:80px">
+                                                        <?php if($domesticExpenseDtlRow['DOMESTIC_TYPE'] == "WALKING"){ ?>
+                                                            <input style="width:100%" value="<?= $domesticExpenseDtlRow['UNIT']; ?>" type="number" name="kmWalked[]"  class="kmWalked">
+                                                        <?php }else{ ?>
+                                                            <input style="width:100%" value=0 type="number" name="kmWalked[]"  class="kmWalked">
+                                                        <?php } ?>      
+                                                    </div>
+                                                </td> 
+                                                <!-- <td>
+                                                    <div style="width:80px">
+                                                        <input style="width:100%" readonly type="number" name="total[]"  class="total">       
+                                                    </div>
+                                                </td> -->
+
+                                                <td>
+                                                <div style="overflow:hidden">
+                                                        <select class='transport' name='transport[]' >
+                                                        <?php 
+                                                            foreach ($transportList as $key => $value) {
+                                                                $selected = ($key == $domesticExpenseDtlRow['TRANSPORTATION']) ? "selected" : "";
+                                                                ?>
+                                                                <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                                        <?php }?>
+                                                        </select>
+                                                    </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['TRANSPORTATION_CLASS']; ?>"  name="transportClass[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['RATE1']; ?>"  name="rate1[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['MILES']; ?>"  name="miles[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['RATE2']; ?>"  name="rate2[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea rows="4" cols="50" style="width:100%" class="otherExpenseDetail" name="otherExpenseDetail[]"><?= $domesticExpenseDtlRow['OTHER_EXPENSE_DETAIL']; ?></textarea>
+                                                </div>
+                                            </td>
+                                                <td>
+                                                    <div style="width:80px">
+                                                        <input style="width:100%" value="<?= $domesticExpenseDtlRow['OTHER_EXPENSE']; ?>" type="number" name="otherExpenses[]"  class="otherExpenses">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:150px">
+                                                        <textarea style="width:100%" rows="4" cols="50" name="detPurpose[]"  class="detPurpose"><?= $domesticExpenseDtlRow['REMARKS']; ?></textarea>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:150px">
+                                                        <textarea style="width:100%" rows="4" cols="50" name="detRemarks[]"  class="detRemarks"><?= $domesticExpenseDtlRow['REMARKS']; ?></textarea>
+                                                    </div>
+                                                </td>
+
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="col-md-1">
+                                <input class="deatilAddBtn btn btn-default" type="button" value="Add +" style="margin-bottom:20px;">
+                            </div>
+
+                        </div>
+                    </div>
+                    <br><br>
+                    <button style="margin-left:10px; margin-top:10px;" class="btn btn-sm btn-primary" id="addInternationalBtn"  type="button">
+                        Add International Config
+                        <i class="fa fa-edit"></i>
+                    </button>
+                    <button style="margin-left:10px; margin-top:10px;" class="btn btn-sm btn-danger" id="deleteInternationalBtn"  type="button">
+                        Delete International Config
+                        <i class="fa fa-trash-o"></i>
+                    </button>
+                    <div class="margin-top-10 scrollbar-horizantal" id="internationalConfigTable">
+                        <div class="row" >
+                            <div style="margin-left: 20px;" >
+                                <table id="internationalConfigTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">International Configuration</th>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="2">Action</th>
+                                            <th rowspan="2">Apply Half Day</th>
+                                            <th rowspan="2">Departure</th>       
+                                            <th colspan="2">Location</th>       
+                                            <th rowspan="2">International Place</th>       
+                                            <th rowspan="2">Arrives</th>
+                                            <th rowspan="2">No. of Days</th>
+                                            <th colspan="5">Mode of Transportation</th>
+                                            <th colspan="2">Petty Expenses</th> 
+                                            <th rowspan="2">Purpose</th>
+                                            <th rowspan="2">Currency</th> 
+                                            <th rowspan="2">Exchange Rate</th>         
+                                            <th rowspan="2">Remarks</th>      
+                                                   
+                                        </tr>
+                                        <tr>       
+                                            <th>From</th>       
+                                            <th>To</th>  
+                                            <th>On foot, Train, Vehicle, Airplane, Cruise etc.</th>       
+                                            <th>Class</th>   
+                                            <th>Rate</th>       
+                                            <th>Miles</th>
+                                            <th>Rate</th> 
+                                            <th>Details</th>
+                                            <th>Total</th>        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($internationalExpenseDtlList as $internationalExpenseDtlRow) { ?>
+                                            <tr>
+                                                <td><input class="dtlDelBtnInternational btn btn-danger" type="button" value="Del -" style="padding:3px;"></td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input  type="checkbox" <?php if($internationalExpenseDtlRow['HALF_DAY_FLAG']=='Y'){echo('checked');} ?> name="applyHalfDay[]"  class="applyHalfDay" id="applyHalfDay">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" type="text" name="depDateInternational[]" value="<?= $internationalExpenseDtlRow['DEPARTURE_DT']; ?>"  class="depDateInternational">
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" value="<?= $internationalExpenseDtlRow['DEPARTURE_PLACE']; ?>" type="text" name="locFromInternational[]"  class="locFromInternational">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" value="<?= $internationalExpenseDtlRow['ARRAIVAL_PLACE']; ?>" type="text" name="loctoInternational[]"   class="loctoInternational">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div style="overflow:hidden">
+                                                        <select class='motInternational' name='motInternational[]' >
+                                                        <?php 
+                                                            foreach ($internationalPlaces as $key => $value) {
+                                                                $selected = ($key == $internationalExpenseDtlRow['INTERNATIONAL_TYPE']) ? "selected" : "";
+                                                                ?>
+                                                                <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                                        <?php }?>
+                                                        </select>
+                                                    </div>
+                                                </td>       
+                                                <td>
+                                                    <div style="width:90px">
+                                                        <input style="width:100%" value="<?= $internationalExpenseDtlRow['ARRAIVAL_DT']; ?>" type="text" name="arrDateInternational[]"  class="arrDateInternational">       
+                                                    </div>
+                                                </td> 
+                                                <td>
+                                                    <div style="width:50px">
+                                                        <input style="width:100%" type="number" readonly value="<?= $internationalExpenseDtlRow['NOOFDAYS']; ?>" name="noOfDaysInternational[]"   class="noOfDaysInternational">       
+                                                    </div>
+                                                </td> 
+                                                <td>
+                                                <div style="overflow:hidden">
+                                                        <select class='internationalTransport' name='internationalTransport[]' >
+                                                        <?php 
+                                                            foreach ($transportList as $key => $value) {
+                                                                $selected = ($key == $internationalExpenseDtlRow['TRANSPORTATION']) ? "selected" : "";
+                                                                ?>
+                                                                <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                                        <?php }?>
+                                                        </select>
+                                                    </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['TRANSPORTATION_CLASS']; ?>"  readonly="readonly" name="internationalTransportClass[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['RATE1']; ?>"  readonly="readonly" name="internationalRate1[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['MILES']; ?>"  readonly="readonly" name="internationalMiles[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['RATE2']; ?>"  readonly="readonly" name="internationalRate2[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="internationalOtherExpenseDetail" name="internationalOtherExpenseDetail[]"><?= $internationalExpenseDtlRow['OTHER_EXPENSE_DETAIL']; ?></textarea>
+                                                </div>
+                                            </td>
+                                                <td>
+                                                    <div style="width:80px">
+                                                        <input style="width:100%" type="number" value="<?= $internationalExpenseDtlRow['OTHER_EXPENSE']; ?>" name="otherExpensesInternational[]"  class="otherExpensesInternational">       
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                <div style="width:150px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="internationalDetPurpose" name="internationalDetPurpose[]"><?= $internationalExpenseDtlRow['PURPOSE']; ?></textarea>
+                                                </div>
+                                            </td>
+                                                <td>
+                                                    <div style="overflow:hidden">
+                                                        <select class='currency' name='currency[]' >
+                                                        </select>
+                                                    </div>
+                                                </td> 
+                                                <td>
+                                                    <div style="width:80px">
+                                                        <input style="width:100%" type="number" value="<?= $internationalExpenseDtlRow['EXCHANGE_RATE']; ?>" name="exchangeRateInternational[]"  class="exchangeRateInternational">       
+                                                    </div>
+                                                </td>       
+                                                <td>
+                                                    <div style="width:150px">
+                                                        <textarea style="width:100%" rows="4" cols="50" name="detRemarksInternational[]"  class="detRemarksInternational"><?= $internationalExpenseDtlRow['REMARKS']; ?></textarea>
+                                                    </div>
+                                                </td>
+
+                                                
+
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="col-md-1">
+                                <input class="deatilAddBtnInternational btn btn-default" type="button" value="Add +" style="margin-bottom:20px;">
+                            </div>
+
+                        </div>
+                    </div>
+                
+                <div class= "row" style="margin-top:20px">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th>
+                                <th>&nbsp;</th>
+                                <th>Action</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button>
+                    </div>
+                </div>
+                <?php if(!empty($files)){ ?>
+                        <div class="row"> 
+                            <div class="col-sm-6"> 
+                                <label>Attachments</label>
+                                    <div style="overflow: scroll; height:100px;" >
+                                        <ul> 
+                                            <?php foreach($files as $file){ ?>
+                                                <a target="_blank" href="<?='../../../uploads/travel_documents/'.$file['FILE_IN_DIR_NAME']?>">
+                                                    <li><?=$file['FILE_NAME']?></li></a>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                        </div> 
+                    <?php } ?>
+
+                <?php if (isset($detail['SUB_EMPLOYEE_ID'])) { ?>
+                    <div class="form-group padding-0">
+                        <label for="noOfDays">
+                            Substitute Employee 
+                        </label>
+                        <div>
+                            <select disabled="disabled" class="form-control" name="travelSubstitute">
+                                <option style="cursor: pointer;" selected><?php echo $detail['SUB_EMPLOYEE_NAME']; ?></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div
+                        class="form-group margin-top-10 required">
+                        <label>Reason for action [From Sub. Employee] <?php echo $detail['SUB_APPROVED_FLAG_DETAIL']; ?></label>
+                        <textarea disabled="disabled" name="subRemarks" id="form-subRemarks" class="form-subRemarks form-control" style="height: 50px; font-size:12px">
+                            <?php echo $detail['SUB_REMARKS']; ?>
+                        </textarea>
+                    </div>
+                <?php } ?>
+            </div>
+            <?php if ($detail['SUB_APPROVED_FLAG'] == 'Y') { ?>
+                <div
+                    class="form-group margin-top-10 required <?= empty($recommendedRemarks->getMessages()) ? "" : "error" ?>">
+                    <label>Reason for action [From Recommender]</label>
+                    <?php print $this->formElement($recommendedRemarks); ?>
+                </div>
+                <div
+                    class="form-group required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                    <label>Reason for action [From Approver]</label>
+                    <?php print $this->formElement($approvedRemarks); ?>
+                </div>
+            <?php } else if ($detail['SUB_APPROVED_FLAG'] == 'N') { ?>
+                <div class="form-group" style="font-size:11px;">[note:You have to re-send leave detail!!!!]</div>
+            <?php } ?>
+        </div>
+    </div>
+</div>
+
+<div style="border:1px solid; display: none;" id="printableArea" class="col-md-8">
+    <div class="row">
+        <div class="col-md-8 col-sm-offset-2">
+            <ul id="headingList">
+                <li>
+                    <?php if ($detail['COMPANY_FILE_PATH'] != null || $detail['COMPANY_FILE_PATH'] != "") { ?>
+                        <img src="<?= $this->basePath("uploads/" . $detail['COMPANY_FILE_PATH']); ?>" style="float:left;" height="50" width="50"/>
+                    <?php } ?>
+                    <h2><?= strtoupper($detail['COMPANY_NAME']); ?></h2></li>
+                <li id="underline"><h3>Travel Authorization Form</h3></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row font-common" style="min-height: 70px;">
+        <div class="dtlTravel">
+            <ul id="personalInfo">
+                <li>Name: <?php echo $detail['FULL_NAME']; ?></li>
+                <li>Place of Visit: <?= $detail['DESTINATION']; ?></li>
+                <li>Purpose of Visit: <?= $detail['PURPOSE']; ?></li>
+            </ul>
+        </div>
+        <div class="dtlDate">
+            <ul id="personalInfo">
+                <li>Date: <?php print_r($detail['REQUESTED_DATE']); ?></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row font-common detailOfRequest">
+        <ul id="personalInfo">
+            <li>
+                Visit Form : <?= $detail['FROM_DATE']; ?> To <?= $detail['TO_DATE']; ?> Total <?= $detail['DURATION']; ?> Day<?= ($detail['DURATION'] > 1) ? "s" : "" ?>
+            </li>
+            <li>
+                Advance For Tour : Rs. <?= $detail['REQUESTED_AMOUNT'] ?> (<?= $advanceAmount; ?>)
+            </li>
+            <li>Mode of Transport: <?php echo $detail['TRANSPORT_TYPE_DETAIL']; ?></li>
+        </ul>
+    </div>
+
+    <div class="row font-common signature">
+        <div class="signEmployee">
+            <div class="border-dotted">
+                Signature of Employee
+            </div>
+        </div>
+        <div class="signRecommender">
+            <p style="height: 14px"><label><?= ucwords(strtolower($recommender)); ?></label></p>
+            <div class="border-dotted" style="margin-left: 55px;">
+                Recommended By 
+            </div>
+        </div>
+        <div class="signApprover">
+            <p style="height: 14px"><label><?= ucwords(strtolower($approver)); ?></label></p>
+            <div class="border-dotted" style="float:right;">
+                Approving Authority
+            </div>
+        </div>
+    </div>
+
+    <div class="row detailOfRequest" style="">
+        <h4 style="margin-bottom:3px;">To Account Section:</h4>
+        <div class="font-common">
+            <p style="margin-top:0px;">
+                Please provide to give him/her tour advance Rs. <?= $detail['REQUESTED_AMOUNT'] ?> which will be adjusted after presenting travel expenses & tour report within 15 days.
+            </p>
+        </div>
+    </div>
+
+    <div class="row font-common detailOfRequest1">
+        <div class="signEmployee2">
+            <div class="border-dotted1">
+                Administration Department
+            </div>
+        </div>
+    </div>
+    <?php if (isset($detail['SUB_EMPLOYEE_ID'])) { ?>
+        <div class="row detailOfRequest" style="margin-top: 4%;">
+            <div class="font-common">
+                <p style="margin-top:0px; font-size:11px;">
+                    I am responsible to do his/her official works in his/her absence from office due to travelling/leave training.
+                </p>
+                <div class="dtlTravel">
+                    <ul id="personalInfo">
+                        <li>Name: <?= $detail['SUB_EMPLOYEE_NAME']; ?></li>
+                        <li>Design: <?= $detail['SUB_DESIGNATION_TITLE']; ?></li>
+                        <li>Date: <?= $detail['SUB_APPROVED_DATE']; ?></li>
+                        <li>Signature: </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+</div>
+
+<div class="col-md-12" style="text-align:center;display:<?php echo $detail['STATUS'] == 'AP' ? 'block' : 'none'; ?>">
+    <a class="btn btn-success" id="print"> Print</a>
+</div>
+
+<?php
+print $this->formSubmit($submit);
+print $this->form()->closeTag();
+?>
+
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload .pdf or .txt or .jpg or .png files only.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>

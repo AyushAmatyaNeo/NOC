@@ -1,0 +1,68 @@
+
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/other/workforce-management/index.js'));
+?>
+
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.workforceList = [
+        {
+            SN: "1",
+            BRANCH_NAME: "Jawalakhel",
+            DESIGNATION: "General Manager",
+            DARBANDI: "2",
+            VACANT: "1"
+        },
+        {
+            SN: "1",
+            BRANCH_NAME: "New Road",
+            DESIGNATION: "Designer",
+            DARBANDI: "6",
+            VACANT: "6"
+        }
+    ];
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\workforce-management')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="margin-top-20">
+    <div id="workforceTable">
+    </div>
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>    
+        #: (SN == null) ? '-' : SN #
+        </td>
+        <td> 
+        #: (BRANCH_NAME== null) ? '-' : BRANCH_NAME #
+        </td>
+        <td> 
+        #: (DESIGNATION== null) ? '-' : DESIGNATION #
+        </td>
+        <td> 
+        #: (DARBANDI== null) ? '-' : DARBANDI #
+        </td>
+        <td> 
+        #: (VACANT== null) ? '-' : VACANT #
+        </td>
+        </tr>
+    </script>
+</div>
+

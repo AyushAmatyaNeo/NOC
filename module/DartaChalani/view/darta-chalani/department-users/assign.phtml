@@ -1,0 +1,66 @@
+<?php
+    
+$this->headScript()
+        ->appendFile($this->basePath('js/dartachalani/department-users/assign.js'));
+?>
+<script>
+    document.getEmpList = '<?= $this->url("departmentusers", ["action" => "getEmpList"]) ?>';
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Branch')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    Assign Users
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+            <form method="POST" name="departmentUsers" role="form" id="departmentUsers" action='<?= $this->url('departmentusers', ['action' => 'assign', 'id' => $id]); ?>'>   
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="departmentId">Department</label>
+                            <select name="departmentId" readonly id="departmentId"  class="form-control">
+                                <option value="<?=$department['DEPARTMENT_ID']?>"  selected=""><?=$department['DEPARTMENT_NAME']?></option>                           
+                            </select>
+                        </div>  
+                    </div>
+                    <?php if($department['DEPARTMENT_CODE']=='NA'){ ?>
+                    <div class="col-sm-4" id= "locationDiv">
+                        <div class="form-group">
+                            <label for="locationId">Location</label>
+                            <select name="locationId" id="locationId" class="form-control">                          
+                                <option value=""  selected="">Please select</option>                           
+                                    <?php foreach ($locations as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                    <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                    <?php } ?>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="employeeId">Employee</label>
+                            <select name="employeeId[]" id="employeeId" class="form-control" multiple>                          
+                                    <?php foreach ($employee as $key => $value) { 
+                                        $selected = (in_array($key, $employeeList)) ? "selected" : ""; ?>
+                                        <option <?=$selected?>  value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                    <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                </div>
+                <input class="btn btn-success" type="submit"/>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>

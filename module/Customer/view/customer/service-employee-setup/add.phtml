@@ -1,0 +1,270 @@
+<?php
+
+$this->headScript()->appendFile($this->basePath('js/customer/waged-employee-setup/add.js'));
+?>
+
+<?php
+
+$employeeCode = $form->get('employeeCode');
+$firstName = $form->get('firstName');
+$middleName = $form->get('middleName');
+$lastName = $form->get('lastName');
+$genderId = $form->get('genderId');
+$bloodGroupId = $form->get('bloodGroupId');
+$telephoneNo = $form->get('telephoneNo');
+$mobileNo = $form->get('mobileNo');
+$email = $form->get('email');
+$idCitizenshipNo = $form->get('citizenshipNo');
+$idCitizenshipIssueDate = $form->get('citizenshipIssueDate');
+$idCitizenshipIssuePlace = $form->get('citizenshipIssuePlace');
+$addrPermZoneId = $form->get('permanentZoneId');
+$addrPermDistrictId = $form->get('permanentDistrictId');
+$addrTempZoneId = $form->get('temporaryZoneId');
+$addrTempDistrictId = $form->get('temporaryDistrictId');
+
+
+$employeeType = $form->get('employeeType');
+$branchId = $form->get('branchId');
+$departmentId = $form->get('departmentId');
+$designationId = $form->get('designationId');
+$positionId = $form->get('positionId');
+$accountNo = $form->get('accountNo');
+
+
+
+
+$genderId->setOptions(["value_options" => $genders]);
+$bloodGroupId->setOptions(["value_options" => $bloodGroups]);
+$addrPermZoneId->setOptions(["value_options" => $zones]);
+$addrTempZoneId->setOptions(["value_options" => $zones]);
+
+
+$branchId->setValueOptions($branches);
+$departmentId->setValueOptions($departments);
+$designationId->setValueOptions($designations);
+$positionId->setValueOptions($positions);
+
+
+
+$addressValues['perZoneValue']='';
+$addressValues['perDisValue']='';
+$addressValues['tempZoneValue']='';
+$addressValues['tempDisValue']='';
+
+
+$submit = $form->get('submit');
+
+$form->setAttribute('action', $this->url('service-employee', ['action' => 'add']));
+$form->prepare();
+
+?>
+<script>
+    document.urlDistrict = '<?= $this->url("webService", ["action" => "district"]) ?>';
+    document.addressValues = <?= json_encode($addressValues)?>;
+    document.editPage = false;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\advance-setup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($firstName); ?>
+                            <?php print $this->formElement($firstName); ?>
+                            <?php print $this->formElementErrors()->render($firstName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($middleName); ?>
+                            <?php print $this->formElement($middleName); ?>
+                            <?php print $this->formElementErrors()->render($middleName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($lastName); ?>
+                            <?php print $this->formElement($lastName); ?>
+                            <?php print $this->formElementErrors()->render($lastName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($genderId); ?>
+                            <?php print $this->formElement($genderId); ?>
+                            <?php print $this->formElementErrors()->render($genderId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($employeeType); ?>
+                            <?php print $this->formElement($employeeType); ?>
+                            <?php print $this->formElementErrors()->render($employeeType, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($bloodGroupId); ?>
+                            <?php print $this->formElement($bloodGroupId); ?>
+                            <?php print $this->formElementErrors()->render($bloodGroupId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($telephoneNo); ?>
+                            <?php print $this->formElement($telephoneNo); ?>
+                            <?php print $this->formElementErrors()->render($telephoneNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($mobileNo); ?>
+                            <?php print $this->formElement($mobileNo); ?>
+                            <?php print $this->formElementErrors()->render($mobileNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($email); ?>
+                            <?php print $this->formElement($email); ?>
+                            <?php print $this->formElementErrors()->render($email, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($idCitizenshipNo); ?>
+                            <?php print $this->formElement($idCitizenshipNo); ?>
+                            <?php print $this->formElementErrors()->render($idCitizenshipNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($idCitizenshipIssueDate); ?>
+                            <?php print $this->formElement($idCitizenshipIssueDate); ?>
+                            <?php print $this->formElementErrors()->render($idCitizenshipIssueDate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($idCitizenshipIssuePlace); ?>
+                            <?php print $this->formElement($idCitizenshipIssuePlace); ?>
+                            <?php print $this->formElementErrors()->render($idCitizenshipIssuePlace, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($addrPermZoneId); ?>
+                            <?php print $this->formElement($addrPermZoneId); ?>
+                            <?php print $this->formElementErrors()->render($addrPermZoneId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($addrPermDistrictId); ?>
+                            <?php print $this->formElement($addrPermDistrictId); ?>
+                            <?php print $this->formElementErrors()->render($addrPermDistrictId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($addrTempZoneId); ?>
+                            <?php print $this->formElement($addrTempZoneId); ?>
+                            <?php print $this->formElementErrors()->render($addrTempZoneId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($addrTempDistrictId); ?>
+                            <?php print $this->formElement($addrTempDistrictId); ?>
+                            <?php print $this->formElementErrors()->render($addrTempDistrictId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($branchId); ?>
+                            <?php print $this->formElement($branchId); ?>
+                            <?php print $this->formElementErrors()->render($branchId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($departmentId); ?>
+                            <?php print $this->formElement($departmentId); ?>
+                            <?php print $this->formElementErrors()->render($departmentId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($designationId); ?>
+                            <?php print $this->formElement($designationId); ?>
+                            <?php print $this->formElementErrors()->render($designationId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($positionId); ?>
+                            <?php print $this->formElement($positionId); ?>
+                            <?php print $this->formElementErrors()->render($positionId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    
+                    <div class="col-sm-12 col-md-6 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($accountNo); ?>
+                            <?php print $this->formElement($accountNo); ?>
+                            <?php print $this->formElementErrors()->render($accountNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+

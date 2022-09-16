@@ -1,0 +1,130 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('js/Payroll/employee-grade/index.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.getGradeValueDetailWS = '<?php echo $this->url("employeeGrade", ["action" => "getEmployeeGrade"]); ?>';
+    document.getGradeValueUpdateWS = '<?php echo $this->url("employeeGrade", ["action" => "postEmployeeGrade"]); ?>';
+    document.fiscalYears =<?php echo json_encode($fiscalYears); ?>;
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.acl =<?php echo json_encode($acl); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\flatValue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 ">
+            <div class="portlet light bg-inverse">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-paper-plane font-green-haze"></i>
+                        <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label>Company</label>
+                            <select multiple class="form-control" name="company" id="companyId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Branch</label>
+                            <select multiple class="form-control" name="branchId" id="branchId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Department</label>
+                            <select multiple class="form-control" name="department" id="departmentId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Designation</label>
+                            <select multiple class="form-control" name="designation" id="designationId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Position</label>
+                            <select multiple class="form-control" name="position" id="positionId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Service Type</label>
+                            <select multiple class="form-control" name="serviceType" id="serviceTypeId">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-2">
+                            <label>Service Event Type</label>
+                            <select multiple class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Employee Type</label>
+                            <select multiple class="form-control" name="employeeType" id="employeeTypeId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Gender</label>
+                            <select multiple class="form-control" name="gender" id="genderId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Location</label>
+                            <select multiple class="form-control" name="location" id="locationId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Employee</label>
+                            <select multiple class="form-control" name="employee" id="employeeId">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-2">
+                            <label>Fiscal year</label>
+                            <select class="form-control reset-field" id="fiscalYearId" >
+                            </select>
+                        </div>
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
+                                Reset
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                            <button  id="searchEmployeesBtn" class="btn btn-default btn-sm pull-right">
+                                Search
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body">
+        <div class="row margin-top-20">
+            <div class="col-sm-12">
+                <button id="submit" class="btn pull-right" >SUBMIT</button>
+            </div>
+        </div>
+    </div>
+          
+<div id="table"></div>
+
+
+

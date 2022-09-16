@@ -1,0 +1,64 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\news-status')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<?php
+//print_r($newsDetails);
+//print_r($newsFileDetails);
+?>
+<div>
+    <h1>Messages</h1>
+    <div class="row">
+        <div class="col-md-offset-1">
+            <label><b>News Date: </b></label><?= $newsDetails['NEWS_DATE'] ?></br>
+            <label><b>Title: </b></label><?= $newsDetails['NEWS_TITLE'] ?></br>
+            <label><b>Description: </b></label><?= $newsDetails['NEWS_EDESC'] ?></br>
+            <label><b>Expiry Date: </b></label><?= $newsDetails['NEWS_EXPIRY_DT'] ?></br>
+        </div>
+    </div>
+
+    <div class="margin-top-20">
+
+        <?php
+        if ($newsFileDetails) {
+            ?>
+        <h3>Attachments</h3>
+            <div class="row">
+                <div class="col-md-6">
+                    <table class = "table">
+                        <tr>
+                            <td>SN</td>
+                            <td>Document Name</td>
+                            <td></td>
+                        </tr>
+                        <?php
+                        $i = 1;
+                        foreach ($newsFileDetails as $fileData) {
+                            ?>
+                            <tr>
+                                <td><?= $i ?></td>
+                                <td><?= $fileData['FILE_NAME'] ?></td>
+                                <td><a href="<?= $this->basePath() ?>/uploads/news/<?= $fileData['FILE_PATH'] ?>" target="_blank"><i class="fas fa-file></i></a></td>
+                                <td><?= print($this->basePath())?></td>
+                            </tr>
+
+                            <?php
+                            $i++;
+                        }
+                        ?>
+                    </table>
+                </div>
+            </div>
+            <?php
+        } else {
+            ?>
+            <b>Attachment Not Available</b>
+
+
+            <?php
+        }
+        ?>
+
+    </div>
+
+</div>

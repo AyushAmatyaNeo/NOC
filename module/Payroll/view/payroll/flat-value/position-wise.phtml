@@ -1,0 +1,64 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/bootstrap-table/bootstrap-table.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-table/bootstrap-table.min.js'))
+        ->appendFile($this->basePath('js/setup/recommend-approve/comBranchDeptDesignSearch.js'))
+        ->appendFile($this->basePath('js/Payroll/FlatValue/position-wise.js'));
+?>
+
+<script>
+    document.fiscalYears =<?php echo json_encode($fiscalYears); ?>;
+    document.flatValues =<?php echo json_encode($flatValues); ?>;
+    document.positions =<?php echo json_encode($positions); ?>;
+    document.getPositionFlatLink = '<?php echo $this->url('flatValue', ['action' => 'getPositionFlatValue']); ?>';
+    document.setPositionFlatValueLink = '<?php echo $this->url('flatValue', ['action' => 'setPositionFlatValue']); ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\flatValue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 ">
+            <div class="portlet light bg-inverse">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-paper-plane font-green-haze"></i>
+                        <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <select class="form-control" id="fiscalYearId" >
+                            </select>
+                        </div>
+                        <div class="col-sm-8">
+                            <button id="assignFlatValueBtn" class="btn pull-right" >Assign Flat Value</button>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-striped customTable " id="flatValueDetailTable" >
+                                <thead>
+                                    <tr id="flatValuesDetailHeader">
+
+                                    </tr>
+                                </thead>
+                                <tbody id="flatValueDetailGrid">
+
+
+                                </tbody>
+                                <tfoot id="flatValueDetailFooter">
+
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

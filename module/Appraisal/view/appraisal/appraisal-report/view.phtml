@@ -1,0 +1,31 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/jquery-print/jQuery.print.js'));
+$this->headScript()->appendFile($this->basePath('js/angular-messages.min.js'));
+$this->headScript()
+    ->appendFile($this->basePath('js/user-form-error.js'))
+    ->appendFile($this->basePath('js/appraisal/report/view.js'));
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\appraisalReport')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div id="printable">
+        <?php print $this->partial('appraisal/layout/employee-detail.phtml'); ?>
+        <?php print $this->partial('print-tab/kpi.phtml'); ?>
+        <?php print $this->partial('print-tab/competencies.phtml'); ?>
+        <?php print $this->partial('print-tab/performance-evaluation.phtml'); ?>
+        <?php print $this->partial('print-tab/appraiser-evaluation.phtml'); ?>
+        <?php print $this->partial('print-tab/reviewer-evaluation.phtml'); ?>
+        <?php print $this->partial('print-tab/super-reviewer-evaluation.phtml'); ?>
+        <?php print $this->partial('print-tab/appraisee-feedback.phtml'); ?>
+        <?php print $this->partial('tab/hr-feedback.phtml'); ?>
+    </div>
+    <?php if (in_array($assignedAppraisalDetail['STAGE_ID'], ['2', '9', '4'])) { ?>
+        <div class="col-md-12" style="text-align:center;">
+            <a class="btn btn-success print"> Print</a>
+        </div>
+    <?php } ?>
+</div>
+

@@ -1,0 +1,130 @@
+<?php
+$formSix->setAttribute('id', 'form6');
+$academicDegreeId = $formSix->get('academicDegreeId');
+$academicDegreeId->setValueOptions($academicDegree);
+$academicUniversityId = $formSix->get('academicUniversityId');
+$academicUniversityId->setValueOptions($academicUniversity);
+$academicProgramId = $formSix->get('academicProgramId');
+$academicProgramId->setValueOptions($academicProgram);
+$academicCourseId = $formSix->get('academicCourseId');
+$academicCourseId->setValueOptions($academicCourse);
+$rankType = $formSix->get('rankType');
+$rankType->setValueOptions($rankTypes);
+$rankValue = $formSix->get('rankValue');
+$passedYr = $formSix->get('passedYr');
+?>
+
+<div class="tab-pane" id="tab5" style="min-height: 400px;">
+    <div class="row esetup">
+        <input type="hidden" name="employeeId" id="employeeId" value="<?php echo $id; ?>">
+        <div class="col-sm-12">
+            <table class="table table-striped table-bordered table-hover no-footer customtbl" id="qualificationTbl">
+                <tr>
+                    <td>
+                        <a href="javascript:;" id="add-degree" class="btn btn-block blue"> 
+                            <?php print $academicDegreeId->getLabel(); ?>
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:;" id="add-university" class="btn btn-block blue"> 
+                            <?php print $academicUniversityId->getLabel(); ?>
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:;" id="add-program" class="btn btn-block blue"> 
+                            <?php print $academicProgramId->getLabel(); ?>
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:;" id="add-course" class="btn btn-block blue"> 
+                            <?php print $academicCourseId->getLabel(); ?>
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                    <td class="rankwidth"><?php print $this->formLabel($rankType); ?></td>
+                    <td><?php print $this->formLabel($rankValue); ?></td>
+                    <td class="passedyr"><?php print $this->formLabel($passedYr); ?></td>
+                    <td width="1%">
+                    </td>
+                </tr>
+                <tr ng-repeat="qualificationForm in qualificationFormList">
+                    <td>
+                        <input type="hidden" ng-model="qualificationForm.id"/>
+                        <select select2 class="form-control academicSelect"
+                                ng-options="degree.name for degree in degreeList track by degree.id"
+                                ng-model="qualificationForm.academicDegreeId">
+                        </select>
+                    </td>
+                    <td>
+                        <select select2 class="form-control academicSelect"
+                                ng-options="university.name for university in universityList track by university.id"
+                                ng-model="qualificationForm.academicUniversityId">
+                        </select>
+                    </td>
+                    <td>
+                        <select select2 class="form-control academicSelect"
+                                ng-options="program.name for program in programList track by program.id"
+                                ng-model="qualificationForm.academicProgramId">
+                        </select>
+                    </td>
+                    <td>
+                        <select select2 class="form-control academicSelect"
+                                ng-options="course.name for course in courseList track by course.id"
+                                ng-model="qualificationForm.academicCourseId">
+                        </select>
+                    </td>
+                    <td>
+                        <select select2 class="form-control academicSelect"
+                                ng-options="rankTypes.name for rankTypes in rankType track by rankTypes.id"
+                                ng-model="qualificationForm.rankType">
+                        </select>
+                    </td>
+
+
+                    <td>
+                        <input ng-model="qualificationForm.rankValue" required="required"
+                               class="rankValue-weight form-control" size="1" type="text" value="">
+                    </td>
+                    <td>
+                        <input type="text" class="form-passedYr form-control" value=""
+                               ng-model="qualificationForm.passedYr" size="2">
+                    </td>
+                    <td width="1%" style="padding:15px;" class="checkboxgap">
+                        <div class="md-checkbox">
+                            <input type="checkbox" id="{{qualificationForm.checkbox}}" class="md-check"
+                                   ng-model="qualificationForm.checked">
+                            <label for="{{qualificationForm.checkbox}}">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                            </label>
+                        </div>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <a href="javascript:;" class="btn btn-icon-only default pull-right"
+                           ng-click="view()">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                    </td>
+                    <td>
+                        <a href="javascript:;" class="btn btn-icon-only default" ng-click="delete()">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>

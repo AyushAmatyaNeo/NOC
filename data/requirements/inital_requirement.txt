@@ -1,0 +1,25 @@
+1. Recuritment System [No need]
+2. Tax Calculator [related to Payroll]
+
+
+3. Leave: Validation in late post [done]
+4. Wages tracking system for daily basis and contract basis [need verification]
+5. Day off exchange 
+6. Travel advance and Travel expense verification with voucher generation. [dependancy]
+7. Late Office in for two days a month leave. [need verification]
+8. Family detail maintain. [need verificaton]
+9. Training Request and Training Call Process [done but training attendance report is pending]
+10. Reports [done]
+11. Monthly Report[done]
+12. Attendance Summary Report[done]
+13. Late In Early Out Report[done]
+
+14. Assign while creating profile[done]
+
+15. Expense approval should reflect advance amount if taken [dependancy]
+16. Experience and Training History of employee should be maintained [done]
+17. Shift should have total hour and grace time for late in and early out[done]
+
+18. Overtime approval system as leave assign [done]
+19. Loan Entry(apply) allow back date( bug) [done]
+20. Redesign Asset table and issue table [done]

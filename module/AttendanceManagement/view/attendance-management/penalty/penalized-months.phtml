@@ -1,0 +1,66 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/AttendanceManagement/penalty/penalized-months.js'));
+?>
+<script>
+    document.editLink = '<?= $this->url("penalty", ["action" => "deduct"]); ?>';
+    document.deleteLink = '<?= $this->url("penalty", ["action" => "deduct"]); ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.getFiscalYearMonthLink = '<?php echo $this->url('penalty', ['action' => 'getFiscalYearMonth']); ?>';
+    document.noOfDeductionDays =<?php echo $noOfDeductionDays; ?>;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\penalty')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a id="export" href="javascript:;" class="hris-export-to-excel" hris-export-to-excel-target="withOTReport">
+                            <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <select class="form-control"  id="fiscalYear" >
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-control" id="fiscalMonth" >
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <input class="form-control" id="noOfDeductionDays" type="number" step="0.5" min="0" required />
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="table">
+</div>

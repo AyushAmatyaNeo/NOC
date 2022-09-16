@@ -1,0 +1,82 @@
+<div class="page-sidebar-wrapper">
+    <div class="page-sidebar navbar-collapse collapse">
+        <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true"
+            data-slide-speed="200" style="padding-top: 20px">
+            <li class="sidebar-toggler-wrapper hide">
+                <div class="sidebar-toggler">
+                    <span></span>
+                </div>
+            </li>
+<!--            <li class="sidebar-search-wrapper">
+                <form class="sidebar-search" id="sidebar-search">
+                    <a href="javascript:;" class="remove">
+                        <i class="icon-close"></i>
+                    </a>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <a href="javascript:;" class="btn submit">
+                                <i class="icon-magnifier"></i>
+                            </a>
+                        </span>
+                    </div>
+                </form>
+            </li>-->
+<!--            <li class="heading">
+                <h3 class="uppercase">Features</h3>
+            </li>-->
+
+            <?php
+
+            function generateMenus($page) {
+                $isActive = $page->isActive();
+                $isChildActive = $page->isActive(true);
+                $active = $isActive ? 'active' : ( $isChildActive ? 'active open' : '');
+                $subMenus = generateSubMenus($page);
+
+
+                $showSubMenus = $page->hasPages() && (!$page->isChildAllInvisible) ? "class='nav-link nav-toggle'" : "";
+                $selected = $isActive || $isChildActive ? "<span class='selected'></span>" : "";
+                $isOpen = $isChildActive ? 'open' : '';
+                $showArrow = $page->hasPages() && (!$page->isChildAllInvisible) ? "<span class='arrow " . $isOpen . "'></span>" : "";
+
+                $showHide = (($page->isVisible == 'N') ? "hide" : "");
+                return "<li class='nav-item " . $active . " " . $showHide . "'>"
+                        . "<a href='" . $page->getHref() . "' " . $showSubMenus . " >"
+                        . "<i class='" . $page->icon . "'></i>"
+                        . "<span class='title'>"
+                        . $page->getLabel()
+                        . "</span>"
+                        . $selected
+                        . $showArrow
+                        . "</a>"
+                        . $subMenus
+                        . "</li>";
+            }
+
+            function generateSubMenus($page) {
+                if ($page->hasPages()) {
+                    $subPages = $page->getPages();
+                    $pageList = "";
+                    foreach ($subPages as $subPage) {
+                        $menu = generateMenus($subPage);
+                        $pageList = $pageList . $menu;
+                    }
+
+                    $showSubMenus = $page->isActive(true) ? "style='display:block;'" : "style='display:none'";
+                    $ul = "<ul class='sub-menu' $showSubMenus>";
+                    $ulx = "</ul>";
+                    return $ul . $pageList . $ulx;
+                } else {
+                    return '';
+                }
+            }
+            ?>
+            <?php foreach ($this->container as $page): ?>
+                <?php echo generateMenus($page); ?>
+            <?php endforeach; ?>
+
+
+    </div>
+    <!-- END SIDEBAR -->
+</div>

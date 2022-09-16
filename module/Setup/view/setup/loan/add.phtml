@@ -1,0 +1,368 @@
+<?php
+
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+ ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/setup/loan/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'loan-form');
+
+
+$loanName = $form->get('loanName');
+$minAmount = $form->get('minAmount');
+$maxAmount = $form->get('maxAmount');
+$ledgerCode = $form->get('ledgerCode');
+$interestRate = $form->get('interestRate');
+$repaymentAmount = $form->get('repaymentAmount');
+$repaymentPeriod = $form->get('repaymentPeriod');
+$maxIssueTime = $form->get('maxIssueTime');
+$eligibleServicePeriod = $form->get('eligibleServicePeriod');
+$validFrom = $form->get('validFrom');
+$validUpto = $form->get('validUpto');
+$remarks = $form->get('remarks');
+$payIdInt = $form->get('payIdInt');
+$payIdAmt = $form->get('payIdAmt');
+$drAccCode = $form->get('drAccCode');
+$crAccCode = $form->get('crAccCode');
+
+$loanType = $form->get('loanType');
+$loanType->setValueOptions($loanTypes);
+
+$issuedBy = $form->get('issuedBy');
+$issuedBy->setValueOptions($issuers);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value','SUBMIT');
+
+$form->setAttribute('action', $this->url('loan', ['action' => 'add']));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+
+$form->prepare();
+?>
+    <script>
+        document.uploadUrl = '<?= $this->url('loan', ['action' => 'fileUpload']); ?>';
+        document.deleteFileLink = '<?= $this->url('loan', ['action' => 'deleteFileByName']); ?>';
+        document.pushFileLink = '<?php echo $this->url('loan', ['action' => 'pushFileLink']); ?>';
+        document.menu=<?php $menu = ["id" => "menuSetup","subMenu"=>["id"=>"subMenuLoan"]];echo json_encode($menu);?>;
+        document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+        document.pay_codes = <?php echo json_encode($pay_codes); ?>;
+    </script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loan')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+                
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($loanName); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($loanName); ?>
+                            <?php print $this->formElementErrors()->render($loanName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($issuedBy); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($issuedBy); ?>
+                            <?php print $this->formElementErrors()->render($issuedBy, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($loanType); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($loanType); ?>
+                            <?php print $this->formElementErrors()->render($loanType, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($interestRate); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($interestRate); ?>
+                            <?php print $this->formElementErrors()->render($interestRate, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($eligibleServicePeriod); ?>
+                            <?php print $this->formElement($eligibleServicePeriod); ?>
+                            <?php print $this->formElementErrors()->render($eligibleServicePeriod, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($maxIssueTime); ?>
+                            <?php print $this->formElement($maxIssueTime); ?>
+                            <?php print $this->formElementErrors()->render($maxIssueTime, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($minAmount); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($minAmount); ?>
+                            <?php print $this->formElementErrors()->render($minAmount, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($maxAmount); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($maxAmount); ?>
+                            <?php print $this->formElementErrors()->render($maxAmount, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($repaymentAmount); ?>
+                            <?php print $this->formElement($repaymentAmount); ?>
+                            <?php print $this->formElementErrors()->render($repaymentAmount, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>    
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payIdInt); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($payIdInt); ?>
+                            <?php print $this->formElementErrors()->render($payIdInt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payIdAmt); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($payIdAmt); ?>
+                            <?php print $this->formElementErrors()->render($payIdAmt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>  
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($drAccCode); ?>
+                            <?php print $this->formElement($drAccCode); ?>
+                            <?php print $this->formElementErrors()->render($drAccCode, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($crAccCode); ?>
+                            <?php print $this->formElement($crAccCode); ?>
+                            <?php print $this->formElementErrors()->render($crAccCode, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($ledgerCode); ?>
+                            <?php print $this->formElement($ledgerCode); ?>
+                            <?php print $this->formElementErrors()->render($ledgerCode, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>   
+
+                <div class="row">
+                        <div class="col-sm-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($validFrom); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($validFrom); ?>
+                            <?php print $this->formElementErrors()->render($validFrom, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="validFromNepali">&nbsp;</label>
+                            <input type="text" name="validFromNepali" id="validFromNepali"
+                                   class="form-control" value="">
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($validUpto); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($validUpto); ?>
+                            <?php print $this->formElementErrors()->render($validUpto, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="validUptoNepali">&nbsp;</label>
+                            <input type="text" name="validUptoNepali" id="validUptoNepali"
+                                   class="form-control" value="">
+                        </div>
+                    </div> 
+                    </div>                                          
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($repaymentPeriod); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($repaymentPeriod); ?>
+                            <?php print $this->formElementErrors()->render($repaymentPeriod, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label>Rate Flexible Flag</label>
+                            <select name="isRateFlexible" id="isRateFlexible">
+                                <option value="N">No</option>
+                                <option value="Y">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                <div class="form-group" >
+                    <?php print $this->formLabel($remarks); ?>
+                    <?php print $this->formElement($remarks); ?>
+                    <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                </div>
+                        
+                    </div>
+                </div>  
+
+                <div class="row">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th>
+                                <th>&nbsp;</th>
+                                <th>Action</th>
+                                <th>&nbsp;</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                <fieldset class="margin-bottom-20">
+                    <legend style="margin-bottom: 5px !important;">
+                        <span style="font-size:13px;">Restriction For</span>
+                    </legend>
+                        <div class="row">                   
+                            <div class="col-sm-4">
+                                <?php print $this->formLabel($serviceType); ?>
+                                <?php print $this->formElement($serviceType); ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <?php print $this->formLabel($designation); ?>
+                                <?php print $this->formElement($designation); ?>
+                            </div>
+                            <div class="col-sm-4">
+                                <?php print $this->formLabel($position); ?>
+                                <?php print $this->formElement($position); ?>
+                            </div>                       
+                        </div>
+                        <div class="row margin-top-10">                   
+                            <div class="col-sm-6">
+                                <label for="salaryRange">Salary Range</label>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input size="5" type="number" id="salaryRangeFrom" placeholder="From" name="salaryRangeFrom" class="form-control" min="0"/>
+                                    </div>
+                                    <div class="col-sm-6" style="padding-left: 0px !important;">
+                                        <input size="5" type="number" id="salaryRangeTo" placeholder="To" name="salaryRangeTo" class="form-control" min="0"/>
+                                    </div>                                 
+                                </div>                                
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="workingPeriod">Working Period(in year)</label>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input size="5" type="number" id="workingPeriodFrom" placeholder="From" name="workingPeriodFrom" class="form-control" min="0"/>
+                                    </div>
+                                    <div class="col-sm-6" style="padding-left: 0px !important;">
+                                        <input size="5" type="number" id="workingPeriodTo" placeholder="To" name="workingPeriodTo" class="form-control" min="0"/>
+                                    </div>                                 
+                                </div>
+                            </div>                      
+                        </div>
+                    </fieldset>
+                
+                <?php
+                    print $this->formSubmit($submit);
+                    print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--bootstrap modal-->
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload Image.</div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>

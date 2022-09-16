@@ -1,0 +1,77 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/bootstrap-table/bootstrap-table.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-table/bootstrap-table.min.js'))
+        ->appendFile($this->basePath('js/setup/recommend-approve/comBranchDeptDesignSearch.js'))
+        ->appendFile($this->basePath('js/Payroll/MonthlyValue/position-wise.js'));
+?>
+
+<script>
+    document.fiscalYears =<?php echo json_encode($fiscalYears); ?>;
+    document.months =<?php echo json_encode($months); ?>;
+    document.monthlyValues =<?php echo json_encode($monthlyValues); ?>;
+    document.positions =<?php echo json_encode($positions); ?>;
+    document.getPositionMonthlyLink = '<?php echo $this->url('monthlyValue', ['action' => 'getPositionMonthlyValue']); ?>';
+    document.setPositionMonthlyValueLink = '<?php echo $this->url('monthlyValue', ['action' => 'setPositionMonthlyValue']); ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\monthlyValue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 ">
+            <div class="portlet light bg-inverse">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-paper-plane font-green-haze"></i>
+                        <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <select class="form-control" id="fiscalYearId" >
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="monthId" >
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="monthlyId" multiple="multiple" >
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select class="form-control" id="positionId" multiple="multiple" >
+                            </select>
+                        </div>
+                        <div class="col-sm-4">
+                            <button id="assignMonthlyValueBtn" class="btn pull-right" >Assign Monthly Value</button>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-12" style="overflow-x:auto;" >
+                            <table class="table table-bordered table-striped customTable " id="monthlyValueDetailTable" >
+                                <thead>
+                                    <tr id="monthlyValuesDetailHeader">
+
+                                    </tr>
+                                </thead>
+                                <tbody id="monthlyValueDetailGrid">
+
+
+                                </tbody>
+                                <tfoot id="monthlyValueDetailFooter">
+
+                                </tfoot>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

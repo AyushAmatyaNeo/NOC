@@ -1,0 +1,54 @@
+<?php
+//Load JS files here
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('sweet_alert/dist/sweetalert2.css'))
+        ->appendStylesheet($this->basePath('sweet_alert/dist/sweetalert2.min.css'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+    
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'))
+        ->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/document-registration/karyaSampadan.js'));
+?> 
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> List Of My Karya Sampadan</span>
+        </div>
+        <div class="tools">
+            <a  class="collapse"></a>
+            <a  class="fullscreen"></a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools<i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                    </li>
+                    <li >
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> Export to PDF </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div id="karyaSampadanList" >
+        <div id="karyaSampadanTable">
+        </div>
+    </div>
+</div>

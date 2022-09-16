@@ -1,0 +1,85 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/Payroll/MonthlyValue/addEdit.js'));
+?>
+
+<?php
+$mthCode = $form->get('mthCode');
+$mthEdesc = $form->get('mthEdesc');
+$mthLdesc = $form->get('mthLdesc');
+$assignType = $form->get('assignType');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+
+$submit->setAttribute('value', 'Submit');
+$form->setAttribute('action', $this->url('monthlyValue', ['action' => 'edit', 'id' => $id]));
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\monthlyValue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class="row">
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($mthCode); ?>
+                            <?php print $this->formElement($mthCode); ?>
+                            <?php print $this->formElementErrors()->render($mthCode, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($mthEdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($mthEdesc); ?>
+                            <?php print $this->formElementErrors()->render($mthEdesc, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($mthLdesc); ?>
+                            <?php print $this->formElement($mthLdesc); ?>
+                            <?php print $this->formElementErrors()->render($mthLdesc, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($assignType); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($assignType); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($assignType, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+
+</div>

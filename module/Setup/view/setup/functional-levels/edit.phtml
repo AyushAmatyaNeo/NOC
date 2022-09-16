@@ -1,0 +1,77 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/functionalLevels/add.js'));
+?>
+<?php
+$functionalLevelEdesc = $form->get("functionalLevelEdesc");
+$functionalLevelLdesc = $form->get("functionalLevelLdesc");
+$functionalLevelCode = $form->get("functionalLevelNo");
+$roles = $form->get('roles');
+$submit = $form->get("submit");
+$form->setAttribute('action', $this->url('functionalLevels', ['action' => 'edit', 'id' => $id]));
+$form->prepare();
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\functionalLevels')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($functionalLevelCode) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($functionalLevelCode); ?>
+                            <?= $this->formElementErrors()->render($functionalLevelCode, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($functionalLevelEdesc) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($functionalLevelEdesc); ?>
+                            <?= $this->formElementErrors()->render($functionalLevelEdesc, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($functionalLevelLdesc) ?>
+                            <?= $this->formElement($functionalLevelLdesc); ?>
+                            <?= $this->formElementErrors()->render($functionalLevelLdesc, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($roles->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($roles); ?>
+                            <?php print $this->formElement($roles); ?>
+                            <?php print $this->formElementErrors()->render($roles, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+

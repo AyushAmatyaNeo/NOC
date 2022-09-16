@@ -1,0 +1,209 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/cafeteria/cafeteria-activity/activity.js'));
+
+
+?>
+<script>
+   
+</script>
+<style>
+    input[type="number"], select, input[type="text"]{
+        width: 80%;
+    }
+    .table-wrapper {
+        background-color: lightgreen;
+        max-height: 450px;
+        max-width: 80%;
+        overflow: scroll;
+        display:inline-block;
+    }
+    .bg-inverse{
+        background-color: lightblue !important;
+    }
+    table td {
+        padding-bottom:0 !important; 
+        padding-top:0 !important;
+        overflow: hidden !important;
+        white-space: nowrap !important;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+</style>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loanApply')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.menuList = <?=json_encode($menuList)?>;
+    document.timeList = <?=json_encode($timeList)?>;
+    document.mapList = <?=json_encode($mapList)?>;
+    document.employeeProfiles = <?=json_encode($employeeDetails)?>;
+    document.fetchProfileLink = '<?=$this->url("cafeteria-activity", ["action" => "fetchEmployeeProfile"])?>';
+    document.fetchPresentStatusLink = '<?=$this->url("cafeteria-activity", ["action" => "fetchPresentStatus"])?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+</script>   
+    
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase">Data Record Entry System</span>
+            <label style="margin-left: 100px;">Type:
+            <label>SCP <input type="radio" id="scp" name="type" value="SCP"></label>
+            <label>LSG <input type="radio" id="lsg" name="type" value="LSG"></label>
+            </label>
+        </div>
+        
+        <div class="tools">
+            <a href="" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+      <!--       <a id="add" class="btn default btn-sm">
+                <i class="fa fa-plus-square icon-black"></i> New </a>
+           <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> 
+                            Export to Excel 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF
+                        </a>
+                    </li>
+                </ul>
+            </div>-->
+        </div>
+    </div>
+    
+
+<!--        <div class="row margin-top-10">
+            <div class=" col-sm-offset-8 col-sm-4">
+                <button class="btn default btn-sm pull-right hris-reset-btn">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button id="search" class="btn btn-default btn-sm pull-right">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>-->
+<form method="post" action="<?=$this->url('cafeteria-activity', ['action' => 'activity'])?>" id="cafeteria-activity">
+<div class="container">
+    <div class="row">
+    <div class="col-sm-5">
+    <div class="row">
+        <div class="col-sm-12">
+            <table class="table table-bordered left-table">
+                <tr>
+                    <td>
+                        <div class="form-group">
+                        <label for="logDate">Log Date</label>  <span class="required" aria-required="true">*</span>
+                        <input type="text" name="logDate" required="required" id="logDate" class="form-control" value="">                                                                   
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group">
+                        <label for="nepaliDate">&nbsp;</label>
+                        <input type="text" name="nepaliLogDate" id="nepaliLogDate" class="form-control" value="">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label class="control-label">
+                            Menu Time:</label>
+                                <div class="form-group">
+                            <select name="menuTime" id="menuTime">
+                                <option value="-">--</option>
+                                <?php foreach($timeList as $item){ ?>
+                                <option value="<?=$item['TIME_ID']?>"><?=$item['TIME_NAME']?></option>
+                                <?php } ?>
+                            </select></div>
+                        </td><td rowspan="2"><div class="image">
+        </div></td>
+                </tr>
+                <tr>
+                    <td>
+                            <label class="control-label">
+                                Pay Type:</label><div class="form-group">
+                            <select name="payType" id="payType">
+                                <option value="p">payable</option>
+                                <option value="c">complementary</option>
+                            </select>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Code</label></td><td><div class="form-group">
+                        <input type="number" name="empCode" id="empCode">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Name</label></td><td><div class="form-group">
+                        <input type="text" readonly name="empName" id="empName" tabindex="-1">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Department</label></td><td><div class="form-group">
+                        <input type="text" readonly name="dept" id="dept" tabindex="-1">
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label>Designation</label></td><td><div class="form-group">
+                        <input type="text" readonly name="desg" id="desg" tabindex="-1">
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    </div>
+        <div class="col-sm-7 right-table" id="menuTable">
+        </div>
+    </div>
+    
+    <div class="form-group">
+        <button type="submit" id="submit" class="btn btn-primary">Submit</button>
+    </div>
+</form>    
+</div>
+    

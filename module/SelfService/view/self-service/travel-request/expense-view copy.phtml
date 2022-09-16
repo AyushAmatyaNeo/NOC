@@ -1,0 +1,1058 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\travelRequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>   
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+        
+    </script>
+<?php } ?>
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/SelfService/travel-request/expense-view.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'travelRequest-form');
+
+$jvNumber = $form->get('jvNumber');
+$chequeNumber = $form->get('chequeNumber');
+$bank = $form->get('bank');
+
+
+$recommendedRemarks = $form->get('recommendedRemarks');
+$recommendedRemarks->setAttributes(["disabled" => "disabled"]);
+$approvedRemarks = $form->get('approvedRemarks');
+$approvedRemarks->setAttributes(["disabled" => "disabled"]);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('travelRequest', ['action' => 'add']));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.pullFilebyId = '<?php echo $this->url('travelRequest', ['action' => 'pullFilebyId']); ?>';
+    document.pushDCFileLink = '<?php echo $this->url('travelRequest', ['action' => 'pushDCFileLink']); ?>';
+    document.uploadUrl = '<?= $this->url("travelRequest", ["action" => "fileUpload"]); ?>';
+    document.id = '<?php echo $id; ?>';
+</script>
+<div class="row margin-top-20">  
+    <div class="col-sm-12">    
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Travel Request Detail
+                </div>
+            </div>
+            <div class="portlet-body div-font-11">
+                <div class="row">
+                <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($jvNumber); ?>
+                            <input readonly class= "form-jvNumber form-control" value = '<?php echo $Jvdetails['JV_NUMBER']; ?>'>
+                            <?php print $this->formElementErrors()->render($jvNumber, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($chequeNumber); ?>
+                            <input readonly class= "form-chequeNumber form-control" value = '<?php echo $Jvdetails['CHEQUE_NUMBER']; ?>'>
+                            <?php print $this->formElementErrors()->render($chequeNumber, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($bank); ?>
+                            <input readonly class= "form-control" value = '<?php echo $Jvdetails['BANK_NAME']; ?>'>
+                            <?php print $this->formElementErrors()->render($bank, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table width="80%">
+                            <tr>
+                                <td width="40%">
+                                    <label for="travelCode">Employee Name : </label>
+                                </td>
+                                <td> <?php echo $detail['FULL_NAME']; ?></td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table width="100%">
+                            <tr>
+                                <td width="35%">
+                                    Recommender :  
+                                </td>
+                                <td>
+                                    <?php echo ucwords(strtolower($recommender)); ?>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table width="100%">
+                            <tr>
+                                <td>
+                                    Approver :  
+                                </td>
+                                <td>
+                                    <?php echo ucwords(strtolower($approver)); ?>
+                                </td>
+                            </tr>     
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="destination">Status :</label> 
+                                </td>
+                                <td>
+                                    <input  value="<?php echo $detail['STATUS_DETAIL']; ?>" type="text" disabled="disabled" name="returnedDate" id="returnedDate" class="form-control"> 
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="advanceAmount">Advance Amount :</label> 
+                                </td>
+                                <td>
+                                    <input type="text" disabled="disabled" value="<?php echo $detail['REQUESTED_AMOUNT']; ?>" name="advanceAmount" id="advanceAmount" class="form-control">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="departure">Departure :</label> 
+                                </td>
+                                <td>
+                                    <input type="text" disabled="disabled" value="<?php echo $detail['DEPARTURE'] ?>" name="departure"  id="departure" class="form-control">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                      <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="destination">Destination :</label> 
+                                </td>
+                                <td>
+                                    <input type="text" disabled="disabled" value="<?php echo $detail['DESTINATION'] ?>" name="destination"  id="destination" class="form-control">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="purpose">Purpose :</label> 
+                                </td>
+                                <td>
+                                    <input type="text" disabled="disabled" value="<?php echo $detail['PURPOSE']; ?>" name="purpose"  id="purpose" class="form-control">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="departureDate">Departure Date :</label>
+                                </td>
+                                <td>
+                                    <input  type="text" disabled="disabled" value="<?php echo $detail['FROM_DATE']; ?>" name="departureDate" id="departureDate" class="form-control">
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="employeeCode">Returned Date :</label> 
+                                </td>
+                                <td>
+                                    <input  value="<?php echo $detail['TO_DATE']; ?>" type="text"  disabled="disabled" name="returnedDate" id="returnedDate" class="form-control"> 
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="advanceAmount">Requested Date :</label> 
+                                </td>
+                                <td>
+                                    <input  value="<?php echo $detail['REQUESTED_DATE']; ?>" type="text"  disabled="disabled" name="returnedDate" id="returnedDate" class="form-control"> 
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                   
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <table>
+                            <tr>
+                                <td width="40%">
+                                    <label for="travelCode">Travel Code :</label></td>
+                                <td><input type="text" disabled="disabled" value="<?php echo $detail['TRAVEL_ID']; ?>" name="travelCode" id="travelCode" class="form-control"></td>
+                            </tr>
+                        </table>
+
+                    </div> 
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                        <?php if($detail['IS_TEAM_LEAD'] == 'Y'){ ?>
+                        <input type="checkbox" id="teamLead" name="teamLead" disabled  checked  >
+                            <?php }else{ ?>
+                        <input type="checkbox" id="teamLead" name="teamLead" disabled   >
+                        <?php } ?>
+                        <label for="teamLead">Team Leader</label>
+                        </div>
+                </div>
+                <?php if($domesticExpenseDtlList){ ?>
+                <div class="margin-top-10 scrollbar-horizantal" id="domesticConfigTable">
+                    <div class="row" >
+                        <div style="margin-left: 20px" >
+                            <table id="domesticConfigTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Domestic Configuration</th>
+                                    </tr>
+                                    <tr> 
+                                        <th rowspan="2">Departure Date</th>       
+                                        <th colspan="2">Location</th>       
+                                        <th rowspan="2">Means of Transport</th>       
+                                        <th rowspan="2">Arrive Date</th>
+                                        <th rowspan="2">No. of Days</th> 
+                                        <th rowspan="2">KM walked</th>
+                                        <th rowspan="2">Amount</th> 
+                                        <th colspan="5">Mode of Transportation</th> 
+                                        <th colspan="2">Petty Expenses</th> 
+                                        <th rowspan="2">Purpose</th>     
+                                        <th rowspan="2">Total all column</th> 
+                                        <th rowspan="2">Remarks</th>       
+                                                
+                                    </tr>
+                                    <tr>       
+                                        <th>From</th>       
+                                        <th>To</th>
+                                        <th>On foot, Train, Vehicle, Airplane, Cruise etc.</th>       
+                                        <th>Class</th>   
+                                        <th>Rate</th>       
+                                        <th>Miles</th>
+                                        <th>Rate</th> 
+                                        <th>Details</th>
+                                        <th>Total</th>          
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($domesticExpenseDtlList as $domesticExpenseDtlRow) { ?>
+                                        <tr>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['DEPARTURE_DT']; ?>"  readonly="readonly" name="depDate[]"/>
+                                                    <!-- <input type="text" name="depDate[]"  class="depDate"> -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['DEPARTURE_PLACE']; ?>"  readonly="readonly" name="locFrom[]"/>       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['ARRAIVAL_PLACE']; ?>"  readonly="readonly" name="locto[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="locto[]"  class="locto">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="overflow:hidden">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['DOMESTIC_TYPE']; ?>"  readonly="readonly" name="mot[]"/>
+                                                    <!-- <select class='mot' name='mot[]' >
+                                                    </select> -->
+                                                </div>
+                                            </td>       
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['ARRAIVAL_DT']; ?>"  readonly="readonly" name="arrDate[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="arrDate[]"   class="arrDate">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:50px">
+                                                        <input style="width:50px" type="text" value="<?= $domesticExpenseDtlRow['NOOFDAYS']; ?>"  readonly="readonly" name="noOfDays[]"/>
+                                                    <!-- <input style="width:100%" type="number" readonly name="noOfDays[]" required="required"  class="noOfDays">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <?php if($domesticExpenseDtlRow['DOMESTIC_TYPE'] == "WALKING"){ ?>
+                                                        <input style="width:80px" type="text" value="<?= $domesticExpenseDtlRow['UNIT']; ?>"  readonly="readonly" name="kmWalked[]"/>
+                                                    <?php }else{ ?>
+                                                        <input style="width:80px" type="text" value=0  readonly="readonly" name="kmWalked[]"/>
+                                                    <?php } ?>       
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $domesticExpenseDtlRow['AMOUNT']; ?>"  readonly="readonly" name="total[]"/>
+                                                    <!-- <input style="width:100%" readonly type="number" name="total[]"  class="total">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['TRANSPORTATION']; ?>"  readonly="readonly" name="transport[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['TRANSPORTATION_CLASS']; ?>"  readonly="readonly" name="transportClass[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['RATE1']; ?>"  readonly="readonly" name="rate1[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['MILES']; ?>"  readonly="readonly" name="miles[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['RATE2']; ?>"  readonly="readonly" name="rate2[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="otherExpenseDetail" name="otherExpenseDetail[]"><?= $domesticExpenseDtlRow['OTHER_EXPENSE_DETAIL']; ?></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $domesticExpenseDtlRow['OTHER_EXPENSE']; ?>"  readonly="readonly" name="otherExpenses[]"/>
+                                                    <!-- <input style="width:100%" type="number" name="otherExpenses[]"  class="otherExpenses">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="detPurpose" name="detPurpose[]"><?= $domesticExpenseDtlRow['PURPOSE']; ?></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $domesticExpenseDtlRow['TOTAL']; ?>"  readonly="readonly" name="total[]"/>
+                                                    <!-- <input style="width:100%" readonly type="number" name="total[]"  class="total">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="detRemarks" name="detRemarks[]"><?= $domesticExpenseDtlRow['REMARKS']; ?></textarea>
+                                                    <!-- <textarea style="width:100%" rows="4" cols="50" name="detRemarks[]"  class="detRemarks"></textarea> -->
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    <?php } ?>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                        </td>
+                                        <td><b>Grand Total:</b></td>
+                                        <td>
+                                            <input type="number" value="<?= $totalDomesticAmount ?>"  readonly="readonly" id="sumAllTotal" step="0.01" min="0" readonly="readonly" style="width: 80px;" />
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+                <?php } ?>
+                
+                <?php if($internationalExpenseDtlList){ ?>
+                <div class="margin-top-10 scrollbar-horizantal" id="internationalConfigTable">
+                    <div class="row" >
+                        <div style="margin-left: 20px;" >
+                            <table id="internationalConfigTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">International Configuration</th>
+                                    </tr>
+                                    <tr>
+                                        <!-- <th rowspan="2">Action</th> -->
+                                        <th rowspan="2">Departure</th>       
+                                        <th colspan="2">Location</th>       
+                                        <th rowspan="2">International Place</th>       
+                                        <th rowspan="2">Arrives</th>
+                                        <th rowspan="2">No. of Days</th>
+                                        <th rowspan="2">Amount</th> 
+                                        <th colspan="5">Mode of Transportation</th> 
+                                        <th colspan="2">Petty Expenses</th> 
+                                        <th rowspan="2">Purpose</th>
+                                        <th rowspan="2">Total</th>
+                                        <th rowspan="2">Currency</th> 
+                                        <th rowspan="2">Exchange Rate</th> 
+                                        <th rowspan="2">NPR Total</th>        
+                                        <th rowspan="2">Remarks</th>       
+                                                
+                                    </tr>
+                                    <tr>
+                                        <!-- <th>Date</th>        -->
+                                        <!-- <th>Time</th>        -->
+                                        <th>From</th>       
+                                        <th>To</th>      
+                                        <th>On foot, Train, Vehicle, Airplane, Cruise etc.</th>       
+                                        <th>Class</th>   
+                                        <th>Rate</th>       
+                                        <th>Miles</th>
+                                        <th>Rate</th> 
+                                        <th>Details</th>
+                                        <th>Total</th>  
+                                        <!-- <th>Date</th>        -->
+                                        <!-- <th>Time</th>        -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($internationalExpenseDtlList as $internationalExpenseDtlRow) { ?>
+                                        <tr>
+                                            <!-- <td></td> -->
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $internationalExpenseDtlRow['DEPARTURE_DT']; ?>"  readonly="readonly" name="depDateInternational[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="depDateInternational[]"   class="depDateInternational"> -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $internationalExpenseDtlRow['DEPARTURE_PLACE']; ?>"  readonly="readonly" name="locFromInternational[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="locFromInternational[]"  class="locFromInternational">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $internationalExpenseDtlRow['ARRAIVAL_PLACE']; ?>"  readonly="readonly" name="loctoInternational[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="loctoInternational[]"   class="loctoInternational">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="overflow:hidden">
+                                                    <input style="width:150px" type="text" value="<?= $internationalExpenseDtlRow['INTERNATIONAL_TYPE']; ?>"  readonly="readonly" name="motInternational[]"/>
+                                                    <!-- <select class='motInternational' name='motInternational[]' > -->
+                                                    </select>
+                                                </div>
+                                            </td>       
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $internationalExpenseDtlRow['ARRAIVAL_DT']; ?>"  readonly="readonly" name="arrDateInternational[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="arrDateInternational[]"  class="arrDateInternational">        -->
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div style="width:50px">
+                                                    <input style="width:50px" type="text" value="<?= $internationalExpenseDtlRow['NOOFDAYS']; ?>"  readonly="readonly" name="noOfDaysInternational[]"/>
+                                                    <!-- <input style="width:100%" type="number" readonly name="noOfDaysInternational[]"   class="noOfDaysInternational">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $internationalExpenseDtlRow['AMOUNT']; ?>"  readonly="readonly" name="total[]"/>
+                                                    <!-- <input style="width:100%" readonly type="number" name="total[]"  class="total">        -->
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['TRANSPORTATION']; ?>"  readonly="readonly" name="internationalTransport[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['TRANSPORTATION_CLASS']; ?>"  readonly="readonly" name="internationalTransportClass[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['RATE1']; ?>"  readonly="readonly" name="internationalRate1[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['MILES']; ?>"  readonly="readonly" name="internationalMiles[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $internationalExpenseDtlRow['RATE2']; ?>"  readonly="readonly" name="internationalRate2[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="internationalOtherExpenseDetail" name="internationalOtherExpenseDetail[]"><?= $internationalExpenseDtlRow['OTHER_EXPENSE_DETAIL']; ?></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $internationalExpenseDtlRow['OTHER_EXPENSE']; ?>"  readonly="readonly" name="otherExpensesInternational[]"/>
+                                                    <!-- <input style="width:100%" type="number" name="otherExpensesInternational[]"  class="otherExpensesInternational">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="internationalDetPurpose" name="internationalDetPurpose[]"><?= $internationalExpenseDtlRow['PURPOSE']; ?></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $internationalExpenseDtlRow['TOTAL']; ?>"  readonly="readonly" name="totalInternational[]"/>
+                                                    <!-- <input style="width:100%" readonly type="number" name="total[]"  class="total">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="overflow:hidden">
+                                                <input style="width:50px" type="text" value="USD"  readonly="readonly" name="currency[]"/>
+                                                    <!-- <select class='currency' name='currency[]' > -->
+                                                    <!-- </select> -->
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $internationalExpenseDtlRow['EXCHANGE_RATE']; ?>"  readonly="readonly" name="exchangeRateInternational[]"/>
+                                                    <!-- <input style="width:100%" type="number" name="exchangeRateInternational[]"  class="exchangeRateInternational">        -->
+                                                </div>
+                                            </td> 
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $internationalExpenseDtlRow['TOTAL'] * $internationalExpenseDtlRow['EXCHANGE_RATE']; ?>"  readonly="readonly" name="NPR_total[]"/>
+                                                </div>
+                                            </td>      
+                                            <td>
+                                                <div style="width:150px">
+                                                <textarea rows="4" cols="50" style="width:100%" readonly="detRemarks" name="detRemarksInternational[]"><?= $internationalExpenseDtlRow['REMARKS']; ?></textarea>
+                                                    <!-- <textarea style="width:100%" rows="4" cols="50" name="detRemarksInternational[]"  class="detRemarksInternational"></textarea> -->
+                                                </div>
+                                            </td>   
+                                        </tr>
+                                    <?php } ?>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><b>Grand NPR Total:</b></td>
+                                        <td>
+                                            <input type="number" value="<?= $totalInternationalAmount ?>"  readonly="readonly" id="sumAllTotal" step="0.01" min="0" readonly="readonly" style="width: 100%;" />
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+                <?php } ?>
+                
+                <div class= "row">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th>
+                                <th>&nbsp;</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <!-- <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button> -->
+                    </div>
+                </div>
+                <div class="submit_button" style="margin-top:2%;">
+                    <div
+                        class="form-group margin-top-10 required <?= empty($recommendedRemarks->getMessages()) ? "" : "error" ?>">
+                        <label>Reason for action [From Recommender]</label>
+                        <?php print $this->formElement($recommendedRemarks); ?>
+                    </div>
+                    <div
+                        class="form-group required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                        <label>Reason for action [From Approver]</label>
+                        <?php print $this->formElement($approvedRemarks); ?>
+                    </div> 
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>
+
+
+
+<div id="printableArea" class="col-md-8"  style="border:1px solid; display: none;">
+<div style="font-family:arial;">
+    <div class="wrapper">
+        <table width='100%'>
+            <td width='20%' align='left'>
+            <div class="wrapper font-common">
+            <div id="employeeDtl">
+            <ul>
+                <li ><b>JV NUMBER:</b><?php echo $Jvdetails['JV_NUMBER']; ?></li>
+                <li ><b>Cheque Number:</b> <?php echo $Jvdetails['CHEQUE_NUMBER']; ?></li>
+                <li ><b>Bank:</b> <?php echo $Jvdetails['BANK_NAME']; ?></li>
+                                    </ul>
+            </td>
+                                    </div></div>
+            <td width='60%' align='center'>
+            <div class="col-md-8 col-sm-offset-2">
+            <ul id="headingList">
+                <li>
+                <h5 style="color:#17365d; line-height: 1;">Annex 12<br>(In accordance with Para - 12, Regulation 11.10)</h5></li>
+                    <li style=" margin-top: -15px;"><h3 style="color:#c00000;"><?= strtoupper($detail['COMPANY_NAME']); ?></h3></li>
+                <li><h5 style="margin-top: -7px;"><?= $detail['LOCATION_EDESC']; ?></h5>
+                <h5 style="color:#17365d; margin-top:-30px">Invoice of Travel Allowance</h5></li>
+            </ul>
+        </div>
+            </td>
+            <td width='20%' align='right'>
+            <div class="wrapper font-common">
+
+            <b>Number of Attachments/Bills:</b> <?= $totalAttachment ?>
+ 
+                                    </div>
+            </td>
+                                    </table>
+
+    </div>
+    <!-- <div class="wrapper font-common">
+        <div class="formNo">
+            <ul>
+                <li>Form No: HRM-10</li>
+                <li style="margin-top:20px;">JV NUMBER: < ?php echo $Jvdetails['JV_NUMBER']; ?></li>
+                <li style="margin-top:20px;">Cheque Number: < ?php echo $Jvdetails['CHEQUE_NUMBER']; ?></li>
+                <li style="margin-top:20px;">Bank: < ?php echo $Jvdetails['BANK_NAME']; ?></li>
+            </ul>
+        </div>
+        <div class="dateDtl">
+            <ul>
+                <li>TECF No: <php echo $detail['TRAVEL_CODE']; ?></li>
+                <li>Date: <php echo $detail['REQUESTED_DATE'] ?></li>
+            </ul>
+        </div>
+    </div> -->
+
+    
+        <table style="width:100%; margin-top:-10px;">
+        <td style="width:25%">
+        <div class="wrapper font-common"><b>Name:</b> <?= $detail['FULL_NAME']; ?> (<?= $detail['EMPLOYEE_CODE']; ?>)</div></td>
+        <td style="width:25%">
+        <div class="wrapper font-common" align='center'><b>Designation:</b> <?= $detail['DESIGNATION_TITLE']; ?></div></td>
+        <td style="width:25%">
+        <div class="wrapper font-common" align='center'><b>Salary:</b></div></td>
+        <td style="width:25%">
+        <div class="wrapper font-common" align='right'><b>Office:</b> <?= $detail['LOCATION_EDESC']; ?></div></td>
+        <table>
+        
+
+    <div class="wrapper font-common">
+        <table id="expenseDtlTbl" width="100%" align="center" class="customTable div-font-10" style="font-size:10px; border: 2px solid black; border-collapse: collapse;">
+            <thead style="font-size:11px !important;">
+                <tr >
+                    <th colspan="4" align="center" style=" border: 1px solid black; border-collapse: collapse;">Details of Travel and Stages of Journey</th>
+                    <th colspan="6" align="center" style=" border: 1px solid black; border-collapse: collapse;">Mode of Transportation</th>
+                    <th colspan="3" align="center" style=" border: 1px solid black; border-collapse: collapse;">Daily Allowance</th>
+                    <th colspan="2" align="center" style=" border: 1px solid black; border-collapse: collapse;">Petty Expenses</th>
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Purpose of Visit</th>
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Total of Every Column</th>
+                    <th rowspan="3" class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;">Remarks</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style=" border: 1px solid black; border-collapse: collapse;">Departure</th>
+                    <th colspan="2" style=" border: 1px solid black; border-collapse: collapse;">Destination</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">On foot, Train, Vehicle, Airplane, Cruise etc.</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Class</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Miles</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (12)</th>
+                    <!-- <th rowspan="2">Expense Category</th> -->
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Days</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (15)</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Details</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (17)</th>
+                </tr>
+                <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Location</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Location</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Date</th>
+                    
+                </tr>
+            </thead>
+            <tbody style=" border: 1px solid black; border-collapse: collapse;">
+                <?php
+                $totalCol15 = 0;
+                $totalCol12 = 0;
+                $totalCol17 = 0;
+                $totallead = 0;
+                    foreach ($domesticExpenseDtlList as $domesticExpenseDtlRow) {
+                        $totalCol15 = $totalCol15 + $domesticExpenseDtlRow['AMOUNT'];
+                        $totalCol12 = $totalCol12 + ($domesticExpenseDtlRow['RATE1'] + $domesticExpenseDtlRow['RATE2']);
+                        $totalCol17 = $totalCol17 + $domesticExpenseDtlRow['OTHER_EXPENSE'];
+                    
+
+                    ?>
+                    <tr>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['DEPARTURE_PLACE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['DEPARTURE_DT']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['ARRAIVAL_PLACE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['ARRAIVAL_DT']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['TRANSPORTATION']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['TRANSPORTATION_CLASS']; ?>
+                        </td >
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['RATE1']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['MILES']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['RATE2']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($domesticExpenseDtlRow['RATE1'] + $domesticExpenseDtlRow['RATE2']); ?>
+                        </td>
+                        <!-- <td>
+                            < ?= $domesticExpenseDtlRow['DOMESTIC_TYPE']; ?>
+                        </td> -->
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['NOOFDAYS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['AMOUNT']/$domesticExpenseDtlRow['NOOFDAYS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['AMOUNT']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['OTHER_EXPENSE_DETAIL']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['OTHER_EXPENSE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $domesticExpenseDtlRow['PURPOSE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($domesticExpenseDtlRow['OTHER_EXPENSE'] + $domesticExpenseDtlRow['AMOUNT'] + $domesticExpenseDtlRow['RATE1'] + $domesticExpenseDtlRow['RATE2']); ?>
+                        </td>
+                        <td class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;"> 
+                            <?= $domesticExpenseDtlRow['REMARKS']; ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+                <?php
+                    foreach ($internationalExpenseDtlList as $internationalExpenseDtlRow) {
+                        $totalCol15 = $totalCol15 + ($internationalExpenseDtlRow['AMOUNT'] * $internationalExpenseDtlRow['EXCHANGE_RATE']);
+                        $totalCol12 = $totalCol12 + ($internationalExpenseDtlRow['RATE1'] + $internationalExpenseDtlRow['RATE2']);
+                        $totalCol17 = $totalCol17 + ($internationalExpenseDtlRow['OTHER_EXPENSE']);
+                    ?>
+                    <tr>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['DEPARTURE_PLACE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['DEPARTURE_DT']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['ARRAIVAL_PLACE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['ARRAIVAL_DT']; ?>
+                        </td>
+
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['TRANSPORTATION']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['TRANSPORTATION_CLASS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['RATE1']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['MILES']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['RATE2']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($internationalExpenseDtlRow['RATE1'] + $internationalExpenseDtlRow['RATE2']) ?>
+                        </td>
+                        <!-- <td>
+                            < ?= $internationalExpenseDtlRow['INTERNATIONAL_TYPE']; ?>
+                        </td> -->
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['NOOFDAYS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($internationalExpenseDtlRow['AMOUNT'] * $internationalExpenseDtlRow['EXCHANGE_RATE'])/$internationalExpenseDtlRow['NOOFDAYS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($internationalExpenseDtlRow['AMOUNT'] * $internationalExpenseDtlRow['EXCHANGE_RATE']); ?>
+                        </td>
+                        <td>
+                            <?= $internationalExpenseDtlRow['OTHER_EXPENSE_DETAIL']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['OTHER_EXPENSE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $internationalExpenseDtlRow['PURPOSE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($internationalExpenseDtlRow['OTHER_EXPENSE'] + $internationalExpenseDtlRow['RATE1'] + $internationalExpenseDtlRow['RATE2']) + ($internationalExpenseDtlRow['AMOUNT']* $internationalExpenseDtlRow['EXCHANGE_RATE']); ?>
+                        </td>
+                        <td class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;"> 
+                            <?= $internationalExpenseDtlRow['REMARKS']; ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </tbody>
+
+            <!-- <tbody>
+                < ?php
+                $fare = 0;
+                $allowance = 0;
+                $localConveyence = 0;
+                $miscExpense = 0;
+                $totalAmount = 0;
+                foreach ($expenseDtlList as $expenseDtlRow) {
+                    $fare += $expenseDtlRow['FARE'];
+                    $allowance += $expenseDtlRow['ALLOWANCE'];
+                    $localConveyence += $expenseDtlRow['LOCAL_CONVEYENCE'];
+                    $miscExpense += $expenseDtlRow['MISC_EXPENSES'];
+                    $totalAmount += $expenseDtlRow['TOTAL_AMOUNT'];
+                    ?>
+                    <tr>
+                        <td>
+                            < ?= $expenseDtlRow['DEPARTURE_DATE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DEPARTURE_TIME']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DEPARTURE_PLACE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DESTINATION_DATE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DESTINATION_TIME']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DESTINATION_PLACE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['TRANSPORT_TYPE_DETAIL']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['FARE']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['ALLOWANCE']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['LOCAL_CONVEYENCE']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['MISC_EXPENSES']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['TOTAL_AMOUNT']; ?>
+                        </td>
+                        <td class="lastColumn"> 
+                            <= $expenseDtlRow['REMARKS']; ?>
+                        </td>
+                    </tr>
+                <php } ?>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><= $fare; ?></td>
+                    <td><= $allowance; ?></td>
+                    <td><= $localConveyence; ?></td>
+                    <td><= $miscExpense; ?></td>
+                    <td><= $totalAmount; ?></td>
+                    <td class="lastColumn"></td>
+                </tr>
+            </tbody> -->
+        </table>
+    </div>
+    <hr>
+        <table width='100%' table style='font-family:"Arial"; font-size:10px; font-weight:bold;' >
+        <tr>
+        <td width='40%' align='right'>Total of On Foot, Train, Vehicle, Bus (Column 12) :</td>
+        <td width='10%'> Rs. <?= $totalCol12 ?></td>
+        <td></td>
+                </tr>
+                <tr>
+        <td width='40%' align='right'>Total of Days Travel Allowance (Column 15) :</td>
+        <td width='10%'>Rs. <?= $totalCol15 ?></td>
+        <td width='40%' align='right'> Advance Taken for Travel :</td>
+        <td width='10%'> Rs. <?= $advaceForTravel ?></td>
+
+                </tr>
+                <tr>
+        <td width='40%' align='right'>Total of Petty Expenses (Column 17) :</td>
+        <td width='10%'>Rs. <?= $totalCol17 ?></td>
+        <td width='40%' align='right'> Total Claimed Amount :</td>
+        <td width='10%'> Rs. <?php echo($totalCol17 + $totalCol12 + $totalCol15 - $advaceForTravel + (($detail['IS_TEAM_LEAD'] == 'Y')?($totalCol15 * 0.25): 0) )  ?></td>
+
+
+                </tr>
+
+                
+        <?php  if ($detail['IS_TEAM_LEAD'] == 'Y'){ ?>
+            <tr>
+        <td width='40%' align='right'>25% ADD ON DAILY ALLOWANCE :</td>
+        <td width='10%'>Rs. <?=$totalCol15* 0.25?></td>
+        </tr>
+        <?php } ?> 
+
+                
+                </table>
+                
+    <div class="wrapper font-common">
+        <div id="employeeDtl1">
+            <ul>
+                
+                <li style="margin-top:-10px;"><i>1. The above fare has not been spent on any of the free rides and is utilised appropriately.</i></li>
+                <li style="margin-top:-10px;"><i>2. I acknowledge that travel has been accomplished on the class/category as written.</i></li>
+                <li style="margin-top:-10px;"><i>3. Cloth allowance amount  of Rs.&nbsp;&nbsp; has not been claimed prior  this visit.</i></li>
+               
+                <li style="margin-top:-10px;"><span style="font-weight:bold;color:#c00000;"><u>Disclaimer</u></span></li>
+                <li style="margin-top:-10px;"><span style="color:#c00000;">All the details furnished here with in accordance with approved Travel Requisition form no. &nbsp;&nbsp; dated </span></li>
+
+
+                <li style="margin-top:-10px;"><span style="color:#c00000;">I duly acknowledge that the total amount for the Travel of Rs  <?php echo($totalCol17 + $totalCol12 + $totalCol15 - $advaceForTravel + (($detail['IS_TEAM_LEAD'] == 'Y')?($totalCol15 * 0.25): 0)) ?> mentioned in the above bill is true. If found to be false, I will submit in accordance with the act. </span></li>
+
+                <!-- <li>
+                    Advance taken for travel in Rs. < ?= $detail['REQUESTED_AMOUNT'] ?> expenses incured during travel in Rs. <?= $totalAmount; ?>
+                    Balance amount after expenses Rs. < ?php echo $balance; ?>
+                </li>
+                <li>Total Expenses(in words): < ?= $totalExpenseInWords; ?> </li> -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="wrapper font-common signature">
+        <div class="signChecked">
+            <div class="border-dotted">
+                Signature
+            </div>
+        </div>
+        <div class="signEmployee1">
+            <div class="border-dotted">
+                Amouont Approved
+            </div>
+        </div>
+        <div class="signRecommender1">
+            <p style="height:14px"><label><?php if($detail['STATUS'] != 'RQ'){echo ucwords(strtolower($recommender));} ?></label></p>
+            <div class="border-dotted" style="margin-left: 55px;">
+                Recommended By 
+            </div>
+        </div>
+        <div class="signApprover1">
+            <p style="height: 14px"><label> <?php if($detail['STATUS'] != 'RQ' && $detail['STATUS'] != 'RC'){echo ucwords(strtolower($approver));} ?></label></p>
+            <div class="border-dotted" style="float:right;">
+                Approved by
+            </div>
+        </div>
+    </div>
+                </div>
+</div>
+<div class="col-md-12" style="text-align:center;display:<?php echo ($detail['STATUS'] == 'AP') ? 'block' : 'block'; ?>">
+    <a class="btn btn-success" id="print"> Print</a>
+</div>

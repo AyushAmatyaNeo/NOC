@@ -1,0 +1,306 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Changelog for Kendo UI v2014.2.716</title>
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font: .75em/1.5 Tahoma, sans-serif;
+        }
+
+        h1 {
+            font-size: 2.2em;
+            font-size: normal;
+        }
+
+        h2 {
+            font-size: 2em;
+            font-weight: normal;
+
+            margin: 1.2em 0 .3em;
+            padding-bottom: .2em;
+        }
+
+        #page {
+            width: 50em;
+            margin: 0 auto 2em;
+            border-radius: 0 0 1em 1em;
+            box-shadow: 0 0 10px #ccc;
+            padding: 1em 2em 2em;
+        }
+
+        .poBoxIcon {
+            float: left;
+            font-size: 2em;
+            margin: 1.2em .5em 0 0;
+        }
+
+        .poTopLine {
+            border-top: 2px solid #e1e1e1;
+            margin: 17px 0 40px 0;
+        }
+    </style>
+
+    <base href="http://www.telerik.com/support/whats-new/kendo-ui-web/release-history">
+</head>
+<body>
+    <div id="page">
+        <h1 class="title">Release notes for Kendo UI v2014.2.716</h1>
+
+        <h1>Components</h1>
+        <div class="tClear poTopLine">
+            <div class="poBoxIconText">
+                <p><strong>What's new</strong></p><ul><li>Support for mobile application model scope</li><li>Allow forced resize of widgets using kendo.resize(element, force)</li><li>AutoComplete with MVVM binding triggers a change when bound to null</li><li>Infinite loop can occur when plotting date series with minute resolution over DST transitions</li><li>Missing Getting-Started Overview for Barcode/QRCode</li><li>Demos: Search results – Currently the results look ambiguous and confusing how the two columns relate.</li><li>Demos: Sample applications in http://demos.telerik.com/aspnet-mvc/ - should be the same style across all demos</li><li>Demos: Sentence case of titles, not all CAPITAL letters.</li><li>Demos: Mouse over colour of links in the footer on the homepage should be more visible</li><li>Demos: Make the back arrow in the main menu more active/visible. </li><li>Demos: In 1360 – 768 resolution the top left column with “Most popular controls” sticks to the left browser border.</li><li>Make "View desktop version" footer on mobile demos smaller</li><li>Checkboxes of the TreeView not vertically aligned in the middle.</li></ul>
+                <p><strong>What's fixed</strong></p><ul><li>Loader is acting strange in both iOS themes</li><li>Android loader rotation origin is off on some devices</li><li>Popup doesn't destroy itself due to leftover events on document element</li><li>offset method returns string instead of number</li><li>swipe gesture in iOS 7 may results in subsequent invalid navigation on tap</li><li>Font icons are missing in iOS8</li><li>WP8 loading popup is not modal</li><li>Themes are missing in WP8</li><li>Select element is incorrectly styled in Android 4.3, when ios7 platform mode is forced</li><li>DropDownList styling outside of ListView in a mobile app is broken</li><li>Web widgets look shorter in iOS7 theme</li><li>The refresh method of the editable widget leaks memory if invoked more than once.</li><li>NavBar missing after 2 immediate consecutive View transitions</li><li>Popup is allowed to apply negative z-index, depending on stacking context</li><li>Overlay transition is occasionally short cut </li><li>Complex views briefly appear before the transitions occur</li><li>kendo.destroy does not destroy multiple widget instances on an element</li><li>Platform variant classes shouldn't be added when different skin is set</li><li>Select element is incorrectly styled in Android 4.3, when ios7 platform mode is forced.</li><li>Calendar header is animated incorrectly in IE8</li><li>Fix missing DataViz definitions in typescript </li></ul>
+            </div>
+        </div>
+
+        <h1>New UI Widgets</h1>
+        <div class="tClear poTopLine">
+            <div class="poBoxIconText">
+                <h2>Gantt Widget</h2>
+            </div>
+        </div>
+        <div class="tClear poTopLine">
+            <div class="poBoxIconText">
+                <h2>Toolbar widget</h2>
+            </div>
+        </div>
+
+        <h1>UI Widgets Features and Updates</h1>
+
+        <div class="tClear poTopLine">
+            <h2>ActionSheet</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>ActionSheet (adaptive) not showing when bind is called</li><li>actionsheet remains in the after the containing view is destroyed. </li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>AutoComplete</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Button</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Clicked and subsequently disabled button remains focused </li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ButtonGroup</h2>
+            <p><strong>What's new</strong></p><ul><li>Implement disable/enable widget functionality</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Calendar</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Calendar header is animated incorrectly in IE8</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Chart</h2>
+            <p><strong>What's new</strong></p><ul><li>Add RangeBar and RangeColumn series</li><li>Add Waterfall and HorizontalWaterfall series</li><li>Buble chart should not render point with null size</li><li>Breaking change: The tooltip element is no longer rendered within the chart. Use ".k-chart-tooltip" selector instead of ".k-chart .k-tooltip".</li><li>Allow tooltips to escape overflow: hidden containers</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>100% Stacked line / area charts are plotted incorrectly if all points in a category are 0</li><li>Bubble point should get color from series.color</li><li>Chart doesn't render when stack: true and errorLowField / errorHighField are defined</li><li>Incorrect error bars standard deviation and error when there are missing values</li><li>Incorrect log axis labels value when the axis min value is not a whole power of the base</li><li>Chart tooltip doesn't show in Firefox if base href is set</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ColorPicker</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>DOM input does not trigger change event when value changes</li><li>Bottom border is randomly missing in Chrome at random zoom levels</li><li>Icon is not vertically centered with XHTML 1.0 Transitional DOCTYPE</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ComboBox</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Cascading child combobox is not enabled when local bind is used</li><li>Widget prevents selection on ENTER after the popup is opened with ALT + DOWN</li><li>Widget with source and value binding does not honor the ObservableArray change</li><li>Bottom border is randomly missing in Chrome at random zoom levels</li><li>Icon is not vertically centered with XHTML 1.0 Transitional DOCTYPE</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>DataSource</h2>
+            <p><strong>What's new</strong></p><ul><li>Support min and max aggregates on date fields</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Incorrect range is loaded if existing range is requested during pending remote range request</li><li>Push operations don't update the total of the data source when autoSync is set to true.</li><li>Total is incorrect when re-adding a removed item and the DataSource is initially bound to a single record</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>DatePicker</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>DatePicker calendar day headers does not size correctly in mobile application</li><li>Bottom border is randomly missing in Chrome at random zoom levels</li><li>Icon is not vertically centered with XHTML 1.0 Transitional DOCTYPE</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>DateTimePicker</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Bottom border is randomly missing in Chrome at random zoom levels</li><li>Icon is not vertically centered with XHTML 1.0 Transitional DOCTYPE</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Diagram</h2>
+            <p><strong>What's new</strong></p><ul><li>The editable.select option is no longer available. Use the diagram selectable option instead.</li><li>The background options of the diagram and its elements are renamed to fill</li><li>Add diagram zoomMin option</li><li>Add diagram zoomMax option</li><li>Add diagram zoom option</li><li>Add selectArea()</li><li>Add deselect(diagram item) and deselect(array of diagram items)</li><li>Breaking change: select(false) and select("none") is no longer available. Use deselect()</li><li>Breaking change: shape.model renamed to shape.dataItem</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Diagram image element should set correct y</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Draggable</h2>
+            <p><strong>What's new</strong></p><ul><li>Allow throttling of event handlers</li><li>Export dropTarget field in the drag event data</li><li>Expose the lastDropTarget property of the Kendo UI Draggable</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>draggable breaks selection</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Drawer</h2>
+            <p><strong>What's new</strong></p><ul><li>Add afterHide event to the Kendo UI Drawer</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>DropDownList</h2>
+            <p><strong>What's new</strong></p><ul><li>Implement filtering functionality</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Widget throws an error when search for a nonexisting text and the last item is selected</li><li>Widget with source and value binding does not honor the ObservableArray change</li><li>Icon is not vertically centered with XHTML 1.0 Transitional DOCTYPE</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Editor</h2>
+            <p><strong>What's new</strong></p><ul><li>Deprecated `formatBlock` and `style` tools have been removed in favor of the `formatting` tool</li><li>Tool for format cleaning</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Additional thumbnail request is issued during new image upload in ImageBrowser</li><li>Pasting from MS Word to inline editor is not cleaned in IE10-</li><li>Editing link text creates an empty element</li><li>`text-align` is inconsistently set to paragraphs in list items</li><li>Paste performance is slow with large MS Word content in IE11</li><li>Pasting HTML content does not work correctly in the latest version</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Globalization</h2>
+            <p><strong>What's new</strong></p><ul><li>Update PT and ES culture files</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>kendo.parseDate does not parse UTC dates without a timezone offset</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Grid</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Dragging a groupable header does not work in IE11</li><li>IE: Row selected on clicking a checkbox</li><li>Navigation and inline editing after doing a sort causes the Grid to re-sort when pressing enter</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ListView</h2>
+            <p><strong>What's new</strong></p><ul><li>Add dataItem method</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Native Scrolling listview does prevents scrolling momentum in Android platforms</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MVVM</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>The click binding creates a memory leak when kendo.bind is called multiple times</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Map</h2>
+            <p><strong>What's new</strong></p><ul><li>Add shape layer setDataSource method</li><li>Add marker layer setDataSource method</li><li>Breaking change: Shape geometry is now an accessor function instead of a field</li><li>"Bubble" visualization layer</li><li>Add Location.destination method for locating points at specified distance and bearing</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Shapes are duplicated on data source change</li><li>Adding an item to the marker layer data source clears the existing markers</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MaskedTextBox</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li><li>Widget should place caret at first position on focus if input is empty</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Widget loses value selection on input focus in Firefox</li><li>Pasting via "Ctrl + V" does not work in Firefox </li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Menu</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>ContextMenu shown at wrong position if its Popup is contained in the target</li><li>Menu prevents clicks on anchors in a template</li><li>Opening items are immediately closed with openOnClick and IE11 touch</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MobileListView</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>ListView freezes when pullToRefresh is issued while data is loading</li><li>iOS6 theme checkboxes and radios are rendered as squares in Android 4.x</li><li>Drag Scrolling Kendo UI Mobile ListView throws error checking useNativeScrolling</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MobileView</h2>
+            <p><strong>What's new</strong></p><ul><li>Support mobile view event bindings to the model </li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>WP8.1 View is incorrectly resized when keyboard is hidden</li><li>Overlay:up transition causes flickering</li><li>Back button in iOS does not work correctly when transition slide is enabled</li><li>Hiding keyboard in a form makes the view scroll from the top</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ModalView</h2>
+            <p><strong>What's new</strong></p><ul><li>Add preventDefault functionality for the close event</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Close method fires close event twice</li><li>When modal is closed, calling close method triggers close event</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>MultiSelect</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li><li>Add autocomplete=off attribute to the filter input element</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Multiselect does not remove focused class on blur</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>NavBar</h2>
+            <p><strong>What's new</strong></p><ul><li>Navigating to another view hides the navbar when it should not</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Mobile NavBar will not ungroup</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>NumericTextBox</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>NumericTextBox spinners area is visible in RTL mode even if spinners are disabled</li><li>Bottom border is randomly missing in Chrome at random zoom levels</li><li>Pasting via "Ctrl + V" does not work in Firefox</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>PanelBar</h2>
+            <p><strong>What's new</strong></p><ul><li>clearSelection method for PanelBar</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Second+ level items don't collapse their siblings when expandMode is single</li><li>Expand image is not centered when font-size is different</li><li>Metro hover color is wrong on expanded items with expandMode multiple</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>PopOver</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Using overlay:left for PopOver's pane transition breaks the widget</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Scheduler</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Scheduler doesn't have a requirejs dependency to datetimepicker</li><li>Resource text is not encoded when displayed in the header</li><li>"Ends" massage in the editor of the mobile Scheduler cannot be translated </li><li>MonthView dayTemplate is not working as expected</li><li>Scheduler moveEnd event has wrong e.resources values</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Scroller</h2>
+            <p><strong>What's new</strong></p><ul><li>animatedScrollTo to return event/callback on completion </li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Slider</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Slider should not have large last tick when the largeStep is not devisible to max value</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Sparkline</h2>
+            <p><strong>What's new</strong></p><ul><li>Allow tooltips to escape overflow: hidden containers</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>SplitView</h2>
+            <p><strong>What's new</strong></p><ul><li>Support for app level header/footer</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>StockChart</h2>
+            <p><strong>What's new</strong></p><ul><li>Breaking change: The tooltip element is no longer rendered within the chart. Use ".k-chart-tooltip" selector instead of ".k-chart .k-tooltip".</li><li>Allow tooltips to escape overflow: hidden containers</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>TabStrip</h2>
+            <p><strong>What's new</strong></p><ul><li>BREAKING: TabStrip should fire activate event at the end of animation as all other widgets</li><li>TabStrip should call kendo.resize on its content elements on activate</li><li>Expose tabstrip keyboard navigation boolean configuration option</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>TabStrip doesn't render content element when JSON content property is empty</li><li>Repeatedly calling TabStrip select method selects multiple tabs simultaneously</li><li>Breaking change: TabStrip does not retain scroll position on tab change</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>TimePicker</h2>
+            <p><strong>What's new</strong></p><ul><li>Listen to focusout instead of blur to trigger change correctly</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Icon is not vertically centered with XHTML 1.0 Transitional DOCTYPE</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>ToolBar</h2>
+            <p><strong>What's new</strong></p><ul><li>Unify icon positioning and size within mobile ToolBar across different platforms </li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Template content is not wrapped inside a parent element</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Touch</h2>
+            <p><strong>What's new</strong></p><ul><li>Expose the userEvents threshold configuration as a static global configuration option</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>TreeView</h2>
+            <p><strong>What's new</strong></p><ul><li>expandTo method - expand all nodes up to a given node</li><li>Deprecated checkboxTemplate option has been removed in favor of checkboxes.template</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>expandPath context is not the widget object</li><li>expandPath modifies path parameter</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Upload</h2>
+            <p><strong>What's new</strong></p><ul><li>Add withCredentials setting for async uploads. Default is true.</li></ul>
+            <p><strong>What's fixed</strong></p><ul><li>Reloading the page with mozzila re-posts the files inside the Upload widget</li></ul>
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Validator</h2>
+            <p><strong>What's new</strong></p><ul><li>Add change event and value method</li><li>Breaking Change. Validator calls the rules in the Validator object context.</li><li>Add attribute that can be used to disable the validation for an input</li></ul>
+            
+        </div>
+        <div class="tClear poTopLine">
+            <h2>Window</h2>
+            
+            <p><strong>What's fixed</strong></p><ul><li>Window repositions on resize</li><li> Window cannot be resized to a smaller dimension if an iframe is used</li><li>Hover is not applied on the action buttons</li></ul>
+        </div>
+    </div>
+</body>
+</html>

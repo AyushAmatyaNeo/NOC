@@ -1,0 +1,131 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/insurance/add-ins-emp.js'));
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+    ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'insurance-employee-form');
+
+$employeeId = $form->get('insuranceId');
+$insuranceId = $form->get('insuranceId');
+$approvedAmt = $form->get('approvedAmt');
+$releasedAmt = $form->get('releasedAmt');
+$insuranceDt = $form->get('insuranceDt');
+$completed = $form->get('completed');
+$maturedDt = $form->get('maturedDt');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$form->setAttribute('action', $this->url('insurance-emp-dtl', ['action' => 'addInsEmp']));
+$form->prepare();
+?>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    Add Employee Insurance
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <label>Employee Name</label>
+                        <select class="form-control" name="employeeId" id="employeeId">
+                            <?php  foreach($employeeList as $key => $value) {  ?>
+                            <option value='<?=$key?>'><?=$value?></option>
+                            <?php } ?> 
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <label>Insurance Name</label>
+                        <select class="form-control" name="insuranceId" id="insuranceId">
+                            <?php  foreach($insuranceList as $key => $value) {  ?>
+                            <option value='<?=$key?>'><?=$value?></option>
+                            <?php } ?> 
+                        </select>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($approvedAmt->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($approvedAmt); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($approvedAmt); ?>
+                            <?php print $this->formElementErrors()->render($approvedAmt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($releasedAmt->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($releasedAmt); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($releasedAmt); ?>
+                            <?php print $this->formElementErrors()->render($releasedAmt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($insuranceDt->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($insuranceDt); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($insuranceDt); ?>
+                            <?php print $this->formElementErrors()->render($insuranceDt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="nepaliInsuranceDt">&nbsp;</label>
+                            <div class="input-group">
+                                <input type="text" name="nepaliInsuranceDt" id="nepaliInsuranceDt" placeholder="Date in Nepali"
+                                        class="form-control" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($completed->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($completed); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($completed); ?>
+                            <?php print $this->formElementErrors()->render($completed, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($maturedDt->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($maturedDt); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($maturedDt); ?>
+                            <?php print $this->formElementErrors()->render($maturedDt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="nepaliMaturedDt">&nbsp;</label>
+                            <div class="input-group">
+                                <input type="text" name="nepaliMaturedDt" id="nepaliMaturedDt" placeholder="Date in Nepali"
+                                        class="form-control" value="">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($remarks->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($remarks); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,116 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+        // ->appendStylesheet($this->basePath('css/workforce.css'))
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+$this->headScript()
+        ->appendFile($this->basePath('js/Workforce/location-office.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+?>
+<script>
+    document.functionalLevelList = <?= json_encode($functionalLevelList); ?>;
+    document.groupList = <?= json_encode($groupList); ?>;
+    document.serviceList = <?= json_encode($serviceList); ?>;
+    document.designationList = <?= json_encode($designationList); ?>;
+    document.departmentList = <?= json_encode($departmentList); ?>;
+    document.locationList = <?= json_encode($locationList);?>;
+    document.getCurrentStaff = '<?= $this->url("workforce", ["action" => "getCurrentStaff"]) ?>';
+    document.getPastValues = '<?= $this->url("workforce", ["action" => "getPastValues"]) ?>';
+    document.getQuotaData = '<?= $this->url("workforce", ["action" => "getQuotaDataByLocation"]) ?>';
+    document.validateWorkForce = '<?= $this->url("workforce", ["action" => "validateWorkForce"]) ?>'; 
+    document.getWorkForceData = '<?= $this->url("workforce", ["action" => "getWorkForceDataByLocation"]) ?>';
+    document.serviceGroupList= <?= json_encode($serviceGroupList); ?>;
+    document.serviceSubgroupList =<?= json_encode($serviceSubgroupList); ?>;
+    document.getServiceSubgroupList =<?= json_encode($serviceSubgroupList); ?>;
+    document.getId =<?=$id?>;
+</script>
+
+<div class="portlet-body">
+
+<h1>Location </h1>
+<form name="workforceLocationForm" id="workforceLocationForm"  method="post">
+
+        <div class="col-sm-12">
+                <div class="row">
+                        <div class="col-sm-2">
+                                <label for="location">Location:</label>
+                        </div>
+                        <div class="col-sm-10">
+                                <select class="location" name='location' id ='locationId'></select>
+                        </div>
+                </div>
+        </div>
+        <div class="row" >
+                <div style="margin-left: 20px; margin-top: 20px;" >
+                    <table id="workforceTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Work Force</th>
+                            </tr>
+                            <tr>
+                                <th rowspan="2">Action</th> 
+                                <th rowspan="2">Functional Level</th> 
+                                <th rowspan="2">Service Type</th>
+                                <th rowspan ="2"> Service Group</th>
+                                <th rowspan ="2"> Service Subgroup</th>        
+                                <th rowspan="2">Quota</th> 
+                                <th rowspan="2">Current</th>
+                                <th rowspan="2">Vacant</th>        
+                                        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php /* <tr>
+                            <td><input class="dtlDelBtn btn-danger" type="button" value="Del -" style="padding:3px;"></td>
+                                <td>
+                                    <div style="width:90px">
+                                        <select class='functionalLevelList' name='functionalLevelList[]' style="width:100%">
+                                        </select>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width:80px">
+                                        <select class='service' name='service[]' >
+                                        </select>      
+                                    </div>
+                                </td>     
+                                <td>
+                                    <div style="width:80px">
+                                        <input style="width:100%" type="number" name="quota[]"   class="quota">       
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width:80px">
+                                        <input style="width:100%" type="number" readonly name="current[]" class="current">       
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width:80px">
+                                        <input style="width:100%" type="number" readonly name="vacant[]"  class="vacant">       
+                                    </div>
+                                </td> 
+
+                            </tr> */ ?>
+                        </tbody>
+                    </table>
+
+                </div>
+                <div class="col-md-1">
+                    <input class="deatilAddBtn btn btn-default" type="button" value="Add +" style="margin-bottom:20px;">
+                </div>
+
+            </div>
+
+
+        <div class="submit_button" style="margin-top:2%;">
+                <button class="btn btn-sm green mt-ladda-btn ladda-button mt-progress-demo" id="submitBtn" name="submit" type="submit">
+                SUBMIT
+                <i class="fa fa-edit"></i>
+                </button>    
+        </div>
+        </form>
+</div>

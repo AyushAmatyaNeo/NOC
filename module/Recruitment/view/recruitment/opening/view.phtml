@@ -1,0 +1,166 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Vacancy')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/recruitment/opening/view.js'));
+
+
+        
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'OpeningForm');
+
+// $OpeningId = $form->get('OpeningId');
+// $OpeningId->setAttributes(["disabled" => "disabled"]);
+$OpeningNo = $form->get('OpeningNo');
+$OpeningNo->setAttributes(["disabled" => "disabled"]);
+$Vacancy_total_no = $form->get('Vacancy_total_no');
+$Vacancy_total_no->setAttributes(["disabled" => "disabled"]);
+$ReservationNo = $form->get('ReservationNo');
+$ReservationNo->setAttributes(["disabled" => "disabled"]);
+$Start_dt = $form->get('Start_dt');
+$Start_dt->setAttributes(["disabled" => "disabled"]);
+$End_dt = $form->get('End_dt');
+$End_dt->setAttributes(["disabled" => "disabled"]);
+$Extended_dt = $form->get('Extended_dt');
+$Extended_dt->setAttributes(["disabled" => "disabled"]);
+$Instruction_Edesc = $form->get('Instruction_Edesc');
+$Instruction_Edesc->setAttributes(["disabled" => "disabled"]);
+$Instruction_Ndesc = $form->get('Instruction_Ndesc');
+$Instruction_Ndesc->setAttributes(["disabled" => "disabled"]);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+// $form->setAttribute('action', $this->url('vacancy', ['action' => 'action', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\opening')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Opening Detail
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="border-bottom">
+                <div class=" row">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($OpeningNo); ?>
+                                    <div class="input-group date" id="OpeningNo">
+                                        <?php print $this->formElement($OpeningNo); ?>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($OpeningNo, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($Vacancy_total_no); ?>
+                                    <?php print $this->formElement($Vacancy_total_no); ?>
+                                    <?php print $this->formElementErrors()->render($Vacancy_total_no, ['class' => 'help-block']); ?>                            
+                                </div>                        
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($ReservationNo); ?>
+                                    <?php print $this->formElement($ReservationNo); ?>
+                                    <?php print $this->formElementErrors()->render($ReservationNo, ['class' => 'help-block']); ?>                            
+                                </div>                        
+                            </div>        
+                        </div>    
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Start_dt); ?>
+                            <?php print $this->formElement($Start_dt); ?>
+                            <?php print $this->formElementErrors()->render($Start_dt, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="nepaliStartDate">&nbsp;</label>
+                            <input type="text" name="nepaliStartDate" id="nepaliStartDate"
+                                   class="form-control" value="" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($End_dt); ?>
+                            <?php print $this->formElement($End_dt); ?>
+                            <?php print $this->formElementErrors()->render($End_dt, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="nepaliEndDate">&nbsp;</label>
+                            <input type="text" name="nepaliEndDate" id="nepaliEndDate" class="form-control" value="" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Extended_dt); ?>
+                            <?php print $this->formElement($Extended_dt); ?>
+                            <?php print $this->formElementErrors()->render($Extended_dt, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="nepaliExtendedDate">&nbsp;</label>
+                            <input type="text" name="nepaliExtendedDate" id="nepaliExtendedDate"
+                                   class="form-control" value="" disabled="disabled">
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Instruction_Edesc); ?>
+                            <?php print $this->formElement($Instruction_Edesc); ?>
+                            <?php print $this->formElementErrors()->render($Instruction_Edesc, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Instruction_Ndesc); ?>
+                            <?php print $this->formElement($Instruction_Ndesc); ?>
+                            <?php print $this->formElementErrors()->render($Instruction_Ndesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>               
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+print $this->form()->closeTag();
+?>
+

@@ -1,0 +1,388 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/appraisal/question/add.js'));
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'));
+$this->headScript()->appendFile($this->basePath('js/appraisal/question/questionOptionController.js'));
+//print_r($form); die();
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'appraisalQuestion-form');
+
+$questionCode = $form->get('questionCode');
+$questionEdesc = $form->get('questionEdesc');
+$questionNdesc = $form->get('questionNdesc');
+$orderNo = $form->get('orderNo');
+$minValue = $form->get('minValue');
+$maxValue = $form->get('maxValue');
+$remarks = $form->get('remarks');
+$answerType = $form->get('answerType');
+$answerType->setValueOptions($answerTypeList);
+$headingId = $form->get('headingId');
+$headingId->setValueOptions($headings);
+$appraiseeFlag = $form->get('appraiseeFlag');
+$appraiserFlag = $form->get('appraiserFlag');
+$reviewerFlag = $form->get('reviewerFlag');
+$appraiseeRating = $form->get('appraiseeRating');
+$appraiserRating = $form->get('appraiserRating');
+$reviewerRating = $form->get('reviewerRating');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('question', ['action' => 'add']));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+$form->prepare();
+?>
+<script>
+    document.urlSubmit = '<?= $this->url("question", ["action" => "submit"]) ?>';
+    document.urlPullQuestionDtl = '<?= $this->url("question", ["action" => "pullQuestionDetail"]) ?>';
+    document.urlDeleteQuestionOption = '<?= $this->url("question", ["action" => "deleteQuestionOption"]) ?>';
+    document.headings = <?= json_encode($headings); ?>;
+    document.answerTypes = <?= json_encode($answerTypeList); ?>;
+    document.urlIndex = '<?= $this->url("question", ["action" => "index"]) ?>';</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Question')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div ng-app="hris" ng-controller="questionOptionController">
+    <div class="row margin-top-20">
+        <div class="col-sm-12">
+            <div class="portlet box custom-box">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-user"></i>Update
+                    </div>
+                    <div class="actions">
+                        <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                    </div>
+                </div>
+                <div class="portlet-body form-box">
+                    <form name="appraisalQuestionForm" id="appraisalQuestion-form" ng-submit="submitForm()" novalidate>
+                        <input type="hidden" id="questionId" value="<?php echo $id; ?>" />
+
+                        <div class=" row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($questionCode); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <input type="text" ng-model="question.questionCode" name="questionCode" required="required" id="questionCode" class="form-control" value="">
+                                    <?php print $this->formElementErrors()->render($questionCode, ['class' => 'help-block']); ?>
+                                    <div ng-show="appraisalQuestionForm.$submitted || appraisalQuestionForm.questionCode.$touched">
+                                        <ul ng-show="appraisalQuestionForm.questionCode.$error.required" class="help-block error">
+                                            <li>Question Code is required.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($questionEdesc); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <input type="text" ng-model="question.questionEdesc" name="questionEdesc" required="required" id="questionEdesc" class="form-control" value="">
+                                    <?php print $this->formElementErrors()->render($questionEdesc, ['class' => 'help-block']); ?>
+                                    <div ng-show="appraisalQuestionForm.$submitted || appraisalQuestionForm.questionEdesc.$touched">
+                                        <ul ng-show="appraisalQuestionForm.questionEdesc.$error.required" class="help-block error">
+                                            <li>Question Edesc is required.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($questionNdesc); ?>
+                                    <input type="text" ng-model="question.questionNdesc" name="questionNdesc" id="questionNdesc" class="form-control" value="">
+                                    <?php print $this->formElementErrors()->render($questionNdesc, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class=" row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($answerType); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <select name="answerType" ng-model="question.answerType" id="answerType" class="form-control" required="required">
+                                        <?php foreach ($answerTypeList as $key => $value) { ?>
+                                            <option value="<?php echo $key ?>"><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <?php print $this->formElementErrors()->render($answerType, ['class' => 'help-block']); ?>
+                                    <div ng-show="appraisalQuestionForm.$submitted || appraisalQuestionForm.answerType.$touched">
+                                        <ul ng-show="appraisalQuestionForm.answerType.$error.required" class="help-block error">
+                                            <li>Answer Type is required.</li>
+                                        </ul>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class=" row">
+                            <div class="questionOptionWrap" ng-if="question.answerType == 'SELECT' || question.answerType == 'RADIO' || question.answerType == 'CHECKBOX'" id='questionOptionWrap'> 
+                                <label>Option List::</label><br>
+                                <table width='100%'>
+                                    <tr ng-repeat="questionOption in questionOptionList" height="30"> 
+                                        <td width="47">
+                                            <div class="md-checkbox">
+                                                <input type="checkbox" id="{{questionOption.checkbox}}" class="md-check"
+                                                       ng-model="questionOption.checked">
+                                                <label for="{{questionOption.checkbox}}">
+                                                    <span class="inc"></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span>
+                                                </label>
+                                            </div>
+                                        </td>
+                                        <td width="45%" style="padding:5px;">
+                                            <input type="text" size="3" placeholder="Option Name (in Eng.)" class="form-control" name="optionEdesc_{{questionOption.checkbox}}" ng-model="questionOption.optionEdesc" value="" required="required"/>
+                                            <div ng-show="appraisalQuestionForm.$submitted || appraisalQuestionForm.optionEdesc_{{questionOption.checkbox}}.$touched">
+                                                <ul ng-show="appraisalQuestionForm.optionEdesc_{{questionOption.checkbox}}.$error.required" class="help-block error">
+                                                    <li>Option Edesc is required.</li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td width="45%" style="padding:5px;">
+                                            <input type="text" size="3" placeholder="Option Name (in Nep.)" class="form-control" name="optionNdesc_{{questionOption.checkbox}}" ng-model="questionOption.optionNdesc" value=""/>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            <a href="javascript:;" class="btn btn-icon-only default" style="margin-left:17%;" ng-click="addQuestionOption()" id="plushIcon">
+                                                <i class="fa fa-plus"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="javascript:;" class="btn btn-icon-only default" ng-click="delete()" id="plushIcon">
+                                                <i class="fa fa-trash-o"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                            </div>
+                        </div>
+
+
+                        <div class=" row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($headingId); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <select name="headingId" ng-model="question.headingId" ng-options="k as v for (k,v) in headings" id="headingId" class="form-control" required="required">
+                                    </select>
+                                    <?php print $this->formElementErrors()->render($headingId, ['class' => 'help-block']); ?>
+                                    <div ng-show="appraisalQuestionForm.$submitted || appraisalQuestionForm.headingId.$touched">
+                                        <ul ng-show="appraisalQuestionForm.headingId.$error.required" class="help-block error">
+                                            <li>Heading Name is required.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($orderNo); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <input type="number" ng-model="question.orderNo" required="required" name="orderNo" id="orderNo" class="form-control" value="">
+                                    <?php print $this->formElementErrors()->render($orderNo, ['class' => 'help-block']); ?>
+                                    <div ng-show="appraisalQuestionForm.$submitted || appraisalQuestionForm.orderNo.$touched">
+                                        <ul ng-show="appraisalQuestionForm.orderNo.$error.required" class="help-block error">
+                                            <li>Order No. is required.</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($appraiseeFlag); ?>
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input ng-model="question.appraiseeFlag" checked="checked" type="radio" value="Y" name="appraiseeFlag" id="appraiseeFlag+Yes" class="md-radiobtn radioButton">
+                                            <label for="appraiseeFlag+Yes">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Yes
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" ng-model="question.appraiseeFlag" value="N" name="appraiseeFlag" id="appraiseeFlag+No" class="md-radiobtn radioButton">
+                                            <label for="appraiseeFlag+No">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> No
+                                            </label>
+                                        </div>                            
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($appraiseeFlag, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($appraiserFlag); ?>
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input checked="checked" ng-model="question.appraiserFlag" type="radio" value="Y" name="appraiserFlag" id="appraiserFlag+Yes" class="md-radiobtn radioButton">
+                                            <label for="appraiserFlag+Yes">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Yes
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" value="N" ng-model="question.appraiserFlag" name="appraiserFlag" id="appraiserFlag+No" class="md-radiobtn radioButton">
+                                            <label for="appraiserFlag+No">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> No
+                                            </label>
+                                        </div>                            
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($appraiserFlag, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($reviewerFlag); ?>
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input checked="checked" ng-model="question.reviewerFlag" type="radio" value="Y" name="reviewerFlag" id="reviewerFlag+Yes" class="md-radiobtn radioButton">
+                                            <label for="reviewerFlag+Yes">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Yes
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" value="N" ng-model="question.reviewerFlag" name="reviewerFlag" id="reviewerFlag+No" class="md-radiobtn radioButton">
+                                            <label for="reviewerFlag+No">
+                                                <span class="inc"></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> No
+                                            </label>
+                                        </div>                            
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($reviewerFlag, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($appraiseeRating); ?>
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input checked="checked" ng-model="question.appraiseeRating" type="radio" value="Y" name="appraiseeRating" id="appraiseeRating+Yes" class="md-radiobtn radioButton">
+                                            <label for="appraiseeRating+Yes">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Yes
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" value="N" ng-model="question.appraiseeRating" name="appraiseeRating" id="appraiseeRating+No" class="md-radiobtn radioButton">
+                                            <label for="appraiseeRating+No">
+                                                <span class="inc"></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> No
+                                            </label>
+                                        </div>                            
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($appraiseeRating, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($appraiserRating); ?>
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input checked="checked" type="radio" ng-model="question.appraiserRating" value="Y" name="appraiserRating" id="appraiserRating+Yes" class="md-radiobtn radioButton">
+                                            <label for="appraiserRating+Yes">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Yes
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" value="N" ng-model="question.appraiserRating" name="appraiserRating" id="appraiserRating+No" class="md-radiobtn radioButton">
+                                            <label for="appraiserRating+No">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> No
+                                            </label>
+                                        </div>                            
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($appraiserRating, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($reviewerRating); ?>
+                                    <div class="md-radio-inline">
+                                        <div class="md-radio">
+                                            <input checked="checked" ng-model="question.reviewerRating" type="radio" value="Y" name="reviewerRating" id="reviewerRating+Yes" class="md-radiobtn radioButton">
+                                            <label for="reviewerRating+Yes">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> Yes
+                                            </label>
+                                        </div>
+                                        <div class="md-radio">
+                                            <input type="radio" value="N" ng-model="question.reviewerRating" name="reviewerRating" id="reviewerRating+No" class="md-radiobtn radioButton">
+                                            <label for="reviewerRating+No">
+                                                <span></span>
+                                                <span class="check"></span>
+                                                <span class="box"></span> No
+                                            </label>
+                                        </div>                            
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($reviewerRating, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($minValue); ?>
+                                    <input type="number" ng-model="question.minValue" name="minValue" id="minValue" class="form-control" step="0.01" value="">
+                                    <?php print $this->formElementErrors()->render($minValue, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($maxValue); ?>
+                                    <input type="number" ng-model="question.maxValue" name="maxValue" id="maxValue" class="form-control" step="0.01" value="">
+                                    <?php print $this->formElementErrors()->render($maxValue, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($remarks); ?>
+                                    <textarea name="remarks" ng-model="question.remarks" id="remarks" class="form-control"></textarea>
+                                    <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button  id="submit" class="btn btn-success">
+                            SUBMIT
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

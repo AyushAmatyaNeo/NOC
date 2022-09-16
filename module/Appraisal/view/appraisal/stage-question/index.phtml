@@ -1,0 +1,64 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/jstree/dist/themes/default/style.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/jstree/dist/jstree.min.js'))
+        ->appendFile($this->basePath('js/appraisal/stage-question/index.js'))
+        ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('js/appraisal/stage-question/stageQuestionController.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+    <script>
+         document.url='<?= $this->url("stageQuestion",['action'=>'index']); ?>';
+    </script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\StageQuestion')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div ng-app="hris" ng-controller="stageQuestionController" class="margin-top-20 formbg">
+    <div style="margin-top:15px;margin-bottom:10px;">
+        <div class="row">
+            <div class="col-md-6">
+                <select id="appraisalTypeId">
+                    <option value="0" selected="selected">Please Select Appraisal Type</option>
+                    <?php foreach($typeResult as $typeRow){ ?>
+                    <option value="<?php echo $typeRow['APPRAISAL_TYPE_ID']; ?>"><?php echo $typeRow['APPRAISAL_TYPE_EDESC']; ?></option>
+                    <?php } ?>
+                </select>
+                
+                <span ng-bind="heading"></span>
+                
+                <div id="tree_3" class="tree-demo" style="margin-top:2%;"></div>
+            </div>
+            <div class="col-md-6">
+                <div id="stageAssign" style="display: none;">
+                    <b style="color:#666;">Stage Assign</b>
+                    <ul id="roleList" style="margin-top:2%;">
+                        <li ng-repeat="stage in stageList">
+                            {{stage.STAGE_EDESC}}
+                            <div class="md-checkbox pull-right">
+                                <input type="checkbox" id="{{stage.STAGE_EDESC}}" class="md-check" ng-click="assignStage(stage)" ng-model="stage.checked">
+                                <label for="{{stage.STAGE_EDESC}}">
+                                    <span class="inc"></span>
+                                    <span class="check"></span>
+                                    <span class="box"></span></label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>  
+    </div>
+</div>

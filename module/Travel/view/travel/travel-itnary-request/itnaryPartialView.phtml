@@ -1,0 +1,108 @@
+<H3> Itnary Details </H3>
+</br>
+
+<?php
+
+//echo '<pre>';
+//print_r($itnaryId);
+//print_r($travelItnaryDet);
+//print_r($travelItnaryMemDet);
+//die();
+
+?>
+
+
+<!--member addition-->
+<?php if($itnaryId){
+echo 'GWTN/TVI/'.$itnaryId.'</br>' ;
+}  ?>
+            <div class="row">
+                <div class="col-sm-4">
+                    <table id="memberDetails" class="table">
+                        <thead>
+                            <tr>
+                                <th>Member</th>       
+                                <th>status</th>       
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            
+                            foreach($travelItnaryMemDet as $memDet){
+                                echo '<tr>
+               <td>'.$memDet['FULL_NAME'].'</td>
+            <td>'.$memDet['ITNARY_STATUS'].'</td>
+            </tr>';
+                            }
+                                
+                                
+                                ?>
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+
+            <!--itnary details addition-->
+
+            <div class="row" >
+                <div class="col-md-12" >
+                    <table id="itnaryDetails" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="2">Departure</th>       
+                                <th colspan="2">Location</th>       
+                                <th rowspan="2">Means of TPT</th>       
+                                <th colspan="2">Arrives</th>       
+                                <th rowspan="2">Remarks</th>       
+                            </tr>
+                            <tr>
+                                <th>Date</th>       
+                                <th>Time</th>       
+                                <th>From</th>       
+                                <th>To</th>       
+                                <th>Date</th>       
+                                <th>Time</th>       
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            foreach ($travelItnaryDet as $itnaryDtl){
+                                ?>
+    <tr>
+                                <td>
+                                    <?=$itnaryDtl['DEPARTURE_DT_AD']?>
+                                </td>
+                                <td>
+                                    <?=$itnaryDtl['DEPARTURE_TIME']?>
+                                </td>
+                                <td>
+                                    <?=$itnaryDtl['LOCATION_FROM']?>
+                                </td>
+                                <td>
+                                    <?=$itnaryDtl['LOCATION_TO']?>
+                                </td>
+                                <td>
+                                    <?=$itnaryDtl['TRANSPORT_NAME']?>
+                                </td>       
+                                <td>
+                                    <?=$itnaryDtl['ARRIVE_DT_AD']?>
+                                </td>
+                                <td>
+                                    <?=$itnaryDtl['ARRIVE_TIME']?>
+                                </td>       
+                                <td>
+                                    <?=$itnaryDtl['REMARKS']?>
+                                </td>
+                            </tr>
+                            
+<?php                            }
+                            ?>
+                            
+                            
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>

@@ -1,0 +1,171 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/branch/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'branch-form');
+
+$branchName = $form->get('branchName');
+$branchNdesc = $form->get('branchNdesc');
+$streetAddress = $form->get('streetAddress');
+$telephone = $form->get('telephone');
+$fax = $form->get('fax');
+$email = $form->get('email');
+$remarks = $form->get('remarks');
+$countryId = $form->get('countryId');
+$countryId->setValueOptions($countries);
+
+$companyId = $form->get('companyId');
+$companyId->setValueOptions($companies);
+
+$branchManager= $form->get('branchManager');
+$branchManager->setValueOptions($employees);
+
+$province = $form->get('province');
+$province->setValueOptions($provinces);
+
+$isRemote = $form->get('isRemote');
+$allowanceRebate = $form->get('allowanceRebate');
+
+//custom validatin message
+if (key($telephone->getMessages()) == "regexNotMatch") {
+    $telephone->setMessages(["regexNotMatch" => "Invalid Phone Number"]);
+}
+if (key($email->getMessages()) == "regexNotMatch") {
+    $email->setMessages(["regexNotMatch" => "Invalid Email Address"]);
+}
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$form->setAttribute('action', $this->url('branch', ['action' => 'add']));
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Branch')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    Add New Branch
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($branchName->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($branchName); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($branchName); ?>
+                            <?php print $this->formElementErrors()->render($branchName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($branchNdesc->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($branchNdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($branchNdesc); ?>
+                            <?php print $this->formElementErrors()->render($branchNdesc, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($streetAddress->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($streetAddress); ?>
+                            <?php print $this->formElement($streetAddress); ?>
+                            <?php print $this->formElementErrors()->render($streetAddress, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($countryId); ?>
+                            <?php print $this->formElement($countryId); ?>
+                            <?php print $this->formElementErrors()->render($countryId, ['class' => 'help-block error']); ?>
+                        </div>  
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($telephone->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($telephone); ?>
+                            <?php print $this->formElement($telephone); ?>
+                            <?php print $this->formElementErrors()->render($telephone, ['class' => 'help-block error']); ?>
+                        </div>       
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($fax->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($fax); ?>
+                            <?php print $this->formElement($fax); ?>
+                            <?php print $this->formElementErrors()->render($fax, ['class' => 'help-block error']); ?>
+                        </div>  
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($email->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($email); ?>
+                            <?php print $this->formElement($email); ?>
+                            <?php print $this->formElementErrors()->render($email, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyId); ?>
+                            <?php print $this->formElement($companyId); ?>
+                            <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($remarks->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($branchManager); ?>
+                            <?php print $this->formElement($branchManager); ?>
+                            <?php print $this->formElementErrors()->render($branchManager, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($province); ?>
+                            <?php print $this->formElement($province); ?>
+                            <?php print $this->formElementErrors()->render($province, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class=" col-sm-4 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($isRemote); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($isRemote); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($isRemote, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($allowanceRebate); ?>
+                            <?php print $this->formElement($allowanceRebate); ?>
+                            <?php print $this->formElementErrors()->render($allowanceRebate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

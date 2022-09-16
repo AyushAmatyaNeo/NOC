@@ -1,0 +1,101 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/appraisal/heading/add.js'));
+//print_r($appraisalTypes); die();
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'appraisalHeading-form');
+
+$headingEdesc = $form->get('headingEdesc');
+$headingNdesc = $form->get('headingNdesc');
+$remarks = $form->get('remarks');
+$percentage = $form->get('percentage');
+$appraisalTypeId = $form->get('appraisalTypeId');
+$appraisalTypeId->setValueOptions($appraisalTypes);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('heading', ['action' => 'edit','id'=>$id]));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+$form->prepare();
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Heading')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                
+                 <div class=" row">
+                    
+                    <div class="col-sm-4">
+                <div class="form-group">
+                    <?php print $this->formLabel($headingEdesc); ?>
+                    <span class="required" aria-required="true">*</span>
+                    <?php print $this->formElement($headingEdesc); ?>
+                    <?php print $this->formElementErrors()->render($headingEdesc, ['class' => 'help-block']); ?>
+                </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                <div class="form-group">
+                    <?php print $this->formLabel($headingNdesc); ?>
+                    <?php print $this->formElement($headingNdesc); ?>
+                    <?php print $this->formElementErrors()->render($headingNdesc, ['class' => 'help-block']); ?>
+                </div>
+                    </div>
+                     
+                    <div class="col-sm-4">
+                <div class="form-group">
+                    <?php print $this->formLabel($percentage); ?>
+                    <?php print $this->formElement($percentage); ?>
+                    <?php print $this->formElementErrors()->render($percentage, ['class' => 'help-block']); ?>
+                </div>
+                    </div>
+                </div>
+                
+                 <div class=" row">
+                    <div class="col-sm-4">
+                <div class="form-group">
+                    <?php print $this->formLabel($appraisalTypeId); ?>
+                    <?php print $this->formElement($appraisalTypeId); ?>
+                    <?php print $this->formElementErrors()->render($appraisalTypeId, ['class' => 'help-block']); ?>
+                </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                <div class="form-group">
+                    <?php print $this->formLabel($remarks); ?>
+                    <?php print $this->formElement($remarks); ?>
+                    <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                </div>
+                    </div>
+                </div>
+                
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

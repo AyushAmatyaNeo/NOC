@@ -1,0 +1,385 @@
+
+<?php
+
+use ZF\DevelopmentMode\Disable;
+
+$this->headScript()->appendFile($this->basePath('js/document-registration/view.js'));
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+    ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'registration-form');
+$choiceFlag = $form->get('choiceFlag');
+$choiceFlag->setAttribute('disabled', 'disabled');
+$sbFiscalYear = $form->get('sbFiscalYear');
+$choiceFlagKS = $form->get('choiceFlagKS');
+$choiceFlagKS->setAttribute('disabled', 'disabled');
+$ksFiscalYear = $form->get('ksFiscalYear');
+
+$registrationTempCode = $form->get('registrationTempCode');
+// $registrationTempCode->setAttribute('disabled', 'true');
+$registrationTempCode->setAttribute('readonly', 'readonly');
+
+$registrationDate = $form->get('registrationDate');
+$registrationDate->setAttributes(['disabled' => "disabled"]);
+// if($registrationDate != null){
+//     $registrationDate->setAttribute('disable', 'disable');
+// }
+
+$receivingLetterReferenceNo = $form->get('receivingLetterReferenceNo');
+if($receivingLetterReferenceNo != null){
+    $receivingLetterReferenceNo->setAttribute('readonly', 'readonly');
+}
+
+$fromOfficeId = $form->get('fromOfficeId');
+if($fromOfficeId != null){
+    $fromOfficeId->setAttribute('readonly', 'readonly');
+}
+
+$description = $form->get('description');
+if($description != null){
+    $description->setAttribute('readonly', 'readonly');
+}
+
+$receivingLetterReferenceDate = $form->get('receivingLetterReferenceDate');
+if($receivingLetterReferenceDate!= null){
+    $receivingLetterReferenceDate->setAttributes(['disabled' => "disabled"]);
+}
+
+$receivingDepartment = $form->get('receivingDepartment');
+if($receivingDepartment != null){
+    $receivingDepartment->setAttribute('readonly', 'readonly');
+}
+
+$receiverName = $form->get('receiverName');
+if($receiverName!= null){
+    $receiverName->setAttribute('readonly', 'readonly');
+}
+
+$documentDate = $form->get('documentDate');
+if($documentDate!= null){
+    $documentDate->setAttributes(['disabled' => "disabled"]);
+}
+// $filesUpload = $form->get('filesUpload');
+$responseFlag = $form->get('responseFlag');
+if($responseFlag != null){
+    $responseFlag->setAttributes(['disabled' => "disabled"]);
+}
+
+$remarks = $form->get('remarks');
+if($remarks!= null){
+    $remarks->setAttribute('readonly', 'readonly');
+}
+
+$submit = $form->get('submit');
+
+$form->setAttribute('action', $this->url('incomingdoc', ['action' => 'view','id'=>$id]));
+$form->prepare();
+
+?>
+<script>
+document.pushDCFileLink = '<?php echo $this->url('incomingdoc', ['action' => 'pushDCFileLink']); ?>';
+    document.uploadUrl = '<?= $this->url('incomingdoc', ['action' => 'fileUpload']); ?>';
+    document.pullFilebyId = '<?php echo $this->url('incomingdoc', ['action' => 'pullFilebyId']); ?>';
+    document.deleteFileFromTable =   '<?php echo $this->url('incomingdoc', ['action' => 'deleteFileFromTable','id'=>$id]); ?>';
+    document.id = '<?php echo $id; ?>';
+    document.getOfficeCode ='<?= $this->url('incomingdoc',['action'=>'getOfficeCode']); ?>';
+
+</script>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Darta Request
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form);?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?=empty($registrationTempCode->getMessages()) ? "" : "has-error"?>">
+                            <?php print $this->formLabel($registrationTempCode);?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($registrationTempCode);?>
+                            <?php print $this->formElementErrors()->render($registrationTempCode, ['class' => 'help-block error']);?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($registrationDate);?>
+                                    <?php print $this->formElement($registrationDate);?>
+                                    <?php print $this->formElementErrors()->render($registrationDate, ['class' => 'help-block error']);?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliRegistrationDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliRegistrationDate" id="nepaliRegistrationDate"
+                                               class="form-control" value="" placeholder="Date in Nepali" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?=empty($receivingLetterReferenceNo->getMessages()) ? "" : "has-error"?>">
+                            <?php print $this->formLabel($receivingLetterReferenceNo);?>
+                            <?php print $this->formElement($receivingLetterReferenceNo);?>
+                            <?php print $this->formElementErrors()->render($receivingLetterReferenceNo, ['class' => 'help-block error']);?>
+                        </div>
+                    </div>
+                </div>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?=empty($fromOfficeId->getMessages()) ? "" : "has-error"?>">
+                            <?php print $this->formLabel($fromOfficeId);?>
+                            <?php print $this->formElement($fromOfficeId);?>
+                            <?php print $this->formElementErrors()->render($fromOfficeId, ['class' => 'help-block error']);?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id= "officeDiv">
+                        <div class="form-group">
+                            <label for="officeId">Office Name</label>
+                            <input type="text" class="form-control" name="toOtherOffice" id='fromOtherOfficeName' value="<?=$fromOtherOffice?>">
+                        </div>  
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($responseFlag);?>
+                            <?php print $this->formElement($responseFlag);?>
+                            <?php print $this->formElementErrors()->render($responseFlag, ['class' => 'help-block error']);?>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class=" row">
+                <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($receivingLetterReferenceDate);?>
+                                    <?php print $this->formElement($receivingLetterReferenceDate);?>
+                                    <?php print $this->formElementErrors()->render($receivingLetterReferenceDate, ['class' => 'help-block error']);?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliReceivingLetterReferenceDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliReceivingLetterReferenceDate" id="nepaliReceivingLetterReferenceDate"
+                                               class="form-control" value="" placeholder="Date in Nepali" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?=empty($receivingDepartment->getMessages()) ? "" : "has-error"?>">
+                            <?php print $this->formLabel($receivingDepartment);?>
+                            <?php print $this->formElement($receivingDepartment);?>
+                            <?php print $this->formElementErrors()->render($receivingDepartment, ['class' => 'help-block error']);?>
+                        </div>
+                    </div>                    
+                    <div class="col-sm-4">
+                        <div class="form-group <?=empty($remarks->getMessages()) ? "" : "has-error"?>">
+                            <?php print $this->formLabel($remarks);?>
+                            <?php print $this->formElement($remarks);?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']);?>
+                        </div>
+                    </div>                    
+                    
+                </div>
+                <div>
+                    <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($documentDate);?>
+                                    <?php print $this->formElement($documentDate);?>
+                                    <?php print $this->formElementErrors()->render($documentDate, ['class' => 'help-block error']);?>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliDocumentDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliDocumentDate" id="nepaliDocumentDate"
+                                               class="form-control" value="" placeholder="Date in Nepali" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                        <div class=" col-sm-4 ">
+                            <div class="form-group">
+                                <?php print $this->formLabel($description);?>
+                                <?php print $this->formElement($description);?>
+                                <?php print $this->formElementErrors()->render($description, ['class' => 'help-block error']);?>
+                            </div>
+                        </div>                    
+                        <div class="col-sm-2">
+                            <label>Status</label>
+                            
+                            <select class="form-control" name="processId" id="processId" disabled="disabled">
+                                <?php
+                                    foreach ($processList as $key => $value) {
+                                        $selected = ($key == $processId) ? "selected" : "";
+                                        ?>
+                                        <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                <?php }?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class= "row">    
+                    <div class="col-sm-4">
+                        <div class="row" id="sampatiBibaran">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($choiceFlag);?>
+                                    <?php print $this->formElement($choiceFlag);?>
+                                    <?php print $this->formElementErrors()->render($choiceFlag, ['class' => 'help-block error']);?>
+                                </div>
+                            </div>
+                            <div id="sbFisYr">
+                                <div class="col-sm-6">
+                                    <label>Fiscal Year:</label>
+                                    <select class="form-control" name="sbFiscalYear" id="sbFiscalYear" disabled>
+                                    <?php
+                                        foreach ($fiscalYear as $key => $value) {
+                                            $selected = ($key == $selectedfiscalYear) ? "selected" : "";
+                                        ?>
+                                            <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="employeee">
+                                <div class="col-sm-6">
+                                    <label>Employee Name:</label>
+                                    <select class="form-control" name="employeeId" id="employee" disabled>
+                                    <?php
+                                        foreach ($employee as $key => $value) {
+                                            $selected = ($key == $selectedEmployee) ? "selected" : "";
+                                        ?>
+                                            <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class= "row">    
+                    <div class="col-sm-4">
+                        <div class="row" id="karyaSampadan">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($choiceFlagKS);?>
+                                    <?php print $this->formElement($choiceFlagKS);?>
+                                    <?php print $this->formElementErrors()->render($choiceFlagKS, ['class' => 'help-block error']);?>
+                                </div>
+                            </div>
+                            <div id="ksFisYr">
+                                <div class="col-sm-6">
+                                    <label>Fiscal Year:</label>
+                                    <select class="form-control" name="ksFiscalYear" id="ksFiscalYear" disabled>
+                                    <?php
+                                        foreach ($fiscalYear as $key => $value) {
+                                            $selected = ($key == $selectedfiscalYearKS) ? "selected" : "";
+                                        ?>
+                                            <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div id="employeeee">
+                                <div class="col-sm-6">
+                                    <label>Employee Name:</label>
+                                    <select class="form-control" name="empId" id="employee2" disabled>
+                                    <?php
+                                        foreach ($employee as $key => $value) {
+                                            $selected = ($key == $selectedEmployee2) ? "selected" : "";
+                                        ?>
+                                            <option style="cursor: pointer;" value="<?php echo $key; ?>" <?php echo $selected; ?>><?php echo $value; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                
+                <div class= "row">
+                <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th>
+                                <th>&nbsp;</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <!-- <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button> -->
+                    </div>
+                </div>
+
+
+                <?php
+// print $this->formSubmit($submit);
+print $this->form()->closeTag();
+?>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--bootstrap modal-->
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload Image.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

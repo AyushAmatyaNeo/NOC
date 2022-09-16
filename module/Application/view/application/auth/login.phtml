@@ -1,0 +1,115 @@
+<?php
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('class', 'login-form');
+
+$username = $form->get("username");
+$username->setAttribute('id', 'form-username');
+$username->setAttribute('class', 'form-control form-control-solid placeholder-no-fix');
+$username->setAttribute('placeholder', 'Username');
+$username->setAttribute('required', true);
+
+$password = $form->get('password');
+$password->setAttribute('id', 'form-password');
+$password->setAttribute('class', 'form-control form-control-solid placeholder-no-fix');
+$password->setAttribute('placeholder', 'Password');
+$password->setAttribute('required', true);
+$password->setAttribute('AUTOCOMPLETE', 'off');
+
+$rememberme = $form->get('rememberme');
+$rememberme->setAttribute('class', '');
+
+$submit = $form->get('submit');
+$submit->setAttribute('class', 'btn btn-primary btn-noc uppercase loginbtn');
+
+$form->setAttribute('action', $this->url('auth/process', ['action' => 'authenticate']));
+$form->prepare();
+
+print $this->form()->openTag($form);
+?>
+<div class="form-title">
+    <div class="panel-header main-title">
+    <h5>Please login</h5>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="form-group cstm-form-grp" style="font-size:13px;color:#575655;color:red;margin-top:-10px;">
+    <?php
+        if ($this->messages) {
+            foreach ($this->messages as $message) {
+                print  $message;
+                print ' Please Login to continue.';
+            }
+        }
+    ?>
+    </div>
+
+    <?php
+    date_default_timezone_set("Asia/Kathmandu");
+    $serverTime=localtime(time(),true);
+    $serverTimeString=$serverTime['tm_hour'].':'.$serverTime['tm_min'];
+    //echo '</br>'.$serverTimeString;
+    $currTime= new dateTime($serverTimeString);
+    $morningFrom= new dateTime('9:00');
+    $morningTo= new dateTime('10:30');
+    $eveningFrom= new dateTime('16:30');
+    $eveningTo= new dateTime('17:30');
+    // $currTime= new dateTime('10:30');
+
+    // if(($currTime < $morningFrom || $currTime > $morningTo)  &&  ($currTime < $eveningFrom || $currTime > $eveningTo) || $type=='admin' ){	
+
+    ?>
+    <div class="form-group cstm-form-grp">
+        <?php print $this->formElement($username); ?>
+        <?php print $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+        <i class="fa fa-user" aria-hidden="true"></i>
+    </div>
+    <div class="form-group cstm-form-grp">
+        <?php print $this->formElement($password); ?>
+        <?php print $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+        <i class="fa fa-lock" aria-hidden="true"></i>
+    </div>
+
+    <?php
+    // }
+    ?>
+
+    <div class="form-actioins mb-0 alginRight" style="margin-top:20px;">
+    <i class="fa fa-book" aria-hidden="true"></i>
+    <a target="_blank" href="<?=$this->basePath('HRIS-docs/build/HRIS.html')?>"><button class="btn-link" type="button" style="font-size:15px;color:#3b7183;margin-right:50%">Manual</button></a>
+        <?php
+        //if (($currTime < $morningFrom || $currTime > $morningTo) && ($currTime < $eveningFrom || $currTime > $eveningTo) || $type == 'admin') {
+                print $this->formSubmit($submit);
+        //   }
+            ?>
+        <div class="pull-right" <?php if(!($preference->allowSystemAttendance == 'Y')) {
+                echo 'style="display:none;"';
+            } ?>>
+            <a href="<?= $this->url('registerAttendance') ?>" id="forget-password" class="forget-password" style="font-size:13px;color:#575655;">Register Attendance </a>
+        </div>
+
+    </div>
+    
+    <div class="form-actions" style="margin-top:10px;">
+        <div class="pull-left makeHidden">
+            <label style="font-size:13px;color:#575655;font-weight:normal;">
+    <?php print $this->formElement($rememberme); ?>
+                Remember me </label>
+        </div>
+        
+        <div class="pull-right forget-password-block">
+            <a href="<?= $this->url("recover"); ?>" id="forget-password" style="font-size:13px;color:#575655;">Forgot Password?</a>
+        </div>
+    </div>
+
+
+    
+            <?php
+        //	if(($currTime < $morningFrom || $currTime > $morningTo)  &&  ($currTime < $eveningFrom || $currTime > $eveningTo) || $type=='admin' ){	
+            ?>
+
+    <?php
+    //		}
+    print $this->form()->closeTag();
+    ?>
+</div>

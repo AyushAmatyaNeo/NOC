@@ -1,0 +1,97 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/department/add.js'));
+
+?>
+<?php
+$departmentName = $form->get('departmentName');
+$departmentNdesc = $form->get('departmentNdesc');
+$parentDepartment = $form->get('parentDepartment');
+$countryId = $form->get('countryId');
+$companyId = $form->get('companyId');
+$branchId = $form->get('branchId');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+
+$form->setAttribute('action', $this->url('department', ['action' => 'edit', 'id' => $id]));
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Department')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <input type="hidden" id="departmentId" value="<?php echo $id; ?>"/>
+                <div class=" row">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($departmentName); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($departmentName); ?>
+                            <?php print $this->formElementErrors()->render($departmentName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($departmentNdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($departmentNdesc); ?>
+                            <?php print $this->formElementErrors()->render($departmentNdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($countryId); ?>
+                            <?php print $this->formElement($countryId); ?>
+                            <?php print $this->formElementErrors()->render($countryId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <div class="form-group">
+                                <?php print $this->formLabel($companyId); ?>
+                                <?php print $this->formElement($companyId); ?>
+                                <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($branchId); ?>
+                            <?php print $this->formElement($branchId); ?>
+                            <?php print $this->formElementErrors()->render($branchId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($parentDepartment); ?>
+                            <?php print $this->formElement($parentDepartment); ?>
+                            <?php print $this->formElementErrors()->render($parentDepartment, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

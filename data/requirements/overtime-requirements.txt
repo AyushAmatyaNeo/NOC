@@ -1,0 +1,21 @@
+OT rate => 1.5
+
+Apply for OT
+Recommended
+Approved
+
+Even on Approval, OT will be calculated on Biometic basis.
+
+The OT calculation criteria are
+
+minimum of 1 Hr
+calculation on Half hour basis
+
+
+other OT claim process are
+Work on Holiday
+Work On Dayoff
+
+
+
+

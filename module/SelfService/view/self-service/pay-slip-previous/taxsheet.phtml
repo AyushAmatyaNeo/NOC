@@ -1,0 +1,487 @@
+<style>
+    .table>thead>tr>th, .table>tbody>tr>th, .table>tfoot>tr>th, .table>thead>tr>td, .table>tbody>tr>td, .table>tfoot>tr>td{
+    } 
+    table tr td
+    {
+        font-size:12px !important;
+        padding:2px 5px !important;
+        color: #555555 !important;
+        font-weight:400 !important;
+    }  
+    .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
+        border-bottom-width: 1px !important;
+    }
+    .btn-go{
+        padding:5px !important;
+        color:#fff !important;
+        height:28px !important;  
+    }   
+
+    .table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+
+        padding: 2px;
+    }
+
+</style>
+<?php
+$db_host = "192.168.4.44";
+$db_user = "suyashk446";
+$db_password = "Everest@8848";
+$database = "kumari";
+$connect = mysqli_connect($db_host, $db_user, $db_password, $database) or die("couldn't connect!!! to database");
+//$employeeQuery = mysqli_query($connect, "SELECT * FROM EMPLOYEE_MASTER_SETUP WHERE OFFICIAL_CODE='$employeeCode'");
+//$employeeDetail = mysqli_fetch_array($employeeQuery);
+//$id = $employeeDetail['employee_code'];
+$id = $employeeCode;
+$monthCode = 01;
+if (isset($_POST['mcode'])) {
+    $monthCode = $_POST['mcode'];
+}
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\payslip-previous')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="panel panel-default margin-top-20">
+    <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+        <div class="panel-body">
+            <form name="filter" method="post" action="">
+                <table class="table table-striped table-bordered table-hover" style="width:200px;">
+                    <tr>
+                        <th> Month :</th>
+                        <?php
+                        $query = 'SELECT PERIOD_DT_CODE,DT_EDESC FROM hr_period_detail ORDER BY to_number(PERIOD_DT_CODE)';
+                        $r = mysqli_query($connect, $query);
+
+                        ?>
+                        <td><select name="mcode" class="form-data" style="width:100px;padding-top:3px;">
+                                <?php
+                                while ($result = mysqli_fetch_assoc($r)) :
+
+                                    ?>
+                                    <option <?php echo (isset($_POST['mcode']) && ($_POST['mcode'] == $result['PERIOD_DT_CODE'])) ? 'selected' : ''; ?>
+                                        value="<?php echo $result['PERIOD_DT_CODE']; ?>">
+                                            <?php echo $result['DT_EDESC']; ?>
+                                    </option>
+                                <?php endwhile; ?>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><input type="submit" value="Go"
+                                               class="btn btn-small btn-success"
+                                               label="Filter"/></td>
+                    </tr>
+                </table>
+            </form>
+
+
+            <?php
+            $sql = " 
+                SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+                where TAX_TYPE = 'I'
+                order by TAX_NO
+                ";
+            $fst = mysqli_query($connect, $sql);
+
+            ?>
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                    <center>INCOMES</center>
+                                    </th>
+                                    </tr>
+                                    <?php
+                                    $total = 0;
+                                    while ($res = mysqli_fetch_assoc($fst)) {
+
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                echo $res['TAX_DESC'];
+
+                                                ?></td>
+                                            <td class='rowAA'><span style='float:right;'><?php
+                                                    $pay_code = $res['PAY_CODE'];
+                                                    if (strLen($pay_code) == 3) {
+                                                        $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                                    } else {
+                                                        $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                                    }
+
+                                                    $sst = mysqli_query($connect, $sql1);
+                                                    $row = mysqli_fetch_assoc($sst);
+                                                    $amount = $row['AMOUNT'];
+                                                    echo number_format($row['AMOUNT'], 2);
+//                                                    echo $sql1;
+                                                    $total = $total + $amount;
+
+                                                    ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <?php
+                        $sql = " 
+                            SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+                            WHERE TAX_TYPE = 'T'
+                            order by TAX_NO";
+                        $fst = mysqli_query($connect, $sql);
+
+                        ?>
+                        <div class="col-lg-4">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                    <center>TAX EXEMPTIONS</center>
+                                    </th>
+                                    </tr>
+                                    <?php
+                                    while ($res = mysqli_fetch_assoc($fst)) {
+
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                echo $res['TAX_DESC'];
+
+                                                ?></td>
+                                            <td><span style='float:right;'><?php
+                                                    $pay_code = $res['PAY_CODE'];
+
+                                                    if (strLen($pay_code) == 3) {
+                                                        $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                                    } else {
+                                                        $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                                    }
+
+                                                    $sst = mysqli_query($connect, $sql1);
+                                                    $row = mysqli_fetch_assoc($sst);
+                                                    echo $amount = number_format($row['AMOUNT'], 2);
+
+                                                    ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                        <?php
+                        $sql = " 
+                            SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+                            WHERE
+                            TAX_TYPE = 'O'
+                            order by TAX_NO";
+                        $fst = mysqli_query($connect, $sql);
+
+                        ?>
+                        <div class="col-lg-4">
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="2">
+                                    <center>OTHER TAX</center>
+                                    </th>
+                                    </tr>
+                                    <?php
+                                    while ($res = mysqli_fetch_assoc($fst)) {
+
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                echo $res['TAX_DESC'];
+
+                                                ?></td>
+                                            <td><span style='float:right;'>
+                                                    <?php
+                                                    $pay_code = $res['PAY_CODE'];
+                                                    if (strLen($pay_code) == 3) {
+                                                        $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                                    } else {
+                                                        $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                                    }
+                                                    $sst = mysqli_query($connect, $sql1);
+                                                    $row = mysqli_fetch_assoc($sst);
+                                                    echo $amount = number_format($row['AMOUNT'], 2);
+
+                                                    ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                                </thead>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="col-lg-4">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td colspan="2">
+                                        <?php echo 'TOTAL INCOME: ' ?></td>
+                                    <td style="text-align: right"><?php echo number_format($total, 2); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-4">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td colspan='2'>
+                                        <?php
+                                        $sql = "SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+                            WHERE TAX_TYPE = 'S'
+                            order by TAX_NO";
+                                        $fst = mysqli_query($connect, $sql);
+                                        while ($res = mysqli_fetch_assoc($fst)) {
+                                            echo $res['TAX_DESC'] . ':';
+                                            $pay_code = $res['PAY_CODE'];
+                                            if (strLen($pay_code) == 3) {
+                                                $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                            } else {
+                                                $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                            }
+                                            $sst = mysqli_query($connect, $sql1);
+                                            $row = mysqli_fetch_assoc($sst);
+                                        }
+
+                                        ?>
+                                        <?php echo $res['TAX_DESC']; ?>
+                                    </td>
+                                    <td style="text-align: right"><?php echo $amount = number_format($row['AMOUNT'], 2); ?></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-lg-4">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <td colspan='2'>
+                                        <?php
+                                        $sql = "SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+                    WHERE TAX_TYPE = 'A'
+                    order by TAX_NO";
+                                        $fst = mysqli_query($connect, $sql);
+                                        while ($res = mysqli_fetch_assoc($fst)) {
+                                            echo $res['TAX_DESC'];
+                                            $pay_code = $res['PAY_CODE'];
+                                            if (strLen($pay_code) == 3) {
+                                                $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                            } else {
+                                                $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                            }
+
+                                            $sst = mysqli_query($connect, $sql1);
+                                            $row = mysqli_fetch_assoc($sst);
+                                        }
+
+                                        ?>
+                                    </td>
+                                    <td style="text-align:right">
+                                        <?php echo $amount = number_format($row['AMOUNT'], 2); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <?php
+                            $sql = "SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+where TAX_TYPE = 'M'
+order by TAX_NO";
+                            $fst = mysqli_query($connect, $sql);
+
+                            ?>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <?php
+                                    while ($res = mysqli_fetch_assoc($fst)) {
+
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                echo $res['TAX_DESC'];
+
+                                                ?></td>
+                                            <td><span style='float:right;'><?php
+                                                    $pay_code = $res['PAY_CODE'];
+                                                    if (strLen($pay_code) == 3) {
+                                                        $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                                    } else {
+                                                        $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                                    }
+                                                    $sst = mysqli_query($connect, $sql1);
+                                                    $row = mysqli_fetch_assoc($sst);
+                                                    echo $amount = number_format($row['AMOUNT'], 2);
+
+                                                    ?>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+                            <?php
+                            $sql = "SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+WHERE
+TAX_TYPE = 'B'
+order by TAX_NO";
+                            $fst = mysqli_query($connect, $sql);
+
+                            ?>
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <?php
+                                    while ($res = mysqli_fetch_assoc($fst)) {
+
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                echo $res['TAX_DESC'];
+
+                                                ?></td>
+                                            <td><?php
+                                                $pay_code = $res['PAY_CODE'];
+                                                if (strLen($pay_code) == 3) {
+                                                    $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                                } else {
+                                                    $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                                }
+                                                $sst = mysqli_query($connect, $sql1);
+                                                $row = mysqli_fetch_assoc($sst);
+                                                echo $amount = number_format($row['AMOUNT'], 2);
+
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <?php
+                            $sql = "SELECT TAX_DESC, TAX_NO, PAY_CODE FROM HR_TAX_SETUP
+                                where TAX_TYPE = 'C'
+                                order by TAX_NO";
+                            $fst = mysqli_query($connect, $sql);
+
+                            ?>
+
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <?php
+                                    while ($res = mysqli_fetch_assoc($fst)) {
+
+                                        ?>
+                                        <tr>
+                                            <td>
+                                                <?php
+                                                echo $res['TAX_DESC'];
+
+                                                ?></td>
+                                            <td><?php
+                                                $pay_code = $res['PAY_CODE'];
+                                                if (strLen($pay_code) == 3) {
+                                                    $sql1 = "SELECT FLAT_VALUE as AMOUNT FROM HR_FLAT_VALUE_DETAIL 
+                                                                WHERE EMPLOYEE_CODE = '$id'
+                                                                AND FLAT_CODE = '$pay_code'";
+                                                } else {
+                                                    $sql1 = "SELECT AMOUNT FROM HR_SALARY_PAY_DETAIL
+                                                         WHERE EMPLOYEE_CODE = '$id'
+                                                         AND PAY_CODE = '$pay_code'
+                                                         AND SHEET_NO IN (SELECT SHEET_NO FROM HR_SALARY_SHEET
+                                                         WHERE PERIOD_DT_CODE = '$monthCode')";
+                                                }
+                                                $sst = mysqli_query($connect, $sql1);
+                                                $row = mysqli_fetch_assoc($sst);
+                                                echo $amount = number_format($row['AMOUNT'], 2);
+
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    <?php } ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+

@@ -1,0 +1,265 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\workOnDayoffStatus')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb'); ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<?php
+/**
+ * Load Javascript files here
+ */
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'));
+$this->headScript()->appendFile($this->basePath('js/SelfService/work-on-dayoff/add.js'))
+            ->appendFile($this->basePath('js/manager-service/dayoff-work-approve/view.js'));
+
+
+$form->setAttribute('role', 'form');
+
+$fromDate = $form->get('fromDate');
+$fromDate->setAttributes(["disabled" => "disabled"]);
+$toDate = $form->get('toDate');
+$toDate->setAttributes(["disabled" => "disabled"]);
+$duration = $form->get('duration');
+$duration->setAttributes(["disabled" => "disabled"]);
+$remarks = $form->get('remarks');
+$remarks->setAttributes(["disabled" => "disabled"]);
+$recommendedRemarks = $form->get('recommendedRemarks');
+$recommendedRemarks->setAttributes(['required' => 'true']);
+$approvedRemarks = $form->get('approvedRemarks');
+$approvedRemarks->setAttributes(['required' => 'true']);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Approve');
+$submit->setAttribute('id','approve');
+
+$form->setAttribute('action', $this->url('workOnDayoffStatus', ['action' => 'view', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.employeeId =<?= json_encode($employeeId) ?>;
+</script>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Work on Day-off Request Detail
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="border-bottom margin-bottom-10">
+                    <div class="form-group">
+                        <div class="row div-font-11">
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Employee Name
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $employeeName; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            Recommender
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $recommender; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Requested Date
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $requestedDt; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            Approver
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $approver; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Status
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php
+                                            if ($status == 'RQ') {
+                                                echo "Pending";
+                                            } else if ($status == 'RC') {
+                                                echo "Recommended";
+                                            } else if ($status == 'AP') {
+                                                echo "Approved";
+                                            } else if ($status == "R") {
+                                                echo "Rejected";
+                                            } else if ($status == "C") {
+                                                echo "Cancelled";
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class=" row">
+                        <div class="col-sm-4">
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div
+                                        class="form-group required  <?= empty($fromDate->getMessages()) ? "" : "error" ?>">
+                                            <?php print $this->formLabel($fromDate) ?>
+                                            <?php print $this->formElement($fromDate) ?>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($fromDate, ['class' => 'help-block error']) ?>
+                                </div>     
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="nepaliStartDate">&nbsp;</label>
+                                        <div class="input-group">
+                                            <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                                   class="form-control" value="" disabled="disabled">
+                                        </div>
+                                    </div>
+                                </div>     
+                            </div>       
+
+                        </div>
+
+                        <div class="col-sm-4">
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group required <?= empty($toDate->getMessages()) ? "" : "error" ?>">
+                                        <?php print $this->formLabel($toDate) ?>
+                                        <?php print $this->formElement($toDate) ?>
+                                        <span id="errorMsgDate" style="font-size:11px; color:red;"></span>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($toDate, ['class' => 'help-block error']) ?>
+                                </div>     
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="nepaliEndDate">&nbsp;</label>
+                                        <div class="input-group">
+                                            <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                                   class="form-control" value="" disabled="disabled">
+                                        </div>
+                                    </div>
+                                </div>     
+                            </div>       
+
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div
+                                class="form-group required <?= empty($duration->getMessages()) ? "" : "error" ?>">
+                                    <?php print $this->formLabel($duration); ?>
+                                    <?php print $this->formElement($duration); ?>
+                                <span id="errorMsg" style="font-size:11px; color:red;"></span>
+                            </div>
+                            <?php print $this->formElementErrors()->render($duration, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class=" row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?php print $this->formLabel($remarks); ?>
+                                <?php print $this->formElement($remarks); ?>
+                                <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                        </div>
+
+                        <div class="col-sm-4">
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+
+                <?php
+                if (($status == 'RC' || $status == 'AP' || $status == 'R') && $recommApprove == 0) {
+                    $recommendedRemarks->setAttributes(['disabled' => 'disabled']);
+                    ?>
+                    <div class="form-group padding-0">
+                        <label>Reason for action [From Recommender]</label>
+                        <?php print $this->formElement($recommendedRemarks); ?>
+                    </div>
+                    <?php
+                }
+                if ($status == 'RC' || $status == 'RQ' || $status == 'AP' || ($status == 'R' && $approvedDT != null)) {
+                    ?>
+                    <div class="form-group padding-0">
+                        <?php print $this->formLabel($approvedRemarks); ?>
+                        <?php print $this->formElement($approvedRemarks); ?>
+                    </div>
+                <?php } ?>
+
+                <?php if ($status == 'RQ' || $status == 'RC') { ?>
+                    <?php  if($acl['HR_APPROVE']=='Y'){  ?>
+                        <?php print $this->formSubmit($submit); ?>
+                        <input type="submit" name="submit" class="btn btn-danger pull-right" value="Reject">
+                    <?php }      ?>
+                <?php } ?>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>

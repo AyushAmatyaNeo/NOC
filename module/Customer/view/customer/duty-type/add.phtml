@@ -1,0 +1,83 @@
+<?php
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'));
+$this->headScript()->appendFile($this->basePath('js/customer/duty-type/add.js'));
+?>
+<?php
+$dutyTypeName = $form->get('dutyTypeName');
+$normalHour = $form->get('normalHour');
+$otHour = $form->get('otHour');
+$remarks = $form->get('remarks');
+$submit = $form->get('submit');
+
+
+$form->setAttribute('action', $this->url('duty-type', ['action' => 'add']));
+$form->prepare();
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\customer-setup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($dutyTypeName); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($dutyTypeName); ?>
+                            <?php print $this->formElementErrors()->render($dutyTypeName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($normalHour) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($normalHour) ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($normalHour, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($otHour) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($otHour) ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($otHour, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php // print $this->formLabel($remarks); ?>
+                            <?php // print $this->formElement($remarks); ?>
+                            <?php // print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

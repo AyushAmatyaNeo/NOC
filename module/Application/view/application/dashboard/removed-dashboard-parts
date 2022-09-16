@@ -1,0 +1,83 @@
+
+            <div class="row widget-row">
+                <div class="col-sm-6 col-md-6">
+                    <!-- BEGIN WIDGET THUMB -->
+                    <div class="wigetbox wigetbox-colorone clearfix widget-thumb widget-bg-color-lightgreen margin-bottom-20 bordered green-haze">
+                        <div class="widget-thumb-wrap widget-thumb-wrap-bgone">
+                            <h4 class="widget-thumb-heading">Total Head Count</h4>
+                            <div class="widget-thumb-body">
+                                <span class="widget-thumb-body-stat" data-counter="counterup"><?php print count($employeeList); ?></span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="icons">
+                                <i class="widget-thumb-icon  fa fa-user colorone"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- BEGIN WIDGET THUMB -->
+                <div class="col-sm-6 col-md-6">
+                    <div class="wigetbox wigetbox-colortwo clearfix widget-thumb widget-bg-color-lightgreen margin-bottom-20 bordered green-haze">
+                        <div class="widget-thumb-wrap widget-thumb-wrap-bgtwo">
+                            <h4 class="widget-thumb-heading">Joining This Month</h4>
+                            <div class="widget-thumb-body">
+                                <span class="widget-thumb-body-stat" data-counter="counterup"><?php print $employeeJoinCM['ECMJ']; ?></span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="icons">
+                                <i class="widget-thumb-icon fa fa-user-plus colortwo"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-6 col-md-6">
+                    <!-- BEGIN WIDGET THUMB -->
+                    <div class="wigetbox wigetbox-colorthree clearfix widget-thumb widget-bg-color-lightgreen margin-bottom-20 bordered green-haze">
+                        <div class="widget-thumb-wrap widget-thumb-wrap-bgthree">
+                            <h4 class="widget-thumb-heading">Exits This Month</h4>
+                            <div class="widget-thumb-body">
+                                <span class="widget-thumb-body-stat" data-counter="counterup">0</span>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="icons">
+                                <i class="widget-thumb-icon fa fa fa-user-times colorthree"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-6">
+                    <!-- BEGIN WIDGET THUMB -->
+                    <a href="<?php echo $pendingleaveUrl ?>">
+                        <div class="wigetbox wigetbox-colorfour clearfix widget-thumb margin-bottom-20 bordered green-haze widget-appraisal-due">
+                            <div class="widget-thumb-wrap widget-thumb-wrap-bgfour">
+                                <h4 class="widget-thumb-heading">Pending Leave</h4>
+                                <div class="widget-thumb-body">
+                                    <ul>
+                                        <!--                                    <li class="line">
+                                                                                <span class="widget-thumb-body-stat" data-counter="counterup">30</span>
+                                                                                This Month
+                                                                            </li>
+                                                                            <li>
+                                                                                <span class="widget-thumb-body-stat" data-counter="counterup">20</span>
+                                                                                Next Month
+                                                                            </li>-->
+                                        <li class="line">
+                                            <span class="widget-thumb-body-stat" data-counter="counterup"><?= $pendingLeave['PENDING_LEAVE']; ?></span>
+                                        </li>
+
+                                    </ul>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="icons">
+                                    <i class="widget-thumb-icon  fa fa-users colorfour"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>

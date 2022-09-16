@@ -1,0 +1,236 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('js/selfservice/vacancy/apply.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'perfomanceApplication-form');
+
+// $fromDate = $form->get('fromDate');
+// $toDate = $form->get('toDate');
+// $duration = $form->get('duration');
+// $remarks = $form->get('remarks');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Apply');
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\vacancies')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Vacancy Apply
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-group">
+                <input type="hidden" id="employeeId" value="<?php echo $employeeId; ?>" />
+            </div>
+            <?php print $this->form()->openTag($form);  ?>
+            <h4 class="text-center"> <strong style="line-height: 25px;"> नेपाल आइल निगम लिमिटेड <br> कर्मचारी प्रशासन विनियमावली २०६३ को विनियम ६,४ बमोजिम  <br>जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि  <br> दरखास्त फारम </strong></h4>
+            <div class="row" style="margin: 20px;">
+                <h5 class="bold">कर्मचारी संकेत न :</h5>
+                <div class="col-12" style="border:1px solid black ;">
+                    <div class="row clearfix e-setup">                    
+                        <div class="col-xs-12 col-sm-3 col-md-6 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group" style="margin: 10px;">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="ad_no">सूचना न. / प्रकाशन भएको मिति:  </label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $detail['AD_NO']. ' / 2021-1-1' ?></div>
+                                </div>
+                            </div>
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">बढुवा हुने पद / तह :</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $detail['POSITION_NAME'].' / '. $detail['FUNCTIONAL_LEVEL_NO'];?></div>
+                                </div>
+                            </div>                            
+                        </div>
+                        <div class="col-xs-12 col-sm-3 col-md-6 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group" style="margin: 10px;">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="ad_no">सेवा / समुह:  </label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <?php echo $detail['SERVICE_EVENT_NAME'].'/ '. $detail['SERVICE_TYPE_NAME'];?></div>
+                                </div>
+                            </div>
+
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">बि. न. :</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $detail['AD_NO'] ?></div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12" style="border:1px solid black; margin-top: 10px">
+                    <div class="row clearfix e-setup">                    
+                        <div class="col-xs-12 col-sm-3 col-md-6 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group" style="margin: 10px;">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="ad_no">उमेद्वारको नाम / थर:  </label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['FIRST_NAME'] .' '.$EmployeeData['MIDDLE_NAME'].' ' .$EmployeeData['LAST_NAME'] ?></div>
+                                </div>
+                            </div>
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">बहाल रहेको कार्यालय:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['DEPARTMENT_ID'] ?></div>
+                                </div>
+                            </div>
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">पद / तह:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['DESIGNATION_TITLE'].' / '. $EmployeeData['POSITION_ID'] ?></div>
+                                </div>
+                            </div>  
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">सेवा / समुह:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['SERVICE_TYPE_NAME'].' / '. $EmployeeData['SERVICE_EVENT_NAME'] ?></div>
+                                </div>
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+                    <h5 class="bold">१. सेवा सम्बन्धी बिवरण ( शुरू नियुक्तिदेखि हालको पदसम्म )</h5>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center"  style="width: 10%;">पद</td>
+                                <td class="text-center"  style="width: 20%;">पदको नाम / तह / सेवा / समुह </td>
+                                <td class="text-center"  style="width: 20%;">कार्यालय को नाम / रहेको स्थान </td>
+                                <td class="text-center"  style="width: 10%;">नियुक्ति वा बढुवाको मिति </td>
+                                <td class="text-center"  style="width: 10%;">बहाल रहेको मिति </td>
+                                <td class="text-center"  style="width: 10%;">असाधारण बिदा बसेको अबिधि </td>
+                                <td class="text-center"  style="width: 10%;">कसरी आएको </td>
+                                <td class="text-center"  style="width: 10%;">कैफियत </td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>शुरू नियुक्ति </td>
+                                <td class="text-center"> <?php echo $JobStart['DESIGNATION_TITLE'] .' / '. $JobStart['FUNCTIONAL_LEVEL_EDESC'] .' / '. $JobStart['SERVICE_TYPE_NAME'] .' / '. $JobStart['DEPARTMENT_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $JobStart['BRANCH_NAME'] .' / '. $JobStart['LOCATION_EDESC']?></td>
+                                <td class="text-center"> <?php echo $JobStart['START_DATE'] ?></td>
+                                <td class="text-center"> <?php echo $JobStart['SERVICE_TYPE_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $casLeaveEarlier ?></td>
+                                <td class="text-center"> <?php echo $JobStart['SERVICE_TYPE_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $JobStart['REMARKS'] ?></td>
+                            </tr>
+                            <tr>
+                                <td>हालको पद / तह </td>
+                                <td class="text-center"> <?php echo $JobEnd['DESIGNATION_TITLE'] .' / '. $JobEnd['FUNCTIONAL_LEVEL_EDESC'] .' / '. $JobEnd['SERVICE_TYPE_NAME'] .' / '. $JobEnd['DEPARTMENT_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['BRANCH_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['START_DATE'] ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['SERVICE_TYPE_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $casLeaveLater ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['SERVICE_TYPE_NAME'] ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['REMARKS'] ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h5 class="bold">द्रष्टब्य : </h5>
+                    <p> १ . सेवा , समुह परिवर्तन के हो स्पष्ट उलेख गर्ने। <br>  
+                        २. बढुवाको उमेद्वार हुन असर पर्ने कुनै कुरा छैन भनि कैफियत महलमा उलेख गरि दस्तखत समेत गर्ने। <br>
+                        ३. गयल कट्टी लगायत सेवा अवधि गणना नहुने कुनै बिवरण भए कैफियत महलमा खुलाउनु पर्नेछ। <br>
+                        ४. माथि कार्यालयमा रहेको स्थानमा हालको पदको बिवरण खुलाउदा  विनियम ६।११ (२) बमोजिम वर्ग उलेख गर्नु पर्ने। 
+                    </p>
+                </div>
+                    <h5 class="bold">२. शैक्षित योग्यता ( विनियम ६। १२ ( १ ) अनुसारको मात्र )</h5>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center" style="width: 5%">सि. न.</td>
+                                <td class="text-center" style="width: 35%">शैक्षित योग्यता</td>
+                                <td class="text-center" style="width: 15%">अध्यन अवधि</td>
+                                <td class="text-center" style="width: 15%">श्रेणी </td>
+                                <td class="text-center" style="width: 15%">शिक्षण संस्थाको नाम , ठेगाना</td>
+                                <td class="text-center" style="width: 15%">अध्यनको मूल बिषय</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>क.</td>
+                                <td>सेवाप्रवेशको  निमित तोकिएको न्यूनतम शैक्षिक योग्यता</td>
+                                <td class="text-center"> <?php echo $eduFirst['PASSED_YEAR'] ?></td>
+                                <td class="text-center"> <?php echo $eduFirst['ACADEMIC_DEGREE_ID'] ?></td>
+                                <td class="text-center"> <?php echo $eduFirst['ACADEMIC_UNIVERSITY_ID'] ?></td>
+                                <td class="text-center"> <?php echo $eduFirst['ACADEMIC_PROGRAM_ID'] ?></td>
+                            </tr>
+                            <tr>
+                                <td>ख.</td>
+                                <td>सेवाप्रवेशको  निमित तोकिएको न्यूनतम शैक्षिक योग्यता भन्दा माथिको सम्बधित बिषयको कुनै एक अतिरिक्त शैक्षिक उपाधि  </td>
+                                <td class="text-center"> <?php echo $eduLast['PASSED_YEAR'] ?></td>
+                                <td class="text-center"> <?php echo $eduLast['ACADEMIC_DEGREE_ID'] ?></td>
+                                <td class="text-center"> <?php echo $eduLast['ACADEMIC_UNIVERSITY_ID'] ?></td>
+                                <td class="text-center"> <?php echo $eduLast['ACADEMIC_PROGRAM_ID'] ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <h5 class="bold">द्रष्टब्य : </h5>
+                    <p> १. माथि उल्लेखित सबै उपाधिहरुको प्रमाणित प्रतिलिपि पेश गर्नु पर्नेछ। <br>  
+                        २. बढुवा हुने पदको लागि तोकिएको न्यूनतम शैक्षिक योग्यताको सम्बधमा तोकिएको शैक्षिक योग्यताको प्रमाणपत्र वा समकक्षता र सम्बंद्वाता निर्धारण भएकोमा सोको कागजात समेत पेश गर्नु पर्नेछ।  <br>
+                       <br> <br>
+                       माथि उल्लेखित बिवरण कुनै कुरा झुठा लेकिएको वा जानी जानी साचो कुरा दवाउने उद्हेश्ले लेखिएको ठहरे कानुन बमोजिम सजाय स्वीकार गर्ने छु भनि सहिछाप गर्ने। 
+                    </p>
+                </div>
+            </div>
+            <?php
+            print $this->formSubmit($submit);
+            print $this->form()->closeTag();
+            ?>
+            <div class="border-bottom">
+            </div>
+        </div>
+    </div>
+</div>

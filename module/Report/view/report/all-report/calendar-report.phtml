@@ -1,0 +1,273 @@
+<?php
+//Load JS files here
+$this->headLink()
+        ->appendStylesheet($this->basePath('css/dashboard.employee.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+        
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('js/search.js')) 
+        ->appendFile($this->basePath('js/Report/AllReport/calendarReport.js'))
+        ->appendFile($this->basePath('js/nepali-calendar.js'));
+?>    
+
+<script type="text/javascript">
+    document.calendarJsonFeedUrl = '<?php echo $this->url('allreport', ['action' => 'fetchEmployeeCalendarJsonFeed']); ?>';
+</script>
+
+<script>   
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.pullEmployeeListForEmployeeTableLink = '<?= $this->url("allreport", ["action" => "jobDurationReport"]) ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+    document.preference =<?php echo json_encode($preference) ?>;
+    document.calendarType = '<?php echo $calendarType ?>';
+    document.empList =<?php echo json_encode($empList) ?>;
+    document.empProfile =<?php echo json_encode($empProfile) ?>;
+</script> 
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Employee')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?> 
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div id="employeeList" >
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <!--<div class="caption">-->
+                <!--<i class="icon-paper-plane font-green-haze"></i>-->
+                <!--<span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>-->
+            <!--</div>-->
+            <?php /*
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <?php if ($acl['ALLOW_ADD'] == 'Y'): ?>
+                    <a href="<?= $this->url('employee', ['action' => 'edit', 'tab' => 1]) ?>" class="btn default btn-sm">
+                        <i class="fa fa-plus-square icon-black"></i> New </a>
+                <?php endif; ?> 
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="excelExport">
+                                <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                        </li>
+                        <li >
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> Export to PDF </a>
+                        </li>
+                    </ul>
+                </div> 
+            </div> */ ?>
+        </div>
+        <div class="portlet-body">
+            
+            
+            <div class="row">
+                
+                <div class="employeedashboard">
+    <div class="emplyoee-dashboard col-md-12">
+        <div class="row">
+            <div class="employe-descbox">
+                <div class="col-sm-2 col-md-1 profile_pic">
+                    <img id="employeeImageCalendar" src="<?php print $this->basePath("img/nobody_m.original.jpg"); ?>">
+                </div>
+                <div class="col-sm-3 col-md-3 employee-details">
+
+                    <h4 class="font-weight-bold" id="employeeFullName"></h4>
+                    <span id="employeeOfficialEmail"></span><br>
+                    <span id="employeeDesignationTitle"></span><br>
+                    <span id="employeeServiceDate"></span><br>
+                </div>
+                <div class="col-md-5">
+<!--                    <div class="row detailsbox">
+                        <a  href="<?php echo $presentUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg1" >
+                                    <span id="employeePresentDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">Present</div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a  href="<?php echo $OnLeaveUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg2">
+                                    <span id="employeeLeaveDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">On Leave</div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a  href="<?php echo $OnTrainingUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg3">
+                                    <span id="employeeTrainingDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">Training</div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a  href="<?php echo $OnTravelUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg4">
+                                    <span id="employeeTravelDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">On Tour</div>
+                                </div>
+                            </div>
+                        </a>
+
+                        <a  href="<?php echo $wohUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg5">
+                                    <span id="employeeWOHDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">WOH</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>-->
+                </div>
+                <div class="col-xs-12  col-sm-7 col-md-3">
+<!--                    <div class="col-hris row attendence-box">
+                        <ul>
+                            <a  href="<?php echo $lateInUrl ?>">
+                                <li class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="hris efficiency efficiency-bg1">
+                                        <span id="employeeLateInDays">0</span>
+                                        <div>Late In</div>
+                                    </div>
+                                </li>
+                            </a>
+                            <a  href="<?php echo $earlyOutUrl ?>">
+                                <li class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="hris efficiency efficiency-bg2">
+                                        <span id="employeeEarlyOutDays">0</span>
+                                        <div>Early Out</div>
+                                    </div>
+                                </li>
+                            </a>
+                            <a  href="<?php echo $missPunchUrl ?>">
+                                <li class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="hris efficiency efficiency-bg3">
+                                        <span id="employeeMissPunch">0</span>
+                                        <div>Missed Punch</div>
+                                    </div>
+                                </li>
+                            </a>
+                        </ul>
+                    </div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+                
+                
+                
+    <div class="col-md-12">
+        <div class="portlet light calendar boxborder">
+            <div class="portlet-title ">
+                <div class="caption">
+                    <i class="fa fa-calendar font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp bold">Calendar</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row" style="padding:1%;">
+                    <div class="col-sm-3">
+                        <select class="form-control" id="cal_emp"></select>
+                    </div>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="nc-year"></select>
+                    </div>
+                    <div class="col-sm-3">
+                        <select class="form-control" id="nc-month"></select>
+                    </div>
+                </div>
+                <div id="nepaliCalendar" class="nc-container">
+                    <table id="nc-content" class="table table-bordered">
+                        <tr>
+                            <td class="nc-box"><div class="nc-header">Sunday</div><div id="nc-sunday"></div></td>
+                            <td class="nc-box"><div class="nc-header">Monday</div><div id="nc-monday"></div></td>
+                            <td class="nc-box"><div class="nc-header">Tuesday</div><div id="nc-tuesday"></div></td>
+                            <td class="nc-box"><div class="nc-header">Wednesday</div><div id="nc-wednesday"></div></td>
+                            <td class="nc-box"><div class="nc-header">Thursday</div><div id="nc-thrusday"></div></td>
+                            <td class="nc-box"><div class="nc-header">Friday</div><div id="nc-friday"></div></td>
+                            <td class="nc-box"><div class="nc-header">Saturday</div><div id="nc-saturday"></div></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="calendar-colorbox" >
+                    <ul>
+                        <li>
+                            <div class="color-box colorbox-color1"></div>
+                            <span>Holiday</span>
+                        </li>
+                        <li>
+                            <div class="color-box colorbox-color2"></div>
+                            <span>Leave</span>
+                        </li>
+                        <li>
+                            <div class="color-box colorbox-color3"></div>
+                            <span>Training</span>
+                        </li>
+                        <li>
+                            <div class="color-box colorbox-color4"></div>
+                            <span>Tour</span>
+                        </li>
+                        <li>
+                            <div class="color-box colorbox-color5"></div>
+                            <span>Absent</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+            
+            
+            
+            
+        </div>
+    </div> 
+
+<!--    <div id="employeeTable">
+    </div>-->
+
+
+</div>

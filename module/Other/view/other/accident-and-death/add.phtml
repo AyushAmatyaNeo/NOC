@@ -1,0 +1,43 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\accident-and-death')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form>
+                    <div class="form-group <?= empty($employees->getMessages()) ? "" : "has-error" ?>">
+                        <?php print $this->formLabel($employees); ?>
+                        <?php print $this->formElement($employees); ?>
+                    </div>
+                    <div class="form-group <?= empty($accDate->getMessages()) ? "" : "has-error" ?>">
+                        <?php print $this->formLabel($accDate); ?>
+                        <?php print $this->formElement($accDate); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($accType); ?>
+                        <?php print $this->formElement($accType); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($lifeInsurance); ?>
+                        <?php print $this->formElement($lifeInsurance); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($isOnWork); ?>
+                        <?php print $this->formElement($isOnWork); ?>
+                    </div>
+
+
+
+                    <?php print $this->formSubmit($submit); ?>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,80 @@
+<div class="tab-pane" id="portlet_tab2_4">
+    <form method="post" action="" name="performanceAppraisalForm">
+    <div class="row">
+        <?php
+        foreach ($appraiseeQuestionTemplate as $appraiseeQuestionRow) { ?>
+            <div class="col-md-12 margin-bottom-10">
+                <div style="">
+                    <h6 class="appHeading"><?php echo $appraiseeQuestionRow['HEADING_EDESC']; ?></h6>
+                    <div class="row questionWrapRow">
+                        <div class="questionWrap">
+                        <?php foreach ($appraiseeQuestionRow['QUESTIONS'] as $questionRow) { ?>
+                            <div  class="col-md-12 margin-bottom-5 appQuestion">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <label><h7 style="font-size:12px;"><?php echo $questionRow['QUESTION_EDESC']; ?></h7> </label> 
+                                        <?php 
+                                        $keyForQuestion = ($questionRow['ANSWER']==null || count($questionRow['ANSWER'])==0)?$questionRow['QUESTION_ID']:array_keys($questionRow['ANSWER'])[0];
+                                        if($questionRow['APPRAISEE_FLAG']=='Y'){
+                                            if($questionRow['ANSWER_TYPE']=="RADIO"){ ?>
+                                            <div class="md-radio-inline">
+                                                <?php $customRenderer($performanceAppraisalObj("answer[".$keyForQuestion."]", $questionRow['ANSWER_TYPE'],(count($questionRow['QUESTION_OPTIONS'])>0)?$questionRow['QUESTION_OPTIONS']:null,($questionRow['ANSWER']!=null && count($questionRow['ANSWER'])>0)?array_values($questionRow['ANSWER'])[0]['ANSWER']:null,"disabled")); ?>
+                                            </div>
+                                            <?php } else if($questionRow['ANSWER_TYPE']=="CHECKBOX"){?>
+                                                <div class="md-checkbox-inline">
+                                                    <?php $customRendererForCheckbox($performanceAppraisalObj("answer[".$keyForQuestion."][]", $questionRow['ANSWER_TYPE'],(count($questionRow['QUESTION_OPTIONS'])>0)?$questionRow['QUESTION_OPTIONS']:null,($questionRow['ANSWER']!=null && count($questionRow['ANSWER'])>0)?array_values($questionRow['ANSWER'])[0]['ANSWER']:null,"disabled")); ?>
+                                                </div>
+                                            <?php } else{
+                                                print_r($this->formElement($performanceAppraisalObj("answer[".$keyForQuestion."]", $questionRow['ANSWER_TYPE'],(count($questionRow['QUESTION_OPTIONS'])>0)?$questionRow['QUESTION_OPTIONS']:null,($questionRow['ANSWER']!=null && count($questionRow['ANSWER'])>0)?array_values($questionRow['ANSWER'])[0]['ANSWER']:null,"disabled")));
+                                            }
+                                        }
+                                        ?>
+                                    </div>
+                                    <?php if($questionRow['APPRAISEE_RATING']=='Y'){ ?>
+                                        <div class="col-sm-1">
+                                            <label>Self Rating:</label><input class="form-control" type="number" name="<?= "answer[".$keyForQuestion.".sr]"?>" value="<?= ($questionRow['ANSWER']!=null||count($questionRow['ANSWER'])>0)?array_values($questionRow['ANSWER'])[0]['RATING']:null ?>"  min="<?= $questionRow['MIN_VALUE'] ?>" max="<?= $questionRow['MAX_VALUE'] ?>" disabled="disabled"/>
+                                        </div>
+                                    <?php }?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <?php } ?>
+        <?php if(($assignedAppraisalDetail['KPI_SETTING']=='Y') && ($assignedAppraisalDetail['COMPETENCIES_SETTING']=='Y')){ ?>
+        <div class="col-sm-12">
+            <label style="font-size:12px !important;">
+        Have you had the opportunity for a full discussion on the report and agree. Agree? 
+            </label>
+            <div class="md-radio-inline">
+                <div class="md-radio">
+                    <input disabled="disabled" type="radio" id="appraiseeAgree1" name="appraiseeAgree" value="Y" class="md-radiobtn" <?= ($assignedAppraisalDetail['APPRAISEE_AGREE']=='Y'||$assignedAppraisalDetail['APPRAISEE_AGREE']==null)?"checked":""; ?>>
+                    <label for="appraiseeAgree1">
+                        <span class="inc"></span>
+                        <span class="check"></span>
+                        <span class="box"></span> Yes </label>
+                </div>
+                <div class="md-radio">
+                    <input disabled="disabled" type="radio" id="appraiseeAgree2" name="appraiseeAgree" value="N" class="md-radiobtn" <?= ($assignedAppraisalDetail['APPRAISEE_AGREE']=='N')?"checked":""; ?>>
+                    <label for="appraiseeAgree2">
+                        <span class="inc"></span>
+                        <span class="check"></span>
+                        <span class="box"></span> No </label>
+                </div>
+            </div>
+        </div>
+        <?php } ?>
+    </div>
+<!--                            <div class="row margin-top-10">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <button type="submit" id="submit" class="btn btn-success">
+                    SUBMIT
+                </button>
+            </div>
+        </div>
+    </div>-->
+    </form>
+</div>

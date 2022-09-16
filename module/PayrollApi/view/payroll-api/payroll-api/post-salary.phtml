@@ -1,0 +1,70 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/payroll-api/post-salary.js'));
+
+
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.refreshTokenUrl ='<?php echo $this->url('payroll-api', ['action' => 'refreshToken']); ?>';
+    document.fiscalYears =<?php echo json_encode($fiscalYears); ?>;
+    document.months =<?php echo json_encode($months); ?>;
+    
+</script>
+
+
+<div class="row margin-top-20" >
+    
+   
+        
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>
+                    Post Salary
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                
+                 <form id="postSalaryForm" method="post" action="">
+                <div class="row">
+                        <div class="col-sm-2">
+                            <select name="fiscalYear" class="form-control" id="fiscalYearId" >
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select name="monthId" class="form-control" id="monthId" >
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <input  type="button" value="Post" id="postBtn" class="btn pull-right"  >
+                        </div>
+                    </div>
+                     
+                     </form>
+                
+                <?php if($refreshPage=='Y'){ ?>
+                <div class="row" id="refreshBtnDiv">
+                    <div class="col-sm-2">
+                        <input id="refreshButton" type="button" class="btn btn-primary" value="Refresh for new Token">
+                    </div>
+                </div>
+                <?php } ?>
+
+
+            </div>
+        </div>
+    </div>
+        
+    
+</div>

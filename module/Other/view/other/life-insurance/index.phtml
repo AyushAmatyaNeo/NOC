@@ -1,0 +1,69 @@
+
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/other/life-insurance/index.js'));
+?>
+
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.lifeInsuranceList = [
+        {
+            SN: "1",
+            INSURANCE_COMPANY: "Annapurna",
+            INSURANCE_AMOUNT: "100000",
+            IMPACT_ON_TAX: "Yes",
+            TYPE: "Official"
+        },
+        {
+            SN: "2",
+            INSURANCE_COMPANY: "Yeti",
+            INSURANCE_AMOUNT: "10000",
+            IMPACT_ON_TAX: "No",
+            TYPE: "Personal"
+        }
+    ];
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\life-insurance')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="margin-top-20">
+    <div id="lifeInsuranceTable">
+    </div>
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>    
+        #: (SN == null) ? '-' : SN #
+        </td>
+        <td> 
+        #: (INSURANCE_COMPANY== null) ? '-' : INSURANCE_COMPANY #
+        </td>
+        <td> 
+        #: (INSURANCE_AMOUNT== null) ? '-' : INSURANCE_AMOUNT #
+        </td>
+        <td> 
+        #: (IMPACT_ON_TAX== null) ? '-' : IMPACT_ON_TAX #
+        </td>
+        <td> 
+        #: (TYPE== null) ? '-' : TYPE #
+        </td>
+        </tr>
+    </script>
+</div>
+
+

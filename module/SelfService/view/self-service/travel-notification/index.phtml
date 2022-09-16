@@ -1,0 +1,99 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/SelfService/travel-notification/index.js'));
+?>
+
+<script>
+    document.list =<?php echo json_encode($list) ?>;
+    document.viewLink ='<?= $this->url("travelNotification", ["action" => "view"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\travelNotification')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="margin-top-20">
+    
+    
+    <div class="portlet light bg-inverse">
+        
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="export">
+                                <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    <div id="travelNotificationTable">
+    </div>
+	</div>
+    
+   
+<!--    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>
+        #: (FULL_NAME == null) ? ' ' : FULL_NAME #
+        </td>
+        <td>
+        #: (FROM_DATE == null) ? '-' : FROM_DATE #
+        </td>
+        <td>
+        #: (TO_DATE == null) ? '-' : TO_DATE #
+        </td>
+        <td>
+        #: (REQUESTED_DATE == null) ? '-' : REQUESTED_DATE #
+        </td>
+        <td>
+        #: (DESTINATION == null) ? '-' : DESTINATION #
+        </td>
+        <td>
+        #: (STATUS == null) ? '-' : STATUS #
+        </td>
+        <td>
+        #: (SUB_APPROVED_FLAG == null) ? '-' : SUB_APPROVED_FLAG #
+        </td>
+        <td>
+        <a class="btn-edit"
+        href="/#: TRAVEL_ID #" style="height:17px;" title="view detail">
+        <i class="fa fa-search-plus"></i>
+        </a>
+        </td>
+        </tr>
+    </script>-->
+</div>

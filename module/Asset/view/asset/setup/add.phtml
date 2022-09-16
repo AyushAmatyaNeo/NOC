@@ -1,0 +1,236 @@
+<?php
+//echo '<pre>';
+//print_r($group);
+//echo '</pre>';
+//die();
+$this->headLink()
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$this->headScript()->appendFile($this->basePath('js/asset/setup/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'assetSetup-form');
+$form->setAttribute('action', $this->url('assetSetup', ['action' => 'add']));
+
+$assetEdesc = $form->get('assetEdesc');
+
+$assetNdesc = $form->get('assetNdesc');
+
+$brandName = $form->get('brandName');
+
+$modelNo = $form->get('modelNo');
+
+$series = $form->get('series');
+
+$vendorName = $form->get('vendorName');
+
+$quantity = $form->get('quantity');
+
+$warranty = $form->get('warranty');
+
+$purchaseDate = $form->get('purchaseDate');
+
+$expiaryDate = $form->get('expiaryDate');
+
+$purchaseThrough = $form->get('purchaseThrough');
+
+$assetImage = $form->get('assetImage');
+
+$remarks = $form->get('remarks');
+
+$assetGroupId = $form->get('assetGroupId');
+$assetGroupId->setValueOptions($group);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->prepare();
+?>
+
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.wsFileUpload = '<?= $this->url('company', ["action" => "fileUpload"]) ?>';
+    document.imageData =<?php echo json_encode($imageData); ?>;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\assetSetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row form-group">
+                    <div class="col-sm-4">
+                        <form  action="<?= $this->url('company', ["action" => "fileUpload"]) ?>"
+                               class="dropzone"
+                               id="my-awesome-dropzone">
+                        </form>
+                        <div id="uploadedImage" class="cbp-caption-defaultWrap">
+                            <image style="width:100%;height:100px;" />
+                        </div>
+
+                        <button id="uploadFile" class="btn btn-default">Upload</button> 
+
+                    </div>
+                </div>
+                <?php print $this->form()->openTag($form); ?>
+                <input  name="logo" id="form-logo" class="form-control" type="hidden" value="">
+                <div class=" row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($assetEdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($assetEdesc); ?>
+                            <?php print $this->formElementErrors()->render($assetEdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($assetNdesc); ?>
+                            <?php print $this->formElement($assetNdesc); ?>
+                            <?php print $this->formElementErrors()->render($assetNdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($assetGroupId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($assetGroupId); ?>
+                            <?php print $this->formElementErrors()->render($assetGroupId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($brandName); ?>
+                            <?php print $this->formElement($brandName); ?>
+                            <?php print $this->formElementErrors()->render($brandName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($modelNo); ?>
+                            <?php print $this->formElement($modelNo); ?>
+                            <?php print $this->formElementErrors()->render($modelNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($series); ?>
+                            <?php print $this->formElement($series); ?>
+                            <?php print $this->formElementErrors()->render($series, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($vendorName); ?>
+                            <?php print $this->formElement($vendorName); ?>
+                            <?php print $this->formElementErrors()->render($vendorName, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($quantity); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($quantity); ?>
+                            <?php print $this->formElementErrors()->render($quantity, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($warranty); ?>
+                            <?php print $this->formElement($warranty); ?>
+                            <?php print $this->formElementErrors()->render($warranty, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class=" row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($purchaseDate); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($purchaseDate); ?>
+                            <?php print $this->formElementErrors()->render($purchaseDate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($expiaryDate); ?>
+                            <?php print $this->formElement($expiaryDate); ?>
+                            <?php print $this->formElementErrors()->render($expiaryDate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($purchaseThrough); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($purchaseThrough); ?>
+                            <?php print $this->formElementErrors()->render($purchaseThrough, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <div class=" row">
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+                </div>
+
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+

@@ -1,0 +1,63 @@
+<?php
+$form->setAttribute('role', 'form');
+$form->setAttribute('class', 'login-form');
+
+$username = $form->get("username");
+$username->setAttribute('id', 'form-username');
+$username->setAttribute('class', 'form-control form-control-solid placeholder-no-fix');
+$username->setAttribute('placeholder', 'Username...');
+$username->setAttribute('required', true);
+
+$password = $form->get('password');
+$password->setAttribute('id', 'form-password');
+$password->setAttribute('class', 'form-control form-control-solid placeholder-no-fix');
+$password->setAttribute('placeholder', 'Password...');
+$password->setAttribute('required', true);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Register Time');
+$submit->setAttribute('class', 'btn btn-primary btn-noc uppercase loginbtn');
+
+$form->setAttribute('action', $this->url('registerAttendance', ['action' => 'authenticate']));
+$form->prepare();
+
+print $this->form()->openTag($form);
+?>
+<div class="form-title">
+    <div class="panel-header main-title">
+    <h5>Please Register Attendance </h5>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="form-group cstm-form-grp" style="font-size:13px;color:#575655;color:red;margin-top:-10px;">
+    <?php
+    if ($this->messages) {
+        foreach ($this->messages as $message) {
+            print $message ;
+            print ' Please login to continue.';
+        }
+    }?>
+    </div>
+
+
+<div class="form-group cstm-form-grp">
+    <?php print $this->formElement($username); ?>
+    <?php print $this->formElementErrors()->render($username, ['class' => 'help-block']) ?>
+    <i class="fa fa-envelope" aria-hidden="true"></i>
+</div>
+<div class="form-group cstm-form-grp">
+    <?php print $this->formElement($password); ?>
+    <?php print $this->formElementErrors()->render($password, ['class' => 'help-block']) ?>
+    <i class="fa fa-lock" aria-hidden="true"></i>
+</div>
+<div class="form-actioins mb-0">
+        <?php
+        print $this->formSubmit($submit);
+        ?>
+        <a href="<?= $this->url("login"); ?>" style="font-size:13px;color:#575655;margin-left:20px;">Cancel</a>
+</div>
+</div>
+
+<?php
+print $this->form()->closeTag();
+?>

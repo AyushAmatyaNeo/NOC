@@ -1,0 +1,365 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Travel balance and Synergy integration &mdash; HRIS May 21, 2018 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="HRIS May 21, 2018 documentation" href="../index.html"/>
+        <link rel="up" title="Travel" href="travel.html"/>
+        <link rel="prev" title="Travel within HR/ADMIN" href="applying_from_hr.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../HRIS.html" class="icon icon-home"> HRIS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../employee/employee.html">Employee</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../employee/add.html">Creating an Employee</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#general-info">General Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#family-details">Family Details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#employee-identification">Employee Identification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#status-integration">Status &amp; Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#qualification">Qualification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#document-upload">Document Upload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#experience">Experience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#training">Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/add.html#additional-information">Additional Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../employee/view.html">Managing Employees</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../employee/view.html#view-details">View Details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/view.html#edit-employee">Edit Employee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../employee/view.html#delete-employee-record">Delete Employee Record</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../appraisal/appraisal.html">Appraisal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appraisal/add.html">Appraisal Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../appraisal/add.html#appraisal-types">Appraisal Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appraisal/add.html#appraisal-detail">Appraisal Detail</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../appraisal/add.html#creating-questionnaire">Creating Questionnaire</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../appraisal/view.html">Assigning Appraisal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../attendance/attendance.html">Attendance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../attendance/report.html">Attendance Report</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/report.html#manager-report">Manager Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/report.html#hr-report">HR Report</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../attendance/troubleshooting.html">Troubleshooting Attendance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/troubleshooting.html#zkteco-attendance-manager">ZKTeco Attendance Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/troubleshooting.html#re-attendance">Re Attendance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/troubleshooting.html#common-issues">Common Issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../attendance/troubleshooting.html#invalid-join-date">Invalid Join Date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../attendance/troubleshooting.html#duplicate-empty-thumb-id">Duplicate / Empty Thumb ID</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../attendance/overtime.html">Overtime</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../leave-holiday/leave-holiday.html">Leave/Holiday</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../leave-holiday/leave-types.html">Leave categorization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-types.html#recurring-leaves">Recurring Leaves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-types.html#service-period-leaves">Service Period Leaves</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../leave-holiday/leave-configuration.html">Leave Record Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#leave-configuration">Leave Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#leave-setup-in-hris">Leave Setup in HRIS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#leave-filters">Leave Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#manual-leave-assignment">Manual Leave Assignment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../leave-holiday/leave-balance.html">Leave Balances</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">System Setup</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/portal.html">Manager Service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../manager/manager-approval.html">Request Approval</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#request-notification">Request Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#leave-appproval">Leave Appproval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#attendance-approval">Attendance Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#loan-approval">Loan Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#travel-expense-approval">Travel/Expense Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#work-on-day-off">Work on Day Off</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#work-on-holiday">Work On Holiday</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#training-approval">Training Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#overtime-approval">Overtime Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#bulk-approval">Bulk Approval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../manager/attendance-report.html">Subordinate Attendance Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager/status-reporting.html">Subordinate Request Status</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#attendance-request-status">Attendance Request Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#leave-status">Leave Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#loan-status">Loan Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#travel-status">Travel Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#day-off-work-status">Day off Work Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#holiday-work-status">Holiday Work Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#training-status">Training Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#overtime-status">Overtime Status</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../manager/appraisal.html">Appraisal Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current"><a class="reference internal" href="travel.html">Travel</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="add.html">Applying For Travel Advance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Applying For Travel Expense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="applying_from_hr.html">Travel within HR/ADMIN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="applying_from_hr.html#applying-for-travel-advance">Applying for travel advance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="applying_from_hr.html#approval-of-travel-advance-expense">Approval of travel advance/expense</a></li>
+</ul>
+</li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Travel balance and Synergy integration</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../HRIS.html">HRIS</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../HRIS.html">Docs</a> &raquo;</li>
+        
+          <li><a href="travel.html">Travel</a> &raquo;</li>
+        
+      <li>Travel balance and Synergy integration</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="travel-balance-and-synergy-integration">
+<h1>Travel balance and Synergy integration<a class="headerlink" href="#travel-balance-and-synergy-integration" title="Permalink to this headline">¶</a></h1>
+<p>Those companies that are using our HRIS with ITN Synergy, can have functionality to view ledger impact on  synergy table.All the amount of travel advance and travel expenses requested are stored and calculated appropriately in our synergy table.</p>
+<p>There are three conditions in which debit and credit are balanced in synergy table.</p>
+<p>1.Expense higher than advance requested(Excess condition)</p>
+<p>for eg:advance requested:16,000</p>
+<blockquote>
+<div>expense requested:20,000</div></blockquote>
+<div class="figure" id="id1">
+<a class="reference internal image-reference" href="../_images/synergy_excess.png"><img alt="../_images/synergy_excess.png" src="../_images/synergy_excess.png" style="width: 681.5px; height: 287.5px;" /></a>
+<p class="caption"><span class="caption-text">Excess condition Ledger impact on synergy table.</span></p>
+</div>
+<p>2.Expense equal to advance requested(Exact condition)</p>
+<p>for eg:advance requested:9,000</p>
+<blockquote>
+<div>expense requested:9,000</div></blockquote>
+<div class="figure" id="id2">
+<a class="reference internal image-reference" href="../_images/synergy_exact.png"><img alt="../_images/synergy_exact.png" src="../_images/synergy_exact.png" style="width: 681.5px; height: 287.5px;" /></a>
+<p class="caption"><span class="caption-text">Exact condition Ledger impact on synergy table.</span></p>
+</div>
+<p>3.Expense less than advance requested(less condition)</p>
+<p>for eg:advance requested:20,000</p>
+<blockquote>
+<div>expense requested:13,000</div></blockquote>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/synergy_less.png"><img alt="../_images/synergy_less.png" src="../_images/synergy_less.png" style="width: 681.5px; height: 283.5px;" /></a>
+<p class="caption"><span class="caption-text">Less condition Ledger impact on synergy table.</span></p>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="applying_from_hr.html" class="btn btn-neutral" title="Travel within HR/ADMIN" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, IT Nepal Pvt. Ltd..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'May 21, 2018',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

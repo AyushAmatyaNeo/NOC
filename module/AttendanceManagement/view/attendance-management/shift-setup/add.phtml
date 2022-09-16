@@ -1,0 +1,458 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'));
+$this->headScript()->appendFile($this->basePath('js/AttendanceManagement/ShiftSetup/add.js'));
+?>
+
+
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+</script>
+
+<?php
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'shiftSetup-form');
+
+$shiftEname = $form->get('shiftEname');
+$shiftLname = $form->get('shiftLname');
+
+$startTime = $form->get('startTime');
+$endTime = $form->get('endTime');
+
+$halfDayEndTime = $form->get('halfDayEndTime');
+$halfTime = $form->get('halfTime');
+
+$lateIn = $form->get('lateIn');
+$earlyOut = $form->get('earlyOut');
+
+$startDate = $form->get('startDate');
+$endDate = $form->get('endDate');
+
+$weekday1 = $form->get('weekday1');
+$weekday2 = $form->get('weekday2');
+$weekday3 = $form->get('weekday3');
+$weekday4 = $form->get('weekday4');
+$weekday5 = $form->get('weekday5');
+$weekday6 = $form->get('weekday6');
+$weekday7 = $form->get('weekday7');
+
+$currentShift = $form->get('currentShift');
+$twoDayShift = $form->get('twoDayShift');
+$defaultShift = $form->get('defaultShift');
+if ($anotherDefaultShift) {
+    $defaultShift->setValue('N');
+    $defaultShift->setAttributes(['disabled']);
+}
+$remarks = $form->get('remarks');
+
+$companyId = $form->get('companyId');
+$companyId->setValueOptions($companies);
+
+$actualWorkingHr = $form->get('actualWorkingHr');
+$totalWorkingHr = $form->get('totalWorkingHr');
+
+$graceStartTime = $form->get('graceStartTime');
+$graceEndTime = $form->get('graceEndTime');
+
+$halfDayInTime = $form->get('halfDayInTime');
+$halfDayOutTime = $form->get('halfDayOutTime');
+
+$nightShift = $form->get('nightShift');
+$breakDeductFlag = $form->get('breakDeductFlag');
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+?>
+
+<?php
+$form->setAttribute('action', $this->url('shiftsetup', ['action' => 'add']));
+$form->prepare();
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\shiftsetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb'); ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+                <div class="row shiftcode">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyId); ?>
+                            <?php print $this->formElement($companyId); ?>
+                            <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="row shiftdetails">
+                    <div class="col-sm-6">
+                        <div
+                            class="form-group  <?= empty($shiftEname->getMessages()) ? "" : "error" ?>">
+                                <?php print $this->formLabel($shiftEname); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($shiftEname); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($shiftEname, ['class' => 'help-block error']); ?>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div
+                            class="form-group  <?= empty($shiftLname->getMessages()) ? "" : "error" ?>">
+                                <?php print $this->formLabel($shiftLname); ?>
+                                <?php print $this->formElement($shiftLname); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($shiftLname, ['class' => 'help-block error']); ?>
+                    </div>
+
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group  required  <?= empty($startDate->getMessages()) ? "" : "error" ?>">
+                                    <?php print $this->formLabel($startDate) ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($startDate) ?>
+                                </div>
+                                <?php print $this->formElementErrors()->render($startDate, ['class' => 'help-block error']) ?>
+                            </div>    
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliStartDate">&nbsp;</label>
+                                    <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                           class="form-control" value="">
+                                </div>    
+                            </div> 
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group required  <?= empty($endDate->getMessages()) ? "" : "error" ?>">
+                                    <?php print $this->formLabel($endDate) ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($endDate) ?>
+                                </div>
+                                <?php print $this->formElementErrors()->render($endDate, ['class' => 'help-block error']) ?>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliEndDate">&nbsp;</label>
+                                    <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                           class="form-control" value="">
+                                </div>
+                            </div>     
+                        </div>   
+
+                    </div>
+                </div>
+
+                <div class="row shiftdetails">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($startTime) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($startTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($startTime, ['class' => 'help-block error']) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($endTime) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($endTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($endTime, ['class' => 'help-block error']) ?>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($halfTime) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($halfTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($halfTime, ['class' => 'help-block error']) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($halfDayEndTime) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($halfDayEndTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($halfDayEndTime, ['class' => 'help-block error']) ?>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($totalWorkingHr) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($totalWorkingHr) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($totalWorkingHr, ['class' => 'help-block error']) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($actualWorkingHr) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($actualWorkingHr) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($actualWorkingHr, ['class' => 'help-block error']) ?>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($graceStartTime) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($graceStartTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($graceStartTime, ['class' => 'help-block error']) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($graceEndTime) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($graceEndTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($graceEndTime, ['class' => 'help-block error']) ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($halfDayInTime) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($halfDayInTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($halfDayInTime, ['class' => 'help-block error']) ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group required">
+                            <?php print $this->formLabel($halfDayOutTime) ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($halfDayOutTime) ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($halfDayOutTime, ['class' => 'help-block error']) ?>
+                    </div>
+                </div>
+
+                <div class="row time">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($lateIn); ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($lateIn); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($lateIn, ['class' => 'help-block error']); ?>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group ">
+                            <?php print $this->formLabel($earlyOut); ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($earlyOut); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($earlyOut, ['class' => 'help-block error']); ?>
+
+                    </div>
+                </div>
+                <div class="row bg-master-lightest weekend">
+                    <div class="col-sm-6 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($weekday1); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday1); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday1, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($weekday2); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday2); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday2, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6 ">
+                        <div class="form-group  padding-0">
+                            <?php print $this->formLabel($weekday3); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday3); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday3, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class="col-sm-6 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($weekday4); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday4); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday4, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($weekday5); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday5); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday5, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($weekday6); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday6); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday6, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6 ">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($weekday7); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($weekday7); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($weekday7, ['class' => 'help-block error']); ?>
+                    </div>
+
+                </div>   
+
+
+
+
+
+
+
+                <div class="row currentshift">
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($currentShift); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($currentShift); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($currentShift, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($defaultShift); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($defaultShift); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($defaultShift, ['class' => 'help-block error']); ?>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0 ">
+                            <?php print $this->formLabel($twoDayShift); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($twoDayShift); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($twoDayShift, ['class' => 'help-block error']); ?>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0 ">
+                            <?php print $this->formLabel($nightShift); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($nightShift); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($nightShift, ['class' => 'help-block error']); ?>
+
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0 ">
+                            <?php print $this->formLabel($breakDeductFlag); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($breakDeductFlag); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($breakDeductFlag, ['class' => 'help-block error']); ?>
+
+                    </div>
+                </div>
+                <div class="row remarks">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+
+                    </div>
+                </div>
+                <div class="submit_button">
+                    <?php
+                    print $this->formSubmit($submit);
+                    print $this->form()->closeTag();
+                    ?>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

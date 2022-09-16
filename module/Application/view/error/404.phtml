@@ -1,0 +1,193 @@
+<?php print $this->doctype() ?>
+
+<html lang="en">
+
+    <head>
+        <meta http-equiv="content-type" content="text/html;charset=UTF-8"/>
+        <meta charset="utf-8"/>
+        <title>Neo::HRIS</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no"/>
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-touch-fullscreen" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="default">
+        <meta content="" name="description"/>
+        <meta content="" name="author"/>
+        <!-- BEGIN GLOBAL MANDATORY STYLES -->
+        <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&amp;subset=all" rel="stylesheet"
+              type="text/css"/>
+        <link href="<?= $this->basePath('assets/font-awesome/font-awesome.css') ?>" rel="stylesheet"
+              type="text/css"/>
+        <link href="<?= $this->basePath('assets/global/plugins/simple-line-icons/simple-line-icons.min.css') ?>"
+              rel="stylesheet" type="text/css"/>
+        <link href="<?= $this->basePath('assets/global/plugins/bootstrap/css/bootstrap.min.css') ?>" rel="stylesheet"
+              type="text/css"/>
+        <link href="<?= $this->basePath('assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css') ?>"
+              rel="stylesheet" type="text/css"/>
+        <link href="<?= $this->basePath('assets/global/plugins/bootstrap-toastr/toastr.min.css') ?>"
+              rel="stylesheet" type="text/css"/>
+        <!-- END GLOBAL MANDATORY STYLES -->
+        <!-- BEGIN THEME GLOBAL STYLES -->
+        <link href="<?= $this->basePath('assets/global/css/components-md.min.css') ?>"
+              rel="stylesheet" type="text/css"/>
+        <link href="<?= $this->basePath('assets/global/css/plugins-md.min.css') ?>"
+              rel="stylesheet" type="text/css"/>
+        <!-- END THEME GLOBAL STYLES -->
+        <!-- BEGIN PAGE LEVEL STYLES -->
+        <link href="<?= $this->basePath('css/error.min.css') ?>"
+              rel="stylesheet" type="text/css"/>
+        <!-- END PAGE LEVEL STYLES -->
+        <!--[if lte IE 9]>distribution
+        <link href="<?php print $this->basePath('pages/css/ie9.css'); ?>" rel="stylesheet" type="text/css" />
+        <![endif]-->
+
+    </head>
+    <body class=" page-404-3">
+        <div class="page-inner">
+            <img src="<?php print $this->basePath('img/earth.jpg'); ?>" class="img-responsive" alt=""> </div>
+        <div class="container error-404">
+            <h1>404</h1>
+            <h2>Houston, we have a problem.</h2>
+            <p> Actually, the page you are looking for does not exist. </p>
+            <p>
+                <a href="index.html" class="btn red btn-outline"> Return home </a>
+                <br> </p>
+        </div>
+        <?php
+        $this->headScript()
+                ->prependFile($this->basePath('assets/global/scripts/app.min.js'));
+        ?>
+        <?php
+        print $this->headScript()
+                        ->prependFile($this->basePath('assets/global/plugins/jquery-ui/jquery-ui.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/bootstrap-toastr/toastr.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/jquery.blockui.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/jquery-slimscroll/jquery.slimscroll.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/js.cookie.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/bootstrap/js/bootstrap.min.js'))
+                        ->prependFile($this->basePath('assets/global/plugins/jquery.min.js'));
+        ?>
+
+    </body>
+
+</html>
+
+<?php exit; ?>
+
+<h1>A 404 error occurred</h1>
+<h2><?= $this->message ?></h2>
+
+<?php if (isset($this->reason) && $this->reason): ?>
+
+    <?php
+    $reasonMessage = '';
+    switch ($this->reason) {
+        case 'error-controller-cannot-dispatch':
+            $reasonMessage = 'The requested controller was unable to dispatch the request.';
+            break;
+        case 'error-controller-not-found':
+            $reasonMessage = 'The requested controller could not be mapped to an existing controller class.';
+            break;
+        case 'error-controller-invalid':
+            $reasonMessage = 'The requested controller was not dispatchable.';
+            break;
+        case 'error-router-no-match':
+            $reasonMessage = 'The requested URL could not be matched by routing.';
+            break;
+        default:
+            $reasonMessage = 'We cannot determine at this time why a 404 was generated.';
+            break;
+    }
+    ?>
+
+    <p><?= $reasonMessage ?></p>
+
+<?php endif ?>
+
+<?php if (isset($this->controller) && $this->controller): ?>
+
+    <dl>
+        <dt>Controller:</dt>
+        <dd><?= $this->escapeHtml($this->controller) ?>
+            <?php
+            if (isset($this->controller_class) && $this->controller_class && $this->controller_class != $this->controller
+            ) {
+                echo '(' . sprintf('resolves to %s', $this->escapeHtml($this->controller_class)) . ')';
+            }
+            ?>
+        </dd>
+    </dl>
+
+<?php endif ?>
+
+<?php if (isset($this->display_exceptions) && $this->display_exceptions): ?>
+
+    <?php if (isset($this->exception) && ($this->exception instanceof Exception || $this->exception instanceof Error)): ?>
+        <hr/>
+        <h2>Additional information:</h2>
+        <h3><?= get_class($this->exception) ?></h3>
+        <dl>
+            <dt>File:</dt>
+            <dd>
+                <pre class="prettyprint linenums"><?= $this->exception->getFile() ?>:<?= $this->exception->getLine() ?></pre>
+            </dd>
+            <dt>Message:</dt>
+            <dd>
+                <pre class="prettyprint linenums"><?= $this->exception->getMessage() ?></pre>
+            </dd>
+            <dt>Stack trace:</dt>
+            <dd>
+                <pre class="prettyprint linenums"><?= $this->exception->getTraceAsString() ?></pre>
+            </dd>
+        </dl>
+        <?php
+        $e = $this->exception->getPrevious();
+        $icount = 0;
+        if ($e) :
+            ?>
+            <hr/>
+            <h2>Previous exceptions:</h2>
+            <ul class="unstyled">
+                <?php while ($e) : ?>
+                    <li>
+                        <h3><?= get_class($e) ?></h3>
+                        <dl>
+                            <dt>File:</dt>
+                            <dd>
+                                <pre class="prettyprint linenums"><?= $e->getFile() ?>:<?= $e->getLine() ?></pre>
+                            </dd>
+                            <dt>Message:</dt>
+                            <dd>
+                                <pre class="prettyprint linenums"><?= $e->getMessage() ?></pre>
+                            </dd>
+                            <dt>Stack trace:</dt>
+                            <dd>
+                                <pre class="prettyprint linenums"><?= $e->getTraceAsString() ?></pre>
+                            </dd>
+                        </dl>
+                    </li>
+                    <?php
+                    $e = $e->getPrevious();
+                    $icount += 1;
+                    if ($icount >= 50) {
+                        echo "<li>There may be more exceptions, but we have no enough memory to proccess it.</li>";
+                        break;
+                    }
+                endwhile;
+                ?>
+            </ul>
+        <?php endif; ?>
+
+    <?php else: ?>
+
+        <h3>No Exception available</h3>
+
+    <?php endif ?>
+
+    <?php
+
+
+
+
+
+ endif ?>

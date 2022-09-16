@@ -1,0 +1,80 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/application/check-in/index.js'));
+
+$lableData = '';
+if ($type == 'IN') {
+    $lableData = 'You are Late! Fill Up The Remarks';
+} else if ($type == 'OUT') {
+    $lableData = 'You are trying to Checkout early Please!! Fill Up the Remarks';
+}
+?>
+<div class='font-Size-12px'>
+
+<div class="row">
+    <div class="col-xs-6">
+        <label>Check In Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($shiftDetails)?$shiftDetails['CHECKIN_TIME']:"";  ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Check Out Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($shiftDetails)?$shiftDetails['CHECKOUT_TIME']:"";  ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Logged in  Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($attendanceDetails)?$attendanceDetails['IN_TIME']:"";  ?>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-6">
+        <label>Current Time</label>
+    </div>
+    <div class="col-xs-2">
+        <label>:</label>
+    </div>
+    <div class="col-xs-4">
+        <?php  echo ($shiftDetails)?$shiftDetails['CURRENT_TIME']:"";  ?>
+    </div>
+</div>
+    </br>
+<div>
+<form method="POST" name="User" role="form" class="login-form" action="<?= $this->url('registerAttendance',['action'=>'authenticate']); ?>" id="registerAttendanceForm">   
+    <label> <?= $lableData ?> </label>
+    <div class="row">
+        <div class="col-sm-12">
+            <textarea class="width-100" rows="4" cols="30" name="checkInRemarks" id="remarks" required="required"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <input type="hidden" name="username" value="<?= $username; ?>"/>
+            <input type="hidden" name="password" value="<?= $password ?>"/>
+            <input type="hidden" name="type" value="<?= $type ?>"/>
+            <input type="hidden" name="time" value="<?=$shiftDetails['CURRENT_TIME']; ?>"/>
+            <input type="hidden" name="checkIn" value="1"/>
+            <input class="btn btn-primary" type="submit" value="submit">
+            <a href="<?php echo $this->url('logout'); ?>" class="btn btn-danger pull-right"> Cancel </a>
+        </div>
+    </div>
+</div>
+    
+    </div>
+

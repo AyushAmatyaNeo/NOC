@@ -1,0 +1,63 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('js/system/dashboard/DashboardController.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.roles =<?= json_encode($roles) ?>;
+    document.dashboardItems =<?= json_encode($dashboardItems) ?>;
+    document.roleTypes =<?= json_encode($roleTypes) ?>;
+    document.fetchRoleDashboardsLink = '<?php echo $this->url('dashboardsetup', ["action" => "fetchRoleDashboards"]); ?>';
+    document.assignDashboardLink = '<?php echo $this->url('dashboardsetup', ["action" => "assignDashboard"]); ?>';
+    document.updateDashboardAssignLink = '<?php echo $this->url('dashboardsetup', ["action" => "updateDashboardAssign"]); ?>';
+    document.menuDeleteLink = '<?php echo $this->url('dashboardsetup', ["action" => "menuDelete"]); ?>';
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\dashboardsetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div ng-app="hris" ng-controller="dashboardController" class="formbg">
+    <div class="row" style="margin-top:15px;margin-bottom:10px;">
+        <div class="col-sm-2">
+            <select class="form-control" ng-model="role"
+                    ng-change="roleChange(role)"
+                    ng-options="item as item.ROLE_NAME for item in roles track by item.ROLE_ID">
+                <option value="">Select A Role</option>
+            </select>
+        </div>
+    </div>
+    <div class="row " ng-repeat="dashboard in dashboardItems" ng-show="role != null">
+        <div class="col-sm-2">
+            <select class="form-control"   ng-model="dashboard.roleType" ng-change="roleTypeChange(dashboard)">
+                <option ng-repeat="(key,roleType) in roleTypes" value="{{key}}">
+                <label> {{roleType}}</label>
+                </option>
+            </select>
+        </div>
+        <div class="col-sm-4" >
+            <ul id="roleList">
+                <li>
+                    {{dashboard.value}}
+                    <span class="md-checkbox pull-right">
+                        <input ng-model="dashboard.checked" ng-click="assign(dashboard)" type="checkbox" id="{{dashboard.value}}" class="md-check" >
+                        <label for="{{dashboard.value}}">
+                            <span class="inc"></span>
+                            <span class="check"></span>
+                            <span class="box"></span></label>
+                    </span>
+
+                </li>
+            </ul>
+        </div>
+
+    </div>
+</div>
+
+

@@ -1,0 +1,229 @@
+<style>
+    .btn.green:not(.btn-outline), .green {
+        background-color: #63AB6A !important;
+        border-color: #63AB6A !important;
+    }
+    abbr[title] {
+        border-bottom: none !important;
+        cursor: inherit !important;
+        text-decoration: none !important;
+    }
+</style>
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+$this->headScript()->appendFile($this->basePath('js/search.js'));
+$this->headScript()->appendFile($this->basePath('js/Report/AllReport/whereabouts-report.js'));
+
+?>
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+    document.getWhereabouts = "<?php echo $this->url('allreport', ['action' => 'whereabouts']);?>";
+    document.preference =<?php echo json_encode($preference) ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\overtime-report')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 ">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption"> Search Filter</div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                    <a href="" class="fullscreen" data-original-title="" title=""> </a>
+                </div>
+                <div class="actions">
+                    <div class="btn-group">
+                        <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                            <i class="fa fa-copy"></i> Tools
+                            <i class="fa fa-angle-down "></i>
+                        </a>
+                        <ul class="dropdown-menu pull-right">
+                            <li >
+                                <a id="exportExcel" href="javascript:;"  >
+                                    <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                            </li>
+                            <li >
+                                <a id="exportPDF" href="javascript:;"  >
+                                    <i class="fa fa-file-excel-o" ></i> Export to PDF </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-body hris-filter-container" style="display: block;">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Company</label>
+                        <select multiple class="form-control" name="company" id="companyId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Branch</label>
+                        <select multiple class="form-control" name="branchId" id="branchId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Department</label>
+                        <select multiple class="form-control" name="department" id="departmentId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Designation</label>
+                        <select multiple class="form-control" name="designation" id="designationId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Position</label>
+                        <select multiple class="form-control" name="position" id="positionId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Service Type</label>
+                        <select multiple class="form-control" name="serviceType" id="serviceTypeId">
+                        </select>
+                    </div>
+                </div>
+                <div class="row margin-top-10">
+                    <div class="col-sm-2">
+                        <label>Service Event Type</label>
+                        <select multiple class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee Type</label>
+                        <select multiple class="form-control" name="employeeType" id="employeeTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Gender</label>
+                        <select multiple class="form-control" name="gender" id="genderId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Location</label>
+                        <select multiple class="form-control" name="location" id="locationId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee</label>
+                        <select multiple class="form-control" name="employee" id="employeeId">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row margin-top-10">
+                    <div class="col-sm-2">
+                        <input type="text" id="fromDate" name="fromDate"  class="form-control reset-field" placeholder="From Date"/>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text" id="nepaliFromDate" name="nepaliFromDate"  class="form-control reset-field" placeholder="From Date Nepali"/>
+
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text"  id="toDate" name="toDate"  class="form-control reset-field" placeholder="To Date"/>
+                    </div>
+                    <div class="col-sm-2">
+                        <input type="text"  id="nepaliToDate" name="nepaliToDate" class="form-control reset-field" placeholder="To Date Nepali"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
+                            Reset
+                            <i class="fa fa-refresh"></i>
+                        </button>
+                        <button id="search" class="btn btn-default btn-sm pull-right">
+                            Search
+                            <i class="fa fa-search"></i>
+                        </button>  
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="portlet box kendo-report" id="fullReport">
+            <div style="margin-left: 20px" class='my-legend' >
+                <div style="text-align: center"><h5><strong><?=$companyName?></strong></h5></div>
+                <div  class='legend-title'>Legend</div>
+                <div class='legend-scale col-sm-6' >
+                    <ul class='legend-labels col-sm-3' >
+                        <li><span align="center" style='background:#e7505a; border-color:#e7505a'>AB</span> : Absent</li>
+                        <li><span align="center" style='background:#3598dc; border-color:#3598dc'>PR</span> : Present</li>
+                        <li><span align="center" style='background:#63AB6A; border-color:#63AB6A'>L-*</span> : Leave-*</li>
+                        <li><span align="center" style='background:#E5E5E5; color: black !important; border-color:#E5E5E5'>O</span> : Office</li>
+                        <li><span align="center" style='background:#36D7B7; border-color:#36D7B7'>TV</span> : Travel</li>
+                    </ul>
+                    <ul class='legend-labels col-sm-6'>
+                        <li><span align="center" style='background:#C49F47; border-color:#C49F47'>DO</span> : Day off</li>
+                        <li><span align="center" style='background:#8E44AD; border-color:#8E44AD'>HD</span> : Holiday</li>
+                        <li><span align="center" style='background:#c8d046; border-color:#c8d046'>WH</span> : Work On Holiday</li>
+                        <li><span align="center" style='background:#8877A9; border-color:#8877A9'>WD</span> : Work On DayOff</li>
+                    </ul>
+                </div>
+                <div id="date" ></div>
+            </div>
+
+            <style type='text/css'>
+                .my-legend .legend-title {
+                    text-align: left;
+                    margin-bottom: 5px;
+                    font-weight: bold;
+                    font-size: 90%;
+                }
+                .my-legend .legend-scale ul {
+                    margin: 0;
+                    margin-bottom: 5px;
+                    padding: 0;
+                    float: left;
+                    list-style: none;
+                }
+                .my-legend .legend-scale ul li {
+                    font-size: 80%;
+                    list-style: none;
+                    margin-left: 0;
+                    line-height: 18px;
+                    margin-bottom: 2px;
+                }
+                .my-legend ul.legend-labels li span {
+                    display: block;
+                    float: left;
+                    height: 16px;
+                    width: 30px;
+                    color: white;
+                    margin-right: 5px;
+                    margin-left: 0;
+                    border: 1px solid #999;
+                }
+                .my-legend .legend-source {
+                    font-size: 70%;
+                    color: #999;
+                    clear: both;
+                }
+                .my-legend a {
+                    color: #777;
+                }
+            </style>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div id="report" style="overflow-x: auto; ">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

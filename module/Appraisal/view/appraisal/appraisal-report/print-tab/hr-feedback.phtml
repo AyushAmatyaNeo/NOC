@@ -1,0 +1,34 @@
+<?php if (($assignedAppraisalDetail['STAGE_ID'] == 9 || $assignedAppraisalDetail['HR_FEEDBACK'] != null)) { ?>
+    <h3>HR's Feedback</h3>
+    <div class="row">
+        <?php $disabledHrComment = ($assignedAppraisalDetail['STAGE_ID'] != 9) ? 'disabled' : ''; ?>
+        <div class="col-md-12 margin-bottom-10">
+            <div style="">
+                <h6 class="appHeading">For Use Of HR</h6>
+                <div class="row questionWrapRow">
+                    <div class="questionWrap">
+                        <div  class="col-md-12 margin-bottom-5 appQuestion"> 
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <label> <h7 style="font-size:12px;">Overall Comment</h7>  </label> 
+                                    <textarea name="hrComment" id="hrComment" class="form-control" style="height:50px!important" <?= $disabledHrComment; ?>><?= $assignedAppraisalDetail['HR_FEEDBACK']; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <?php if ($assignedAppraisalDetail['STAGE_ID'] == 9) { ?>
+        <div class="row margin-top-10">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <button type="submit" id="submit" class="btn btn-success pull-right">
+                        SUBMIT
+                    </button>
+                </div>
+            </div>
+        </div>
+    <?php } ?>
+<?php } ?>

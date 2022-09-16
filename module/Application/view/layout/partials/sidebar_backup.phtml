@@ -1,0 +1,137 @@
+<div class="page-sidebar-wrapper">
+    <!-- BEGIN SIDEBAR -->
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+        <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+        <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+        <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true"
+            data-slide-speed="200" style="padding-top: 20px">
+            <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+            <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+            <li class="sidebar-toggler-wrapper hide">
+                <div class="sidebar-toggler">
+                    <span></span>
+                </div>
+            </li>
+            <!-- END SIDEBAR TOGGLER BUTTON -->
+            <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+            <li class="sidebar-search-wrapper">
+                <!-- BEGIN RESPONSIVE QUICK SEARCH FORM -->
+                <!-- DOC: Apply "sidebar-search-bordered" class the below search form to have bordered search box -->
+                <!-- DOC: Apply "sidebar-search-bordered sidebar-search-solid" class the below search form to have bordered & solid search box -->
+                <form class="sidebar-search  "
+                      action="http://keenthemes.com/preview/metronic/theme/admin_1_material_design/page_general_search_3.html"
+                      method="POST">
+                    <a href="javascript:;" class="remove">
+                        <i class="icon-close"></i>
+                    </a>
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <a href="javascript:;" class="btn submit">
+                                <i class="icon-magnifier"></i>
+                            </a>
+                        </span>
+                    </div>
+                </form>
+                <!-- END RESPONSIVE QUICK SEARCH FORM -->
+            </li>
+            <li class="heading">
+                <h3 class="uppercase">Features</h3>
+            </li>
+
+            <?php foreach ($this->container as $page): ?>
+                <li id="menu<?php echo preg_replace('/[^a-zA-Z]/', '', $page->getLabel()); ?>"
+                    class="nav-item <?= $page->isActive() ? 'active open' : '' ?>">
+                    <a href="<?php echo $page->getHref() ?>" target="<?php echo $page->getTarget() ?>"
+                       <?php echo $page->hasPages() ? 'class="nav-link nav-toggle"' : '' ?>>
+                        <i class="<?php echo $page->icon; ?>"></i>
+                        <span class="title"><?php echo $page->getLabel() ?></span>
+                        <?php if ($page->hasPages()): ?>
+                            <span class="arrow"></span>
+                        <?php endif; ?>
+                    </a>
+                    <?php if ($page->hasPages()): ?>
+                        <ul class="sub-menu">
+                            <?php foreach ($page->getPages() as $child): ?>
+                                <li id="subMenu<?php echo preg_replace('/[^a-zA-Z]/', '', $child->getLabel()); ?>"
+                                    class="nav-item <?= $child->isActive() ? 'active open' : '' ?>">
+                                    <a href="<?php echo $child->getHref() ?>"
+                                       <?php echo $child->hasPages() ? 'class="nav-link nav-toggle"' : '' ?>>
+                                        <i class="<?php echo $child->icon; ?>"></i>
+                                        <span class="title"><?php echo $child->getLabel() ?></span>
+                                        <?php if ($child->hasPages()): ?>
+                                            <span class="arrow"></span>
+                                        <?php endif; ?>
+                                    </a>
+                                    <?php if ($child->hasPages()): ?>
+                                        <ul class="sub-menu">
+                                            <?php foreach ($child->getPages() as $subChild): ?>
+                                                <li id="subMenuChild<?php echo preg_replace('/[^a-zA-Z]/', '', $subChild->getLabel()); ?>"
+                                                    class="nav-item <?= $subChild->isActive() ? 'active open' : '' ?>">
+                                                    <a href="<?php echo $subChild->getHref() ?>" class="nav-link">
+                                                        <i class="<?php echo $subChild->icon; ?>"></i>
+                                                        <span class="title"><?php echo $subChild->getLabel() ?></span>
+                                                    </a>
+
+                                                    <?php if ($subChild->hasPages()): ?>
+                                                        <ul class="sub-menu">
+
+                                                            <?php foreach ($subChild->getPages() as $subChildSecond): ?>
+                                                                <li id="subMenuChildSecond<?php echo preg_replace('/[^a-zA-Z]/', '', $subChildSecond->getLabel()); ?>"
+                                                                    class="nav-item <?= $subChildSecond->isActive() ? 'active open' : '' ?>">
+                                                                    <a href="<?php echo $subChildSecond->getHref() ?>"
+                                                                       class="nav-link">
+                                                                        <i class="<?php echo $subChildSecond->icon; ?>"></i>
+                                                                        <span
+                                                                            class="title"><?php echo $subChildSecond->getLabel() ?></span>
+                                                                    </a>
+
+                                                                    <?php if ($subChildSecond->hasPages()): ?>
+                                                                        <ul class="sub-menu">
+                                                                            <?php foreach ($subChildSecond->getPages() as $subChildThird): ?>
+                                                                                <li id="subMenuChildThird<?php echo preg_replace('/[^a-zA-Z]/', '', $subChildThird->getLabel()); ?>"
+                                                                                    class="nav-item <?= $subChildThird->isActive() ? 'active open' : '' ?>">
+                                                                                    <a href="<?php echo $subChildThird->getHref() ?>"
+                                                                                       class="nav-link">
+                                                                                        <i class="<?php echo $subChildThird->icon; ?>"></i>
+                                                                                        <span
+                                                                                            class="title"><?php echo $subChildThird->getLabel() ?></span>
+                                                                                    </a>
+                                                                                </li>
+                                                                            <?php endforeach; ?>
+
+                                                                        </ul>
+                                                                    <?php endif; ?>
+
+                                                                </li>
+                                                            <?php endforeach; ?>
+
+                                                        </ul>
+                                                    <?php endif; ?>
+
+                                                </li>
+                                            <?php endforeach; ?>
+
+                                        </ul>
+                                    <?php endif; ?>
+
+                                </li>
+                            <?php endforeach; ?>
+
+                        </ul>
+                    <?php endif; ?>
+
+                </li>
+            <?php endforeach; ?>
+
+
+    </div>
+    <!-- END SIDEBAR -->
+</div>

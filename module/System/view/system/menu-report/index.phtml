@@ -1,0 +1,68 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/simple-line-icons/simple-line-icons.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/jstree/dist/themes/default/style.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/jquery-nestable/jquery.nestable.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/jstree/dist/jstree.min.js'))
+        ->appendFile($this->basePath('js/system/menu-report/index.js'));
+?>
+<script>
+    document.fetchRoleWiseMenuUrl =<?php echo json_encode($fetchRoleWiseMenuUrl); ?>;
+    document.roleList =<?php echo json_encode($roleList); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\menu-report')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="portlet light bg-inverse">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-paper-plane font-green-haze"></i>
+                    <span class="caption-subject bold font-green-haze uppercase"> Search</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <select class="form-control"  id="role-list">
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="row margin-top-20">
+                    <div class="col-sm-offset-2 col-sm-6">
+                        <div id="menu-container"  style="min-height:300px;">
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+</div>

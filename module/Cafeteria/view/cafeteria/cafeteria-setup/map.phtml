@@ -1,0 +1,127 @@
+<?php
+
+$this->headScript()
+        ->appendFile($this->basePath('js/cafeteria/cafeteria-setup/map.js'));
+
+?>
+<script>
+    document.menuList = <?=json_encode($menuList)?>;
+    document.timeList = <?=json_encode($timeList)?>;
+    document.mapList = <?=json_encode($mapList)?>;
+</script>
+<style>
+    .table-wrapper {
+        font-size: 150%;
+        /*max-height: 350px;*/
+        overflow: auto;
+        display:inline-block;
+    }
+</style>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loanApply')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Menu Time Map</span>
+        </div>
+        <div class="tools">
+            <a href="" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+           <!--  <a id="add" class="btn default btn-sm">
+                <i class="fa fa-plus-square icon-black"></i> New </a>
+           <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> 
+                            Export to Excel 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF
+                        </a>
+                    </li>
+                </ul>
+            </div>-->
+        </div>
+    </div>
+    
+
+<!--        <div class="row margin-top-10">
+            <div class=" col-sm-offset-8 col-sm-4">
+                <button class="btn default btn-sm pull-right hris-reset-btn">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button id="search" class="btn btn-default btn-sm pull-right">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>-->
+
+<form method="post" action="<?=$this->url('cafeteriasetup', ['action' => 'map'])?>">
+<div class="row">
+<div class="table-wrapper col-sm-4">
+    <select name="time" id="time">
+        <?php foreach($timeList as $item){ ?>
+        <option value="<?=$item['TIME_ID']?>"><?=$item['TIME_NAME']?></option>
+        <?php } ?>
+    </select>
+</div>
+    <div class="table-wrapper col-sm-4">
+    <label>Type:
+        <label>SCP <input type="radio" id="scp" name="type" value="SCP"></label>
+        <label>LSG <input type="radio" id="lsg" name="type" value="LSG"></label>
+    </label>
+</div>
+</div>
+<div class="row">
+
+
+    <?php for($i = 0; $i < count($menuList); $i+=3){  ?>
+    <div class="table-wrapper col-sm-3">
+    <label class="container"><?=$menuList[$i]['MENU_NAME']?><input type="checkbox" name="menu[]" id="menu<?=$menuList[$i]['MENU_ID']?>" value="<?=$menuList[$i]['MENU_ID']?>"></label>
+    </div><?php if(!empty($menuList[$i+1])){ ?><div class="table-wrapper col-sm-3">
+    <label class="container"><?=$menuList[$i+1]['MENU_NAME']?><input type="checkbox" name="menu[]" id="menu<?=$menuList[$i+1]['MENU_ID']?>" value="<?=$menuList[$i+1]['MENU_ID']?>"></label>
+    </div><?php } if(!empty($menuList[$i+2])){ ?><div class="table-wrapper col-sm-3">
+    <label class="container"><?=$menuList[$i+2]['MENU_NAME']?><input type="checkbox" name="menu[]" id="menu<?=$menuList[$i+2]['MENU_ID']?>" value="<?=$menuList[$i+2]['MENU_ID']?>"></label>
+    </div><?php } }?>
+</div>
+<div class="row">
+<div class="col-sm-3">
+    <button class="btn btn-primary" type="submit">Submit</button>
+</div>
+</div>
+</div>
+
+</form>
+
+</div>
+          
+

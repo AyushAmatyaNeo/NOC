@@ -1,0 +1,66 @@
+<?php
+//echo '<pre>';
+//print_r($assignedAppraisalDetail);
+//die();
+
+?> 
+<div class="tab-pane " id="portlet_tab2_6">
+    <form method="post"  name="performanceAppraisalForm" id="hrAppraisalReview">
+    <div class="row">
+        <div class="col-md-12">
+        <i>
+        <?php
+        echo $stagesInstrunction[9];
+        ?>
+        </i>
+        </div>
+        <div class="col-md-12 margin-bottom-10">
+            <div style="">
+                <h6 class="appHeading">For Use Of HR</h6>
+                <div class="row questionWrapRow">
+                    <div class="questionWrap">
+                        <div  class="col-md-12 margin-bottom-5 appQuestion"> 
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <label> <h7 style="font-size:12px;">Overall Comment</h7>  </label> 
+                                    <textarea name="hrComment" id="hrComment" class="form-control" style="height:50px!important" required="required" disabled="disabled"><?= $assignedAppraisalDetail['HR_FEEDBACK']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Strength</b>
+                                    <textarea name="hrStrength" id="hrStrength" class="form-control" style="height:50px!important" required="required" disabled="disabled"> <?= $assignedAppraisalDetail['HR_STRENGTH']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Weakness</b>
+                                    <textarea name="hrWeakness" id="hrWeakness" class="form-control" style="height:50px!important" required="required" disabled="disabled"><?= $assignedAppraisalDetail['HR_WEAKNESS']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Areas of Improvement</b>
+                                    <textarea name="hrAreasOfImprovement" id="hrAreasOfImprovement" class="form-control" style="height:50px!important" required="required" disabled="disabled"><?= $assignedAppraisalDetail['HR_AREAS_OF_IMPROVEMENT']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Steps for improvements</b>
+                                    <textarea name="hrStepsForImprovement" id="hrStepsForImprovement" class="form-control" style="height:50px!important" required="required" disabled="disabled"><?= $assignedAppraisalDetail['HR_STEPS_FOR_IMPROVEMENT']; ?></textarea>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

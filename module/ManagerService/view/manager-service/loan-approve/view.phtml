@@ -1,0 +1,392 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loanApprove')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+
+$this->headScript()->appendFile($this->basePath('js/SelfService/loan-request/add.js'))
+                    ->appendFile($this->basePath('js/manager-service/loan-approve/view.js'))
+                    ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'loanApprove-form');
+
+$loanId = $form->get('loanId');
+$loanId->setValueOptions($loans);
+$loanId->setAttributes(["disabled" => "disabled"]);
+$appliedLoan = $form->get('appliedLoan');
+$appliedLoan->setAttributes(["disabled" => "disabled"]);
+$loanDate = $form->get('loanDate');
+$loanDate->setAttributes(["disabled" => "disabled"]);
+$reason = $form->get('reason');
+$reason->setAttributes(["disabled" => "disabled"]);
+$recommendedRemarks = $form->get('recommendedRemarks');
+$recommendedRemarks->setAttributes(['required' => 'true']);
+$approvedRemarks = $form->get('approvedRemarks');
+$approvedRemarks->setAttributes(['required' => 'true']);
+$repaymentInstallments = $form->get('repaymentInstallments');
+$repaymentInstallments->setAttributes(["disabled" => "disabled"]);
+$repaymentInstallments = $form->get('repaymentInstallments');
+$repaymentInstallments->setAttributes(["disabled" => "disabled"]);
+$interestRate = $form->get('interestRate');
+$interestRate->setAttributes(["disabled" => "disabled"]);
+$appliedLoan = $form->get('appliedLoan');
+$appliedLoan->setAttributes(["disabled" => "disabled"]);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Approve');
+$submit->setAttribute('id','approve');
+
+$form->setAttribute('action', $this->url('loanApprove', ['action' => 'view', 'id' => $id, 'role' => $role]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.pushFileLink = '<?php echo $this->url('loanRequest', ['action' => 'pushFileLink']); ?>';
+    document.uploadUrl = '<?= $this->url('loanRequest', ['action' => 'fileUpload']); ?>';
+    document.pullFilebyId = '<?php echo $this->url('loanRequest', ['action' => 'pullFilebyId']); ?>';
+    document.idForFile = '<?php echo $id ?>';
+</script>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Loan Request Detail
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="border-bottom">
+                    <div class="form-group">
+                        <div class="row div-font-11">
+                            <div class="col-md-6">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Employee Name
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $employeeName; ?>
+                                        </td>
+                                    </tr>
+
+                                    <tr height="30">
+                                        <td>
+                                            Your Role
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php
+                                            if ($role == 3) {
+                                                echo 'Approver';
+                                            } else if ($role == 2) {
+                                                echo 'Recommender';
+                                            } else if ($role == 4) {
+                                                echo 'Recommender\Approver';
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>                               
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <table>  
+                                    <tr height="30">
+                                        <td>
+                                            Requested Date
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $requestedDate; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            Status
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php
+                                            if ($status == 'RQ') {
+                                                echo "Pending";
+                                            } else if ($status == 'RC') {
+                                                echo "Recommended";
+                                            } else if ($status == 'AP') {
+                                                echo "Approved";
+                                            } else if ($status == "R") {
+                                                echo "Rejected";
+                                            } else if ($status == "C") {
+                                                echo "Cancelled";
+                                            }
+                                            ?>
+                                        </td>
+                                    </tr>
+                                    <?php if ($role != 4) { ?>
+                                        <tr height="30">
+                                            <td>
+                                                <?= ($role == 3) ? "Recommender" : "Approver"; ?>
+                                            </td>
+                                            <td width="15">:</td>
+                                            <td>
+                                                <?= ($role == 3) ? $recommender : $approver; ?>
+                                            </td>
+                                        </tr> 
+                                    <?php } ?>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class=" row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?php print $this->formLabel($loanId); ?>
+                                <?php print $this->formElement($loanId); ?>
+                                <?php print $this->formElementErrors()->render($loanId, ['class' => 'help-block']); ?>
+                            </div>               
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?php print $this->formLabel($appliedLoan); ?>
+                                <?php print $this->formElement($appliedLoan); ?>
+                                <?php print $this->formElementErrors()->render($appliedLoan, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <?php print $this->formLabel($loanDate); ?>
+                                        <?php print $this->formElement($loanDate); ?>
+                                        <?php print $this->formElementErrors()->render($loanDate, ['class' => 'help-block']); ?>
+                                    </div>
+                                </div>     
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label for="nepaliDate">&nbsp;</label>
+                                        <div class="input-group">
+                                            <input type="text" name="nepaliDate" id="nepaliDate"
+                                                   class="form-control" value="" disabled="disabled">
+                                        </div>
+                                    </div>
+                                </div>     
+                            </div>        
+
+                        </div>
+                    </div>
+
+                    <div class=" row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?php print $this->formLabel($repaymentInstallments); ?>
+                                <?php print $this->formElement($repaymentInstallments); ?>
+                                <?php print $this->formElementErrors()->render($repaymentInstallments, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <?php print $this->formLabel($reason); ?>
+                                <?php print $this->formElement($reason); ?>
+                                <?php print $this->formElementErrors()->render($reason, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th> 
+                                <th>&nbsp;</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- <div class="col-md-3">
+                        <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button>
+                    </div> -->
+                </div>
+
+
+                </div>     
+                <?php if ($role == 2) { ?>
+                    <div
+                        class="form-group margin-top-10 required <?= empty($recommendedRemarks->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($recommendedRemarks); ?>
+                            <?php print $this->formElement($recommendedRemarks); ?>
+                    </div>
+                <?php } ?>
+                <?php if ($role == 2 && ($status == 'AP' || ($status == 'R' && $approvedDT != null))) { ?>
+                    <div
+                        class="form-group required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                        <label>Reason for action [From Approver]</label>
+                        <?php print $this->formElement($approvedRemarks); ?>
+                    </div>
+                <?php } ?>
+
+                <?php
+                if ($role == 3 || $role == 4) {
+                    $recommendedRemarks->setAttributes(['disabled' => 'disabled']);
+                    ?>
+                    <?php if ($role != 4) { ?>
+                        <div
+                            class="form-group margin-top-10 required <?= empty($recommendedRemarks->getMessages()) ? "" : "error" ?>">
+                            <label>Reason for action [From Recommender]</label>
+                            <?php print $this->formElement($recommendedRemarks); ?>
+                        </div>
+                    <?php } ?>
+                    <div
+                        class="form-group required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($approvedRemarks); ?>
+                            <?php print $this->formElement($approvedRemarks); ?>
+                    </div>
+                <?php } ?>
+
+                <?php
+                if ($status == 'RQ' || ($status == 'RC' && $employeeId != $recommendedBy)) {
+                    print $this->formSubmit($submit);
+                    ?>
+                    <input type="submit" name="submit" class="btn btn-danger pull-right" value="Reject">
+                <?php } ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row" >
+                        <div style="margin-left: 20px; margin-top: 20px;" >
+                            <table id="loanEmiTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px; background-color:Black; color: white; ">
+                                        EMI Details</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Interest rate
+                                        </th>
+                                        <th>
+                                            <?php print $this->formElement($interestRate); ?>
+                                            <?php print $this->formElementErrors()->render($interestRate, ['class' => 'help-block']); ?>
+                                        </th>
+                                        <th>
+                                            Loan Amount
+                                        </th>
+                                        <th><?php print $this->formElement($appliedLoan); ?>
+                                        <?php print $this->formElementErrors()->render($appliedLoan, ['class' => 'help-block']); ?>
+                                        </th>
+                                        <th>Installment(Tenure)</th>
+                                        <th>
+                                            <?php print $this->formElement($repaymentInstallments); ?>
+                                            <?php print $this->formElementErrors()->render($repaymentInstallments, ['class' => 'help-block']); ?>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:50px">S.NO.</th>
+                                        <th style="width:170px">Loan Amount</th>
+                                        <th style="width:90px">Installment</th>
+                                        <th style="width:90px">Interest</th>
+                                        <th style="width:90px">Principal repaid</th>
+                                        <th style="width:90px">Remaining Principal</th>
+                                        <th style="width:30px">Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 1; foreach($loanDetailView as $viewdetail){
+                                        
+                                        ?>
+                                        <tr>
+                                            <td><?= $i ?></td>
+                                            <td><?= $viewdetail['LOAN_AMOUNT']; ?></td>
+                                            <td><?= $viewdetail['INSTALLMENT']; ?></td>
+                                            <td><?= $viewdetail['INTEREST']; ?> </td>
+                                            <td><?= $viewdetail['PRINCIPAL_REPAID']; ?></td>
+                                            <td><?= $viewdetail['REMAINING_PRINCIPAL']; ?></td>
+                                            <td></td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    } ?>
+                                </tbody>
+                            </table>
+                
+                        </div>
+                </div>            
+            </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<?php
+print $this->form()->closeTag();
+?>
+
+<!--bootstrap modal-->
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload .pdf or .txt or .jpg or .png files only.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>

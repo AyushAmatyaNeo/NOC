@@ -1,0 +1,369 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/ladda/ladda-themeless.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/ladda/spin.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/ladda/ladda.min.js'));
+$this->headScript()
+        ->appendFile($this->basePath('js/transfer-settlement/transfer-settlement-apply/add.js'));
+        // ->appendFile($this->basePath('js/angular.min.js'));
+?>
+ <?php  $all_data = json_encode(file_get_contents("https://gist.githubusercontent.com/aaronhayes/5fef481815ac75f771d37b16d16d35c9/raw/edbec8eea5cc9ace57a79409cc390b7b9bcf24f6/currencies.json")); ?>
+<script>
+    document.transportTypes = '<?php json_encode($transportTypes)  ?>';
+    document.urlExpenseAdd = '<?= $this->url("transferSettlementApply", ["action" => "expenseAdd"]) ?>';
+    document.urlExpense = '<?= $this->url("transferSettlementApply", ["action" => "expense"]) ?>';
+    document.urlExpenseDetailList = '<?= $this->url("transferSettlementApply", ["action" => "expenseDetailList"]) ?>';
+    document.currencyList = <?php echo json_decode($all_data) ?>;
+    document.urlDeleteExpenseDetail = '<?= $this->url("transferSettlementApply", ["action" => "deleteExpenseDetail"]) ?>';
+    document.uploadUrl = '<?= $this->url("transferSettlementApply", ["action" => "fileUpload"]); ?>';
+    document.pushDCFileLink = '<?php echo $this->url('transferSettlementApply', ['action' => 'pushDCFileLink']); ?>';
+    document.getLineTotal = '<?php echo $this->url('transferSettlementApply', ['action' => 'getLineTotal']); ?>';
+    document.validateSettlementExpense = '<?= $this->url("transferSettlementApply", ["action" => "validateSettlementExpense"]) ?>';
+    document.id = <?=$id?>;
+    document.getRowNumber = <?=$rowNumber?>;
+</script>;
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\transferSettlement')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>;
+    </script>
+<?php } ?>
+<div class="row margin-top-20" ng-app="hris" ng-controller="expenseDtlController">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Transfer Settlement Request
+                </div>
+            </div>
+            <div class="portlet-body div-font-11">
+                <form name="jobHistoryForm" id="jobHistory-form"  method="post">
+                    <input type="hidden" id="travelId" value="<?php echo $id; ?>" />
+                    <input type="hidden" name="tansferEmployeeId" class="tansferEmployeeId" id="tansferEmployeeId" value = "<?php echo $detail['EMPLOYEE_ID']; ?>">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <table>
+                                <tr>
+                                    <td width="40%">
+                                        <label for="purpose">Start Date :</label> 
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled="disabled" value="<?php echo $detail['START_DATE']; ?>" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <table>
+                                <tr>
+                                    <td width="40%">
+                                        <label for="advanceAmount">End Date :</label> 
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled="disabled" value="<?php echo $detail['END_DATE']; ?>" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <table>
+                                <tr>
+                                    <td width="40%">
+                                        <label for="departure">Event Date :</label> 
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled="disabled" value="<?php echo $detail['EVENT_DATE'] ?>"  class="form-control" id= "eventDate">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                           <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="40%">
+                                            <label for="destination">To Branch :</label> 
+                                        </td>
+                                        <td>
+                                            <input type="text" disabled="disabled" value="<?php echo $detail['TO_BRANCH_NAME'] ?>" class="form-control">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div>
+
+                    <?php /* <div class="row">
+                           <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="50%">
+                                            <label for="destination">Number of people travelling: </label> 
+                                        </td>
+                                        <td>
+                                            <input type="number" min = "1" max = "4"  class="familyNoTravlledWith" name = "familyNoTravlledWith[]">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div> */ ?>
+ 
+
+                    <div class="margin-top-10 scrollbar-horizantal" id="domesticConfigTable">
+                        <div class="row" >
+                            <div style="margin-left: 20px" >
+                                <table id="domesticConfigTable" class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Transfer Details</th>
+                                        </tr>
+                                        <tr>
+                                            <th rowspan="2">Action</th>
+                                            <th rowspan = "2">Family Member</th>
+                                            <th rowspan ="2"> Full Name</th>
+                                            <th rowspan="2">Departure Date</th>       
+                                            <th colspan="2">Location</th>             
+                                            <!-- <th rowspan="2">Arrives</th> -->
+                                            <th rowspan="2">No. of Days</th> 
+                                            <!-- <th rowspan="2">Total</th>     -->
+                                            <th colspan="5">Mode of Transportation</th> 
+                                            <th colspan="2">Petty Expenses</th> 
+                                            <th rowspan="2">Purpose</th> 
+                                            <th rowspan="2">Remarks</th>       
+                                                  
+                                        </tr>
+                                        <tr>       
+                                            <th>From</th>       
+                                            <th>To</th>
+                                            <th>On foot, Train, Vehicle, Airplane, Cruise etc.</th>       
+                                            <th>Class</th>   
+                                            <th>Rate</th>       
+                                            <th>Miles</th>
+                                            <th>Rate</th> 
+                                            <th>Details</th>
+                                            <th>Total</th>     
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td></td>
+                                            <td>
+                                            <div style="width:90px">
+                                                    <input type="hidden" name="isForFamily[]" class="isForFamily" id="isForFamily" value = "N">
+                                                    <input  type="checkbox" name="familyMember[]"  class="familyMember" id="familyMember">
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:100%" type="text" name="familyName[]"  class="familyName" value="Self">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input required style="width:100%" type="text" name="depDate[]"  class="depDate" name ="depDate">
+                                                </div>
+                                            </td>
+                                            <!-- <td>
+                                                <div style="overflow:hidden">
+                                                    <input style="width:100%" type="text" name="depTime[]"   class="depTime"  data-format="HH:mm" data-template="HH:mm">       
+                                                </div>
+                                            </td> -->
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input required style="width:100%" type="text" name="locFrom[]"   class="locFrom">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input required style="width:100%" type="text" name="locto[]"  class="locto">       
+                                                </div>
+                                            </td>
+      
+                                            <!-- <td>
+                                                <div style="width:90px">
+                                                    <input style="width:100%" type="text" name="arrDate[]"   class="arrDate">       
+                                                </div>
+                                            </td> -->
+                                            <!-- <td>
+                                                <div style="overflow:hidden">
+                                                    <input style="width:100%" type="text" name="arrTime[]"  class="arrTime"  data-format="HH:mm" data-template="HH:mm">
+                                                </div>
+                                            </td>  -->
+                                            <td>
+                                                <div style="width:50px">
+                                                    <input style="width:100%" type="number" readonly name="noOfDays[]" required="required"  class="noOfDays">       
+                                                </div>
+                                            </td>
+
+                                            <!-- <td>
+                                                <div style="width:80px">
+                                                    <input style="width:100%" readonly type="number" name="total[]"  class="total">       
+                                                </div>
+                                            </td> -->
+                                            <td>
+                                                <div style="overflow:hidden">
+                                                    <select class='transport' name='transport[]' >
+                                                    </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:100%" type="text" name="transportClass[]"  class="transportClass">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:100%" type="number" name="rate1[]"  class="rate1">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:100%" type="number" name="miles[]"  class="miles">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:100%" type="number" name="rate2[]"  class="rate2">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea style="width:100%" rows="4" cols="50" name="otherExpenseDetail[]"  class="otherExpenseDetail"></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:100%" type="number" name="otherExpenses[]"  class="otherExpenses">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea style="width:100%" rows="4" cols="50" name="detPurpose[]"  class="detPurpose"></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea style="width:100%" rows="4" cols="50" name="detRemarks[]"  class="detRemarks"></textarea>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                            <div class="col-md-1">
+                                <input class="deatilAddBtn btn btn-default" type="button" value="Add +" style="margin-bottom:20px;" id="dtlAddBtn">
+                            </div>
+
+                        </div>
+                    </div>
+                    <br><br>
+                    <table id="goodsTransportDetailTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Goods Transport Detail</th>
+                            </tr>
+                            <tr>
+                                <th>Weight of Goods (K.G.)</th>
+                                <th>Price of Transportation</th>      
+                                        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="width:100%">
+                                        <input style="width:100%" type="number" name="weightOfGoods[]"  class="weightOfGoods" max = "<?php echo $configDetails['MAX_ALLOWED_WEIGHT'] ?>">
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width:100%">
+                                        <input style="width:100%" type="number" name="priceOfGoods[]"  class="priceOfGoods" max="<?php echo $maxWeightamt?>">       
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    
+                    <div class= "row" style="margin-top:30px;">
+                        <div class=" col-md-6 form-group">
+                            <table id="fileDetailsTbl" class="table">
+                                <tr>
+                                    <th>Document</th>
+                                    <th>&nbsp;</th>
+                                    <th>Action</th>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-md-3">
+                            <button id="addDocument" type="button" class="btn btn-primary">
+                                Add
+                            </button>
+                        </div>
+                    </div>
+                    <div class="submit_button" style="margin-top:2%;">
+                        <button class="btn btn-sm green mt-ladda-btn ladda-button mt-progress-demo" id="submitBtn" name="submit" type="submit">
+                            SUBMIT
+                            <i class="fa fa-edit"></i>
+                        </button>    
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--bootstrap modal-->
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload .pdf or .txt or .jpg or .png files only.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>
+

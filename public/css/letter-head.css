@@ -1,0 +1,80 @@
+body{
+    font-family: 'Oswald', sans-serif !important;
+}
+.letter-head-page{
+    display: flex;
+    justify-content: center;
+}
+.letter-head-sec{
+    height: 842px;
+    width: 595px;
+    border: 1px solid #f1eeee;
+    position: relative;
+    box-shadow: 0px 4px 12px rgb(0 0 0 / 10%);
+}
+.letter-heading img{
+    width: 100px;
+    position: absolute;
+    top: 0;
+    left: 10px;
+}
+.letter-heading .heading-title{
+    text-align: center;
+    margin-left: 20px;
+}
+.letter-heading .heading-title h2{
+    margin: 0;
+    color: #21418e;
+    text-transform: uppercase;
+}
+.letter-heading .heading-title p{
+    margin: 0;
+    color: #ec1d23;
+}
+.letter-head-page hr{
+    border-color: #ffc012;
+    margin: 20px 15px 0;
+    border-style: solid;
+}
+.letter-head-sec .letter-footer{
+    position: absolute;
+    bottom: 0;
+    width: calc(100% - 30px);
+    padding-bottom: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #ffc012;
+    margin: 0 15px;
+}
+.letter-head-sec .letter-footer p{
+    margin-top: 0;
+    margin-bottom: 0;
+    text-align: center;
+}
+.letter-head-sec .letter-footer .bold-colored{
+    color: #21418e;
+    font-weight: bold;
+}
+@media print{
+    body{
+        width: 595px;
+    }
+}
+.watermark{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    vertical-align: middle;
+    height: 610px;
+}
+.watermark img{
+    width: 300px;
+    opacity: 0.1;
+}
+.top-slogan{
+    text-align: center;
+    margin: 0;
+    margin-left: 20px;
+}
+.letter-content{
+	padding: 25px;
+}

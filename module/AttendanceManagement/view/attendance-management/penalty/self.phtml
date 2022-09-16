@@ -1,0 +1,79 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/AttendanceManagement/penalty/self.js'));
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+?>
+<script>
+    document.fiscalYears =<?php echo json_encode($fiscalYears); ?>;
+    document.months =<?php echo json_encode($months); ?>;
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+    document.penaltyDetailWS = '<?php echo $this->url('penalty', ['action' => 'penaltyDetailWS']); ?>';
+    document.selectedMonthId =<?php echo $selectedMonthId; ?>;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\penalty')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Filter Months</span>
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a id="export" href="javascript:;" class="hris-export-to-excel" hris-export-to-excel-target="withOTReport">
+                            <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <select class="form-control reset-field"  id="fiscalYearId" >
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select class="form-control reset-field" id="monthId" >
+                </select>
+            </div>
+            <div class="col-sm-4 col-sm-offset-4">
+                <button id="reset" class="btn default btn-sm pull-right">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button  id="search" class="btn btn-default btn-sm pull-right">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="penalty">
+</div>
