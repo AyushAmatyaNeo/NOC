@@ -1,0 +1,120 @@
+<?php
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'));
+$this->headScript()->appendFile($this->basePath('js/system/preference-setup/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'preferenceSetup-form');
+
+$preferenceName = $form->get('preferenceName');
+$preferenceName->setValueOptions($preferenceNameList);
+$preferenceConstraint = $form->get('preferenceConstraint');
+$preferenceConstraint->setValueOptions($preferenceConstraintList);
+$constraintValue = $form->get('constraintValue');
+$preferenceCondition = $form->get('preferenceCondition');
+$preferenceCondition->setValueOptions($preferenceConditionList);
+$requestType = $form->get('requestType');
+$requestType->setValueOptions($requestTypeList);
+$employeeType = $form->get('employeeType');
+$employeeType->setValueOptions($employeeTypeList);
+$companyId = $form->get('companyId');
+$companyId->setValueOptions($companies);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('preferenceSetup', ['action' => 'add']));
+
+$form->prepare();
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\preferenceSetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($companyId->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($companyId); ?>
+                            <?php print $this->formElement($companyId); ?>
+                            <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($preferenceName->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($preferenceName); ?>
+                            <?php print $this->formElement($preferenceName); ?>
+                            <?php print $this->formElementErrors()->render($preferenceName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($preferenceConstraint->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($preferenceConstraint); ?>
+                            <?php print $this->formElement($preferenceConstraint); ?>
+                            <?php print $this->formElementErrors()->render($preferenceConstraint, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($constraintValue); ?>
+                            <div class="input-group dropdown-select">
+                                <?php print $this->formElement($constraintValue); ?>
+                            </div>
+                            <span id='errMsgPC'></span>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($preferenceCondition->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($preferenceCondition); ?>
+                            <?php print $this->formElement($preferenceCondition); ?>
+                            <?php print $this->formElementErrors()->render($preferenceCondition, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($requestType->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($requestType); ?>
+                            <?php print $this->formElement($requestType); ?>
+                            <?php print $this->formElementErrors()->render($requestType, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($employeeType->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($employeeType); ?>
+                            <?php print $this->formElement($employeeType); ?>
+                            <?php print $this->formElementErrors()->render($employeeType, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

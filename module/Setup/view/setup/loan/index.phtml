@@ -1,0 +1,106 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/setup/loan/index.js'));
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.menu =<?php
+$menu = ["id" => "menuSetup", "subMenu" => ["id" => "subMenuLoan"]];
+echo json_encode($menu);
+?>;
+    document.editLink = '<?= $this->url("loan", ["action" => "edit"]); ?>';
+    document.deleteLink = '<?= $this->url("loan", ["action" => "delete"]); ?>';
+    document.deleteURL = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loan')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+<div class="margin-top-20">
+
+    <div class="portlet light bg-inverse">
+
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <?php if ($acl['ALLOW_ADD'] == 'Y'): ?>
+                    <a href="<?= $this->url('loan', ['action' => 'add']) ?>" class="btn default btn-sm">
+                        <i class="fa fa-plus-square icon-black"></i>
+                        New 
+                    </a>
+                <?php endif; ?>
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="excelExport">
+                                <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                        </li>
+                        <li >
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> 
+                                Export to PDF 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="loanTable">
+        </div>
+    </div>
+
+
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>    
+        #: (LOAN_NAME == null) ? '-' : LOAN_NAME #
+        </td>
+        <td>    
+        #: (COMPANY_NAME == null) ? '-' : COMPANY_NAME #
+        </td>
+        <td>    
+        #: MIN_AMOUNT # - #: MAX_AMOUNT #
+        </td>
+        <td>    
+        #: (INTEREST_RATE == null) ? '-' : INTEREST_RATE #%
+        </td>
+        <td>    
+        #: (REPAYMENT_AMOUNT == null) ? '-' : REPAYMENT_AMOUNT #%
+        </td>
+        <td>    
+        #: (REPAYMENT_PERIOD == null) ? '-' : REPAYMENT_PERIOD #
+        </td>
+        <td>
+        <a class="btn-edit"
+        href="<?= $this->url("loan", ["action" => "edit"]); ?>/#:LOAN_ID#" style="height:17px;">
+        <i class="fa fa-edit"></i>
+        </a>
+        <a class="btn-delete confirmation"
+        href="<?= $this->url("loan", ["action" => "delete"]); ?>/#:LOAN_ID#" id="bs_#:LOAN_ID #" style="height:17px;"> 
+        <i class="fa fa-trash-o"></i></a>
+        </a>
+        </td>
+        </tr>
+    </script>
+
+</div>

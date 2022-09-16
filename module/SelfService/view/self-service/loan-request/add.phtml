@@ -1,0 +1,527 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/SelfService/loan-request/add.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'loan-form');
+
+
+$loanId = $form->get('loanId');
+$loanId->setValueOptions($loans);
+$repaymentInstallments = $form->get('repaymentInstallments');
+$interestRate = $form->get('interestRate');
+$monthlyInstallmentAmount = $form->get('monthlyInstallmentAmount');
+$monthlyInterestRate = $form->get('monthlyInterestRate');
+$employeeCode = $form->get('employeeCode');
+$employeeCode->setValue($empDetail['EMPLOYEE_CODE']);
+$employeeName = $form->get('employeeName');
+$employeeName->setValue($empDetail['FULL_NAME']);
+$basicSalary = $form->get('basicSalary');
+$basicSalary->setValue($empDetail['BASIC_SALARY']);
+$basicGrade = $form->get('basicGrade');
+$basicGrade->setValue($empDetail['FLAT_VALUE'] * $empDetail['ONE_DAY']);
+$netAmnt = $form->get('netAmnt');
+$netAmnt->setValue((($empDetail['FLAT_VALUE'] * $empDetail['ONE_DAY']) + $empDetail['BASIC_SALARY']) * 0.25);
+$salaryGrade = $form->get('salaryGrade');
+$salaryGrade->setValue(($empDetail['FLAT_VALUE'] * $empDetail['ONE_DAY']) + $empDetail['BASIC_SALARY']);
+$epf= $form->get('epf');
+$epf->setValue($loanArrDetail[106]);
+$incomeTax= $form->get('incomeTax');
+$incomeTax->setValue($loanArrDetail[98]);
+$sst = $form->get('sst');
+$sst->setValue($loanArrDetail[96]);
+$cit = $form->get('cit');
+$cit->setValue($loanArrDetail[18]);
+$ewf = $form->get('ewf');
+$ewf->setValue($loanArrDetail[27]);
+$landLoan = $form->get('landLoan');
+$landLoan->setValue($loanArrDetail[82]);
+$motorCycleLoan = $form->get('motorCycleLoan');
+$motorCycleLoan->setValue($loanArrDetail[84]);
+$hml = $form->get('hml');
+$hml->setValue($loanArrDetail[83]);
+
+
+$socialLoan = $form->get('socialLoan');
+$socialLoan->setValue($loanArrDetail[85]);
+$vehiclePurchaseLoan = $form->get('vehiclePurchaseLoan');
+$vehiclePurchaseLoan->setValue($loanArrDetail[104]);
+$medicalLoan = $form->get('medicalLoan');
+$medicalLoan->setValue(0);
+$cycleLoan = $form->get('cycleLoan');
+$educationLoan = $form->get('educationLoan');
+$educationLoan->setValue($loanArrDetail[99]);
+$familyInsuranceLoan = $form->get('familyInsuranceLoan');
+$familyInsuranceLoan->setValue($loanArrDetail[100]);
+$modernTechnology = $form->get('modernTechnology');
+$modernTechnology->setValue($loanArrDetail[103]);
+
+$appliedLoan = $form->get('appliedLoan');
+$period = $form->get('period');
+$loanDate = $form->get('loanDate');
+$reason = $form->get('reason');
+$filePath = $form->get('filePath');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('loanRequest', ['action' => 'add']));
+
+
+$form->prepare();
+?>
+<script>
+    
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.rateDetails = <?=json_encode($rateDetails)?>;
+    document.loanData = '<?= $this->url("loanRequest", ["action" => "add"]); ?>';
+    document.pushFileLink = '<?php echo $this->url('loanRequest', ['action' => 'pushFileLink']); ?>';
+    document.uploadUrl = '<?= $this->url('loanRequest', ['action' => 'fileUpload']); ?>';
+    document.wsValidateLoanRequest = '<?= $this->url("loanRequest", ["action" => "validateLoanRequest"]); ?>';
+    document.urlTest = '<?= $this->url("loanRequest", ["action" => "index"]); ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loanRequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-group">
+                        <input type="hidden" id="employeeId" value="<?php echo $employeeId; ?>"/>
+                    </div>
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($loanId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($loanId); ?>
+                            <?php print $this->formElementErrors()->render($loanId, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+                </div>
+                <h3 style ="text-align :center; font-weight:bold; color:#c00000;">Employee Loan Calculation for CIT Deduction</h3>
+                <div class=" row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($appliedLoan); ?>
+                            <?php print $this->formElement($appliedLoan); ?>
+                            <?php print $this->formElementErrors()->render($appliedLoan, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($period); ?>
+                            <?php print $this->formElement($period); ?>
+                            <?php print $this->formElementErrors()->render($period, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($repaymentInstallments); ?>
+                            <?php print $this->formElement($repaymentInstallments); ?>
+                            <?php print $this->formElementErrors()->render($repaymentInstallments, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($interestRate); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($interestRate); ?>
+                            <?php print $this->formElementErrors()->render($interestRate, ['class' => 'help-block']); ?>
+                        </div>        
+                        <div class="form-group">
+                                <?php print $this->formLabel($monthlyInterestRate); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($monthlyInterestRate); ?>
+                                <?php print $this->formElementErrors()->render($monthlyInterestRate, ['class' => 'help-block']); ?>
+                        </div>         
+                    </div>
+
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($monthlyInstallmentAmount); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($monthlyInstallmentAmount); ?>
+                            <?php print $this->formElementErrors()->render($monthlyInstallmentAmount, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+                    <div class="col-sm-2">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($loanDate); ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($loanDate); ?>
+                                    <?php print $this->formElementErrors()->render($loanDate, ['class' => 'help-block']); ?>
+                                </div>
+                    </div>    
+                </div>
+                <div class="row" style="color:#1f3864;">
+                    <div class="col-xs-12 col-sm-4 col-md-3 col-box" >
+                        <div class="row bottomgap">
+                                <div class="col-xs-6 col-sm-6 col-md-6 "> 
+                                    <?php print $this->formLabel($employeeCode) ?>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <?php print $this->formElement($employeeCode) ?>
+                                    <?php print $this->formElementErrors()->render($employeeCode, ['class' => 'error']) ?>
+                                </div>
+                        </div>
+                    </div>
+
+                    
+                    <div class="col-xs-12 col-sm-4 col-md-3 col-box">
+                        <div class="row bottomgap">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign"> 
+                                    <?php print $this->formLabel($employeeName) ?>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <?php print $this->formElement($employeeName) ?>
+                                    <?php print $this->formElementErrors()->render($employeeName, ['class' => 'error']) ?>
+                                </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row" style="color:#1f3864;">
+                    <div class="col-xs-12 col-sm-4 col-md-3 col-box">
+                            <div class="row">
+                                    <div class="col-sm-6"> 
+                                        <?php print $this->formLabel($basicSalary) ?>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <?php print $this->formElement($basicSalary) ?>
+                                        <?php print $this->formElementErrors()->render($basicSalary, ['class' => 'error']) ?>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-6"> 
+                                        <?php print $this->formLabel($basicGrade) ?>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <?php print $this->formElement($basicGrade) ?>
+                                        <?php print $this->formElementErrors()->render($basicGrade, ['class' => 'error']) ?>
+                                    </div>
+                            </div>
+                            <div class="row">
+                                    <div class="col-sm-6"> 
+                                        <?php print $this->formLabel($netAmnt) ?>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <?php print $this->formElement($netAmnt) ?>
+                                        <?php print $this->formElementErrors()->render($netAmnt, ['class' => 'error']) ?>
+                                    </div>
+                            </div>
+
+                            <div class="row">
+                                    <div class="col-sm-6"> 
+                                        <?php print $this->formLabel($salaryGrade) ?>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <?php print $this->formElement($salaryGrade) ?>
+                                        <?php print $this->formElementErrors()->render($salaryGrade, ['class' => 'error']) ?>
+                                    </div>
+                            </div>
+                    </div>
+                </div>
+                
+                <div class="row" >
+                    <div style="margin-left: 20px; margin-top: 20px;" >
+                        <table id="loanTable" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px; background-color:yellow;">
+                                    Deduction Details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($epf); ?>
+                                            <?php print $this->formElement($epf); ?>
+                                            <?php print $this->formElementErrors()->render($epf, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($vehiclePurchaseLoan); ?>
+                                            <?php print $this->formElement($vehiclePurchaseLoan); ?>
+                                            <?php print $this->formElementErrors()->render($vehiclePurchaseLoan, ['class' => 'help-block']); ?>
+                                        </div>              
+                                    </td>      
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($incomeTax); ?>
+                                            <?php print $this->formElement($incomeTax); ?>
+                                            <?php print $this->formElementErrors()->render($incomeTax, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($medicalLoan); ?>
+                                            <?php print $this->formElement($medicalLoan); ?>
+                                            <?php print $this->formElementErrors()->render($medicalLoan, ['class' => 'help-block']); ?>
+                                        </div>              
+                                    </td>      
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($sst); ?>
+                                            <?php print $this->formElement($sst); ?>
+                                            <?php print $this->formElementErrors()->render($sst, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($cycleLoan); ?>
+                                            <?php print $this->formElement($cycleLoan); ?>
+                                            <?php print $this->formElementErrors()->render($cycleLoan, ['class' => 'help-block']); ?>
+                                        </div>              
+                                    </td>      
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($cit); ?>
+                                            <?php print $this->formElement($cit); ?>
+                                            <?php print $this->formElementErrors()->render($cit, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($educationLoan); ?>
+                                            <?php print $this->formElement($educationLoan); ?>
+                                            <?php print $this->formElementErrors()->render($educationLoan, ['class' => 'help-block']); ?>
+                                        </div>              
+                                    </td>      
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($ewf); ?>
+                                            <?php print $this->formElement($ewf); ?>
+                                            <?php print $this->formElementErrors()->render($ewf, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($familyInsuranceLoan); ?>
+                                            <?php print $this->formElement($familyInsuranceLoan); ?>
+                                            <?php print $this->formElementErrors()->render($familyInsuranceLoan, ['class' => 'help-block']); ?>
+                                        </div>              
+                                    </td>      
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($landLoan); ?>
+                                            <?php print $this->formElement($landLoan); ?>
+                                            <?php print $this->formElementErrors()->render($landLoan, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($modernTechnology); ?>
+                                            <?php print $this->formElement($modernTechnology); ?>
+                                            <?php print $this->formElementErrors()->render($modernTechnology, ['class' => 'help-block']); ?>
+                                        </div>              
+                                    </td>      
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($motorCycleLoan); ?>
+                                            <?php print $this->formElement($motorCycleLoan); ?>
+                                            <?php print $this->formElementErrors()->render($motorCycleLoan, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                    <div class="form-group">
+                                            <?php print $this->formLabel($socialLoan); ?>
+                                            <?php print $this->formElement($socialLoan); ?>
+                                            <?php print $this->formElementErrors()->render($socialLoan, ['class' => 'help-block']); ?>
+                                        </div> 
+                                    </td>      
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="form-group">
+                                            <?php print $this->formLabel($hml); ?>
+                                            <?php print $this->formElement($hml); ?>
+                                            <?php print $this->formElementErrors()->render($hml, ['class' => 'help-block']); ?>
+                                        </div>               
+                                    </td>
+                                    <td>
+                                        <?php $total_amount = $loanArrDetail[106]  + $loanArrDetail[27] +
+                                         $loanArrDetail[82] + $loanArrDetail[84] + $loanArrDetail[83] + $loanArrDetail[85] + $loanArrDetail[104] + $loanArrDetail[99] +
+                                          $loanArrDetail[100] + $loanArrDetail[103] + $loanArrDetail[96] + $loanArrDetail[98];   ?>
+                                        Total Deduction:
+                                        <input type= "text" id ='totalAmount'class = "form-control" name ='totalAmount' value = "<?php echo $total_amount + $loanArrDetail[18]?>" readonly>
+                                    </td>               
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+
+                <div class = "row">
+                    <div class="col-md-6">
+                     <h3 style = "text-align:center; font-weight:bold;">Calculation</h3>
+                        <div class= "row">
+                           <div class="col-md-8" style = "color:red;">
+                            % Received with Existing Deduction
+                           </div>
+                           <?php $total_salary = (($empDetail['FLAT_VALUE'] * $empDetail['ONE_DAY']) + $empDetail['BASIC_SALARY'])?>
+                           <input type="number" hidden id = 'totalSalary' name ='totalSalary' value ="<?php echo $total_salary?>" >
+                           <div class="col-md-4">
+                           <input type="text" id='receivedPercent' name = 'receivedPercent' readonly class="form-control" value= "<?php echo round((($total_salary - ($total_amount + $loanArrDetail[18]))/$total_salary) * 100 ,2).'%'?>">
+                           </div>
+                        </div>
+                        <BR>
+                        <div class= "row">
+                           <div class="col-md-8" style = "color:red;" >
+                           Percentage Received with zero CIT Deduction
+                           </div>
+                           <div class="col-md-4">
+                           <input type="text" class="form-control" readonly id='receivedWOcit' name ='receivedWOcit' value = "<?php echo round((($total_salary - ($total_amount + $loanArrDetail[18]) + $loanArrDetail[18])/$total_salary) * 100,2).'%' ?>">
+                           </div>
+                        </div>
+                        <BR>
+                        <div class= "row">
+                           <div class="col-md-8" style = "color:red;">
+                           Permissible Deduction of CIT for Loan Approval for 25% on hand
+                           </div>
+                           <div class="col-md-4">
+                           <input type="text" class="form-control" readonly id = "permissibleDeduction" name ='permissibleDeduction' value = "<?php echo (($total_salary * 0.25) - $total_salary + ($total_amount + $loanArrDetail[18]) - $loanArrDetail[18])?>">
+                           </div>
+                        </div>
+                    </div>
+                    <div class = "col-md-6">
+                        <div class= "row">
+                           <div class="col-md-8" id ="comment" style = "color:red; padding-top: 53px;">
+                            % Received with Existing Deduction shouldn't be less than 25%
+                           </div>
+                        </div>
+                    </div>
+                </div>
+                <div style='margin-top : 10px;'>
+
+
+                <div class="form-group">
+                                <?php print $this->formLabel($reason); ?>
+                                <?php print $this->formElement($reason); ?>
+                                <?php print $this->formElementErrors()->render($reason, ['class' => 'help-block']); ?>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+
+                    <div style="display: block;" class="row margin-top-20" id="printBtnDiv" >
+                                    <div class="col-md-12" style="text-align:center;">
+                                    <br>
+                                    <a class="btn btn-success" id="testBtn"> Test</a>
+                                    </div>
+                    </div> 
+                </div>
+
+                <div class="row" >
+                        <div style="margin-left: 20px; margin-top: 20px;" >
+                            <table id="loanEmiTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px; background-color:Black; color: white; ">
+                                        EMI Details</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Interest rate
+                                        </th>
+                                        <th>
+                                            <?php print $this->formElement($interestRate); ?>
+                                            <?php print $this->formElementErrors()->render($interestRate, ['class' => 'help-block']); ?>
+                                        </th>
+                                        <th>
+                                            Loan Amount
+                                        </th>
+                                        <th><?php print $this->formElement($appliedLoan); ?>
+                                        <?php print $this->formElementErrors()->render($appliedLoan, ['class' => 'help-block']); ?>
+                                        </th>
+                                        <th>Installment(Tenure)</th>
+                                        <th>
+                                            <?php print $this->formElement($repaymentInstallments); ?>
+                                            <?php print $this->formElementErrors()->render($repaymentInstallments, ['class' => 'help-block']); ?>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:50px">S.NO.</th>
+                                        <th style="width:170px">Loan Amount</th>
+                                        <th style="width:90px">Installment</th>
+                                        <th style="width:90px">Interest</th>
+                                        <th style="width:90px">Principal repaid</th>
+                                        <th style="width:90px">Remaining Principal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                
+                        </div>
+                </div>            
+            </div>
+            <input type="number" hidden id = 'totalDeductionWithoutCit' name ='totalDeductionWithoutCit' value ="<?php echo $total_amount?>">
+
+
+
+        </div>
+    </div>
+</div>
+

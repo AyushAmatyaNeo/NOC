@@ -1,0 +1,42 @@
+<?php
+/**
+ * Load Javascript files here
+ */
+$this->headScript()
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/kendoDataTable.js'));
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\performance-appraisal')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+<div class="row">
+    <div class="col-sm-12">
+        <table id="dataTable">
+            <thead>
+                <tr>
+                    <th>
+                        Appraisal Name
+                    </th>
+                    <th>
+                        Appraisee Status
+                    </th>
+                    <th>
+                        Appraisal Type
+                    </th>
+                    <th>
+                        From Date
+                    </th>
+                    <th>
+                        To Date
+                    </th>
+                    <th>
+                        Operation
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>

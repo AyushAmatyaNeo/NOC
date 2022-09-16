@@ -1,0 +1,132 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\leaverequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<?php 
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('js/LeaveManagement/leave-carry-forward/edit.js'))
+                    ;
+?>
+
+
+<?php
+$form->setAttribute('role', 'form');
+$noOfDays = $form->get('noOfDays');
+$employeeId = $form->get('employeeId');
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Carry Forward Leave');
+$submit->setAttribute('id', 'request');
+
+$form->setAttribute('action', $this->url('leavecarryforward', ['action' => 'edit']));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+   
+    document.leaveMaxEncash = '<?php echo $leaveMaxEncash; ?>';
+    document.pushLeaveFileLink = '<?php echo $this->url('leaveapply', ['action' => 'pushLeaveFileLink']); ?>';
+    document.uploadUrl = '<?= $this->url('leaveapply', ['action' => 'fileUpload']); ?>';
+    document.wsPullLeaveDetailWidEmployeeId = '<?= $this->url("leavecarryforward", ["action" => "pullLeaveDetailWidEmployeeId"]) ?>';
+    document.wsPullLeaveDetail = '<?= $this->url("leaverequest", ["action" => "pullLeaveDetail"]) ?>';
+    document.wsFetchAvailableDays = '<?= $this->url("leavecarryforward", ["action" => "fetchAvailableDays"]) ?>';
+    document.wsValidateLeaveRequest = '<?= $this->url("leaverequest", ["action" => "validateLeaveRequest"]) ?>';
+    
+</script>
+
+<div class="row margin-top-20" >
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>
+                    Leave carry Forward
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+               
+                <div class=" row">
+                     <div class="col-sm-4">
+                        <div class="form-group <?= empty($employeeId->getMessages()) ? "" : "error" ?> ">
+                            <?php print $this->formLabel($employeeId) ?>
+                            <span class="required" >*</span>
+                            <select name="employeeId" READONLY id="employeeId"  class="form-control">
+                                <option value="" selected="selected"><?=$details['FULL_NAME']?></option>                           
+                            </select>
+                        </div>
+                       
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="leaveId">Leave Type</label>
+                            <span class="required" >*</span>
+                            <select name="leaveId"  id="leaveId" class="form-control">
+                                <option value="" disabled="" selected="" ><?=$details['LEAVE_ENAME']?></option>
+                                
+                            </select>
+                        </div>
+                    </div>
+                    <input type="hidden" name="id" value="<?=$id?>">
+                    <div class="col-sm-4">
+                        <div class="form-group disabled">
+                            <label for="leaveId">Available Days</label>
+                            <input type="text" READONLY name="availableDays"  id="availableDays"  class="form-control"  value="<?=$availabledays?>">
+                           
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group disabled">
+                            <label for="leaveId">Leave Days For Carry Forward</label>
+                            <input type="number" name="carryforward" step="0.5"  required="required" id="carryforward"
+                                   class="form-control"  value="<?=$details['CARRY_FORWARD_DAYS']?>">
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group disabled">
+                            <label for="leaveId">Leave Days For Encashment</label>                            
+                            <input type="number" name="encashment" step="0.5" readonly  id="encashment"
+                                   class="form-control" readonly value="<?=$details['ENCASH_DAYS']?>">
+                           
+                        </div>
+                    </div>
+
+
+                </div>
+
+                </div>
+
+                <?php print $this->formSubmit($submit); ?>
+
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>
+
+

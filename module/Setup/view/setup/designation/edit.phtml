@@ -1,0 +1,114 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/designation/add.js'));
+
+$designationTitle = $form->get("designationTitle");
+$parentDesignation = $form->get("parentDesignation");
+$companyId = $form->get('companyId');
+$withinBranch = $form->get("withinBranch");
+$withinDepartment = $form->get("withinDepartment");
+$basicSalary = $form->get("basicSalary");
+$orderNo = $form->get("orderNo");
+$submit = $form->get("submit");
+
+$form->setAttribute('action', $this->url('designation', ['action' => 'edit', 'id' => $id]));
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Designation')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($designationTitle) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($designationTitle); ?>
+                            <?= $this->formElementErrors()->render($designationTitle, ['class' => 'help-block']) ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($basicSalary) ?>
+                            <?= $this->formElement($basicSalary); ?>
+                            <?= $this->formElementErrors()->render($basicSalary, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?php print $this->formLabel($companyId); ?>
+                            <?php print $this->formElement($companyId); ?>
+                            <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($parentDesignation) ?>
+                            <?= $this->formElement($parentDesignation); ?>
+                            <?= $this->formElementErrors()->render($parentDesignation, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($orderNo) ?>
+                            <?= $this->formElement($orderNo); ?>
+                            <?= $this->formElementErrors()->render($orderNo, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-8">
+                        <div class="row" id="scopeArea">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <?= $this->formLabel($withinBranch) ?>
+
+                                    <div class="md-radio-inline">
+                                        <?php $customRender($withinBranch); ?>
+                                    </div>
+                                    <?= $this->formElementErrors()->render($withinBranch, ['class' => 'help-block']) ?>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <?= $this->formLabel($withinDepartment) ?>
+
+                                    <div class="md-radio-inline">
+                                        <?php $customRender($withinDepartment); ?>
+                                    </div>
+                                    <?= $this->formElementErrors()->render($withinDepartment, ['class' => 'help-block']) ?>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+

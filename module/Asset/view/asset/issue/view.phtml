@@ -1,0 +1,205 @@
+
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/asset/issue/view.js'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+?>
+
+<?php
+if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } 
+?>
+    
+    <?php
+    $assetReturnUrl=$this->url('assetIssue', ['action' => 'returnAsset', 'id' => $id]);
+    ?>
+    
+<script>
+    document.issue =<?= json_encode($issue) ?>;
+</script>
+
+
+
+
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\assetSetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+
+
+<div class="margin-top-20">
+    <div class="table-toolbar">
+        <div class="row">
+            <div class="col-md-6">
+                 <div>
+                    <?php  if(1==2){  ?>
+                    <?php //  if($assetImage!=null){  ?>
+                    <img style="width:30%;height:100px;" src="<?=$this->basePath()?>/uploads/<?=$assetImage?>">
+                    <?php } ?>
+                 </div>
+            </div>
+            
+            <div class="col-md-6">
+                <div class="btn-group pull-right">
+                    <button class="btn green btn-outline dropdown-toggle" data-toggle="dropdown">Tools
+                        <i class="fa fa-angle-down"></i>
+                    </button>
+                    <ul class="dropdown-menu pull-right">                      
+                        <li>
+                            <a href="javascript:;" id="export"> Export to Excel </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="assetIssueTable">
+
+    </div>
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>    
+        #: (ASSET_EDESC == null) ? '-' : ASSET_EDESC #
+        </td>
+        <td> 
+        #: (FULL_NAME == null) ? ' ' : FULL_NAME #
+        </td>
+        <td>    
+        #: (ISSUE_DATE == null) ? '-' : ISSUE_DATE #
+        </td>
+        <td>    
+        #: (QUANTITY == null) ? '-' : QUANTITY #
+        </td>
+        <td>    
+        #: (RETURN_DATE == null) ? '-' : RETURN_DATE #
+        </td>
+        <td>    
+        #: (RETURNED_DATE == null) ? '-' : RETURNED_DATE #
+        </td>
+        <td>
+        # if(RETURNABLE=='Y'&&RETURNED!='Y'){#
+        <a class="btn-edit" data-issueid="#:ISSUE_ID#" data-assetid="#:ASSET_ID#" data-rdate=#:RETURN_DATE# 
+        href="\\#"  data-asset="#:ASSET_EDESC#" data-quantity="#:QUANTITY#" 
+        data-employee=" #: (FULL_NAME == null) ? ' ' : FULL_NAME #" data-target="\\#myModal" id="btnReturn"  style="height:17px;">
+        <i class="fa fa-send-o"></i>
+        </a>
+        # } #
+        </a>
+        </td>
+        </tr>
+    </script>
+    
+    
+    
+    
+    <div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Asset Return</h4>
+      </div>
+      <div class="modal-body">
+          <form action="<?=$assetReturnUrl?>" id="assetReturnForm" method="post">
+              <input  name="redirectPage" type="hidden" value="ViewPage">
+              <input id="assetId" name="assetId" type="hidden">
+              <input id="issueId" name="issueId" type="hidden">
+              <input id="issueBal" name="issueBal" type="hidden">
+          <div class="row">
+              <div class="col-sm-3">
+                  <lable>Employee : </lable>
+              </div>
+              
+              <div class="col-sm-3">
+                  <label class="form-group" id="returnEmployee"></label>
+              </div>
+          </div>
+        
+          <div class="row">
+              <div class="col-sm-3">
+                  <lable>Asset : </lable>
+              </div>
+              
+              <div class="col-sm-3">
+                  <label class="form-group" id="returnAsset"></label>
+              </div>
+          </div>
+          <div class="row">
+              <div class="col-sm-3">
+                  <lable>Quantity : </lable>
+              </div>
+              
+              <div class="col-sm-3">
+                  <label class="form-group" id="returnQuantity" ></label>
+              </div>
+          </div>
+        
+          <div class="row">
+              <div class="col-sm-3">
+                  <lable>Return Date : </lable>
+              </div>
+              
+              <div class="col-sm-3">
+                  <label class="form-group" id='rDate'></label>
+              </div>    
+          </div>
+              
+          <div class="row">
+              <div class="col-sm-3 form-group">
+                  <lable>Returned Date : </lable>
+              </div>
+              
+              <div class="col-sm-3">
+                  <input required="required" id="returnedDate" name="returndeDate" class="form-control" type="text">
+              </div>    
+              <div class="col-sm-3">
+                  <input type="text"   id="returnedDateNepali" class="form-control " value="">
+              </div>    
+          </div>
+              
+              <div class='row'>
+                  <div class=' col-sm-offset-3 col-sm-4'>
+              <input class="btn btn-default " type="submit">
+                  </div>
+              </div>
+                  
+          </form>
+        
+        
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" id="">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+
+</div>

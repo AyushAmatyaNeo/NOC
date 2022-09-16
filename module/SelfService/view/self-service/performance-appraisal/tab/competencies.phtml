@@ -1,0 +1,122 @@
+<?php
+$disabledKPICOM = ($assignedAppraisalDetail['STAGE_ID'] != 1) ? "disabled" : "";
+$disabledKeyAchievement = ($assignedAppraisalDetail['STAGE_ID'] != 7) ? "disabled" : "";
+if($assignedAppraisalDetail['COMPETENCIES_SETTING']=='Y'){
+?>
+<div class="tab-pane" id="portlet_tab2_COM" ng-controller="competenciesController">
+    <form name="competenciesForm" id="competenciesForm" ng-submit="submitCompetenciesForm()" novalidate>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <?php if ($assignedAppraisalDetail['STAGE_ID'] == 1) { ?>
+                        <th style="width:5%;"></th>
+                    <?php } ?>
+                    <th style="width:5%;">S.N.</th>
+                    <th>Competencies</th>
+                    <?php if ($appCompetenciesRatingDtlNum > 0 && $assignedAppraisalDetail['REVIEWER_AGREE'] == 'Y') { ?>
+                        <th>Rating</th>
+                        <th>Appraiser's Comments</th>
+                    <?php } ?>
+                </tr>
+            </thead>
+            <tr ng-repeat="competencies in competenciesList">
+                <?php if ($assignedAppraisalDetail['STAGE_ID'] == 1) { ?>
+                    <td>
+                        <div class="md-checkbox">
+                            <input type="checkbox" id="{{competencies.checkbox}}" class="md-check"
+                                   ng-model="competencies.checked">
+                            <label for="{{competencies.checkbox}}">
+                                <span class="inc"></span>
+                                <span class="check"></span>
+                                <span class="box"></span>
+                            </label>
+                        </div>
+                    </td>
+                <?php } ?>
+                <td><span ng-bind="competencies.counter"></span></td>
+                <td>
+                    <div>
+                        <textarea cols="25" rows="20" class="form-control" style="height:25px!important" name="title_{{competencies.checkbox}}" ng-model="competencies.title" required="required" <?= $disabledKPICOM; ?>></textarea>
+                        <div ng-show="competenciesForm.$submitted || competenciesForm.title_{{competencies.checkbox}}.$touched">
+                            <ul ng-show="competenciesForm.title_{{competencies.checkbox}}.$error.required" class="help-block error">
+                                <li>Competencies Detail is required.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </td>
+                <?php if ($appCompetenciesRatingDtlNum > 0 && $assignedAppraisalDetail['REVIEWER_AGREE'] == 'Y') { ?>
+                    <td width='10%'>
+                        <div>
+                            <select name="rating_{{competencies.checkbox}}" ng-model="competencies.rating" ng-options="item for item in ratingNames" required="required" disabled='disabled'>
+                            <option value="" selected="" class="ng-binding"></option>
+                            </select>
+                            <div ng-show="competenciesForm.$submitted || competenciesForm.rating_{{competencies.checkbox}}.$touched">
+                                <ul ng-show="competenciesForm.rating_{{competencies.checkbox}}.$error.required" class="help-block error">
+                                    <li>Appraiser Rating is required.</li>
+                                </ul>
+                            </div> 
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <textarea cols="25" rows="20" class="form-control" style="height:150px!important" name="comments_{{competencies.checkbox}}" ng-model="competencies.comments" required="required" disabled='disabled'></textarea>
+                            <div ng-show="competenciesForm.$submitted || competenciesForm.comments_{{competencies.checkbox}}.$touched">
+                                <ul ng-show="competenciesForm.comments_{{competencies.checkbox}}.$error.required" class="help-block error">
+                                    <li>Appraiser's Comment is required.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                <?php } ?>
+            </tr>
+            <?php if ($appCompetenciesRatingDtlNum > 0 && $assignedAppraisalDetail['REVIEWER_AGREE'] == 'Y') {?>
+                <tr>
+                    <?php if ($assignedAppraisalDetail['STAGE_ID'] == 1) { ?>
+                    <td></td>
+                    <?php } ?>
+                    <td colspan="2">
+                        ANNUAL RATING ON COMPETENCIES:
+                    </td>
+                    <td>
+                        <div>
+                            <select name="annualRatingCompetency" id="annualRatingCompetency" class="appraiserComRating" required="required" disabled='disabled'>
+                                <option <?= ($assignedAppraisalDetail['ANNUAL_RATING_COMPETENCY'] == "A") ? "selected" : "" ?>>A</option>
+                                <option <?= ($assignedAppraisalDetail['ANNUAL_RATING_COMPETENCY'] == "B") ? "selected" : "" ?>>B</option>
+                                <option <?= ($assignedAppraisalDetail['ANNUAL_RATING_COMPETENCY'] == "C") ? "selected" : "" ?>>C</option>
+                            </select>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+            <?php } ?>
+            <?php if ($assignedAppraisalDetail['STAGE_ID'] == 1) { ?>
+                <tr>
+                    <td style="width:10%;">
+                        <a href="javascript:;" class="btn btn-icon-only default" ng-click="addCompetencies()" id="plushIcon">
+                            <i class="fa fa-plus"></i>
+                        </a>
+                        <a href="javascript:;" class="btn btn-icon-only default" ng-click="deleteCompetencies()" id="plushIcon">
+                            <i class="fa fa-trash-o"></i>
+                        </a>
+                    </td>
+                    <?php if ($appCompetenciesRatingDtlNum > 0 && $assignedAppraisalDetail['REVIEWER_AGREE'] == 'Y') {?>
+                    <td></td>
+                    <td></td>
+                    <?php } ?>
+                    <td></td>
+                    <td>
+                        <div class="form-group">
+                            <button type="submit" id="submit" class="btn btn-success pull-right">
+                                SUBMIT
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+    </form>
+    <?php
+    print $this->partial('appraisal/layout/competency-remarks.phtml');
+    ?>
+</div>
+<?php } ?>

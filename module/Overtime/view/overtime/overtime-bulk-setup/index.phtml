@@ -1,0 +1,226 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('js/search.js'))
+    ->appendFile($this->basePath('js/overtime/bulk-update/index.js'));
+?>
+
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.assignSubMandatory = '<?php echo $this->url('overtime-bulk-setup', ['action' => 'assign']); ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+</script>
+
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+        </div>
+        <div class="tools">
+            <a href="" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i>
+                            Export to Excel
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i>
+                            Export to PDF
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Company</label>
+                <select multiple class="form-control" name="company" id="companyId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Branch</label>
+                <select multiple class="form-control" name="branchId" id="branchId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Department</label>
+                <select multiple class="form-control" name="department" id="departmentId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Designation</label>
+                <select multiple class="form-control" name="designation" id="designationId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Position</label>
+                <select multiple class="form-control" name="position" id="positionId">
+                </select>
+            </div>
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <label>Service Type</label>
+                <select multiple class="form-control" name="serviceType" id="serviceTypeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Service Event Type</label>
+                <select multiple class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Service Event Type</label>
+                <select multiple class="form-control" name="employeeType" id="employeeTypeId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <label>Employee</label>
+                <select multiple class="form-control" name="employee" id="employeeId">
+                </select>
+            </div>
+
+            <div class="col-sm-2">
+                <label>Holiday Work Reward</label>
+                <select class="form-control reset-field" name="wohReward" id="wohRewardID">
+                    <option value="">---</option>
+                    <option value="O">Overtime</option>
+                    <option value="L">Substitute Leave</option>
+                </select>
+            </div>
+<!--            <div class="col-sm-2">-->
+<!--                --><?php //print $this->formLabel($leaveFormElement); ?>
+<!--                --><?php //print $this->formElement($leaveFormElement); ?>
+<!--            </div>-->
+        </div>
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <label>Update value</label>
+                <select class="form-control reset-field" name="update" id="updateId">
+                    <option value="">---</option>
+                    <option value="O">Overtime Eligibility</option>
+                    <option value="W">WOH Reward</option>
+                </select>
+            </div>
+
+            <div class="col-sm-10">
+                <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button id="search" class="btn btn-default btn-sm pull-right">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="scroller"  style="min-height:300px;height: 400px;" id="loadingDiv">
+    <table id="employeeTable" class="table table-striped table-bordered table-hover no-footer custometbletwo">
+        <thead>
+        <tr>
+            <th>
+                Code
+            </th>
+            <th>
+                Employee
+            </th>
+            <th>
+                Branch
+            </th>
+            <th>
+                Department
+            </th>
+            <th>
+                Designation
+            </th>
+            <th>
+                Position
+            </th>
+            <th>
+                Work on Holiday Reward
+            </th>
+            <th>
+                Overtime Eligible
+            </th>
+            <th class="bs-checkbox " style="width: 36px; " data-field="state" tabindex="0">
+                <div class="th-inner ">
+                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                        <input id="masterCheckElement" class="" type="checkbox" />
+                        <span></span>
+                    </label>
+                </div>
+                <div class="fht-cell" style="width: 46px;"></div>
+            </th>
+        </tr>
+        </thead>
+
+    </table>
+
+
+
+</div>
+
+<div class="row margin-top-30" >
+    <div class="col-sm-2 W H">
+        <div class="form-group">
+        <label>WOH Reward</label>
+        <select class="form-control" name="wohFlag" id="wohFlagId">
+            <option value="">--</option>
+            <option value="O">Overtime</option>
+            <option value="L">Substitute Leave</option>
+        </select>
+    </div>
+    </div>
+
+    <div class="col-sm-2 O H">
+            <label>Overtime Eligible</label>
+            <form name="overtimeEligible" id="overtimeEligibleId">
+                <input type="radio" name="overtime" value="Y" > Yes
+                <input type="radio" name="overtime" value="N" checked> No
+            </form>
+    </div>
+
+    <div class="col-sm-6">
+        <a id="assignBtn" class="btn btn-primary pull-right">Assign</a>
+        </button>
+    </div>
+</div>

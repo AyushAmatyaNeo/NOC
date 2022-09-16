@@ -1,0 +1,41 @@
+<script type="text/ng-template" id="myModalContent.html">
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Document Upload</h3>
+</div>
+<div class="modal-body" id="modal-body">
+    <div class="row">
+        <div class="col-sm-12">
+            <div id="dropZoneContainer" class="dropzone">
+            </div>
+            <div class="errorMsg" ng-show="!valid">Please upload Image.</div>
+        </div>
+    </div>
+    <div class="row margin-top-10">
+        <div class="col-sm-2">
+        <label>File Type:</label>
+        </div>
+        <div class="col-sm-4">
+            <select class="form-control" id="file-type" ng-change="fileTypeChange()"  ng-options="key as value for (key,value) in fileTypes" ng-model="fileTypeCode">
+                <!-- <option ng-repeat="(key,fileType) in fileTypes" value="{{key}}">{{fileType}}</option> -->
+            </select>
+        </div>
+        <div class="errorMsg" ng-show="!filevalid">Please select File Type : <strong>{{dzfile}} </strong></div>
+    </div>
+    <div class="row">
+        <div class="col-sm-2">
+        <label>File Name:</label>
+        </div>
+        <div class="col-sm-4">
+            <select class="form-control" ng-options="key as value for (key,value) in fileNames"  ng-model="fileNameId">
+            </select>
+        </div>
+    </div>
+
+
+</div>
+</div>
+<div class="modal-footer">
+    <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+    <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+</div>
+</script>

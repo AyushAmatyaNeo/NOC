@@ -1,0 +1,42 @@
+<div class="col-sm-6">
+    <!-- BEGIN Portlet PORTLET-->
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption cborder">
+                <i class="icon-speech"></i>
+                <span class="caption-subject bold"> Total Employee</span>
+                <span class="caption-helper">Branch wise</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="mt-element-list scroller"  style="height:200px">
+                <div class="mt-list-container list-simple ext-1">
+                    <ul>
+                        <?php foreach ($empCountByBranch as $empCount): ?>
+                            <li class="mt-list-item done">
+                                <div class="list-icon-container">
+                                    <i class="icon-check"></i>
+                                </div>
+                                <div class="list-datetime"> 
+                                    <label style="font-size: 0.8em;">
+                                        <?php print $empCount['EMPLOYEE_ID']; ?>
+                                    </label>
+                                </div>
+                                <div class="list-item-content">
+                                    <h3 class="head-title">
+                                        <a href="javascript:;">
+                                            <?php print $empCount['BRANCH_NAME']; ?> 
+                                        </a>
+                                    </h3>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- END Portlet PORTLET-->
+</div>

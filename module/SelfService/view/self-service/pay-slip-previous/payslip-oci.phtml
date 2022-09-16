@@ -1,0 +1,212 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/SelfService/pay-slip-previous/pay-slip-oci.js'));
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\payslip-previous')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-paper-plane font-green-haze"></i>
+                <span class="caption-subject bold font-green-haze uppercase"> Filter</span>
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> 
+                                Export to PDF 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <?php print $this->formElement($monthSE); ?>
+                </div>
+                <div class="col-sm-2">
+                    <?php print $this->formElement($arrearsSE); ?>
+                </div>
+            </div>
+            <div id="payslip-container" class="margin-top-30">
+                <div class="row">
+                    <div class="col-sm-12">  
+                        <table class="table table-striped customTable">
+                            <caption>
+                                Salary Sheet Detail
+                            </caption>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        Sheet No
+                                    </td>
+                                    <td id="SHEET_NO">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Employee Code
+                                    </td>
+                                    <td id="EMPLOYEE_CODE">
+                                    </td>
+                                    <td>
+                                        Employee Name
+                                    </td>
+                                    <td id="EMPLOYEE_EDESC">
+                                    </td>
+                                    <td>
+                                        Company
+                                    </td>
+                                    <td id="COMPANY_EDESC">
+                                    </td>
+                                    <td>
+                                        Account No
+                                    </td>
+                                    <td id="ACCOUNT_NO">
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td>
+                                        PF No
+                                    </td>
+                                    <td id="PF_NUMBER">
+                                    </td>
+                                    <td>
+                                        CIT No
+                                    </td>
+                                    <td id="CIT_NUMBER">
+                                    </td>
+                                    <td>
+                                        PAN No
+                                    </td>
+                                    <td id="PAN_NO">
+                                    </td>
+                                    <td>
+                                        Basic Salary
+                                    </td>
+                                    <td id="BASIC_SALARY">
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td>
+                                        Present Days
+                                    </td>
+                                    <td id="PRESENT_DAYS">
+                                    </td>
+                                    <td>
+                                        Absent Days
+                                    </td>
+                                    <td id="ABSENT_DAYS">
+                                    </td>
+                                    <td>
+                                        Work Days
+                                    </td>
+                                    <td id="WORK_DAYS">
+                                    </td>
+                                    <td>
+                                        Holidays
+                                    </td>
+                                    <td id="HOLIDAYS">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        Leave with pay days
+                                    </td>
+                                    <td id="LEAVE_WITH_PAY_DAYS">
+                                    </td>
+                                    <td>
+                                        leave without pay days
+                                    </td>
+                                    <td id="LEAVE_WITHOUT_PAY_DAYS">
+                                    </td>
+                                    <td>
+                                        Overtime Hours
+                                    </td>
+                                    <td id="OVERTIME_HOURS">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <table class="table customTable">
+                                            <caption>
+                                                Facilities and Renumerations (+)
+                                            </caption>
+                                            <tbody id="tbody-a">
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="table customTable">
+                                            <caption>
+                                                Deductions and Savings (-)
+                                            </caption>
+                                            <tbody id="tbody-d">
+
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <table class="table customTable">
+                                            <tr>
+                                                <td>
+                                                    Total Earnings
+                                                </td>
+                                                <td id="GROSS_AMOUNT">
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    Net Payable
+                                                </td>
+                                                <td id="NET_AMOUNT">
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table class="table customTable">
+                                            <td>
+                                                Total Deductions
+                                            </td>
+                                            <td id="DEDUCTION_AMOUNT">
+                                            </td>
+                                        </table>
+
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,48 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/scripts/app.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-toastr/toastr.min.js'))
+        ->appendFile($this->basePath('js/custom.js'))
+        ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('js/application/forgot-password/checkUsername.js'))
+?>
+<script>
+    document.userList ='';
+</script>
+
+<div class="form-title">
+    <div class="panel-header main-title">
+    <h5>Forgot Your Password?</h5>
+    </div>
+</div>
+<div class="panel-body">
+    <div class="form-group cstm-form-grp" style="font-size:13px;color:#575655;">
+    <?php
+    if ($this->messages) {
+        foreach ($this->messages as $message) {
+            print '<div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+            <strong>Warning!</strong> ';
+            print $message;
+            print '</div>';
+        }
+    } 
+    ?>
+    </div>
+    <div class="form-group cstm-form-grp" style="font-size:15px;color:#575655;margin-top:-20px;">
+    Please enter the username you used to login. We will then send you a recovery code.
+    </div>
+
+<form action="<?= $this->url("recover",["action"=>"email"])?>" id="usernameForm" method="post">
+    <div class="form-group cstm-form-grp">
+        <input type="text" class="form-control" id="username" name="username" placeholder="Enter Username">
+        <i class="fa fa-envelope" aria-hidden="true"></i>
+        <span id="errorMsg" class="errorMsg"></span>
+    </div>
+
+    <div class="form-actioins mb-0">
+        <input type="submit" name="submit" class="btn btn-primary btn-noc" value="Submit">
+        <a href="<?= $this->url("login"); ?>" style="font-size:13px;color:#575655;margin-left:20px;">Cancel</a>
+    </div>
+</form>
+</div>

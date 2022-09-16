@@ -1,0 +1,4 @@
+HRM Solution
+_________________________________________________________________
+
+http://froiden.cloudapp.net/hrm_front/documentation/#!/dashboard

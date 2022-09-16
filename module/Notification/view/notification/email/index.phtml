@@ -1,0 +1,157 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-summernote/summernote.min.js'))
+        ->appendFile($this->basePath('js/Notification/Email/index.js'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/bootstrap-summernote/summernote.css'));
+?>
+
+<?php
+if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } 
+?>
+
+
+<script>
+    document.menu =<?php
+$menu = ["id" => "menuNotification", "subMenu" => ["id" => "subMenuEmail"]];
+echo json_encode($menu);
+?>;
+</script>
+<div class="portlet box blue">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-mail-reply"></i>Email Templates </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse"> </a>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="tabbable-line">
+            <ul class="nav nav-tabs ">
+                <?php foreach ($emailTypes as $key => $emailType): ?>
+                    <li class="<?= ($key == $tab) ? 'active' : '' ?>">
+                        <a href="#<?= $emailType ?>" data-toggle="tab"> <?= $emailType ?> </a>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+            <div class="tab-content">
+                <?php foreach ($emailTypes as $key => $emailType): ?>
+                    <div class="tab-pane <?= ($key == $tab) ? 'active' : '' ?>" id="<?= $emailType ?>">
+                        <form method="POST"  class="form" role="form" action="<?= $this->url('email', ['action' => 'edit']) ?>">
+                            <div class="form-body">
+                                <div class="form-group">
+                                    <label class="control-label">Subject</label>
+                                    <span class="required" aria-required="true">*</span>
+                                    <input required="required" name="subject" type="text" class="form-control" placeholder="Enter Subject" value="<?= isset($templates[$key]) ? $templates[$key]['SUBJECT'] : '' ?>">
+                                    <input type="hidden" name="id" value="<?= $key ?>"/>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label class="control-label">CC</label>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <label class="control-label">&nbsp;</label>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <a class="btn btn-success btnAddCC"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                        </div>
+                                        <?php if (isset($templates[$key])): ?>
+                                            <?php foreach ((array) json_decode($templates[$key]['CC']) as $cc): ?>
+                                                <?php $cc = (array) $cc ?>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input name="ccEmail[]" type="text" class="form-control" placeholder="Email" value="<?= $cc['email'] ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input name="ccName[]" type="text" class="form-control" placeholder="Name" value="<?= $cc['name'] ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label class="control-label">BCC</label>
+                                            </div>
+                                            <div class="col-sm-5">
+                                                <label class="control-label">&nbsp;</label>
+                                            </div>
+                                            <div class="col-sm-1">
+                                                <a class="btn btn-success btnAddBCC"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                        </div>
+                                        <?php if (isset($templates[$key])): ?>
+                                            <?php foreach ((array) json_decode($templates[$key]['BCC']) as $bcc): ?>
+                                                <?php $bcc = (array) $bcc ?>
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input name="bccEmail[]" type="text" class="form-control" placeholder="Email" value="<?= $bcc['email'] ?>">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <input name="bccName[]" type="text" class="form-control" placeholder="Name" value="<?= $bcc['name'] ?>">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="control-label">Message</label>
+                                    <div class="summernote">
+                                    </div>
+                                    <input name="description" type="hidden" value="<?= isset($templates[$key]) ? rawurlencode($templates[$key]['DESCRIPTION']) : '' ?>" >
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <label class="control-label">Variables</label>
+                                            </div>
+                                        </div>
+                                        <?php foreach ($variables[$key] as $k => $variable): ?>
+                                            <?php if ($k % 6 == 0): ?>
+                                                <div class="row">
+                                                <?php endif; ?>
+                                                <div class="col-sm-2">
+                                                    <a class="btn btn-block variables" index="<?= $key ?>" data="<?= $variable ?>" style="font-size: 0.8rem;"><?= $variable ?></a>
+                                                </div>
+
+                                                <?php if ($k % 6 == 5 || sizeof($variables[$key]) == $k + 1): ?>
+                                                </div>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-action">
+                                <input type="submit" class="btn default"  value="Edit"/>
+                            </div>
+                        </form>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        </div>
+    </div>
+</div>

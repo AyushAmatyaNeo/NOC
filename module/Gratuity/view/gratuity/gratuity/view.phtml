@@ -1,0 +1,411 @@
+<?php
+
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+    ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('dropzone/dropzone.min.js'))
+    ->appendFile($this->basePath('js/gratuity/add.js'));
+?>
+
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                        <i class="fa fa-plus"></i>
+                        Gratuity Details
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table id="gratuityEmployeeDetails" class="table table-bordered" style="width: 250px;" align="left">
+                    <tr>
+                        <th>Name:</th>
+                        <td><?php echo $detail['FULL_NAME'] ?></td>
+                    </tr>
+                    <tr>
+                        <th>Functional Level:</th>
+                        <td><?php echo $detail['FUNCTIONAL_LEVEL_ID'] ?></td>
+                    </tr>
+                    <tr>
+                        <th>Position:</th>
+                        <td><?php echo $detail['POSITION_ID'] ?></td>
+                    </tr>
+                </table>
+
+                <table id="gratuityLeaveDetails" class="table table-bordered" style="width: 250px;" align="center">
+                <?php $total_leave = 0; 
+                foreach ($monthly_leave as $ml){
+                    $total_leave = $total_leave + $ml['BALANCE'];?>
+                    <tr>
+                        <th><?php echo $ml['LEAVE_ENAME']?></th>
+                        <td><?php echo $ml['BALANCE'] ?></td>
+                    </tr>
+                <?php }
+                foreach ($other_leave as $ol) {
+                    $total_leave = $total_leave + $ol['BALANCE'];?>
+                    <tr>
+                        <th><?php echo $ol['LEAVE_ENAME']?></th>
+                        <td><?php echo $ol['BALANCE'] ?></td>
+                    </tr>
+                <?php } ?>
+                    <tr>
+                        <th>Total Leaves</th>
+                        <td><?php echo $total_leave?></td>
+                    </tr>
+
+                </table>
+
+                <table id="gratuitySalaryDetails" class="table table-bordered">
+                    <tr>
+                        <th>Salary</th>
+                        <th>Grade</th>
+                        <th>Salary and Grade</th>
+                        <th>Salary and grade per day</th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $salary_detail[2][0]['BASIC_SALARY']?></td>
+                        <td><?php echo $salary_detail[1][0]['GRADE_AMOUNT']?></td>
+                        <td><?php echo ($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT'])?></td>
+                        <td><?php echo round($salary_detail[0][0]['B_G_PDAY'],2)?></td>
+                    </tr>
+                </table>
+
+                <table id="gratuityTenureDetails" class ="table table-bordered">
+                    <tr>
+                        <th>Joined Date</th>
+                        <th>Retiring Date</th>
+                        <th>Years</th>
+                        <th>Month</th>
+                        <th>Days</th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $detail['BS_DATE(JOIN_DATE)']?></td>
+                        <td><?php echo $detail['EST_RETIREMENT_DATE'] ?></td>
+                        <td><?php echo $detail['NO_OF_YEARS'] ?></td>
+                        <td><?php echo $detail['NO_OF_MONTHS'] ?></td>
+                        <td><?php echo $detail['NO_OF_DAYS'] ?></td>
+                    </tr>
+                </table>
+
+                <table id ="gratuityFiscalDetails" class ="table table-bordered">
+                    <tr>
+                        <th colspan="2">Fiscal Year</th>
+                    </tr>
+                    <tr>
+                        <th>Started Date</th>
+                        <th>End Date</th>
+                        <th>Month</th>
+                        <th>Days</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td><?php echo $detail['FISCAL_YEAR_START_DATE'] ?></td>
+                        <td><?php echo $detail['EST_RETIREMENT_DATE'] ?></td>
+                        <td><?php echo $detail['FISCAL_MONTH']?></td>
+                        <td><?php echo $detail['FISCAL_DAYS']?></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3" style="text-align:center;background-color: #ffff86fa;
+                        color: red;
+                        font-weight: bold;">Total Days</td>
+                        <td colspan="2" style="color: red;
+                        font-weight: bold;"><?php echo $detail['TOTAL_DAYS']?></td>
+                    </tr>
+                </table>
+
+                <table id ="gratuityDetails" class ="table table-bordered">
+                    <tr>
+                    <th>Description</th>
+                    <th>Rate</th>
+                    <th>Day/Month</th>
+                    <th>Amount</th>
+                    </tr>
+
+                    <?php 
+                    $total1 = 0;
+                     foreach ($gratuity_detail as $gd){
+                         $total1 += $gd['CALCULATED_AMOUNT'];?>
+                    <tr>
+                        <td><?php echo $gd['DESCRIPTION']?></td>
+                        <td><?php echo round($gd['RATE'],2)?></td>
+                        <td><?php if(strcmp($gd['DESCRIPTION'],'Gratuity Amount')==0){
+                            echo $gd['DAYS'];
+                            }else{
+                            echo $gd['EXTRA_DAYS'];
+                            }?></td>
+                        <td><?php echo $gd['CALCULATED_AMOUNT'] ?></td>
+                    </tr>
+                    <?php }?>
+
+                    <tr>
+                        <td colspan="3" style="text-align:center;background-color: #ffff86fa;
+                        color: red;
+                        font-weight: bold;"> Total Gratuity amount </td>
+                        <td style="color: red;
+                        font-weight: bold;"><?php echo $total1?></td>
+                    </tr>
+                    
+
+                </table>
+
+                <table id ="gratuityDetails" class="table table-bordered">
+                    <tr>
+                        <th>Description</th>
+                        <th>Rate</th>
+                        <th>Month</th>
+                        <th>Day</th>
+                        <th>Amount</th>
+                    </tr>
+                    <?php 
+                    $total2 = 0;
+                    foreach ($medical_detail as $md) {
+                        $total2 +=  $md['CALCULATED_AMOUNT']; ?>
+                    <tr>
+                        <td><?php echo $md['DESCRIPTION'] ?></td>
+                        <td><?php if(strcmp($md['DESCRIPTION'],'Medical Amount')==0){
+                            echo round($salary_detail[0][0]['B_G_PDAY'],2);
+                        }else {
+                            echo  ($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT']);
+                            }?></td>
+                        <td><?php echo $md['RATE']?></td>
+                        <td><?php echo (strcmp($md['DESCRIPTION'],'Medical Amount')==0)?$detail['TOTAL_DAYS']:''?></td>
+                        <td><?php echo $md['CALCULATED_AMOUNT'] ?></td>
+                    </tr>
+                    <?php } ?>
+
+                    <tr>
+                        <td colspan="4" style="text-align:center;background-color: #ffff86fa;
+                        color: red;
+                        font-weight: bold;">Total Medical Amount</td>
+                        <td style="color: red;
+                        font-weight: bold;"><?php echo $total2 ?></td>
+                    </tr>
+                </table>
+
+                <table id="gratuityDetails" class = "table table-bordered" style>
+                    <?php $total3 = $holiday_detail[0]['CALCULATED_AMOUNT'] + $holiday_detail[1]['CALCULATED_AMOUNT'] +  $holiday_detail[2]['CALCULATED_AMOUNT']; ?>
+                    <tr>
+                        <th>Holiday</th>
+                        <td><?php echo ($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT'])/30;?></td>
+                        <td><?php echo round(($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT'])/30,2);?></td>
+                        <td><?php echo $total_leave?></td>
+                        <td><?php echo $total3?></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" style="text-align:center;background-color: #ffff86fa;
+                        color: red;
+                        font-weight: bold;"> Total </td>
+                        <td style="color: red;
+                        font-weight: bold;"><?php $total = $total1 + $total2 + $total3 ;
+                                echo $total;?> </td>
+                    </tr>
+
+                </table>
+
+
+
+
+
+        <div class="col-md-12" style="text-align:center;">
+            <a class="btn btn-success" id="print"> Print</a>
+        </div>
+        </div>
+
+    <div>
+</div>
+
+<div style="border:1px solid; display: none;" id="printableArea" class="col-md-8">  
+    <div class = 'row' style='padding:10px'>
+    <table style='width:100%'>
+        <tr>
+            <td>
+                <table id="gratuityEmployeeDetails" class="table table-bordered" style="width: 250px; border:1px solid; border-collapse:collapse;width: 80%;">
+                    <tr style="padding-bottom:5px;">
+                        <th style=" border: 1px solid black; border-collapse: collapse;padding:10px">Name:</th>
+                        <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $detail['FULL_NAME'] ?></td>
+                    </tr>
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse;padding:10px;">Functional Level:</th>
+                    <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $detail['FUNCTIONAL_LEVEL_ID'] ?></td>
+                    </tr>
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse;padding:10px">Position:</th>
+                    <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $detail['POSITION_ID'] ?></td>
+                    </tr>
+                </table>
+                <br>
+                <table id="gratuitySalaryDetails" class="table table-bordered" style=" border:1px solid;  border-collapse:collapse;width: 80%;">
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;"> Salary </th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Grade</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Salary and Grade</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Salary and grade per day</th>
+                    </tr>
+                    <tr>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $salary_detail[2][0]['BASIC_SALARY']?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $salary_detail[1][0]['GRADE_AMOUNT']?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo ($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT'])?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo round($salary_detail[0][0]['B_G_PDAY'],2)?></td>
+                    </tr>
+                </table>
+                <br>
+
+                <table id="gratuityTenureDetails" class ="table table-bordered" style=" border:1px solid; border-collapse:collapse;width: 80%;">
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Joined Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Retiring Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px; ">Years</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Month</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Days</th>
+                    </tr>
+                    <tr>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['BS_DATE(JOIN_DATE)']?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['EST_RETIREMENT_DATE'] ?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['NO_OF_YEARS'] ?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['NO_OF_MONTHS'] ?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['NO_OF_DAYS'] ?></td>
+                    </tr>
+                </table>
+                <br>
+
+                <table id ="gratuityDetails" class="table table-bordered" style=" border:1px solid; border-collapse:collapse;width: 80%;">
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Description</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Rate</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Month</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Day</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Amount</th>
+                    </tr>
+                    <?php 
+                    $total2 = 0;
+                    foreach ($medical_detail as $md) {
+                        $total2 +=  $md['CALCULATED_AMOUNT']; ?>
+                    <tr>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $md['DESCRIPTION'] ?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $md['RATE']?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $md['CALCULATED_AMOUNT'] ?></td>
+                    </tr>
+                    <?php } ?>
+                    <tr>
+                        <td colspan="4" style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Total Medical Amount</td>
+                        <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $total2 ?></td>
+                    </tr>
+                </table>
+            </td>
+            <td>
+                <table id="gratuityLeaveDetails" class="table table-bordered" style="width: 250px; border:1px solid; border-collapse:collapse;width: 80%;" >
+                    <?php $total_leave = $other_leave[0]['BALANCE'] + $monthly_leave[1]['BALANCE'] + $monthly_leave[0]['LEAVE_ENAME']; ?>
+                    <tr style="padding-bottom:5px;">
+                        <th style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $monthly_leave[0]['LEAVE_ENAME']?></th>
+                        <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $monthly_leave[0]['BALANCE'] ?></td>
+                    </tr>                    <tr>
+                        <th style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $monthly_leave[1]['LEAVE_ENAME']?></th>
+                        <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $monthly_leave[1]['BALANCE'] ?></td>
+                    </tr>
+                    <tr>
+                        <th style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $other_leave[0]['LEAVE_ENAME']?></th>
+                        <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $other_leave[0]['BALANCE'] ?></td>
+                    </tr>
+                    <tr>
+                        <th style=" border: 1px solid black; border-collapse: collapse;padding:10px">Total Leaves</th>
+                        <td style=" border: 1px solid black; border-collapse: collapse;padding:10px"><?php echo $total_leave?></td>
+                    </tr>
+
+                </table>
+                <br>
+
+                <table id ="gratuityFiscalDetails" class ="table table-bordered" style=" border:1px solid; border-collapse:collapse;width: 80%;">
+                    <tr>
+                        <th colspan="4" style=" border: 1px solid black; border-collapse: collapse;  padding:10px;">Fiscal Year</th>
+                    </tr>
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse;  padding:10px;">Started Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;  padding:10px;">End Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Month</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Days</th>
+                    </tr>
+                    <tr>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['BS_DATE(START_DATE)'] ?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['EST_RETIREMENT_DATE'] ?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['FISCAL_MONTH']?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $detail['FISCAL_DAYS']?></td>
+                    </tr>
+                </table>
+
+                <br>
+
+                <table id ="gratuityDetails" class ="table table-bordered" style=" border:1px solid; border-collapse:collapse;width: 80%;">
+                    <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Description</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Rate</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Day/Month</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Amount</th>
+                    </tr>
+
+                    <?php 
+                    $total1 = 0;
+                    foreach ($gratuity_detail as $gd){
+                        $total1 += $gd['CALCULATED_AMOUNT'];?>
+                    <tr>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $gd['DESCRIPTION']?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo round($gd['RATE'],2)?></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"></td>
+                    <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $gd['CALCULATED_AMOUNT'] ?></td>
+                    </tr>
+
+                    <?php }?>
+                    
+                    <tr>
+                        <td colspan="3"  style=" border: 1px solid black; border-collapse: collapse; padding:10px;">> Total Gratuity amount </td>
+                        <td  style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $total1?></td>
+                    </tr>
+
+                </table>
+
+                
+
+                <br>
+
+                <table id="gratuityDetails" class = "table table-bordered" style=" border:1px solid; border-collapse:collapse; width: 80%;">
+                    <?php $total3 = $holiday_detail[0]['CALCULATED_AMOUNT'] + $holiday_detail[1]['CALCULATED_AMOUNT'] +  $holiday_detail[2]['CALCULATED_AMOUNT']; ?>
+                    <tr>
+                        <th style=" border: 1px solid black; border-collapse: collapse; padding:10px;">Holiday</th>
+                        <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo round(($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT'])/30,2);?></td>
+                        <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo round(($salary_detail[2][0]['BASIC_SALARY'] + $salary_detail[1][0]['GRADE_AMOUNT'])/30,2);?></td>
+                        <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $total_leave?></td>
+                        <td style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php echo $total3?></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4" style=" border: 1px solid black; border-collapse: collapse; padding:10px;"> Total </td>
+                        <td colspan="2" style=" border: 1px solid black; border-collapse: collapse; padding:10px;"><?php $total = $total1 + $total2 + $total3 ;
+                                echo $total;?> </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+
+        <br>
+
+        
+
+        
+
+        
+    <div>
+</div>

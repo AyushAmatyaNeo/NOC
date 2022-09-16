@@ -1,0 +1,76 @@
+<?php if ($assignedAppraisalDetail['KPI_SETTING'] == 'Y') : ?>
+    <div id="portlet_tab2_KPI" >
+        <h6 class="appHeading">
+            KEY ACHIEVEMENTS AND RATING
+        </h6>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th style="width:5%;">S.N.</th>
+                    <th>KPI Detail</th>
+                    <th>Success Criteria</th>
+                    <th style="width:10%;">Weight</th>
+                    <?php if ($keyAchievementDtlNum > 0): ?>
+                        <th>Key Achievement</th>
+                        <th>Self Rating</th>
+                    <?php endif; ?>
+                    <?php if ($appraiserRatingDtlNum > 0) : ?>
+                        <th>Appraiser Rating</th>
+                    <?php endif; ?>
+                </tr>
+            </thead>
+            <?php foreach ($kpiList as $kpi) : ?>
+                <tr>
+                    <td><span> <?php echo $kpi['SNO']; ?> </span></td>
+                    <td>
+                        <div>
+                            <textarea cols="25" rows="20" class="form-control" style="height:150px!important"  disabled=""> <?php echo $kpi['TITLE']; ?></textarea>
+                        </div>
+                    </td>
+                    <td>
+                        <div>
+                            <textarea cols="25" rows="20" class="form-control" style="height:150px!important"  disabled=""><?php echo $kpi['SUCCESS_CRITERIA']; ?></textarea>
+                        </div>
+                    </td>
+                    <td> 
+                        <div>
+                            <input type="number" size="3" value="<?php echo $kpi['WEIGHT']; ?>"  min="0" step='1' disabled="" style="width:100%;"/>
+                        </div>
+                    </td>
+                    <?php if ($keyAchievementDtlNum > 0) : ?>
+                        <td>
+                            <div>
+                                <textarea cols="25" rows="20" class="form-control" style="height:150px!important"  disabled="disabled"> <?php echo $kpi['KEY_ACHIEVEMENT']; ?> </textarea>
+                            </div>
+                        </td>
+                        <td style="width: 10%">
+                            <div>
+                                <input type="number"  size="3" value="<?php echo $kpi['SELF_RATING']; ?>"  min="0" step='1' style=" width:100%;" disabled="disabled" />
+                            </div>
+                        </td>
+                    <?php endif; ?>
+                    <?php if ($appraiserRatingDtlNum > 0) { ?>
+                        <td style="width: 10%">
+                            <div>
+                                <input type="number" size="3" value="<?php echo $kpi['APPRAISER_RATING']; ?>" min="0" step='1' style=" width:100%;" disabled='disabled'/>
+                            </div>
+                        </td>
+                    <?php } ?>
+                </tr>
+            <?php endforeach; ?>
+            <?php if ($appraiserRatingDtlNum > 0) { ?>
+                <tr>
+                    <td colspan="6">
+                        ANNUAL RATING ON KEY PERFORMANCE INDICATOR:
+                    </td>
+                    <td>
+                        <div>
+                            <input type="number" disabled="disabled"  name="annualRating" id="annualRating" value="<?php echo $calculatedAnnualRating; ?>" style="width:100%;"/>
+                        </div>
+                    </td>
+                </tr>
+            <?php } ?>
+        </table>
+        <?php print $this->partial('appraisal/layout/kpi-remarks.phtml'); ?>
+    </div>
+<?php endif; ?>

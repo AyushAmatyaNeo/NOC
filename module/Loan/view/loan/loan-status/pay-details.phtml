@@ -1,0 +1,84 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('js/loan/loan-status/pay-details.js'));
+?> 
+ 
+<script>
+    document.ids =<?php echo json_encode(["loanId" => -1, "loanRequestStatusId" => -1, "fromDate1" => "", "nepaliFromDate" => "", "toDate1" => "", "nepaliToDate" => ""]) ?>;
+    document.searchValues =<?php echo json_encode($searchValues) ?>;
+    document.viewLink = '<?= $this->url("loanStatus", ["action" => "view"]) ?>';
+    document.editLink = '<?= $this->url("loanStatus", ["action" => "skip"]) ?>';
+    document.deleteLink = '<?= $this->url("loanStatus", ["action" => "delete"]) ?>';
+   
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loanStatus')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+    <div class="caption">
+            
+        </div>
+        <div class="tools">
+            <a href="" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> 
+                            Export to Excel 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+       
+    </div>
+</div>
+
+<div class="margin-top-20">  
+    <div id="loanTable">
+    </div>
+</div>

@@ -1,0 +1,135 @@
+
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/customer/customer-contract/print.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="page-bar">
+
+</div>
+
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+
+        <div class="portlet-title">
+            <input id="printContract" type="button" class="btn btn-primary" value="print">
+        </div>
+
+
+        <div id="printDiv">
+            <div style="margin: 30px;">
+                <div clas="row">
+                    <div class="text-center">
+                        Contract </br>
+                        Garud Services
+
+                    </div>
+                </div>
+
+
+                <div class="row margin-top-30">
+                    <div class="col-md-6">
+                        <table >
+                            <tr>
+                                <td>Contract :</td>
+                                <td> <?= $contract['CONTRACT_NAME'] ?></td>
+                            </tr>
+                            <tr>
+                                <td>Customer :</td>
+                                <td><?= $contract['CUSTOMER_ENAME'] ?></td>
+                            </tr>
+                            <tr>
+                                <td>Address :</td>
+                                <td><?= $contract['ADDRESS'] ?></td>
+                            </tr>
+                            <tr>
+                                <td>Contract Start Date :   </td>
+                                <td><?= $contract['START_DATE'] . '  (' . $contract['START_DATE_BS'] . ')'; ?></td>
+                            </tr>
+                            <tr>
+                                <td>Contract End Date :   </td>
+                                <td><?= $contract['END_DATE'] . '  (' . $contract['END_DATE_BS'] . ')'; ?></td>
+                            </tr>
+
+                        </table>
+
+                    </div>
+                </div>
+
+
+
+
+                <div class="row margin-top-30">
+                    <div class="col-md-8 col-md-offset-2">
+                        <?php if ($contractDetails) { ?>
+
+                            <table class="table">
+                                <tr>
+                                    <td>S.N</td>
+                                    <td>Designation</td>
+                                    <td>Quantity</td>
+                                    <td>Rate</td>
+                                    <td>Total</td>
+                                </tr>
+
+
+                                <?php
+                                $i = 1;
+                                foreach ($contractDetails as $details) {
+                                    ?>
+                                    <tr>
+                                        <td><?= $i; ?></td>
+                                        <td><?= $details['DESIGNATION_TITLE']; ?></td>
+                                        <td><?= $details['QUANTITY']; ?></td>
+                                        <td><?= $details['RATE']; ?></td>
+                                        <td><?= $details['QUANTITY'] * $details['RATE']; ?></td>
+                                    </tr>
+
+                                    <?php
+                                    $i++;
+                                }
+                                ?>                    
+                            </table>
+                        <?php } ?>                    
+
+                    </div>
+                </div>
+
+
+
+                <div class="row margin-top-30">
+                    <div class="col-md-12">
+
+                        <div style="text-align: left;display: inline-block;width: 50%;" >----------------------------</br> Garud Services</div><!-- no space here
+                        --><div style="text-align: right;display: inline-block;width: 50%;" >----------------------------</br> <?= $contract['CUSTOMER_ENAME'] ?></div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+<style>
+    left {
+        text-align: left;
+    }
+    .right {
+        text-align: right;
+    }
+    .left, .right {
+        display: inline-block;
+        width: 50%;
+    }
+
+</style>

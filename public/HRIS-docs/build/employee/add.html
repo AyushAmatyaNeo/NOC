@@ -1,0 +1,424 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Creating an Employee &mdash; HRIS May 21, 2018 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  
+  
+    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  
+
+  
+
+  
+        <link rel="index" title="Index"
+              href="../genindex.html"/>
+        <link rel="search" title="Search" href="../search.html"/>
+    <link rel="top" title="HRIS May 21, 2018 documentation" href="../index.html"/>
+        <link rel="up" title="Employee" href="employee.html"/>
+        <link rel="next" title="Managing Employees" href="view.html"/>
+        <link rel="prev" title="Employee" href="employee.html"/> 
+
+  
+  <script src="../_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="../HRIS.html" class="icon icon-home"> HRIS
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="employee.html">Employee</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Creating an Employee</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#general-info">General Info</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#family-details">Family Details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#employee-identification">Employee Identification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#status-integration">Status &amp; Integration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#qualification">Qualification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#document-upload">Document Upload</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#experience">Experience</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#training">Training</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#additional-information">Additional Information</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="view.html">Managing Employees</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="view.html#view-details">View Details</a></li>
+<li class="toctree-l3"><a class="reference internal" href="view.html#edit-employee">Edit Employee</a></li>
+<li class="toctree-l3"><a class="reference internal" href="view.html#delete-employee-record">Delete Employee Record</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../appraisal/appraisal.html">Appraisal</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../appraisal/add.html">Appraisal Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../appraisal/add.html#appraisal-types">Appraisal Types</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../appraisal/add.html#appraisal-detail">Appraisal Detail</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../appraisal/add.html#creating-questionnaire">Creating Questionnaire</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../appraisal/view.html">Assigning Appraisal</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../attendance/attendance.html">Attendance</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../attendance/report.html">Attendance Report</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/report.html#manager-report">Manager Report</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/report.html#hr-report">HR Report</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../attendance/troubleshooting.html">Troubleshooting Attendance</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/troubleshooting.html#zkteco-attendance-manager">ZKTeco Attendance Manager</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/troubleshooting.html#re-attendance">Re Attendance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../attendance/troubleshooting.html#common-issues">Common Issues</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="../attendance/troubleshooting.html#invalid-join-date">Invalid Join Date</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../attendance/troubleshooting.html#duplicate-empty-thumb-id">Duplicate / Empty Thumb ID</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../attendance/overtime.html">Overtime</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../leave-holiday/leave-holiday.html">Leave/Holiday</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../leave-holiday/leave-types.html">Leave categorization</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-types.html#recurring-leaves">Recurring Leaves</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-types.html#service-period-leaves">Service Period Leaves</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../leave-holiday/leave-configuration.html">Leave Record Management</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#leave-configuration">Leave Configuration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#leave-setup-in-hris">Leave Setup in HRIS</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#leave-filters">Leave Filters</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../leave-holiday/leave-configuration.html#manual-leave-assignment">Manual Leave Assignment</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../leave-holiday/leave-balance.html">Leave Balances</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../setup/setup.html">System Setup</a><ul class="simple">
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../manager/portal.html">Manager Service</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../manager/manager-approval.html">Request Approval</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#request-notification">Request Notification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#leave-appproval">Leave Appproval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#attendance-approval">Attendance Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#loan-approval">Loan Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#travel-expense-approval">Travel/Expense Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#work-on-day-off">Work on Day Off</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#work-on-holiday">Work On Holiday</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#training-approval">Training Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#overtime-approval">Overtime Approval</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/manager-approval.html#bulk-approval">Bulk Approval</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../manager/attendance-report.html">Subordinate Attendance Report</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../manager/status-reporting.html">Subordinate Request Status</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#attendance-request-status">Attendance Request Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#leave-status">Leave Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#loan-status">Loan Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#travel-status">Travel Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#day-off-work-status">Day off Work Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#holiday-work-status">Holiday Work Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#training-status">Training Status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../manager/status-reporting.html#overtime-status">Overtime Status</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../manager/appraisal.html">Appraisal Flow</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../travel/travel.html">Travel</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="../travel/add.html">Applying For Travel Advance</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../travel/view.html">Applying For Travel Expense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../travel/applying_from_hr.html">Travel within HR/ADMIN</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="../travel/applying_from_hr.html#applying-for-travel-advance">Applying for travel advance</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../travel/applying_from_hr.html#approval-of-travel-advance-expense">Approval of travel advance/expense</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../travel/Travel_balance_and_Synergy_integration.html">Travel balance and Synergy integration</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../HRIS.html">HRIS</a>
+        
+      </nav>
+
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../HRIS.html">Docs</a> &raquo;</li>
+        
+          <li><a href="employee.html">Employee</a> &raquo;</li>
+        
+      <li>Creating an Employee</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="creating-an-employee">
+<span id="add-employee"></span><h1>Creating an Employee<a class="headerlink" href="#creating-an-employee" title="Permalink to this headline">¶</a></h1>
+<p>For adding an employee, you will have to navigate to employees tab, then click on New button displayed on the top-right section of the screen.</p>
+<div class="figure" id="id3">
+<a class="reference internal image-reference" href="../_images/add-new-button.png"><img alt="../_images/add-new-button.png" src="../_images/add-new-button.png" style="width: 540.5px; height: 248.5px;" /></a>
+<p class="caption"><span class="caption-text">Click on the New Button to add a new employee.</span></p>
+</div>
+<p>Once the add new employee panel opens up, you’ll have to fill in the form. Some fields are mandatory(marked with a <a href="#id1"><span class="problematic" id="id2">*</span></a>) and some are optional. There are multiple tabs presented in then panel, which are to be filled in a serial manner.</p>
+<div class="figure" id="id4">
+<a class="reference internal image-reference" href="../_images/add-tabs.png"><img alt="../_images/add-tabs.png" src="../_images/add-tabs.png" style="width: 522.0px; height: 20.0px;" /></a>
+<p class="caption"><span class="caption-text">various tabs while adding an employee.</span></p>
+</div>
+<div class="section" id="general-info">
+<h2>General Info<a class="headerlink" href="#general-info" title="Permalink to this headline">¶</a></h2>
+<p>This section collects the basic details for the employee.</p>
+<div class="figure" id="id5">
+<a class="reference internal image-reference" href="../_images/add-general.png"><img alt="../_images/add-general.png" src="../_images/add-general.png" style="width: 556.0px; height: 280.5px;" /></a>
+<p class="caption"><span class="caption-text">adding general info about an employee.</span></p>
+</div>
+</div>
+<div class="section" id="family-details">
+<h2>Family Details<a class="headerlink" href="#family-details" title="Permalink to this headline">¶</a></h2>
+<p>This section collects the details related to the family of an employee.</p>
+<div class="figure" id="id6">
+<a class="reference internal image-reference" href="../_images/add-family.png"><img alt="../_images/add-family.png" src="../_images/add-family.png" style="width: 561.5px; height: 163.0px;" /></a>
+<p class="caption"><span class="caption-text">adding general info about an employee.</span></p>
+</div>
+</div>
+<div class="section" id="employee-identification">
+<h2>Employee Identification<a class="headerlink" href="#employee-identification" title="Permalink to this headline">¶</a></h2>
+<p>This section collects the identification details related to the employee.</p>
+<div class="figure" id="id7">
+<a class="reference internal image-reference" href="../_images/add-identification.png"><img alt="../_images/add-identification.png" src="../_images/add-identification.png" style="width: 562.5px; height: 205.5px;" /></a>
+<p class="caption"><span class="caption-text">adding general info about an employee.</span></p>
+</div>
+</div>
+<div class="section" id="status-integration">
+<h2>Status &amp; Integration<a class="headerlink" href="#status-integration" title="Permalink to this headline">¶</a></h2>
+<p>This section collects info about employee position in the company, designation, location, salary details, and data about reporting hierarchy.</p>
+<div class="figure" id="id8">
+<a class="reference internal image-reference" href="../_images/add-status.png"><img alt="../_images/add-status.png" src="../_images/add-status.png" style="width: 571.0px; height: 197.5px;" /></a>
+<p class="caption"><span class="caption-text">Status and Integration Tab while adding an employee.</span></p>
+</div>
+</div>
+<div class="section" id="qualification">
+<h2>Qualification<a class="headerlink" href="#qualification" title="Permalink to this headline">¶</a></h2>
+<p>This section captures Academic Degrees/Qualifications about an employee. One has to configure academic qualifications parameters in the master setup so that the options for selecting universities/degrees etc. appear in this menu.</p>
+<div class="figure" id="id9">
+<a class="reference internal image-reference" href="../_images/add-qualification.png"><img alt="../_images/add-qualification.png" src="../_images/add-qualification.png" style="width: 563.0px; height: 248.0px;" /></a>
+<p class="caption"><span class="caption-text">Adding qualifications details while creating an employee.</span></p>
+</div>
+</div>
+<div class="section" id="document-upload">
+<h2>Document Upload<a class="headerlink" href="#document-upload" title="Permalink to this headline">¶</a></h2>
+<p>This section enables an organization to upload the employee picture along with relevant documents.</p>
+<div class="figure" id="id10">
+<a class="reference internal image-reference" href="../_images/add-documents.png"><img alt="../_images/add-documents.png" src="../_images/add-documents.png" style="width: 553.5px; height: 246.0px;" /></a>
+<p class="caption"><span class="caption-text">Uploading employee profile image and relevant documents.</span></p>
+</div>
+</div>
+<div class="section" id="experience">
+<h2>Experience<a class="headerlink" href="#experience" title="Permalink to this headline">¶</a></h2>
+<p>This section collects past experiences of an employee.</p>
+<div class="figure" id="id11">
+<a class="reference internal image-reference" href="../_images/add-experience.png"><img alt="../_images/add-experience.png" src="../_images/add-experience.png" style="width: 551.5px; height: 125.0px;" /></a>
+<p class="caption"><span class="caption-text">Storing past experiences of an employee.</span></p>
+</div>
+</div>
+<div class="section" id="training">
+<h2>Training<a class="headerlink" href="#training" title="Permalink to this headline">¶</a></h2>
+<p>This section collects trainings that an employee has done.</p>
+<div class="figure" id="id12">
+<a class="reference internal image-reference" href="../_images/add-training.png"><img alt="../_images/add-training.png" src="../_images/add-training.png" style="width: 560.5px; height: 117.5px;" /></a>
+<p class="caption"><span class="caption-text">Storing training of an employee.</span></p>
+</div>
+</div>
+<div class="section" id="additional-information">
+<h2>Additional Information<a class="headerlink" href="#additional-information" title="Permalink to this headline">¶</a></h2>
+<p>This lets an organization assign leaves, trainings and appraisal while adding an employee.</p>
+<div class="figure" id="id13">
+<a class="reference internal image-reference" href="../_images/add-extra.png"><img alt="../_images/add-extra.png" src="../_images/add-extra.png" style="width: 561.5px; height: 124.0px;" /></a>
+<p class="caption"><span class="caption-text">Storing training of an employee.</span></p>
+</div>
+</div>
+</div>
+
+
+           </div>
+           <div class="articleComments">
+            
+           </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="view.html" class="btn btn-neutral float-right" title="Managing Employees" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="employee.html" class="btn btn-neutral" title="Employee" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, IT Nepal Pvt. Ltd..
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'../',
+            VERSION:'May 21, 2018',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="../_static/jquery.js"></script>
+      <script type="text/javascript" src="../_static/underscore.js"></script>
+      <script type="text/javascript" src="../_static/doctools.js"></script>
+
+  
+
+  
+  
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+  
+
+  
+  
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.StickyNav.enable();
+      });
+  </script>
+   
+
+</body>
+</html>

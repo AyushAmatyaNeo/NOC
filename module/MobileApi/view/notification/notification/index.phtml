@@ -1,0 +1,123 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/Notification/Notification/index.js'));
+?>
+
+<script>
+    document.menu =<?php
+$menu = ["id" => "menuNotification", "subMenu" => ["id" => "subMenuSystem"]];
+echo json_encode($menu);
+?>;
+    document.markAsViewed = "<?= $this->url('notification', ["action" => "markAsViewed"]) ?>";
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\notification')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="row">
+    <div class="col-sm-12">
+        <button id="markAllAsSeen" class="btn btn-sm btn-default pull-right">Mark all as Seen</button>        
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12 col-xs-12 col-sm-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title tabbable-line">
+                <div class="caption">
+                    <i class="icon-bubbles font-dark hide"></i>
+                    <span class="caption-subject font-dark bold uppercase">Comments</span>
+                </div>
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#portlet_unseen" data-toggle="tab"> Unseen </a>
+                    </li>
+                    <li>
+                        <a href="#portlet_seen" data-toggle="tab"> Seen </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="portlet-body">
+                <div class="tab-content">
+                    <div class="tab-pane active" id="portlet_unseen">
+                        <!-- BEGIN: Comments -->
+                        <div class="mt-comments">
+                            <?php foreach ($notifications as $notification): ?>
+                                <?php if ($notification['STATUS'] == 'U'): ?>
+                                    <div class="mt-comment">
+                                        <div class="mt-comment-img">
+                                            <img width="41" height="41" src="<?= $this->basePath(($notification['FILE_PATH'] == null) ? "uploads/" . $defaultProfilePicture : "uploads/" . $notification['FILE_PATH'] ) ?>" /> </div>
+                                        <div class="mt-comment-body">
+                                            <div class="mt-comment-info">
+                                                <span class="mt-comment-author"><?= $notification['FIRST_NAME'] . " " . $notification['MIDDLE_NAME'] . " " . $notification['LAST_NAME'] ?></span>
+                                                <span class="mt-comment-date"><?= $notification['MESSAGE_DATETIME'] ?></span>
+                                            </div>
+                                            <div class="mt-comment-text"> <?= $notification['MESSAGE_DESC'] ?> </div>
+                                            <div class="mt-comment-details">
+                                                <span class="mt-comment-status mt-comment-status-pending"><?= $notification['STATUS'] == 'U' ? "Unseen" : "Seen" ?></span>
+                                                <ul class="mt-comment-actions">
+                                                    <li>
+                                                        <a class="markAsViewed" message-id="<?= $notification['MESSAGE_ID'] ?>" href="#">Mark As Viewed</a>
+                                                    </li>
+                                                    <li>
+                                                        <a href="<?= $this->url('notification', ['action' => 'view', 'id' => $notification['MESSAGE_ID']]) ?>">View</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- END: Comments -->
+                    </div>
+                    <div class="tab-pane" id="portlet_seen">
+                        <!-- BEGIN: Comments -->
+                        <div class="mt-comments">
+
+                            <?php foreach ($notifications as $notification): ?>
+                                <?php if ($notification['STATUS'] == 'S'): ?>
+                                    <div class="mt-comment">
+                                        <div class="mt-comment-img">
+                                            <img width="41" height="41" src="<?= $this->basePath(($notification['FILE_PATH'] == null) ? "uploads/" . $defaultProfilePicture : "uploads/" . $notification['FILE_PATH'] ) ?>" /> </div>
+                                        <div class="mt-comment-body">
+                                            <div class="mt-comment-info">
+                                                <span class="mt-comment-author"><?= $notification['FIRST_NAME'] . " " . $notification['MIDDLE_NAME'] . " " . $notification['LAST_NAME'] ?></span>
+                                                <span class="mt-comment-date"><?= $notification['MESSAGE_DATETIME'] ?></span>
+                                            </div>
+                                            <div class="mt-comment-text"> <?= $notification['MESSAGE_DESC'] ?> </div>
+                                            <div class="mt-comment-details">
+                                                <span class="mt-comment-status mt-comment-status-approved"><?= $notification['STATUS'] == 'U' ? "Unseen" : "Seen" ?></span>
+                                                <ul class="mt-comment-actions">
+                                                    <li>
+                                                        <a href="<?= $this->url('notification', ['action' => 'view', 'id' => $notification['MESSAGE_ID']]) ?>">View</a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            <?php endforeach; ?>
+
+
+                        </div>
+                        <!-- END: Comments -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

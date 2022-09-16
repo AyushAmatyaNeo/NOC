@@ -1,0 +1,60 @@
+<?php
+
+$this->headScript()->appendFile($this->basePath('js/setup/file-setup/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'fileSetup-form');
+
+$filename = $form->get('fileName');
+$fileType = $form->get('fileType');
+$fileType->setValueOptions($fileTypes);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$form->setAttribute('action', $this->url('fileSetup', ['action' => 'add']));
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\fileType')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    Add New File
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($filename->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($filename); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($filename); ?>
+                            <?php print $this->formElementErrors()->render($filename, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($fileType->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($fileType); ?>
+                            <?php print $this->formElement($fileType); ?>
+                            <?php print $this->formElementErrors()->render($fileType, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+
+                </div>
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>

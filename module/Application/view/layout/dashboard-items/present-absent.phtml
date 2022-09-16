@@ -1,0 +1,88 @@
+<div class="col-sm-6">
+    <!-- BEGIN Portlet PORTLET-->
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title tabbable-line">
+            <div class="caption">
+                <i class="icon-speech"></i>
+                <span class="caption-subject bold"> Attendance</span>
+                <span class="caption-helper">Today</span>
+            </div>
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#tab_1_1" class="active" data-toggle="tab" aria-expanded="true"> Present </a>
+                </li>
+                <li class="">
+                    <a href="#tab_1_2" data-toggle="tab" aria-expanded="false"> Absent </a>
+                </li>
+            </ul>
+        </div>
+        <div class="portlet-body tabbable-line">
+            <div class="tab-content" style="padding-top: 0px;">
+                <div class="tab-pane active" id="tab_1_1">
+                    <div class="mt-element-list scroller"  style="height:200px">
+                        <div class="mt-list-container list-simple ext-1">
+                            <ul>
+                                <?php foreach ($presentEmployees as $presentEmployee): ?>
+                                    <li class="mt-list-item done">
+                                        <div class="list-icon-container">
+                                            <i class="icon-check"></i>
+                                        </div>
+                                        <div class="list-datetime"> 
+                                            <label style="font-size: 0.8em;">
+                                                <?php print $presentEmployee['IN_TIME']; ?>
+
+                                            </label>
+                                        </div>
+                                        <div class="list-item-content">
+                                            <h3 class="uppercase">
+                                                <a href="#">
+                                                    <?php print $presentEmployee['FIRST_NAME']; ?>
+                                                    <?php print $presentEmployee['MIDDLE_NAME']; ?>
+                                                    <?php print $presentEmployee['LAST_NAME']; ?>
+                                                </a>
+                                            </h3>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="tab-pane" id="tab_1_2">
+                    <div class="mt-element-list scroller"  style="height:200px">
+                        <div class="mt-list-container list-simple ext-1">
+                            <ul>
+                                <?php foreach ($absentEmployees as $absentEmployee): ?>
+                                    <li class="mt-list-item done">
+                                        <div class="list-icon-container">
+                                            <i class="icon-check"></i>
+                                        </div>
+                                        <div class="list-datetime"> 
+                                            <label style="font-size: 0.8em;">
+                                                <?php // print $absentEmployee['START_DATE']; ?>
+                                                <?php // print $absentEmployee['END_DATE']; ?>
+
+                                            </label>
+                                        </div>
+                                        <div class="list-item-content">
+                                            <h3 class="uppercase">
+                                                <a href="<?= $this->url("attendancebyhr", ['action' => 'edit', 'id' => $absentEmployee['ID']]); ?>">
+                                                    <?php print $absentEmployee['FIRST_NAME']; ?>
+                                                    <?php print $absentEmployee['MIDDLE_NAME']; ?>
+                                                    <?php print $absentEmployee['LAST_NAME']; ?>
+                                                </a>
+                                            </h3>
+                                        </div>
+                                    </li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- END Portlet PORTLET-->
+</div>

@@ -1,0 +1,85 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/service-question/emp-service-question/index.js'));
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.list =<?php echo json_encode($list); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\empServiceQuestion')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="margin-top-20">
+
+    <div class="portlet light bg-inverse">
+
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <a href="<?= $this->url('empServiceQuestion', ['action' => 'add']) ?>" class="btn default btn-sm">
+                    <i class="fa fa-plus-square icon-black"></i> New </a>
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="export">
+                                <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="serviceQuestionTable">
+        </div>
+    </div>
+
+
+
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>
+        #: (FULL_NAME == null) ? ' ' : FULL_NAME #
+        </td>
+        <td>
+        #: (SERVICE_EVENT_TYPE_NAME == null) ? '-' : SERVICE_EVENT_TYPE_NAME #
+        </td>
+        <td>
+        #: (QA_DATE == null) ? '-' : QA_DATE #
+        </td>
+        <td>
+        <a class="btn-edit"
+        href="<?= $this->url("empServiceQuestion", ["action" => "view"]) ?>/#:EMP_QA_ID #" style="height:17px;" title="view">
+        <i class="fa fa-search-plus"></i>
+        </a> 
+        <a class="btn-edit"
+        href="<?= $this->url("empServiceQuestion", ["action" => "edit"]) ?>/#:EMP_QA_ID #" style="height:17px;" title="edit">
+        <i class="fa fa-edit"></i>
+        </a>
+        <a class="btn-delete confirmation"
+        href="<?= $this->url("empServiceQuestion", ["action" => "delete"]); ?>/#:EMP_QA_ID #" id="bs_#:EMP_QA_ID #" style="height:17px;">
+        <i class="fa fa-trash-o"></i></a>
+        </a>
+        </td>
+        </tr>
+    </script>
+</div>

@@ -1,0 +1,27 @@
+1. Late check-in/early check-out is permitted as per policy for 2 days in a month,
+   however, if this happens for more than prescribed time,
+   employee will be treated as absent and he/she will have to manage this through normal leave processes if available. 
+    
+2. Late check-in and early check-out on same day to be treated as absent    
+3. Employees get two days with grace time attendance.
+
+confusion
+   what period of time is to defined as late check-in?
+   what period of time is to be defined as grace check-in?
+    
+    start_time : 10am
+    late_in : 15 min
+    grace_start_time : 12 pm
+    
+    after 10:15 am is defined as late check-in but to what time the late check-in counts like after 12 pm the grace_start_time starts.
+
+    what if the employee comes at 1pm, how to treat this?
+
+    the same scenario goes to the early check out .
+
+
+
+    
+    
+    
+    

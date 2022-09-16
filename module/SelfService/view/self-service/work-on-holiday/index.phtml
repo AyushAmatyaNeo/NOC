@@ -1,0 +1,113 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.rtl.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.dataviz.default.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/SelfService/work-on-holiday/index.js'));
+?>
+
+<script>
+    document.deleteURL = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.viewLink = '<?= $this->url("workOnHoliday", ["action" => "view"]) ?>';
+    document.editLink = '<?= $this->url("workOnHoliday", ["action" => "edit"]) ?>';
+    document.deleteLink = '<?= $this->url("workOnHoliday", ["action" => "delete"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\workOnHoliday')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="margin-top-20">
+
+    <div class="portlet light bg-inverse">
+
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <a href="<?= $this->url('workOnHoliday', ['action' => 'add']) ?>" class="btn default btn-sm">
+                    <i class="fa fa-plus-square icon-black"></i> New </a>
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li>
+                            <a href="javascript:;" id="excelExport">
+                                <i class="fa fa-file-excel-o" ></i> 
+                                Export to Excel 
+                            </a>
+                        </li>
+                        <li>
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> 
+                                Export to PDF 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="workOnHolidayTbl">
+        </div>
+    </div>
+
+
+<!--    <script id="rowTemplate" type="text/x-kendo-tmpl">
+ <tr>
+ <td>
+ #: (HOLIDAY_ENAME == null) ? '-' : HOLIDAY_ENAME #
+ </td>
+ <td>
+ #: (REQUESTED_DATE == null) ? '-' : REQUESTED_DATE #
+ </td>
+ <td>
+ #: (FROM_DATE == null) ? '-' : FROM_DATE #
+ </td>
+ <td>
+ #: (TO_DATE == null) ? '-' : TO_DATE #
+ </td>
+ <td>
+ #: (DURATION == null) ? '-' : DURATION #
+ </td>
+ <td>
+ #: (STATUS == null) ? '-' : STATUS #
+ </td>
+ <td>
+ <a class="btn-edit"
+/#: ID #" style="height:17px;" title="view detail">
+ <i class="fa fa-search-plus"></i></a>
+ </a>
+ #if(ALLOW_TO_EDIT == 1){#       
+ <a class="confirmation btn-delete"
+ /#: ID #" id="bs_#:ID #" style="height:17px;">
+ <i class="fa fa-trash-o"></i></a>
+ </a>
+ #}#
+ </td>
+ </tr>
+</script>-->
+</div>

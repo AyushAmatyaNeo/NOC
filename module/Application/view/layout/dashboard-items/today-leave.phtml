@@ -1,0 +1,46 @@
+<div class="col-sm-6">
+    <!-- BEGIN Portlet PORTLET-->
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption cborder">
+                <i class="icon-speech"></i>
+                <span class="caption-subject bold">Leave</span>
+                <span class="caption-helper">Today</span>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="mt-element-list scroller"  style="height:200px">
+                <div class="mt-list-container list-simple ext-1">
+                    <ul>
+                        <?php foreach ($approvedLeaveList as $approvedLeave): ?>
+                            <li class="mt-list-item done">
+                                <div class="list-icon-container">
+                                    <i class="icon-check"></i>
+                                </div>
+                                <div class="list-datetime"> 
+                                    <label style="font-size: 0.8em;">
+                                        <?php print $approvedLeave['START_DATE']; ?>&nbsp-&nbsp 
+                                        <?php print $approvedLeave['END_DATE']; ?>
+
+                                    </label>
+                                </div>
+                                <div class="list-item-content">
+                                    <h3 class="head-title">
+                                        <a href="#">
+                                            <?php print $approvedLeave['FIRST_NAME']; ?>
+                                            <?php print $approvedLeave['MIDDLE_NAME']; ?>
+                                            <?php print $approvedLeave['LAST_NAME']; ?>
+                                        </a>
+                                    </h3>
+                                </div>
+                            </li>
+                        <?php endforeach; ?>
+                    </ul>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+    <!-- END Portlet PORTLET-->
+</div>

@@ -1,0 +1,429 @@
+<?php
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/albe-timeline/style-albe-timeline.css'));
+
+$this->headLink()->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+$this->headScript()->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/albe-timeline/jquery-albe-timeline.js'));
+$this->headScript()->appendFile($this->basePath('js/setup/job-history/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'jobHistory-form');
+
+$employeeId = $form->get('employeeId');
+$employeeId->setValueOptions($employees);
+$roles = $form->get('roles');
+$startDate = $form->get('startDate');
+$endDate = $form->get('endDate');
+
+$toFunctionalLevelId = $form->get('toFunctionalLevelId');
+$toFunctionalLevelId->setValueOptions($functionalLevels);
+
+$toActingFunctionalLevelId = $form->get('toActingFunctionalLevelId');
+$toActingFunctionalLevelId->setValueOptions($functionalLevels);
+
+$serviceEventTypeId = $form->get('serviceEventTypeId');
+$serviceEventTypeId->setValueOptions($serviceEventTypes);
+
+$toServiceTypeId = $form->get('toServiceTypeId');
+$toServiceTypeId->setValueOptions($serviceTypes);
+
+
+$toCompanyId = $form->get('toCompanyId');
+$toCompanyId->setValueOptions($companies);
+
+
+$toBranchId = $form->get('toBranchId');
+$toBranchId->setValueOptions($branches);
+
+$toActingPositionId = $form->get('toActingPositionId');
+$toActingPositionId->setValueOptions($positions);
+
+$toLocationId = $form->get('toLocationId');
+$toLocationId->setValueOptions($locations);
+
+
+$toDepartmentId = $form->get('toDepartmentId');
+$toDepartmentId->setValueOptions($departments);
+
+
+$toDesignationId = $form->get('toDesignationId');
+$toDesignationId->setValueOptions($designations);
+
+$toServiceGroupId = $form->get('toServiceGroupId');
+$toServiceGroupId->setValueOptions($services);
+
+$toServiceSubGroupId = $form->get('toServiceSubGroupId');
+$toServiceSubGroupId->setValueOptions($serviceSubGroup);
+
+
+$toSalary = $form->get('toSalary');
+
+
+
+$toPositionId = $form->get('toPositionId');
+$toPositionId->setValueOptions($positions);
+
+$retiredFlag = $form->get('retiredFlag');
+$disabledFlag = $form->get('disabledFlag');
+$eventDate = $form->get('eventDate');
+$fileId = $form->get('fileId');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('jobHistory', ['action' => 'add']));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\jobHistory')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 0)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[0];
+    print '</div>';
+}
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        //document.messages =<?php //echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.wsGetPreviousHistory = '<?php echo $this->url('jobHistory', ['action' => 'getPreviousHistory']); ?>';
+    document.getCurrentDetails = '<?php echo $this->url('jobHistory', ['action' => 'getCurrentDetails']); ?>';
+    document.getRolesData = '<?php echo $this->url('jobHistory', ['action' => 'getRolesData']); ?>';
+    document.wsGetHistoryList = '<?php echo $this->url('jobHistory', ['action' => 'getHistoryList']); ?>';
+    document.uploadFileLink = '<?php echo $this->url('jobHistory', ['action' => 'uploadFile']); ?>';
+    document.getNewGradeAmount = '<?php echo $this->url('jobHistory', ['action' => 'getNewGradeAmount']); ?>';
+    document.getPositions = <?=json_encode($positions)?>;
+    document.getServiceType = <?=json_encode($serviceTypes)?>;
+    document.getFunctionalLevels = <?=json_encode($functionalLevels)?>;
+</script>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Job History
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->formElement($fileId); ?>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($employeeId); ?>
+                            <select name="employeeId" id="employeeId" required="required"  class="form-control">
+                            <option value="" disabled="" selected="" class="ng-binding">Please select</option>
+                                <?php foreach ($employees as $key => $value) { ?>
+                                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                <?php } ?>
+                            </select>
+                            <?php print $this->formElementErrors()->render($employeeId, ['class' => 'help-block']); ?>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($startDate); ?>
+                                    <?php print $this->formElement($startDate) ?>
+                                    <?php print $this->formElementErrors()->render($startDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliStartDate">&nbsp;</label>
+                                    <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                           class="form-control" value="">
+                                </div>
+                            </div>     
+                        </div>     
+                        <div class="form-group companyToggle">
+                            <?php print $this->formLabel($toCompanyId); ?>
+                            <?php print $this->formElement($toCompanyId); ?>
+                            <?php print $this->formElementErrors()->render($toCompanyId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toDepartmentId); ?>
+                            <?php print $this->formElement($toDepartmentId); ?>
+                            <?php print $this->formElementErrors()->render($toDepartmentId, ['class' => 'help-block']); ?>
+                        </div>
+
+                        <div class="form-group">
+                            <?php print $this->formLabel($toPositionId); ?>
+                            <?php print $this->formElement($toPositionId); ?>
+                            <?php print $this->formElementErrors()->render($toPositionId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toFunctionalLevelId); ?>
+                            <?php print $this->formElement($toFunctionalLevelId); ?>
+                            <?php print $this->formElementErrors()->render($toFunctionalLevelId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toSalary); ?>
+                            <?php print $this->formElement($toSalary); ?>
+                            <?php print $this->formElementErrors()->render($toSalary, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toServiceTypeId); ?>
+                            <?php print $this->formElement($toServiceTypeId); ?>
+                            <?php print $this->formElementErrors()->render($toServiceTypeId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toServiceGroupId); ?>
+                            <?php print $this->formElement($toServiceGroupId); ?>
+                            <?php print $this->formElementErrors()->render($toServiceGroupId, ['class' => 'help-block']); ?>
+                        </div>
+
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($serviceEventTypeId); ?>
+                            <?php print $this->formElement($serviceEventTypeId); ?>
+                            <?php print $this->formElementErrors()->render($serviceEventTypeId, ['class' => 'help-block']); ?>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($endDate); ?>
+                                    <?php print $this->formElement($endDate) ?>
+                                    <?php print $this->formElementErrors()->render($endDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliEndDate">&nbsp;</label>
+                                    <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                           class="form-control" value="">
+                                </div>
+                            </div>     
+                        </div>        
+                        <div class="form-group">
+                            <?php print $this->formLabel($toBranchId); ?>
+                            <?php print $this->formElement($toBranchId); ?>
+                            <?php print $this->formElementErrors()->render($toBranchId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toDesignationId); ?>
+                            <?php print $this->formElement($toDesignationId); ?>
+                            <?php print $this->formElementErrors()->render($toDesignationId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toActingPositionId); ?>
+                            <?php print $this->formElement($toActingPositionId); ?>
+                            <?php print $this->formElementErrors()->render($toActingPositionId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toActingFunctionalLevelId); ?>
+                            <?php print $this->formElement($toActingFunctionalLevelId); ?>
+                            <?php print $this->formElementErrors()->render($toActingFunctionalLevelId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toLocationId); ?>
+                            <?php print $this->formElement($toLocationId); ?>
+                            <?php print $this->formElementErrors()->render($toLocationId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($toServiceSubGroupId); ?>
+                            <?php print $this->formElement($toServiceSubGroupId); ?>
+                            <?php print $this->formElementErrors()->render($toServiceSubGroupId, ['class' => 'help-block']); ?>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($eventDate); ?>
+                                    <?php print $this->formElement($eventDate) ?>
+                                    <?php print $this->formElementErrors()->render($eventDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="eventDateNepali">&nbsp;</label>
+                                    <input type="text" name="eventDateNepali" id="eventDateNepali"
+                                           class="form-control" value="">
+                                </div>
+                            </div>     
+                        </div>  
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($retiredFlag); ?>
+                            <?php print $this->formElement($retiredFlag); ?>
+                            <?php print $this->formElementErrors()->render($retiredFlag, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($disabledFlag); ?>
+                            <?php print $this->formElement($disabledFlag); ?>
+                            <?php print $this->formElementErrors()->render($disabledFlag, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-2">
+
+                            </div>
+                            <div class="col-sm-8" 
+                                style = "text-align: center;
+                                font-weight: bold;
+                                border-bottom: 1px solid;
+                                padding: 5px;"
+                            >
+                                Old Grade Details
+                            </div>
+                            <div class="col-sm-2">
+
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <label>Grade Sankhya</label>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <input readonly type="text" class = "form-control" id='oldGradeSankhya'>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <label>Grade Amount</label>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <input readonly type="text" class = "form-control" id='oldGradeAmount'>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <label>One Day Grade Amount</label>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <input readonly type="text" class = "form-control" id='oldOneDayGradeAmount'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                    
+                        <div class="row">
+                            <div class="col-sm-2">
+
+                            </div>
+                            <div class="col-sm-8" 
+                                style = "text-align: center;
+                                font-weight: bold;
+                                border-bottom: 1px solid;
+                                padding: 5px;"
+                            >
+                                New Grade Details
+                            </div>
+                            <div class="col-sm-2">
+
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <label>Grade Sankhya</label>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <input type="text" class = "form-control" id='newGradeSankhya'>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <label>Grade Amount</label>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <input readonly type="text" class = "form-control" id='newGradeAmount'>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <label>One Day Grade Amount</label>
+                            </div>
+                            <div class="col-sm-6" style="margin-top:10px;">
+                                <input readonly type="text" class = "form-control" id='newOneDayGradeAmount'>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-3">
+                        <h4 style="color:red; font-weight:bold;">Grade Details:</h4>
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <label style="color:red;">Position: </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input readonly type="text" class = "form-control" id='gradePosition' style="height: 17px !important;">
+                                </div>
+                                <div class="col-sm-7">
+                                    <label style="color:red;">Service Type: </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input readonly type="text" class = "form-control" id='gradeServiceType' style="height: 17px !important;">
+                                </div>
+                                <div class="col-sm-7">
+                                    <label style="color:red;">Functional Level: </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input readonly type="text" class = "form-control" id='gradeFunctionalLevel' style="height: 17px !important;">
+                                </div>
+                                <div class="col-sm-7">
+                                    <label style="color:red;">Basic Salary: </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input readonly type="text" class = "form-control" id='gradeSalary' style="height: 17px !important;">
+                                </div>
+                                <div class="col-sm-7">
+                                    <label style="color:red;">1 Day Grade Amount: </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input readonly type="text" class = "form-control" id='gradeOneDayAmount' style="height: 17px !important;">
+                                </div>
+                                <div class="col-sm-7">
+                                    <label style="color:red;">Grade Ceiling: </label>
+                                </div>
+                                <div class="col-sm-5">
+                                    <input readonly type="text" class = "form-control" id='gradeCeiling' style="height: 17px !important;">
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="row" style = 'margin-top:20px;'>
+                    <div class="col-sm-4">
+                        <div class="border-dotted border-bottom border-left border-right" style="height: 300px;width:300px;" id="dropZone">
+                            <h4>Drop files here or click to upload.</h4>  
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($roles->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($roles); ?>
+                            <?php print $this->formElement($roles); ?>
+                            <?php print $this->formElementErrors()->render($roles, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group pull-right">
+                            <?php print $this->formSubmit($submit); ?>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+        <div id="myTimeline"></div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>

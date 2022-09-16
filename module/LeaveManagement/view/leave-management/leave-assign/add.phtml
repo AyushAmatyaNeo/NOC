@@ -1,0 +1,92 @@
+<?php
+$form->setAttribute('role', 'form');
+
+$leaveId = $form->get('leaveId');
+$previousYearBalance = $form->get('previousYearBalance');
+$noOfDays = $form->get('totalDays');
+$balance = $form->get('balance');
+$fiscalYear = $form->get('fiscalYear');
+$remarks = $form->get('remarks');
+
+$leaveId->setValueOptions($leavelist);
+
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Add Leave');
+
+$form->setAttribute('action', $this->url('leaveassign', ['action' => 'add', 'eid' => $eid]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<div class="container">
+    <?= $this->navigation('Zend\Navigation\leaveassign')->breadcrumbs()->setMinDepth(0) ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8 padding-30 bg-light-color">
+        <div class="panel-heading panel-title-head">
+            <h4>Assign Leave</h4>
+        </div>
+        <div class="panel-body">
+            <div class="form-group form-group-default required form-group-default-select2">
+                <?php print $this->formLabel($leaveId); ?>
+                <?php print $this->formElement($leaveId); ?>
+            </div>
+            <?php print $this->formElementErrors()->render($leaveId, ['class' => 'help-block error']) ?>
+
+            <div class="form-group form-group-default <?= empty($previousYearBalance->getMessages()) ? "" : "error" ?>">
+                <?php print $this->formLabel($previousYearBalance); ?>
+                <?php print $this->formElement($previousYearBalance); ?>
+            </div>
+            <?php print $this->formElementErrors()->render($previousYearBalance, ['class' => 'help-block error']); ?>
+
+            <div class="form-group form-group-default <?= empty($noOfDays->getMessages()) ? "" : "error" ?>">
+                <?php print $this->formLabel($noOfDays); ?>
+                <?php print $this->formElement($noOfDays); ?>
+            </div>
+            <?php print $this->formElementErrors()->render($noOfDays, ['class' => 'help-block error']); ?>
+
+            <div class="form-group form-group-default <?= empty($balance->getMessages()) ? "" : "error" ?>">
+                <?php print $this->formLabel($balance); ?>
+                <?php print $this->formElement($balance); ?>
+            </div>
+            <?php print $this->formElementErrors()->render($balance, ['class' => 'help-block error']); ?>
+
+            <div class="form-group form-group-default <?= empty($fiscalYear->getMessages()) ? "" : "error" ?>">
+                <?php print $this->formLabel($fiscalYear); ?>
+                <?php print $this->formElement($fiscalYear); ?>
+            </div>
+            <?php print $this->formElementErrors()->render($fiscalYear, ['class' => 'help-block error']); ?>
+
+
+            <div class="form-group form-group-default">
+                <?php print $this->formLabel($remarks); ?>
+                <?php print $this->formElement($remarks); ?>
+                <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+            </div>
+
+            <?php print $this->formSubmit($submit); ?>
+
+        </div>
+
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>

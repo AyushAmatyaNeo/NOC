@@ -1,0 +1,205 @@
+<?php
+$formTwo->setAttribute('id', 'form2');
+$famFatherName = $formTwo->get('famFatherName');
+$famFatherOccupation = $formTwo->get('famFatherOccupation');
+$famMotherName = $formTwo->get('famMotherName');
+$famMotherOccupation = $formTwo->get('famMotherOccupation');
+$famGrandFatherName = $formTwo->get('famGrandFatherName');
+$famGrandMotherName = $formTwo->get('famGrandMotherName');
+$maritualStatus = $formTwo->get('maritualStatus');
+$famSpouseName = $formTwo->get('famSpouseName');
+$famSpouseOccupation = $formTwo->get('famSpouseOccupation');
+$famSpouseBirthDate = $formTwo->get('famSpouseBirthDate');
+$famSpouseWeddingAnniversary = $formTwo->get('famSpouseWeddingAnniversary');
+
+$maritualStatus->setOptions(["value_options" => ["M" => "Married", "U" => "Unmarried"]]);
+$formTwo->setAttribute('action', $this->url('employee', ['action' => 'edit', 'id' => $id, 'tab' => 2]));
+$formTwo->setAttribute("name", "employeeForm");
+$formTwo->prepare();
+?>
+<div class="tab-pane" id="tab2">
+    <?php print $this->form()->openTag($formTwo); ?>
+    <div class="col-md-offset-2 col-xs-offset-0 col-xs-12 col-sm-offset-0 col-sm-12 col-md-8 margin gapspaceing">
+        <div class="family-info">
+            <p><i class="fa fa-users ticon" aria-hidden="true"></i>
+                Family Information</p>
+            <div class="row clearfix e-setup">
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+
+                        <div class="form-group <?= empty($famFatherName->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famFatherName); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famFatherName); ?></div>
+                            <?php print $this->formElementErrors()->render($famFatherName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+                        <div class="form-group <?= empty($famFatherOccupation->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famFatherOccupation); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famFatherOccupation); ?></div>
+                            <?php print $this->formElementErrors()->render($famFatherOccupation, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+
+                        <div class="form-group <?= empty($famMotherName->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famMotherName); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famMotherName); ?></div>
+                            <?php print $this->formElementErrors()->render($famMotherName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+                        <div class="form-group <?= empty($famMotherOccupation->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famMotherOccupation); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famMotherOccupation); ?></div>
+                            <?php print $this->formElementErrors()->render($famMotherOccupation, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+                        <div class="form-group <?= empty($famGrandFatherName->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famGrandFatherName); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famGrandFatherName); ?></div>
+                            <?php print $this->formElementErrors()->render($famGrandFatherName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+
+                        <div class="form-group <?= empty($famGrandMotherName->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famGrandMotherName); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famGrandMotherName); ?></div>
+                            <?php print $this->formElementErrors()->render($famGrandMotherName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                
+                
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+
+                        <div class="form-group  <?= empty($maritualStatus->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($maritualStatus); ?>
+                                <span class="required" aria-required="true">*</span>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($maritualStatus); ?></div>
+                            <?php print $this->formElementErrors()->render($maritualStatus, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+
+                        <div class="form-group <?= empty($famSpouseName->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famSpouseName); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famSpouseName); ?></div>
+                            <?php print $this->formElementErrors()->render($famSpouseName, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+                        <div class="form-group <?= empty($famSpouseOccupation->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famSpouseOccupation); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <?php print $this->formElement($famSpouseOccupation); ?></div>
+                            <?php print $this->formElementErrors()->render($famSpouseOccupation, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                
+
+                
+
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+                        <div class="form-group <?= empty($famSpouseBirthDate->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famSpouseBirthDate); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <div class="row">
+                                    <div class="col-md-6 nopaddinggap">
+                                        <div class="input-group date">
+                                            <?php print $this->formElement($famSpouseBirthDate); ?>
+                                        </div>  
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text"   id="famSpouseBirthDateNepali" class="form-control " value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($famSpouseBirthDate, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-xs-12 col-sm-6 col-md-6">
+                    <div class="row bottomgap">
+                        <div class="form-group<?= empty($famSpouseWeddingAnniversary->getMessages()) ? "" : "error" ?>">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign-2">
+                                <?php print $this->formLabel($famSpouseWeddingAnniversary); ?></div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap-2">
+                                <div class="row">
+                                    <div class="col-md-6 nopaddinggap">
+                                        <div class="input-group date">
+                                            <?php print $this->formElement($famSpouseWeddingAnniversary); ?>
+                                        </div>  
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text"   id="weddingAnniversaryDateNepali" class="form-control " value="">
+                                    </div>
+                                </div>
+                            </div>
+                            <?php print $this->formElementErrors()->render($famSpouseWeddingAnniversary, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+
+        <input type="submit" class="hidden" id="btnform2" value="submit">
+        <?php
+        print $this->form()->closeTag();
+        ?>
+    </div>
+</div>

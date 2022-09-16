@@ -1,0 +1,169 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('js/cafeteria/cafeteria-setup/menu.js'));
+
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'menu-form');
+ 
+$menuName = $form->get('menuName');
+$quantity = $form->get('quantity');
+$rate = $form->get('rate');
+
+$remarks = $form->get('remarks');
+
+$form->setAttribute('action', $this->url('cafeteriasetup', ['action' => 'edit']));
+$form->prepare();
+
+?>
+<script>
+    document.menuDetails = <?=json_encode($menu)?>;
+    document.editMenuLink = '<?= $this->url("cafeteriasetup", ["action" => "menu"]) ?>';
+    document.deleteMenuLink = '<?= $this->url("cafeteriasetup", ["action" => "deleteMenu"]) ?>';
+</script>
+<style>
+    .table-wrapper {
+        font-size: 150%;
+        max-height: 300px;
+        overflow: auto;
+        display:inline-block;
+      }
+</style>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\loanApply')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Menu Master Setup</span>
+        </div>
+        <div class="tools">
+            <a href="" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <a id="add" class="btn default btn-sm">
+                <i class="fa fa-plus-square icon-black"></i> New </a>
+<!--            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li>
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> 
+                            Export to Excel 
+                        </a>
+                    </li>
+                    <li>
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF
+                        </a>
+                    </li>
+                </ul>
+            </div>-->
+        </div>
+    </div>
+    
+
+<!--        <div class="row margin-top-10">
+            <div class=" col-sm-offset-8 col-sm-4">
+                <button class="btn default btn-sm pull-right hris-reset-btn">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+                <button id="search" class="btn btn-default btn-sm pull-right">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>-->
+
+
+<div class="row">
+    <div id="menuTable" class="table-wrapper col-sm-4">
+    <table>
+        <?php foreach($menu as $item){ if($item['STATUS'] == 'E'){ ?>
+        <tr id="tr-<?=$item['MENU_ID']?>"><td><button type="button" value="<?=$item['MENU_ID']?>" class="btn btn-link menu" style="border: none;"><?=$item['MENU_NAME']?></button></td></tr>
+        <?php }} ?> 
+    </table>
+    </div>
+    <div class="col-sm-2"></div>
+    <div class="col-sm-4">
+        <?php
+                print $this->form()->openTag($form);
+                ?>
+                <div class=" row">
+
+                <div class="form-group">
+                    <?php print $this->formLabel($menuName); ?>
+                    <span class="required" aria-required="true">*</span>
+                    <?php print $this->formElement($menuName); ?>
+                    <?php print $this->formElementErrors()->render($menuName, ['class' => 'help-block']); ?>
+                </div>
+                </div>
+                <div class=" row">
+
+                <div class="form-group">
+                    <?php print $this->formLabel($quantity); ?>
+                    <span class="required" aria-required="true">*</span>
+                    <?php print $this->formElement($quantity); ?>
+                    <?php print $this->formElementErrors()->render($quantity, ['class' => 'help-block']); ?>
+                </div>
+                </div>
+                <div class=" row">
+
+                <div class="form-group">
+                    <?php print $this->formLabel($rate); ?>
+                    <span class="required" aria-required="true">*</span>
+                    <?php print $this->formElement($rate); ?>
+                    <?php print $this->formElementErrors()->render($rate, ['class' => 'help-block']); ?>
+                </div>
+                </div>
+                <div class=" row">
+                    <input type="hidden" name="menuId" id="menuId" value="">
+                <div class="form-group">
+                    <?php print $this->formLabel($remarks); ?>
+                    <?php print $this->formElement($remarks); ?>
+                    <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                </div>
+                </div>
+         <div class="row">
+             <button type="button" id="submit" class="btn btn-success submit">Submit</button>
+             <button type="button" class="btn btn-success edit-cancel">Edit</button>
+             <?php
+                print $this->form()->closeTag();
+                ?>
+             <form method="post" action="<?= $this->url("cafeteriasetup", ["action" => "deleteMenu"]) ?>">
+             <input type="hidden" name="menuId" id="deleteMenuId" value="">
+             <button type="submit" class="btn btn-success delete">Delete</button>
+             </form>
+         </div>
+        
+    </div>
+    </div>
+          
+    </div>

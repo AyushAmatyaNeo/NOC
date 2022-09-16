@@ -1,0 +1,136 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'));
+$this->headScript()->appendFile($this->basePath('js/angular-messages.min.js'));
+$this->headScript()->appendFile($this->basePath('js/user-form-error.js'));
+$this->headScript()->appendFile($this->basePath('js/SelfService/performance-appraisal/appraisalCustom.js'));
+$this->headScript()->appendFile($this->basePath('js/manager-service/appraisal-evaluation/add.js'));
+$this->headScript()->appendFile($this->basePath('js/SelfService/performance-appraisal/kpiController.js'));
+$this->headScript()->appendFile($this->basePath('js/SelfService/performance-appraisal/competenciesController.js'));
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\appraisal-evaluation')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<script>
+    document.listurl = '<?php echo $listUrl; ?>';
+</script>
+<div class="row margin-top-20" ng-app="hris">
+    <div class="col-md-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <?=
+                    $assignedAppraisalDetail['APPRAISAL_EDESC'];
+                    ?>
+                </div>
+                <div class="btn-group pull-right open" style="margin-top:1%">
+
+                </div>
+            </div>
+            <?php
+            print $this->partial('appraisal/layout/employee-detail.phtml');
+            ?>
+            <div class="portlet-body" style="padding-top:1px;">
+                <h5 id="headingForPanel" style="font-weight:600">Performance Evaluation</h5>
+                <div class="portlet-body">
+                    <div class="tabbable-line menusetuptab" style="padding-top:0px">
+                        <ul class="nav nav-tabs" id="tabList">
+                            <?php if ($assignedAppraisalDetail['KPI_SETTING'] == 'Y') { ?>
+                                <li class="active">
+                                    <a href="#portlet_tab2_KPI" data-toggle="tab"> KPI </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($assignedAppraisalDetail['COMPETENCIES_SETTING'] == 'Y') { ?>
+                                <li>
+                                    <a href="#portlet_tab2_COM" data-toggle="tab"> Competencies </a>
+                                </li>
+                            <?php } ?>
+                            <?php if (count($questionTemplate) > 0) { ?>
+                                <li class="<?= (($assignedAppraisalDetail['KPI_SETTING'] == 'N') && ($assignedAppraisalDetail['COMPETENCIES_SETTING'] == 'N') && ($tab == 1)) ? 'active' : '' ?>">
+                                    <a href="#portlet_tab2_1" data-toggle="tab"> Appraisee's Evaluation </a>
+                                </li>
+                            <?php } ?>
+                            <?php if (count($appraiserQuestionTemplate) > 0) { ?>
+                                <li class="<?= ($tab == 2 || (count($questionTemplate) == 0 && $assignedAppraisalDetail['KPI_SETTING'] == 'N')) ? "active" : "" ?>">
+                                    <a href="#portlet_tab2_2" data-toggle="tab"> Appraiser's Evaluation </a>
+                                </li>
+                            <?php
+                            }
+//                            if(($assignedAppraisalDetail['KPI_SETTING']=='Y' && $assignedAppraisalDetail['COMPETENCIES_SETTING']=='Y' && $assignedAppraisalDetail['REVIEWER_AGREE']=='Y' && $assignedAppraisalDetail['DEFAULT_RATING']!='Y')||($assignedAppraisalDetail['KPI_SETTING']=='N' && $assignedAppraisalDetail['COMPETENCIES_SETTING']=='N')){
+                            ?>
+                            <?php if (count($reviewerQuestionTemplate) > 0 && $reviewerAvailableAnswer == true && $assignedAppraisalDetail['DEFAULT_RATING'] != 'Y') { ?>
+                                <li class="">
+                                    <a href="#portlet_tab2_3" data-toggle="tab"> Reviewer's Evaluation </a>
+                                </li>
+                            <?php
+                            }
+//                            }
+                            ?>
+<?php if ($assignedAppraisalDetail['SUPER_REVIEWER_AGREE'] != null && $assignedAppraisalDetail['DEFAULT_RATING'] != 'Y') { ?>
+                                <li class="<?= ($tab == 5) ? "active" : ""; ?>">
+                                    <a href="#portlet_tab2_5" data-toggle="tab">Super Reviewer's Evaluation </a>
+                                </li>
+                            <?php } ?>
+<?php if (count($appraiseeQuestionTemplate) > 0 && $appraiseeAvailableAnswer == true) { ?>
+                                <li class="">
+                                    <a href="#portlet_tab2_4" data-toggle="tab"> Appraisee's Feedback </a>
+                                </li>
+                            <?php } ?>
+<?php if ($assignedAppraisalDetail['HR_FEEDBACK'] != null) { ?>
+                                <li class="<?= ($tab == 6) ? "active" : ""; ?>">
+                                    <a href="#portlet_tab2_6" data-toggle="tab">HR Feedback</a>
+                                </li>
+<?php } ?>
+                        </ul>
+                    </div>
+                    <div class="tab-content margin-top-15" id="tabContent">
+                        <input type="hidden" value="<?= $assignedAppraisalDetail['EMPLOYEE_ID']; ?>" name="employeeId" id="employeeId"/>
+                        <input type="hidden" value="<?= $assignedAppraisalDetail['APPRAISAL_ID']; ?>" name="appraisalId" id="appraisalId"/>
+                        <input type='hidden' value="<?= $assignedAppraisalDetail['STAGE_ID']; ?>" id="currentStageId" />
+                        <input type='hidden' value="<?= $assignedAppraisalDetail['COMPETENCIES_SETTING']; ?>" id="comSettingId" />
+                        <input type='hidden' value="appraiser" id="currentUser" />
+
+                        <?php
+                        print $this->partial('tab/kpi.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/competencies.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/performance-evaluation.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/appraiser-evaluation.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/reviewer-evaluation.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/super-reviewer-evaluation.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/appraisee-feedback.phtml');
+                        ?>
+                        <?php
+                        print $this->partial('tab/hr-feedback.phtml');
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

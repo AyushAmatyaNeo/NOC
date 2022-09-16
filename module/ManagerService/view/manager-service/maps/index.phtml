@@ -1,0 +1,225 @@
+
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('js/search.js'))
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('js/maps/index.js'))
+    ->appendFile($this->basePath('js/angular.min.js'));
+?>
+ <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+ <style type="text/css">
+     .hidden{
+        visibility: hidden;
+     }
+ </style>
+<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBE0Yegor3f8CZ1ZEEhFAwgI3M0RCh2-T4&amp"></script>
+<script>
+   // window.onerror = function(message, url, lineNumber) { return true; };
+document.wsGetEmployeeList = '<?php echo $this->url('holiday-assign', ['action' => 'getEmployeeList']); ?>';
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.picUrl = '<?= $this->basePath('img/nobody_m.original.jpg'); ?>';
+    document.pullAttendanceWS = '<?php echo $this->url('attendancebyhr', ['action' => 'pullAttendance']); ?>';
+    document.bulkAttendanceWS = '<?php echo $this->url('attendancebyhr', ['action' => 'bulkAttendanceWS']); ?>';
+    document.pullInOutTimeLink = '<?php echo $this->url('attendancebyhr', ['action' => 'pullInOutTime']); ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+</script>
+
+<script type="text/javascript">
+var locationData;
+$(function(){
+    $("#search").on("click", function(){
+        $("#map").addClass('hidden');
+        var employeeId = $("#employeeId").val();
+        var date1 = $("#fromDate").val();
+        var date2 = $("#toDate").val();
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            url: "<?php echo $this->url('showlocation', ['action' => 'showMap']); ?>",
+            //async: false,
+
+            // you can use an object here
+            data: {
+                employeeId : employeeId,
+                date1 : date1,
+                date2 : date2
+            },
+            success: function(data) {
+                if(data.data.checkInLocation.length != 0){
+                    locationData = data;
+                    $("#map").removeClass('hidden');
+                    initializeMap(data,9);
+                }  
+                else{
+                    locationData = null;
+                    $("#map").removeClass('hidden');
+                    $("#map").html("Location data not available for this employee on selected date(s).");
+                }
+            }
+        });
+    });
+});
+</script>
+
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase">Select Employee and Date</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+        <div class="row margin-top-10">
+            <div class="col-sm-2">
+                <label>Employee</label>
+                <select class="form-control" name="employee" id="employeeId">
+                </select>
+            </div> 
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>From Date(AD)</label>
+                    <input type="text" id="fromDate" name="fromDate" class="form-control" placeholder="From Date"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>From Date(BS)</label>
+                    <input type="text" id="nepaliFromDate" name="nepaliFromDate" class="form-control" placeholder="From Date Nepali"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>To Date(AD)</label>
+                    <input type="text" id="toDate" name="toDate"  class="form-control" placeholder="From Date"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>To Date(BS)</label>
+                    <input type="text" id="nepaliToDate" name="nepaliToDate" class="form-control" placeholder="To Date Nepali"/>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label>View Level</label>
+                    <select class="form-control" onchange="changeView();" id="viewLevel">
+                        <option value="1">World</option>
+                        <option value="5">Landmass/continent</option>
+                        <option value="10">City</option>
+                        <option value="15">Streets</option>
+                        <option value="20">Buildings</option>
+                        <option selected="selected" value="9">Fit All Locations</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <button id="search" class="btn btn-default btn-sm pull-right" class="form-control">
+                    Show Location
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<div id ="map" class="hidden" style="height: 500px"></div>
+
+<script language="javascript" type="text/javascript">
+
+function changeView(){
+    var e = document.getElementById("viewLevel");
+    var viewLevel = e.options[e.selectedIndex].value;
+    viewLevel = parseInt(viewLevel);
+    initializeMap(locationData,viewLevel);
+}
+
+function initializeMap(data,view) {
+
+    var marker;
+    var markerLocation;
+    var bounds = new google.maps.LatLngBounds();
+    var xy;
+    
+    xy = data.data.checkInLocation[0].split(",");
+    xy[0] = parseInt(xy[0]); xy[1] = parseInt(xy[1]);
+    var center = new google.maps.LatLng(xy[0],xy[1]);
+
+    var myOptions =
+    {
+        zoom: view,
+        center: center,
+        mapTypeId: google.maps.MapTypeId.ROADMAP,
+        disableDefaultUI: false
+    };
+
+    var map = new google.maps.Map(document.getElementById("map"), myOptions);
+    
+    //marking checkin locations
+    for(var i = 0; i < data.data.checkInLocation.length; i++){ 
+        if(data.data.checkInLocation[i] == null){ console.log("Skipped"); continue; }
+        xy = data.data.checkInLocation[i].split(",");
+        xy[0] = parseFloat(xy[0]); xy[1] = parseFloat(xy[1]);
+        markerLocation = new google.maps.LatLng(xy[0],xy[1]);
+        marker = new google.maps.Marker({
+            map: map,
+            position: markerLocation,
+            title: "Checked In on: "+data.data.checkInTime[i],
+            icon: "<?=$this->basePath();?>/leaflet-color-markers-master/img/marker-icon-2x-green.png"
+        });
+        bounds.extend(marker.getPosition());
+        marker.setMap(map); 
+    }
+
+    //marking checkout locations
+    for(var i = 0; i < data.data.checkOutLocation.length; i++){ 
+        if(data.data.checkOutLocation[i] == null){ console.log("Skipped"); continue; }
+        xy = data.data.checkOutLocation[i].split(",");
+        xy[0] = parseFloat(xy[0]); xy[1] = parseFloat(xy[1]);
+        markerLocation = new google.maps.LatLng(xy[0],xy[1]);
+        marker = new google.maps.Marker({
+            map: map,
+            position: markerLocation,
+            title: "Checked Out on: "+data.data.checkOutTime[i],
+            icon: "<?=$this->basePath();?>/leaflet-color-markers-master/img/marker-icon-2x-red.png"
+        });
+        bounds.extend(marker.getPosition());
+        marker.setMap(map);
+    }
+
+    if(view != 1 && view != 5 && view != 10 && view != 15 && view != 20){
+        map.fitBounds(bounds);
+    }
+}
+
+</script>
+
+
+
+

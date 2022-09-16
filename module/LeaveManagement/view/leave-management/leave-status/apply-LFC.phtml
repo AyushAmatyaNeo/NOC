@@ -1,0 +1,155 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\leaveapply')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('js/LeaveManagement/LeaveRequest/applyLFC.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+?>
+<script>
+    document.searchValues =<?php echo json_encode($searchValues) ?>;
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.preference =<?php echo json_encode($preference) ?>;
+</script>
+
+<div class="row margin-top-20" >
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption"> 
+                    <i class="fa fa-user"></i>
+                    Apply For Leave
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row" style="padding-left: 50px; padding-right: 100px">
+                    <h4 style="text-align: center;">
+                        <strong><u>Application for Compulsory Annual Leave</u></strong>
+                    </h4>
+                    <br>
+                    <p class="pull-right">Date:..........................</p>
+                    <br>
+                    <p>I, hereby kindly request you to grant me Compulsory Annual Leave for following days;</p>
+
+                    <div id="table" >
+                        <table class="table table-bordered" style="width:100%;">
+                            <tr>
+                                <th>Compulsory Annual Leave</th>
+                                <th>From Date (yyyy-mm-dd)</th>
+                                <th>To Date (yyyy-mm-dd)</th>
+                                <th>Leave (Days)</th>
+                            </tr>
+                                <?php $i = 1; foreach ($data as $loopData) {?>
+                            <tr>
+                                <td><?=$i?></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                               <?php $i++;}?>
+
+                        </table>
+                    </div>
+                    <br>
+                    <table style="width:100%" >
+                        <tr>
+                            <td>1. Name: - <u style="border-bottom: 1px dotted #000; text-decoration: none;"><strong><?= $loopData['EMPLOYEE']?></strong></u> </td>
+                            <td class="col-sm-8 pull-right">2. Designation: - <u style="border-bottom: 1px dotted #000; text-decoration: none;"><strong><?= $loopData['DESIGNATION']?></strong></u> </td>
+                        </tr>
+                        <tr>
+                            <td>3. Branch/Department:- <u style="border-bottom: 1px dotted #000; text-decoration: none;"><strong><?= $loopData['BRANCH']?> / <?= $loopData['DEPARTMENT']?></strong></u> </td>
+                            <td class="col-sm-8 pull-right">4. Initial Appointment Date:-………………….......</td>
+                        </tr>
+                        <tr>
+                            <td>5. Date of Confirmation:-………………………........</td>
+                            <td class="col-sm-8 pull-right">6. Period of service completed: - …………........</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <p>I solemnly declare that the information stated above are true and accept all the prescribed rule and
+                        regulation stated in Nepal Bangladesh Bank Limited, Employees Service Bylaw, 2075.</p>
+                    <br>
+                    <table style="width:95%">
+                        <tr>
+                            <td>
+                                .....................................................................
+                            </td>
+                            <td class="pull-right">
+                                ...........................................................
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Name & Signature of Alternative Arrangement
+                            </td>
+                            <td class="pull-right">
+                                Signature of the Applicant
+                            </td>
+                        </tr>
+                    </table>
+                    <br>
+                    <h4>
+                        <strong><u>Recommendation of the Dept./Branch</u></strong>
+                    </h4>
+                    <table style="width:100%" >
+                        <tr>
+                            <td>Recommendation:-..............................................................</td>
+                        </tr>
+                        <tr>
+                            <td>Name:-……………………………….......................</td>
+                            <td class="pull-right">Designation: - ……………………………...............</td>
+                        </tr>
+                        <tr>
+                            <td>Dept. /Branch: -.....................................................</td>
+                            <td class="pull-right">Signature & Date:-………………………..............</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <h4>
+                        <strong><u>Recommendation of HRM Department, Head Office</u></strong>
+                    </h4>
+                    <table style="width:100%" >
+                        <tr>
+                            <td>Recommendation:-..............................................................</td>
+                        </tr>
+                        <tr>
+                            <td>Name:-……………………………….......................</td>
+                            <td class="pull-right">Signature & Date:-………………………..............</td>
+                        </tr>
+                    </table>
+                    <br>
+                    <h4><strong><u>Approving Authority</u></strong></h4>
+                    <p>Considering the request of the applicant and the recommendation of the Branch/Dept., Compulsory
+                        Annual Leave for <strong>15</strong> days as requested above along with the Leave Fare Concession has been
+                        approved to Mr./Mrs./Ms. <u style="border-bottom: 1px dotted #000; text-decoration: none;"><strong><?=$loopData['EMPLOYEE']?></strong></u> as per Nepal Bangladesh
+                        Bank Limited, Employees Service Bylaw, 2075.</p>
+
+                    <table style="width:100%" >
+                        <tr>
+                            <td>Name:-……………………………….......................</td>
+                            <td class="pull-right">Designation: - ……………………………...............</td>
+                        </tr>
+                        <tr>
+                            <td>Signature & Date:-……………………….............</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>
+

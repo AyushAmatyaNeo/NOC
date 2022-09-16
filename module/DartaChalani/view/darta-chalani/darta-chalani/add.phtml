@@ -1,0 +1,224 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+    ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+    $this->headScript()
+    ->appendFile($this->basePath('js/dartachalani/darta-chalani/add.js'))
+    ->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'Chalani');
+
+$dispatchTempCode = $form->get('dispatchTempCode');
+$draftDt = $form->get('draftDt');
+$documentDt = $form->get('documentDt');
+$fromDepartmentCode = $form->get('fromDepartmentCode');
+$description = $form->get('description');
+$remarks = $form->get('remarks');
+$responseFlag = $form->get('responseFlag');
+$responseFlag->setAttribute('class','form-control');
+$responseFlag->setAttribute('id','responseFlag');
+$filePath = $form->get('filePath');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+$form->setAttribute('action', $this->url('dartachalani', ['action' => 'add']));
+$form->prepare();
+
+?>
+
+
+
+<script>
+    document.uploadUrl = '<?= $this->url('dartachalani', ['action' => 'fileUpload']); ?>';
+    document.pushFileLink = '<?php echo $this->url('dartachalani', ['action' => 'pushFileLink']); ?>';
+    document.date = '<?=date('d-M-Y')?>';
+    document.getDepartmentCode = '<?= $this->url('dartachalani', ['action' => 'getDepartmentCode']); ?>';
+    document.getOfficeCode ='<?= $this->url('outgoingdoc',['action'=>'getOfficeCode']); ?>';
+
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Branch')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    Add New Chalani
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class=" row">
+
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="departmentId">From Department</label>
+                            <span class="required" aria-required="true">*</span>
+                            <select name="departmentId" id="departmentId" required="required" class="form-control">
+                                <option value=""  selected="">Please select</option>                           
+                                <?php foreach ($departments as $key => $value) { ?>
+                                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-4" id= "locationDiv">
+                        <div class="form-group">
+                            <label for="locationId">Location</label>
+                            <select name="locationId" id="locationId" class="form-control">                          
+                                <option value=""  selected="">Please select</option>                           
+                                    <?php foreach ($locations as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                    <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group <?= empty($draftDt->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($draftDt); ?>
+                            <?php print $this->formElement($draftDt); ?>
+                            <?php print $this->formElementErrors()->render($draftDt, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="nepaliStartDate1">&nbsp;</label>
+                            <div class="input-group">
+                                <input type="text" name="nepaliStartDate1" id="nepaliStartDate1"
+                                        class="form-control" value="">
+                            </div>
+                        </div>     
+                    </div>
+                    
+
+                    
+                </div>
+                <div class=" row">
+                    
+                <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="toOfficeCode">To Office</label>
+                            <span class="required" aria-required="true">*</span>
+                            <select name="toOfficeCode" id="toOfficeCode" required="required" class="form-control">
+                                <option value=""  selected="">Please select</option>                           
+                                <?php foreach ($offices as $key => $value) { ?>
+                                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-sm-4" id= "officeDiv">
+                        <div class="form-group">
+                            <label for="officeId">To Other Office Name</label>
+                            <input type="text" class="form-control" name="toOtherOffice">
+                        </div>  
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($description->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($description); ?>
+                            <?php print $this->formElement($description); ?>
+                            <?php print $this->formElementErrors()->render($description, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($remarks->getMessages()) ? "" : "has-error" ?>">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($responseFlag); ?>
+                            <?php print $this->formElement($responseFlag); ?>
+                            <?php print $this->formElementErrors()->render($responseFlag, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div> 
+                    <div class="col-sm-4">
+                        <div id="letterRefNos" class="form-group">
+                            <label for="letterRefNo">Letter Reference Description</label>
+                            <span class="required" aria-required="true">*</span>
+                            <select name="letterRefNo" id="letterRefNo" class="form-control">
+                                <option value=""  selected="">Please select</option>                           
+                                <?php foreach ($letters as $key => $value) { ?>
+                                    <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th> 
+                                <th>&nbsp;</th>
+                                <th>Action</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                
+                <?php print $this->formSubmit($submit); ?>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!--bootstrap modal-->
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload the Document.</div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>

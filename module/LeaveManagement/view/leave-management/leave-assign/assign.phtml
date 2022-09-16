@@ -1,0 +1,229 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()->appendFile($this->basePath('assets/pages/scripts/ui-modals.min.js'));
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'))
+    ->appendFile($this->basePath('js/search.js'));
+$this->headScript()->appendFile($this->basePath('js/LeaveManagement/LeaveAssign/assignController.js'));
+
+?>
+
+<script>
+    document.pullEmployeeLeaveLink = '<?php echo $this->url("leaveassign", ["action" => "pullEmployeeLeave"]) ?>';
+    document.pushEmployeeLeaveLink = '<?php echo $this->url("leaveassign", ["action" => "pushEmployeeLeave"]) ?>';
+    document.getSearchDataLink = '<?php echo $this->url('leaveassign', ['action' => 'getSearchData']); ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.employeeDetail =<?php echo json_encode($employeeDetail); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\leaveassign')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div ng-app="hris" ng-controller="assignController">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-paper-plane font-green-haze"></i>
+                <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+            </div>
+            <div class="tools">
+                <a href="" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <label>Company</label>
+                    <select multiple class="form-control" name="company" id="companyId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Branch</label>
+                    <select multiple class="form-control" name="branchId" id="branchId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Department</label>
+                    <select multiple class="form-control" name="department" id="departmentId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Designation</label>
+                    <select multiple class="form-control" name="designation" id="designationId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Position</label>
+                    <select multiple class="form-control" name="position" id="positionId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Service Type</label>
+                    <select multiple class="form-control" name="serviceType" id="serviceTypeId">
+                    </select>
+                </div>
+            </div>
+            <div class="row margin-top-10">
+                <div class="col-sm-2">
+                    <label>Service Event Type</label>
+                    <select multiple class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Employee Type</label>
+                    <select multiple class="form-control" name="employeeType" id="employeeTypeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Gender</label>
+                    <select multiple class="form-control" name="gender" id="genderId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Location</label>
+                    <select multiple class="form-control" name="location" id="locationId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <label>Employee</label>
+                    <select multiple class="form-control" name="employee" id="employeeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <?php print $this->formLabel($leaveFormElement); ?>
+                    <?php print $this->formElement($leaveFormElement); ?>
+                </div> 
+            </div>
+            
+            <div class="row margin-top-10">
+                <div class="col-sm-2">
+                    <?php print $this->formLabel($leaveYearFormElement); ?>
+                    <?php print $this->formElement($leaveYearFormElement); ?>
+                </div> 
+            </div>
+            
+            <div class="row margin-top-10">
+                <div class=" col-sm-offset-8 col-sm-4">
+                    <button id="reset" class="btn default btn-sm pull-right hris-reset-btn ">
+                        Reset
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                    <button ng-click="view()" class="btn btn-default btn-sm pull-right">
+                        Search
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row"  ng-show="monthSelect">
+
+    <div class="col-sm-2">
+        <select id="monthId" ng-model="selectedLeaveMonth" ng-options="item.LEAVE_YEAR_MONTH_NO as item.MONTH_EDESC for item in leaveMonthList">
+</select>  
+    </div>
+    </div>
+    
+    <div class="margin-top-20">
+        <div class="table-responsive scrollbar-vertical" id="loadingDiv">
+            <table class="table table-striped table-bordered table-hover no-footer customTable">
+                <thead>
+                    <tr role="row">
+                        <th>Company</th>
+                        <th>Branch</th>
+                        <th>Department</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Leave</th>
+                        <th>Month</th>
+                        <th>Prev Bal</th>
+                        <th>Total Days</th>
+                        <th>Balance</th>
+                        <th class="bs-checkbox " style="width: 36px; " data-field="state" tabindex="0">
+                            <div class="th-inner ">
+                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                    <input class="" type="checkbox" ng-model="all" ng-click="checkAll(all)"/>
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="fht-cell" style="width: 46px;"></div>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody id="target">
+                    <tr role="row" ng-repeat="item in leaveList">
+                        <td ng-bind="item.COMPANY_NAME"></td>
+                        <td ng-bind="item.BRANCH_NAME"></td>
+                        <td ng-bind="item.DEPARTMENT_NAME"></td>
+                        <td ng-bind="item.EMPLOYEE_CODE"></td>
+                        <td ng-bind="item.FULL_NAME"></td>
+                        <td ng-bind="leaveName">
+                        <td ng-bind="item.MONTH_EDESC"></td>
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" id="previousYearBal" style="width: 100px;" type="number" min="0" ng-disabled="monthSelect" ng-model="item.PREVIOUS_YEAR_BAL"/>
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" id="totalDays" style="width: 100px;" type="number" min="0" ng-disabled="monthSelect" ng-model="item.TOTAL_DAYS"/>
+                        </td>
+                        <td>
+                            <input class="form-control input-sm" disabled="disabled" id="balance" style="width: 100px;" type="number" min="0" ng-model="item.BALANCE"/>
+                        </td>
+                        <td class="bs-checkbox " style="width: 36px; " data-field="state" tabindex="0">
+                            <div class="th-inner ">
+                                <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
+                                    <input class="" ng-model="item.checked" type="checkbox"
+                                           ng-change="checkUnit(item.checked)"/>
+                                    <span></span>
+                                </label>
+                            </div>
+                            <div class="fht-cell" style="width: 46px;"></div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-offset-6 col-sm-2">
+                <input min="0" class="form-control" type="number" ng-model="prevBalForAll"
+                       ng-change="prevBalForAllChange(prevBalForAll)"
+                       ng-show="daysForAllFlag"/>
+            </div>
+            <div class="col-sm-2">
+                <input min="0" class="form-control" type="number" ng-model="daysForAll"
+                       ng-change="daysForAllChange(daysForAll)"
+                       ng-show="daysForAllFlag"/>
+            </div>
+            <div class="col-sm-2">
+                <button ng-show="daysForAllFlag" class="btn btn-sm green pull-right" ng-click="assign()">
+                    Assign
+                    <i class="fa fa-edit"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+        <h3 class="modal-title" id="modal-title">Document Upload</h3>
+        </div>
+        <div class="modal-body" id="modal-body">
+        <div class="row">
+        <div class="col-sm-12">
+        <div id="dropZoneContainer" class="dropzone">
+        </div>
+        <div class="error" ng-show="!valid">Please upload Image.</div>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="modal-footer">
+        <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+        <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>
+

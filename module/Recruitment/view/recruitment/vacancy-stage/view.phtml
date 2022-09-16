@@ -1,0 +1,78 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Vacancystage')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/recruitment/vacancystage/view.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'vacancystageForm');
+$VacancyId = $form->get('VacancyId');
+$VacancyId->setValueOptions($VacancyList);
+$VacancyId->setAttributes(["disabled" => "disabled"]);
+$RecStageId = $form->get('RecStageId');
+$RecStageId->setValueOptions($RecStageList);
+$RecStageId->setAttributes(["disabled" => "disabled"]);
+$Remark = $form->get('Remark');
+$Remark->setAttributes(["disabled" => "disabled"]);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+// $form->setAttribute('action', $this->url('vacancy', ['action' => 'action', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+</script>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Vacancy Stage Details
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">                
+            <div class="border-bottom">
+                <!--Vacancy Options details addition-->
+                <div class="row">                    
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($VacancyId); ?>
+                            <?php print $this->formElement($VacancyId); ?>
+                            <?php print $this->formElementErrors()->render($VacancyId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($RecStageId); ?>
+                            <?php print $this->formElement($RecStageId); ?>
+                            <?php print $this->formElementErrors()->render($RecStageId, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Remark); ?>
+                            <?php print $this->formElement($Remark); ?>
+                            <?php print $this->formElementErrors()->render($Remark, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+                </div>
+                <button id="BackBtn" class="btn btn-success"> Go Back</button>  
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>
+

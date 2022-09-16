@@ -1,0 +1,56 @@
+<div class="tab-pane" id="tab10">
+    <div class="col-md-offset-2 col-xs-offset-0 col-xs-12 col-sm-offset-0 col-sm-12 col-md-8 margin gapspaceing">
+        <div class="identification-infomation">  
+            <p>
+                <i class="fa fa-plus-circle ticon" aria-hidden="true"></i>
+                Additional Infomation
+            </p>
+            <div class="row clearfix e-setup">
+                <div class="col-md-12">
+                    <div id="rolePanel">
+                        <ul id="roleList">
+                            <li>
+                                Leave Assign
+                                <a href="<?php echo $this->url("leaveassign", ["action" => "assign", "eid" => $id]) ?>">
+                                    <i class="fa fa-arrow-circle-right pull-right" aria-hidden="true" style="font-size:20px; line-height:20px!important;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                Training Assign
+                                <a href="<?php echo $this->url("trainingAssign", ["action" => "assign", "employeeId" => $id]) ?>">
+                                    <i class="fa fa-arrow-circle-right pull-right" aria-hidden="true" style="font-size:20px; line-height:20px!important;"></i>
+                                </a>
+                            </li>
+                            <li>
+                                Appraisal Assign
+                                <a href="<?php echo $this->url("appraisalAssign", ["action" => "index", "id" => $id]) ?>">
+                                    <i class="fa fa-arrow-circle-right pull-right" aria-hidden="true" style="font-size:20px; line-height:20px!important;"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+             <?php if($distributionTable){?>
+         <div class="identification-infomation">  
+            <p>
+                <i class="fa fa-plus-circle ticon" aria-hidden="true"></i>
+                DISTRIBUTION
+            </p>
+        
+        
+            <div class="row  clearfix e-setup">
+                <div class="col-md-12">
+                 <input class="" type="button" id="distributionBtn" value="Create Dis Emp">
+                </div>
+            </div>
+            </br>
+                
+        </div>
+            <?php }?>
+            
+            
+        </div>
+    </div>
+</div>

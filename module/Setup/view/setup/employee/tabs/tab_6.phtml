@@ -1,0 +1,97 @@
+<div class="tab-pane" id="tab6" style="min-height: 400px;">
+    <div class="row">
+        <div class="col-sm-6">
+            <div class="row">
+            <div class="col-sm-6 col-sm-offset-3">
+                        <p class="emp-profile-heading">Please upload profile picture: </p>
+                        </div>
+                <div class="col-sm-6 col-sm-offset-3">
+                    <form ng-show="(file.fileCode == null || file.editMode)" action="<?= $this->url("restful", ["action" => "index"]) ?>"
+                          class="dropzone"
+                          id="my-awesome-dropzone">
+                    </form>
+                    <span ng-show="noImageSelected" class="errorMsg">Please Select an Image!</span>
+                    <div ng-hide="(file.fileCode == null || file.editMode)" class="cbp-caption-defaultWrap">
+                        <image class="emp-profile-img"  src="{{viewImage(file.filePath)}}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="row margin-top-10">
+             <!-- Disabled File type  dropdown START -->
+                <!-- <div class="col-sm-3 col-sm-offset-3">
+                    <select class="form-control" ng-model="file.fileTypeCode" ng-options="key as value for (key,value) in fileTypes">
+                    </select>
+                </div> -->
+                 <!-- Disabled File type  dropdown END -->
+                <div class="col-sm-6 emp-profile-upload-btn">
+                    <button class="btn btn-block btn-primary emp-upload-btn" ng-show="(file.fileCode == null || file.editMode)" ng-click="post()">
+                    Upload
+                    </button>
+                    <button class="btn btn-block btn-info emp-margin" ng-hide="(file.fileCode == null || file.editMode)" ng-click="edit()">
+                    Edit
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                    <th>
+                                    Please upload other documents:
+                                    </th>
+                            </tr>
+                                <tr>
+                                    <th>
+                                        Document Name
+                                    </th>
+                                    <th>
+                                        File Type
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr ng-repeat="(key,empDoc) in employeeDocuments">
+                                    <td>
+                                        <label ng-bind="empDoc.FILE_NAME">
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label ng-bind="empDoc.FILE_TYPE">
+                                        </label>
+
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-danger" ng-click="drop(empDoc.FILE_CODE,empDoc.FILE_PATH, key)">
+                                            Delete
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr >
+                                    <td>
+                                    </td>
+                                    <td>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary" ng-click="addDocument()">
+                                            Add
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

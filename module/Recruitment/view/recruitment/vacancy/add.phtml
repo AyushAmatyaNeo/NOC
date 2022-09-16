@@ -1,0 +1,279 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+    ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+$this->headScript()
+    ->appendFile($this->basePath('dropzone/dropzone.min.js'))
+    // ->appendFile($this->basePath('js/recruitment/vacancy/dropdown.js'))
+    ->appendFile($this->basePath('js/recruitment/vacancy/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'RecruitmentVacancy');
+$openingId = $form->get('OpeningId');
+$openingId->setValueOptions($Openings);
+$LevelId = $form->get('LevelId');
+$LevelId->setValueOptions($LevelList);
+$openingId = $form->get('OpeningId');
+$openingId->setValueOptions($Openings);
+// $Vacancy_no->setValueOptions('Test','Test2');
+$Vacancy_no = $form->get('Vacancy_no');
+$Vacancy_no->setAttribute('disabled', 'disabled');
+$QualificationId = $form->get('QualificationId');
+$QualificationId->setValueOptions($QualificationList);
+$Vacancy_type = $form->get('Vacancy_type');
+// $Vacancy_type->setAttribute('required', 'required');
+$Vacancy_type->setValueOptions($Vacancy_types);
+$ServiceTypesId = $form->get('ServiceTypesId');
+$ServiceTypesId->setValueOptions($ServiceTypes);
+$ServiceEventsId = $form->get('ServiceEventsId');
+$ServiceEventsId->setValueOptions($ServiceEvents);
+$Experience = $form->get('Experience');
+$PositionId = $form->get('PositionId');
+$PositionId->setValueOptions($Positions);
+// $SkillId = $form->get('SkillId');
+// $SkillId->setValueOptions($Skills);
+$DepartmentId = $form->get('DepartmentId');
+$DepartmentId->setValueOptions($DepartmentList);
+$Remark = $form->get('Remark');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('vacancy', ['action' => 'add']));
+
+$form->prepare();
+?>
+<script>
+    document.ServiceEvents = <?= json_encode($ServiceEvents); ?>;
+    document.QualificationList = <?= json_encode($QualificationList); ?>;
+    document.ServiceTypes = <?= json_encode($ServiceTypes); ?>;
+    document.InclusionList = <?= json_encode($InclusionList); ?>;
+    document.Positions = <?= json_encode($Positions); ?>;
+    document.LevelList = <?= json_encode($LevelList); ?>;
+    document.DepartmentList = <?= json_encode($DepartmentList); ?>;
+    document.OpeningVacancyNo = <?= json_encode($OpeningVacancyNo); ?>;
+    document.Skills = <?= json_encode($Skills); ?>;
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.CheckVacancyNo = '<?php echo $this->url('vacancy', ['action' => 'CheckVacancyNo']); ?>';
+    document.CheckReserNo = '<?php echo $this->url('vacancy', ['action' => 'CheckReserNo']); ?>';
+    document.uniqueCheck = '<?= $this->basePath('/recruitment/vacancy/uniqueCheck') ?>';
+
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\vacancy')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages = <?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="form-group">
+                    <input type="hidden" id="employeeId" value="<?php echo $employeeId; ?>" />
+                </div>
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Vacancy_type); ?>
+                            <?php print $this->formElement($Vacancy_type); ?>
+                            <?php print $this->formElementErrors()->render($Vacancy_type, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($openingId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($openingId); ?>
+                            <?php print $this->formElementErrors()->render($openingId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="Total_vacancy">Total Vacancy Number : </label>
+                            <p id="Total_vacancy"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="posted_vacancy">Posted Vacancy : </label>
+                            <p id="posted_vacancy"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="rem_vacancy">Remaining Vacancy : </label>
+                            <p id="rem_vacancy"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="Reservation_no">Total Reservation Number : </label>
+                            <p id="Reservation_no"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="posted_Reservation_no">Posted Reservation Number : </label>
+                            <p id="posted_Reservation_no"></p>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label for="rem_Reservation_no">Remaining Reservation Number : </label>
+                            <p id="rem_Reservation_no"></p>
+                        </div>
+                    </div>
+                </div>
+                <!--Vacancy list details addition-->
+                <div class="row">
+                    <div class="col-md-11" id="vacancyDetails">
+                        <table class="vacancyDetails table table-bordered" id="vacancyDetails">
+                            <thead>
+                                <tr>
+                                    <th colspan="4">Vacancy details</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <label>Vacancy No.</label>
+                                        <div style="overflow:hidden">
+                                            <input type="number" class='VacancyNo' name='VacancyNo[]'   value="" required="required" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Department</label>
+                                        <div style="overflow:hidden">
+                                            <select class='DepartmentId' name='DepartmentId[]' required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Qualification</label>
+                                        <div style="overflow:hidden">
+                                            <select class='QualificationId' name='QualificationId[]' required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Designation</label>
+                                        <div style="overflow:hidden">
+                                            <select class='PositionId' name='PositionId[]' required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Experience</label>
+                                        <div style="overflow:hidden">
+                                            <input type="number" class='Experience' name='Experience[]' required="required" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Service Type</label>
+                                        <div style="overflow:hidden">
+                                            <select class='ServiceTypesId' name='ServiceTypesId[]' required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Service group</label>
+                                        <div style="overflow:hidden">
+                                            <select class='ServiceEventsId' name='ServiceEventsId[]' required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Level</label>
+                                        <div style="overflow:hidden">
+                                            <select class='LevelId' name='LevelId[]' required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="vacancyOptions">
+                                    <td>
+                                        <label>Ad number</label>
+                                        <div style="overflow:hidden">
+                                            <input class='AdNo' id='AdNo' name='AdNo[]' required="required" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Reservation No.</label>
+                                        <div style="overflow:hidden">
+                                            <input type="number" class='VacancyReservationNo' name='VacancyReservationNo[]' required="required" />
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Inclusion</label>
+                                        <div style="overflow:hidden">
+                                            <select class='InclusionId' name='InclusionId[0][]' multiple required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Skills</label>
+                                        <div style="overflow:hidden">
+                                            <select class='SkillId' name='SkillId[0][]' multiple required="required">
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <label>Remark</label>
+                                        <div>
+                                            <textarea style="width:100%" cols="20" name="Remark[]" class="Remark"></textarea>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div>
+                                            <input class="vacancyOptAddBtn btn btn-primary" id="addOptvacancyrow" type="button" value="Add Option +">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-md-1">
+                        <input class="vacancyAddBtn btn btn-primary" id="addvacancyrow" type="button" value="Add Vacancy+">
+                    </div>
+                </div>
+                <?php
+                print $this->formSubmit($submit);
+                ?>
+                <!-- <button id="reset" type="reset" class="btn default btn-sm hris-reset-btn">Reset<i class="fa fa-refresh"></i></button> -->
+                <?php
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,251 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/pako-master/dist/pako_deflate.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('js/Payroll/payrollReport/variance.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.columnList =<?php echo json_encode($columnsList); ?>;
+    document.getFiscalYearMonthLink = '<?php echo $this->url('payrollReport', ['action' => 'getFiscalYearMonth']); ?>';
+    document.pullVarianceListLink = '<?= $this->url("payrollReport", ["action" => "pullVarianceList"]) ?>';
+    document.preference =<?php echo json_encode($preference) ?>;
+    document.month = null; document.fiscalYear = null;
+</script>
+
+<script type="x/kendo-template" id="page-template">
+<div class="page-template">
+<div class="header">
+<div>#:document.companyName#</div>
+<div>Variance Report of #:document.fiscalYear# #:document.month#</div>
+</div>
+</div>
+</script>
+
+<style>
+/* Page Template for the exported PDF */
+.page-template {
+position: absolute;
+width: 100%;
+height: 100%;
+top: 0;
+left: 0;
+}
+.page-template .header {
+font-weight: bold;
+text-align: center;
+position: absolute;
+top: 30px;
+left: 30px;
+right: 30px;
+border-bottom: 1px solid #888;
+}
+.page-template .footer {
+font-weight: bold;
+position: absolute;
+bottom: 30px;
+left: 30px;
+right: 30px;
+border-top: 1px solid #888;
+text-align: left;
+}
+.page-template .watermark {
+font-weight: bold;
+font-size: 400%;
+text-align: center;
+margin-top: 30%;
+transform: rotate(-35deg) scale(1.7, 1.5);
+}
+
+/* Content styling */
+.customer-photo {
+display: inline-block;
+width: 32px;
+height: 32px;
+border-radius: 50%;
+background-size: 32px 35px;
+background-position: center center;
+vertical-align: middle;
+line-height: 32px;
+box-shadow: inset 0 0 1px #999, inset 0 0 10px rgba(0,0,0,.2);
+margin-left: 5px;
+}
+kendo-pdf-document .customer-photo {
+border: 1px solid #dedede;
+}
+.customer-name {
+display: inline-block;
+vertical-align: middle;
+line-height: 32px;
+padding-left: 3px;
+}
+</style>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\monthlyValue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div>
+    <div class="row">
+        <div class="col-sm-12 ">
+            <div class="portlet light bg-inverse">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-paper-plane font-green-haze"></i>
+                        <span class="caption-subject bold font-green-haze uppercase"> Filter Employees</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label>Company</label>
+                            <select multiple class="form-control" name="company" id="companyId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Branch</label>
+                            <select multiple class="form-control" name="branchId" id="branchId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Department</label>
+                            <select multiple class="form-control" name="department" id="departmentId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Designation</label>
+                            <select multiple class="form-control" name="designation" id="designationId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Position</label>
+                            <select multiple class="form-control" name="position" id="positionId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Service Type</label>
+                            <select multiple class="form-control" name="serviceType" id="serviceTypeId">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-2">
+                            <label>Service Event Type</label>
+                            <select multiple class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Employee Type</label>
+                            <select multiple class="form-control" name="employeeType" id="employeeTypeId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Gender</label>
+                            <select multiple class="form-control" name="gender" id="genderId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Functional Type</label>
+                            <select multiple class="form-control" name="functionalType" id="functionalTypeId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <label>Employee</label>
+                            <select multiple class="form-control" name="employee" id="employeeId">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row margin-top-10">
+                        <div class="col-sm-2">
+                            <select id="fiscalYearId">
+                            </select>
+                        </div>
+                        <div class="col-sm-2">
+                            <select id="monthId">
+                            </select>
+                        </div>
+                        <div class="col-sm-4 col-sm-offset-4">
+                            <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
+                                Reset
+                                <i class="fa fa-refresh"></i>
+                            </button>
+                            <button  id="searchEmployeesBtn" class="btn btn-default btn-sm pull-right">
+                                Search
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portlet light bg-inverse">
+                <div class="portlet-title">
+                    <div class="tools">
+                        <a href="" class="fullscreen" data-original-title="" title=""> </a>
+                    </div>
+
+                    <div class="actions">
+                        <div class="btn-group">
+                            <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-copy"></i> Tools
+                                <i class="fa fa-angle-down "></i>
+                            </a>
+                            <ul class="dropdown-menu pull-right">
+                                <li >
+                                    <a href="javascript:;" id="excelExport">
+                                        <i class="fa fa-file-excel-o" ></i>
+                                        Export to Excel
+                                    </a>
+                                </li>
+                                <li >
+                                    <a href="javascript:;" id="pdfExport">
+                                        <i class="fa fa-file-pdf-o" ></i> 
+                                        Export to PDF 
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="portlet-body">
+                    <div id="table">
+                    </div>
+
+                    <!--<div>-->
+<!--                        <table class="table table-bordered table-striped customTable " id="monthlyValueDetailTable" >
+                            <thead>
+                                <tr id="monthlyValuesDetailHeader">
+
+                                </tr>
+                            </thead>
+                            <tbody id="monthlyValueDetailGrid">
+
+
+                            </tbody>
+                            <tfoot id="monthlyValueDetailFooter">
+
+                            </tfoot>
+                        </table>-->
+                    <!--</div>-->
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>

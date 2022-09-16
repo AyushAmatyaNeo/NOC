@@ -1,0 +1,81 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/location/add.js'));
+?>
+<?php
+$locationEdesc = $form->get("locationEdesc");
+$locationNdesc = $form->get('locationNdesc');
+$locationLdesc = $form->get("locationLdesc");
+$locationCode = $form->get("locationCode");
+$parentLocationId = $form->get("parentLocationId");
+$submit = $form->get("submit");
+$form->setAttribute('action', $this->url('location', ['action' => 'edit', 'id' => $id]));
+$form->prepare();
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\location')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($locationCode) ?>
+                            <?= $this->formElement($locationCode); ?>
+                            <?= $this->formElementErrors()->render($locationCode, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($locationEdesc) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($locationEdesc); ?>
+                            <?= $this->formElementErrors()->render($locationEdesc, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($locationNdesc) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($locationNdesc); ?>
+                            <?= $this->formElementErrors()->render($locationNdesc, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($locationLdesc) ?>
+                            <?= $this->formElement($locationLdesc); ?>
+                            <?= $this->formElementErrors()->render($locationLdesc, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?= $this->formLabel($parentLocationId) ?>
+                            <?= $this->formElement($parentLocationId); ?>
+                            <?= $this->formElementErrors()->render($parentLocationId, ['class' => 'help-block']) ?>
+                        </div>
+                    </div>
+                </div>
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+

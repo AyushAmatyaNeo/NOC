@@ -1,0 +1,160 @@
+<?php
+/**
+ * Load Javascript files here
+ */
+$this->headScript()->appendFile($this->basePath('js/angular.min.js'));
+?>
+<form action = "">
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\calculateOvertime')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Overtime Detail
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="border-bottom margin-bottom-10">
+                    <div class="form-group">
+                        <div class="row div-font-11">
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Employee Name
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $employeeName; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            Recommender
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $recommender; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Requested Date
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $requestedDt; ?>
+                                        </td>
+                                    </tr>
+                                    <tr height="30">
+                                        <td>
+                                            Approver
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $approver; ?>
+                                        </td>
+                                    </tr>
+
+                                </table>
+                            </div>
+                            <div class="col-sm-4">
+                                <table>
+                                    <tr height="30">
+                                        <td>
+                                            Status
+                                        </td>
+                                        <td width="15">:</td>
+                                        <td>
+                                            <?php echo $status; ?>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="overtimeDate">Overtime Date</label>
+                                <span class="required" aria-required="true">*</span>
+                                <input type="text" name="overtimeDate" required="required" class="form-control" placeholder="Overtime Date" disabled="disabled" value="<?= $overtimeDt; ?>">
+                            </div>
+                        </div>     
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="nepaliDate">&nbsp;</label>
+                                <input disabled="disabled" placeholder="Overtime Date Nepali" type="text" name="nepaliDate" class="form-control ndp-nepali-calendar" value="<?= $overtimeDtBS; ?>">
+                            </div>
+                        </div>  
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="description">Description</label>
+                                <input name="description" required="required" class="form-control" disabled="disabled" type="text" value="<?= $description; ?>">
+                            </div>
+                        </div>
+                    </div>     
+
+                    <div class="row">
+                        <div class="col-sm-8">
+                        <table width='100%' style="margin-bottom:10px;">
+                            <tr>
+                                <td class="col-sm-4" style="padding:0px;"><label>Start Time</label></td>
+                                <td class="col-sm-4" style="padding:0px;"><label>End Time</label></td>
+                                <td><label>Total Min&#47;s</label></td>
+                            </tr>
+                            <tr height="30"> 
+                                <td width="45%" style="padding-right:5px;">
+                                    <input timepicker type="text" size="3" class="form-control" name="startTime"  value="<?= $starTime; ?>" required="required" readonly="readonly"/>
+                                </td>
+                                <td width="45%" style="padding:5px;">
+                                    <input timepicker type="text" size="3"  class="form-control" name="endTime"   value="<?= $endTime; ?>" required="required" readonly="readonly"/>
+                                </td>
+                                <td width="45%" style="padding:5px;">
+                                    <input type="text" size="3" class="form-control" name="totalHour[]"  value="<?= $totalMins; ?>"  required="required" readonly="readonly"/>
+                                </td>
+                            </tr>
+                            <tr height="30">
+                                </td>
+                                <td>
+                                </td>
+                                <td width="45%" style="padding:5px;">
+                                    <label class="pull-right">Total Hour:</label>
+                                </td>
+                                <td width="45%" style="padding:5px;"> 
+                                    <input size="3" class="form-control" type="text" name="allTotalHour" step="0.01" min="0" readonly="readonly" value="<?= $totalHour; ?>" />
+                                </td>
+                                <td>
+                            </tr>
+                        </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="remarks">Remarks</label>
+                                <input name="remarks" id="remarks" class="form-control" disabled="disabled" type="text" value="<?= $remarks; ?>">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group padding-0">
+                        <label for="form-approvedremarks">Reason for action</label>
+                        <textarea name="approvedRemarks" class="form-reason form-control" style="    height: 50px; font-size:12px" required="required" autocomplete="off" disabled="disabled"><?php echo $approvedRemarks; ?></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</form>
+

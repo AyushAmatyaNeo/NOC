@@ -1,0 +1,74 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/service-event-type/add.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'serviceEventType-form');
+
+$serviceEventTypeCode = $form->get('serviceEventTypeCode');
+$serviceEventTypeName = $form->get('serviceEventTypeName');
+$remarks = $form->get('remarks');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('serviceEventType', ['action' => 'edit','id'=>$id]));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+
+$form->prepare();
+?>
+<script>
+    document.menu =<?php $menu = ["id" => "menuSetup", "subMenu" => ["id" => "subMenuServiceEventType"]];echo json_encode($menu);?>;
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\serviceEventType')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php
+                print $this->form()->openTag($form);
+                ?>
+                <div class="form-group">
+                    <?php print $this->formLabel($serviceEventTypeCode); ?>
+                    <?php print $this->formElement($serviceEventTypeCode); ?>
+                    <?php print $this->formElementErrors()->render($serviceEventTypeCode, ['class' => 'help-block']); ?>
+                    <input type="hidden" value="<?php echo $id ?>" id="serviceEventTypeId"/>
+                    <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                </div>
+                <div class="form-group">
+                    <?php print $this->formLabel($serviceEventTypeName); ?>
+                    <?php print $this->formElement($serviceEventTypeName); ?>
+                    <?php print $this->formElementErrors()->render($serviceEventTypeName, ['class' => 'help-block']); ?>
+                    <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                </div>
+
+                <div class="form-group">
+                    <?php print $this->formLabel($remarks); ?>
+                    <?php print $this->formElement($remarks); ?>
+                    <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>

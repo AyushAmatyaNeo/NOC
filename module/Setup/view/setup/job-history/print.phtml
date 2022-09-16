@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Letter head</title>
+	<!-- <link rel="stylesheet" href="assets/css/bootstrap.min.css"> -->
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap" rel="stylesheet">  
+	<!-- <link rel="stylesheet" href="assets/css/main.css"> -->
+	<!-- <link rel="stylesheet" href="assets/css/login-hris.css"> -->
+    <link rel="stylesheet" href="assets/css/letter-head.css">
+</head><?php
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/albe-timeline/style-albe-timeline.css'));
+$this->headLink()->appendStylesheet($this->basePath('css/letter-head.css'));
+
+$this->headLink()->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+$this->headScript()->appendFile($this->basePath('dropzone/dropzone.min.js'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/albe-timeline/jquery-albe-timeline.js'));
+$this->headScript()->appendFile($this->basePath('js/setup/job-history/print.js'));
+$this->headScript()->appendFile($this->basePath('js/jspdf.min.js'));
+
+?>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-file-text"></i>
+                    Report Print View
+                </div>
+                <div class="actions">
+                <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF 
+                        </a>
+                </div>
+            </div>
+            <div class="portlet-body" >
+                <main class="letter-head-page" id="body">
+                    <div class="letter-head-sec">
+                        <p class="top-slogan"><small>"Purity in Petroleum is Our Commitment"</small></p>
+                        <div class="letter-heading">
+                            <img src="<?= $this->basePath('img/noc-english-logo.png') ?>">
+                            <div class="heading-title">
+                                <h2>Nepal oil corporation Ltd.</h2>
+                                <p>An undertaking of Government of Nepal</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="letter-content">
+                            <?php
+                                echo $data;
+                            ?>
+                        </div>
+                        <div class="letter-footer">
+                            <p class="bold-colored"><small>Central Office: Babarmahal, Kathmandu; G.P.O. Box: 1140;</small></p>
+                            <p><small>Phone: 4262780, 4262921, 4263481, 4263482, 4263485, 4264600</small></p>
+                            <p><small>Fax: (977-1) 4263499, 4262645, Email : info@noc.org.np, URL: www.noc.org.np</small></p>
+                        </div>
+                    </div>
+                </main>
+                    <?php
+                    echo $data;
+                    ?>
+            <!-- <div id="editor"></div> -->
+            <div class="row" id="ignore">
+                <div class="col-sm-4 col-lg-offset-8">
+                    <button id="close" class="btn default btn-sm pull-right hris-reset-btn ">
+                        Close
+                        <i class="fa fa-window-close"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

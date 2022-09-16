@@ -1,0 +1,947 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\travelRequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>   
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+        
+    </script>
+<?php } ?>
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/manager-service/transferSettlement-approve/expense-view.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'travelRequest-form');
+
+$jvNumber = $form->get('jvNumber');
+$chequeNumber = $form->get('chequeNumber');
+$bank = $form->get('bank');
+
+
+$recommendedRemarks = $form->get('recommendedRemarks');
+$recommendedRemarks->setAttributes(["disabled" => "disabled"]);
+$approvedRemarks = $form->get('approvedRemarks');
+$approvedRemarks->setAttributes(["disabled" => "disabled"]);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'APPROVE');
+
+$form->setAttribute('action', $this->url('transferSettlementStatus', ['action' => 'approve']));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.pullFilebyId = '<?php echo $this->url('transferSettlementApprove', ['action' => 'pullFilebyId']); ?>';
+    document.pushDCFileLink = '<?php echo $this->url('transferSettlementApprove', ['action' => 'pushDCFileLink']); ?>';
+    document.uploadUrl = '<?= $this->url("transferSettlementApprove", ["action" => "fileUpload"]); ?>';
+    document.id = '<?php echo $id; ?>';
+    document.serialNumber = '<?php echo $serialNumber; ?>';
+</script>
+<div class="row margin-top-20">  
+    <div class="col-sm-12">    
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Transfer Settlement Request
+                </div>
+            </div>
+            <div class="portlet-body div-font-11">
+            <div class="row">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <table>
+                                <tr>
+                                    <td width="40%">
+                                        <label for="purpose">Start Date :</label> 
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled="disabled" value="<?php echo $detail['START_DATE']; ?>" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <table>
+                                <tr>
+                                    <td width="40%">
+                                        <label for="advanceAmount">End Date :</label> 
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled="disabled" value="<?php echo $detail['END_DATE']; ?>" class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                            <table>
+                                <tr>
+                                    <td width="40%">
+                                        <label for="departure">Event Date :</label> 
+                                    </td>
+                                    <td>
+                                        <input type="text" disabled="disabled" value="<?php echo $detail['EVENT_DATE'] ?>"  class="form-control">
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                           <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="40%">
+                                            <label for="destination">To Branch :</label> 
+                                        </td>
+                                        <td>
+                                            <input type="text" disabled="disabled" value="<?php echo $detail['TO_BRANCH_NAME'] ?>" class="form-control">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="40%">
+                                            <label for="destination">Status:</label> 
+                                        </td>
+                                        <td>
+                                            <input type="text" disabled="disabled" value="<?php echo $allDetails[0]['STATUS_DETAIL'] ?>" class="form-control">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div>
+                    <div class="row">
+                           <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="40%">
+                                            <label for="destination">JV Number :</label> 
+                                        </td>
+                                        <td>
+                                            <input type="text" disabled="disabled" value="<?php echo $allDetails[0]['JV_NUMBER'] ?>" class="form-control">
+
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="40%">
+                                            <label for="destination">Cheque Number :</label> 
+                                        </td>
+                                        <td>
+                                            <input type="text" disabled="disabled" value="<?php echo $allDetails[0]['CHEQUE_NUMBER'] ?>" class="form-control">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
+                                <table>
+                                    <tr>
+                                        <td width="40%">
+                                            <label for="bankId">Bank Name:</label> 
+                                        </td>
+                                        <td>
+                                                <select disabled name="bankId" id="bankId" required="required" class="form-control">
+                                                    <option value=""  selected="">Please select</option>
+                                                    <?php foreach ($bankName as $key => $value) {
+                                                        $selected = ($key == $allDetails[0]['BANK_ID']) ? "selected" : ""; ?>
+                                                        <option  <?=$selected?> value="<?php echo $key; ?>"><?php echo $value; ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                    </div>
+<div style="display:none;">
+                <?php if($allDetails){ ?>
+                <div class="margin-top-10 scrollbar-horizantal" id="domesticConfigTable">
+                    <div class="row" >
+                        <div style="margin-left: 20px" >
+                            <table id="domesticConfigTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Transfer Details</th>
+                                    </tr>
+                                    <tr> 
+                                        <th rowspan = "2">Family Member</th>
+                                        <th rowspan = "2">Full Name</th>
+                                        <th rowspan="2">Departure Date</th>       
+                                        <th colspan="2">Location</th>            
+                                        <!-- <th rowspan="2">Arrives</th> -->
+                                        <th rowspan="2">No. of Days</th> 
+                                        <th rowspan="2">Amount</th>
+                                        <!-- <th rowspan="2">Total</th>     -->
+                                        <th colspan="5">Mode of Transportation</th> 
+                                        <th colspan="2">Petty Expenses</th> 
+                                        <th rowspan="2">Purpose</th> 
+                                        <th rowspan="2">Remarks</th>  
+                                        <th rowspan="2">Total All Column</th> 
+                                    </tr>
+                                    <tr>       
+                                        <th>From</th>       
+                                        <th>To</th>
+                                        <th>On foot, Train, Vehicle, Airplane, Cruise etc.</th>       
+                                        <th>Class</th>   
+                                        <th>Rate</th>       
+                                        <th>Miles</th>
+                                        <th>Rate</th> 
+                                        <th>Details</th>
+                                        <th>Total</th>          
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($allDetails as $domesticExpenseDtlRow) { ?>
+                                        <tr>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <?php if($domesticExpenseDtlRow['FOR_FAMILY'] == 'Y'){ ?>
+                                                    <input type="checkbox" id="familyMember" name="familyMember" disabled  checked  >
+                                                        <?php }else{ ?>
+                                                    <input type="checkbox" id="familyMember" name="familyMember" disabled   >
+                                                    <?php } ?>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input type="hidden" value="<?= $domesticExpenseDtlRow['TRANSFER_SETTLEMENT_ID']; ?>"  readonly="readonly" name="transferSettlementId[]"/>
+                                                    <input style="width:100%" type="text" name="familyName[]"  class="familyName"  value="<?= $domesticExpenseDtlRow['FAMILY_NAME']; ?>" readonly="readonly">       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['FROM_DATE']; ?>"  readonly="readonly" name="depDate[]"/>
+                                                    <!-- <input type="text" name="depDate[]"  class="depDate"> -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['DEPARTURE']; ?>"  readonly="readonly" name="locFrom[]"/>       
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:90px">
+                                                    <input style="width:90px" type="text" value="<?= $domesticExpenseDtlRow['DESTINATION']; ?>"  readonly="readonly" name="locto[]"/>
+                                                    <!-- <input style="width:100%" type="text" name="locto[]"  class="locto">        -->
+                                                </div>
+                                            </td>      
+                                            <td>
+                                                <div style="width:50px">
+                                                        <input style="width:50px" type="text" value="<?= $domesticExpenseDtlRow['TRAVELLED_DAYS']; ?>"  readonly="readonly" name="noOfDays[]"/>
+                                                    <!-- <input style="width:100%" type="number" readonly name="noOfDays[]" required="required"  class="noOfDays">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['TOTAL_TADA_AMT']; ?>"  readonly="readonly" name="transport[]"/>
+                                                </div>
+                                            </td>
+  
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['TRANSPORTATION']; ?>"  readonly="readonly" name="transport[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['TRANSPORT_CLASS']; ?>"  readonly="readonly" name="transportClass[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['VEHICLE_EXPENSE_AP_AMT']; ?>"  readonly="readonly" name="rate1[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['MILES']; ?>"  readonly="readonly" name="miles[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <input style="width:120px" type="text" value="<?= $domesticExpenseDtlRow['PLANE_EXPENSE_AP_AMT']; ?>"  readonly="readonly" name="rate2[]"/>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="otherExpenseDetail" name="otherExpenseDetail[]"><?= $domesticExpenseDtlRow['MISC_EXPENSE_DETAIL']; ?></textarea>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $domesticExpenseDtlRow['MISC_EXPENSE_AP_AMT']; ?>"  readonly="readonly" name="otherExpenses[]"/>
+                                                    <!-- <input style="width:100%" type="number" name="otherExpenses[]"  class="otherExpenses">        -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:120px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="detPurpose" name="detPurpose[]"><?= $domesticExpenseDtlRow['PURPOSE']; ?></textarea>
+                                                </div>
+                                            </td>
+                                            
+                                            <td>
+                                                <div style="width:150px">
+                                                    <textarea rows="4" cols="50" style="width:100%" readonly="detRemarks" name="detRemarks[]"><?= $domesticExpenseDtlRow['REMARKS']; ?></textarea>
+                                                    <!-- <textarea style="width:100%" rows="4" cols="50" name="detRemarks[]"  class="detRemarks"></textarea> -->
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="width:80px">
+                                                    <input style="width:80px" type="text" value="<?= $domesticExpenseDtlRow['TOTAL']; ?>"  readonly="readonly" name="total[]"/>
+                                                    <!-- <input style="width:100%" readonly type="number" name="total[]"  class="total">        -->
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    <?php } ?>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td>
+                                        </td>
+                                        <td><b>Grand Total:</b></td>
+                                        <td>
+                                            <input type="number" value="<?= $grandTotal ?>"  readonly="readonly" id="sumAllTotal" step="0.01" min="0" readonly="readonly" style="width: 80px;" />
+                                        </td>
+                                        <td>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+
+                    </div>
+                </div>
+                <?php } ?>
+            <br><br>
+                <table id="goodsTransportDetailTable" class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px;">Goods Transport Detail</th>
+                            </tr>
+                            <tr>
+                                <th>Weight of Goods (K.G.)</th>
+                                <th>Price of Transportation</th>      
+                                        
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div style="width:100%">
+                                    <input style="width:100%" type="number" value="<?= $allDetails[0]['WEIGHT']; ?>"  readonly="readonly" name="weightOfGoods[]" class="weightOfGoods"/>
+      
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style="width:100%">
+                                    <input style="width:100%" type="number" value="<?= $allDetails[0]['WEIGHT_AP_AMT']; ?>"  readonly="readonly" name="priceOfGoods[]" class="priceOfGoods"/>
+       
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                                                        </div>
+                                                        <table id="expenseDtlTbl" width="100%" align="center" class="customTable div-font-10" style="font-size:10px; border: 2px solid black; border-collapse: collapse; margin-top:20px">
+            <thead style="font-size:11px !important;">
+                <tr >
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Full Name</th>
+                    <th colspan="4" align="center" style=" border: 1px solid black; border-collapse: collapse;">Details of Travel and Stages of Journey</th>
+                    <th colspan="6" align="center" style=" border: 1px solid black; border-collapse: collapse;">Mode of Transportation</th>
+                    <th colspan="3" align="center" style=" border: 1px solid black; border-collapse: collapse;">Daily Allowance</th>
+                    <th colspan="2" align="center" style=" border: 1px solid black; border-collapse: collapse;">Petty Expenses</th>
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Purpose of Visit</th>
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Total of Every Column</th>
+                    <th rowspan="3" class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;">Remarks</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style=" border: 1px solid black; border-collapse: collapse;">Departure</th>
+                    <th colspan="2" style=" border: 1px solid black; border-collapse: collapse;">Destination</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">On foot, Train, Vehicle, Airplane, Cruise etc.</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Class</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Miles</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (12)</th>
+                    <!-- <th rowspan="2">Expense Category</th> -->
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Days</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (15)</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Details</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (17)</th>
+                </tr>
+                <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Location</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Location</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Date</th>
+                    
+                </tr>
+            </thead>
+            <tbody style=" border: 1px solid black; border-collapse: collapse;">
+                <?php
+                $totalCol15 = 0;
+                $totalCol12 = 0;
+                $totalCol17 = 0;
+                $totallead = 0;
+                    
+                    foreach ($allDetails as $transferSettlement) {
+                        $totalCol15 = $totalCol15 + ($transferSettlement['TOTAL_TADA_AMT']);
+                        $totalCol12 = $totalCol12 + ($transferSettlement['VEHICLE_EXPENSE_AP_AMT'] + $transferSettlement['PLANE_EXPENSE_AP_AMT']);
+                        $totalCol17 = $totalCol17 + ($transferSettlement['MISC_EXPENSE_AP_AMT']);
+                    ?>
+                    <tr>
+                    <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['FAMILY_NAME']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['DEPARTURE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['FROM_DATE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['DESTINATION']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TO_DATE']; ?>
+                        </td>
+
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TRANSPORTATION']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TRANSPORT_CLASS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?php if ($transferSettlement['VEHICLE_EXPENSE_AP_AMT']==$transferSettlement['VEHICLE_EXPENSE_REQ_AMT']){
+                                echo $transferSettlement['VEHICLE_EXPENSE_REQ_AMT'];
+                            } else{
+                                ?> <s><?=$transferSettlement['VEHICLE_EXPENSE_REQ_AMT']?></s>   <?=$transferSettlement['VEHICLE_EXPENSE_AP_AMT']?>
+                            <?php } ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['MILES']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?php if ($transferSettlement['PLANE_EXPENSE_AP_AMT']==$transferSettlement['PLANE_EXPENSE_REQ_AMT']){
+                                echo $transferSettlement['PLANE_EXPENSE_REQ_AMT'];
+                            } else{
+                                ?> <s><?=$transferSettlement['PLANE_EXPENSE_REQ_AMT']?></s>   <?=$transferSettlement['PLANE_EXPENSE_AP_AMT']?>
+                            <?php } ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($transferSettlement['VEHICLE_EXPENSE_AP_AMT'] + $transferSettlement['PLANE_EXPENSE_AP_AMT']) ?>
+                        </td>
+                        <!-- <td>
+                            < ?= $internationalExpenseDtlRow['INTERNATIONAL_TYPE']; ?>
+                        </td> -->
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TRAVELLED_DAYS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?=$transferSettlement['TOTAL_TADA_AMT']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?=$transferSettlement['TOTAL_TADA_AMT']; ?>
+                        </td>
+                        <td>
+                            <?= $transferSettlement['MISC_EXPENSE_DETAIL']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?php if ($transferSettlement['MISC_EXPENSE_AP_AMT']==$transferSettlement['MISC_EXPENSE_REQ_AMT']){
+                                echo $transferSettlement['MISC_EXPENSE_REQ_AMT'];
+                            }else{
+                                ?> <s><?=$transferSettlement['MISC_EXPENSE_REQ_AMT']?></s>   <?=$transferSettlement['MISC_EXPENSE_AP_AMT']?>
+                            <?php } ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['PURPOSE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($transferSettlement['VEHICLE_EXPENSE_AP_AMT'] + $transferSettlement['PLANE_EXPENSE_AP_AMT']+$transferSettlement['MISC_EXPENSE_AP_AMT']+$transferSettlement['TOTAL_TADA_AMT']); ?>
+                        </td>
+                        <td class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;"> 
+                            <?= $transferSettlement['REMARKS']; ?>
+                        </td>
+                    </tr>
+                    
+                <?php } ?>
+            </tbody>
+        </table>
+        <div id="employeeDtl1" style= "margin-top:20px;">
+            <ul>
+                <li style="margin-top:-10px;">Total weight:<?= $allDetails[0]['WEIGHT'];?> &nbsp;&nbsp; Total cost of weight:<?php if ($allDetails[0]['WEIGHT_REQ_AMT']==$allDetails[0]['WEIGHT_AP_AMT']){
+                   echo $allDetails[0]['WEIGHT_REQ_AMT'];
+                }else{
+                    ?> <s> <?php echo $allDetails[0]['WEIGHT_REQ_AMT']; ?></s>   <?php echo $allDetails[0]['WEIGHT_AP_AMT'];
+                };?></li>
+
+                <li style="margin-top:-10px;">Yearly Settlement Amount:<?php if ($allDetails[0]['YEARLY_SETTTLEMENT_REQ_AMT']==$allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT']){
+                   echo $allDetails[0]['YEARLY_SETTTLEMENT_REQ_AMT'];
+                }else{
+                    ?> <s> <?php echo $allDetails[0]['YEARLY_SETTTLEMENT_REQ_AMT']; ?></s>   <?php echo $allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT'];
+                };?></li>
+
+            </ul>
+        </div>
+               
+    <hr>
+        <table width='100%' table style='font-family:"Arial"; font-size:10px; font-weight:bold;' >
+            <tr>
+            <td width='40%' align='right'>Total of On Foot, Train, Vehicle, Bus (Column 12) :</td>
+            <td width='10%'> Rs. <?= $totalCol12 ?></td>
+            <td></td>
+                    </tr>
+        
+                    <tr>
+            <td width='40%' align='right'>Total of Days Travel Allowance (Column 15) :</td>
+            <td width='10%'>Rs. <?= $totalCol15 ?></td>
+                    </tr>
+                
+                    <tr>
+            <td width='40%' align='right'>Total of Petty Expenses (Column 17) :</td>
+            <td width='10%'>Rs. <?= $totalCol17 ?></td>
+            <td width='40%' align='right'> Total Claimed Amount :</td>
+            <td width='10%'> Rs. <?php echo($totalCol17 + $totalCol12 + $totalCol15 + $allDetails[0]['WEIGHT_AP_AMT'] + $allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT'])  ?></td>
+
+
+                    </tr>
+
+                    
+
+        </table>
+                <div class= "row">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th>
+                                <th>&nbsp;</th>
+                                <!-- <th>Action</th> -->
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <!-- <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button> -->
+                    </div>
+                </div>
+                <div class="submit_button" style="margin-top:2%;">
+                <?php if ($allDetails[0]['STATUS'] =='RQ'){ ?>
+                <div class="form-group margin-top-10 required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                        <label>Reason for action [From Approver]</label>
+                        <textarea rows="4" cols="50" style="width:100%" name="approverRemarks[]"></textarea>
+                    </div> <?php } else {?>
+                        <div  class="form-group margin-top-10   required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                        <label>Reason for action [From Approver]</label>
+                        <textarea readonly="readonly" rows="4" cols="50" style="width:100%" name="approverRemarks[]" ><?php echo $allDetails[0]['APPROVER_REMARKS'] ?></textarea>  
+                    <?php } ?>                                        
+                    <?php if ($allDetails[0]['STATUS'] == 'RQ' || ($detail['STATUS'] == 'RC')) { ?>
+                        <input type="submit" name="submit" class="btn btn-primary pull-left" value="APPROVE">
+                        <input type="submit" name="submit" class="btn btn-danger pull-right" value="REJECT">
+                    <?php } ?>   
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<?php
+print $this->form()->closeTag();
+?>
+
+
+
+<div id="printableArea" class="col-md-8"  style="border:1px solid; display: none;">
+<div style="font-family:arial;">
+    <div class="wrapper">
+        <table width='100%'>
+            <td width='30%' align='left'>
+            <div class="wrapper font-common">
+            <div id="employeeDtl">
+            <ul>
+                <li ><b>JV NUMBER:</b><?php echo $allDetails[0]['JV_NUMBER']; ?></li>
+                <li ><b>Cheque Number:</b> <?php echo $allDetails[0]['CHEQUE_NUMBER']; ?></li>
+                <li ><b>Bank:</b> <?php echo $bankName[$allDetails[0]['BANK_ID']]; ?></li>
+                                    </ul>
+            </td>
+                                    </div></div>
+            <td width='40%' align='center'>
+            <div class="col-md-8 col-sm-offset-2">
+            <ul id="headingList">
+                <li>
+                <h5 style="color:#17365d; line-height: 1;">Annex 12<br>(In accordance with Para - 12, Regulation 11.10)</h5></li>
+                    <li style=" margin-top: -15px;"><h3 style="color:#c00000;"><?= strtoupper($detail['COMPANY_NAME']); ?></h3></li>
+                <li><h5 style="margin-top: -7px;"><?= $detail['LOCATION_EDESC']; ?></h5>
+                <h5 style="color:#17365d; margin-top:-30px">Invoice of Travel Allowance</h5></li>
+            </ul>
+        </div>
+            </td>
+            <td width='30%' align='right'>
+            <div class="wrapper font-common">
+
+            <b>Number of Attachments/Bills:</b> <?= $totalAttachment ?>
+ 
+                                    </div>
+            </td>
+                                    </table>
+
+    </div>
+    <!-- <div class="wrapper font-common">
+        <div class="formNo">
+            <ul>
+                <li>Form No: HRM-10</li>
+                <li style="margin-top:20px;">JV NUMBER: < ?php echo $Jvdetails['JV_NUMBER']; ?></li>
+                <li style="margin-top:20px;">Cheque Number: < ?php echo $Jvdetails['CHEQUE_NUMBER']; ?></li>
+                <li style="margin-top:20px;">Bank: < ?php echo $Jvdetails['BANK_NAME']; ?></li>
+            </ul>
+        </div>
+        <div class="dateDtl">
+            <ul>
+                <li>TECF No: <php echo $detail['TRAVEL_CODE']; ?></li>
+                <li>Date: <php echo $detail['REQUESTED_DATE'] ?></li>
+            </ul>
+        </div>
+    </div> -->
+
+    
+        <table style="width:100%; margin-top:-10px;">
+        <td style="width:25%">
+        <div class="wrapper font-common"><b>Name:</b> <?= $allDetails[0]['FULL_NAME']; ?> (<?= $allDetails[0]['EMPLOYEE_CODE']; ?>)</div></td>
+        <td style="width:25%">
+        <div class="wrapper font-common" align='center'><b>Designation:</b> <?= $allDetails[0]['DESIGNATION_TITLE']; ?></div></td>
+        <td style="width:25%">
+        <div class="wrapper font-common" align='center'><b>Salary:</b><?=$allDetails[0]['SALARY']; ?></div></td>
+        <td style="width:25%">
+        <div class="wrapper font-common" align='right'><b>Office:</b> <?= $allDetails[0]['LOCATION_EDESC']; ?></div></td>
+        <table>
+        
+
+    <div class="wrapper font-common">
+        <table id="expenseDtlTbl" width="100%" align="center" class="customTable div-font-10" style="font-size:10px; border: 2px solid black; border-collapse: collapse;">
+            <thead style="font-size:11px !important;">
+                <tr >
+                    <th colspan="4" align="center" style=" border: 1px solid black; border-collapse: collapse;">Details of Travel and Stages of Journey</th>
+                    <th colspan="6" align="center" style=" border: 1px solid black; border-collapse: collapse;">Mode of Transportation</th>
+                    <th colspan="3" align="center" style=" border: 1px solid black; border-collapse: collapse;">Daily Allowance</th>
+                    <th colspan="2" align="center" style=" border: 1px solid black; border-collapse: collapse;">Petty Expenses</th>
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Purpose of Visit</th>
+                    <th rowspan="3" style=" border: 1px solid black; border-collapse: collapse;">Total of Every Column</th>
+                    <th rowspan="3" class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;">Remarks</th>
+                </tr>
+                <tr>
+                    <th colspan="2" style=" border: 1px solid black; border-collapse: collapse;">Departure</th>
+                    <th colspan="2" style=" border: 1px solid black; border-collapse: collapse;">Destination</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">On foot, Train, Vehicle, Airplane, Cruise etc.</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Class</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Miles</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (12)</th>
+                    <!-- <th rowspan="2">Expense Category</th> -->
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Days</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Rate</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (15)</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Details</th>
+                    <th rowspan="2" style=" border: 1px solid black; border-collapse: collapse;">Total (17)</th>
+                </tr>
+                <tr>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Location</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Date</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Location</th>
+                    <th style=" border: 1px solid black; border-collapse: collapse;">Date</th>
+                    
+                </tr>
+            </thead>
+            <tbody style=" border: 1px solid black; border-collapse: collapse;">
+                <?php
+                $totalCol15 = 0;
+                $totalCol12 = 0;
+                $totalCol17 = 0;
+                $totallead = 0;
+                    
+                    foreach ($allDetails as $transferSettlement) {
+                        $totalCol15 = $totalCol15 + ($transferSettlement['TOTAL_TADA_AMT']);
+                        $totalCol12 = $totalCol12 + ($transferSettlement['VEHICLE_EXPENSE_AP_AMT'] + $transferSettlement['PLANE_EXPENSE_AP_AMT']);
+                        $totalCol17 = $totalCol17 + ($transferSettlement['MISC_EXPENSE_AP_AMT']);
+                    ?>
+                    <tr>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['DEPARTURE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['FROM_DATE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['DESTINATION']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TO_DATE']; ?>
+                        </td>
+
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TRANSPORTATION']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TRANSPORT_CLASS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?php if ($transferSettlement['VEHICLE_EXPENSE_AP_AMT']==$transferSettlement['VEHICLE_EXPENSE_REQ_AMT']){
+                                echo $transferSettlement['VEHICLE_EXPENSE_REQ_AMT'];
+                            } else{
+                                ?> <s><?=$transferSettlement['VEHICLE_EXPENSE_REQ_AMT']?></s>   <?=$transferSettlement['VEHICLE_EXPENSE_AP_AMT']?>
+                            <?php } ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['MILES']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?php if ($transferSettlement['PLANE_EXPENSE_AP_AMT']==$transferSettlement['PLANE_EXPENSE_REQ_AMT']){
+                                echo $transferSettlement['PLANE_EXPENSE_REQ_AMT'];
+                            } else{
+                                ?> <s><?=$transferSettlement['PLANE_EXPENSE_REQ_AMT']?></s>   <?=$transferSettlement['PLANE_EXPENSE_AP_AMT']?>
+                            <?php } ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($transferSettlement['VEHICLE_EXPENSE_AP_AMT'] + $transferSettlement['PLANE_EXPENSE_AP_AMT']) ?>
+                        </td>
+                        <!-- <td>
+                            < ?= $internationalExpenseDtlRow['INTERNATIONAL_TYPE']; ?>
+                        </td> -->
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['TRAVELLED_DAYS']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?=$transferSettlement['TOTAL_TADA_AMT']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?=$transferSettlement['TOTAL_TADA_AMT']; ?>
+                        </td>
+                        <td>
+                            <?= $transferSettlement['MISC_EXPENSE_DETAIL']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?php if ($transferSettlement['MISC_EXPENSE_AP_AMT']==$transferSettlement['MISC_EXPENSE_REQ_AMT']){
+                                echo $transferSettlement['MISC_EXPENSE_REQ_AMT'];
+                            }else{
+                                ?> <s><?=$transferSettlement['MISC_EXPENSE_REQ_AMT']?></s>   <?=$transferSettlement['MISC_EXPENSE_AP_AMT']?>
+                            <?php } ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= $transferSettlement['PURPOSE']; ?>
+                        </td>
+                        <td style=" border: 1px solid black; border-collapse: collapse;">
+                            <?= ($transferSettlement['VEHICLE_EXPENSE_AP_AMT'] + $transferSettlement['PLANE_EXPENSE_AP_AMT']+$transferSettlement['MISC_EXPENSE_AP_AMT'] +$transferSettlement['TOTAL_TADA_AMT']); ?>
+                        </td>
+                        <td class="lastColumn" style=" border: 1px solid black; border-collapse: collapse;"> 
+                            <?= $transferSettlement['REMARKS']; ?>
+                        </td>
+                    </tr>
+                    
+                <?php } ?>
+            </tbody>
+
+            <!-- <tbody>
+                < ?php
+                $fare = 0;
+                $allowance = 0;
+                $localConveyence = 0;
+                $miscExpense = 0;
+                $totalAmount = 0;
+                foreach ($expenseDtlList as $expenseDtlRow) {
+                    $fare += $expenseDtlRow['FARE'];
+                    $allowance += $expenseDtlRow['ALLOWANCE'];
+                    $localConveyence += $expenseDtlRow['LOCAL_CONVEYENCE'];
+                    $miscExpense += $expenseDtlRow['MISC_EXPENSES'];
+                    $totalAmount += $expenseDtlRow['TOTAL_AMOUNT'];
+                    ?>
+                    <tr>
+                        <td>
+                            < ?= $expenseDtlRow['DEPARTURE_DATE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DEPARTURE_TIME']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DEPARTURE_PLACE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DESTINATION_DATE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DESTINATION_TIME']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['DESTINATION_PLACE']; ?>
+                        </td>
+                        <td>
+                            < ?= $expenseDtlRow['TRANSPORT_TYPE_DETAIL']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['FARE']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['ALLOWANCE']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['LOCAL_CONVEYENCE']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['MISC_EXPENSES']; ?>
+                        </td>
+                        <td>
+                            <= $expenseDtlRow['TOTAL_AMOUNT']; ?>
+                        </td>
+                        <td class="lastColumn"> 
+                            <= $expenseDtlRow['REMARKS']; ?>
+                        </td>
+                    </tr>
+                <php } ?>
+                <tr>
+                    <td>Total</td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td><= $fare; ?></td>
+                    <td><= $allowance; ?></td>
+                    <td><= $localConveyence; ?></td>
+                    <td><= $miscExpense; ?></td>
+                    <td><= $totalAmount; ?></td>
+                    <td class="lastColumn"></td>
+                </tr>
+            </tbody> -->
+        </table>
+    </div>
+
+    <div class="wrapper font-common">
+        <div id="employeeDtl1">
+            <ul>
+                <li style="margin-top:-10px;">Total weight:<?= $allDetails[0]['WEIGHT'];?> &nbsp;&nbsp; Total cost of weight:<?php if ($allDetails[0]['WEIGHT_REQ_AMT']==$allDetails[0]['WEIGHT_AP_AMT']){
+                   echo $allDetails[0]['WEIGHT_REQ_AMT'];
+                }else{
+                    ?> <s> <?php echo $allDetails[0]['WEIGHT_REQ_AMT']; ?></s>   <?php echo $allDetails[0]['WEIGHT_AP_AMT'];
+                };?></li>
+
+                <li style="margin-top:-10px;">Yearly Settlement Amount:<?php if ($allDetails[0]['YEARLY_SETTTLEMENT_REQ_AMT']==$allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT']){
+                   echo $allDetails[0]['YEARLY_SETTTLEMENT_REQ_AMT'];
+                }else{
+                    ?> <s> <?php echo $allDetails[0]['YEARLY_SETTTLEMENT_REQ_AMT']; ?></s>   <?php echo $allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT'];
+                };?></li>
+
+            </ul>
+        </div>
+    </div>               
+    <hr>
+        <table width='100%' table style='font-family:"Arial"; font-size:10px; font-weight:bold;' >
+        <tr>
+        <td width='40%' align='right'>Total of On Foot, Train, Vehicle, Bus (Column 12) :</td>
+        <td width='10%'> Rs. <?= $totalCol12 ?></td>
+        <td></td>
+                </tr>
+    
+                <tr>
+        <td width='40%' align='right'>Total of Days Travel Allowance (Column 15) :</td>
+        <td width='10%'>Rs. <?= $totalCol15 ?></td>
+                </tr>
+               
+                <tr>
+        <td width='40%' align='right'>Total of Petty Expenses (Column 17) :</td>
+        <td width='10%'>Rs. <?= $totalCol17 ?></td>
+        <td width='40%' align='right'> Total Claimed Amount :</td>
+        <td width='10%'> Rs. <?php echo($totalCol17 + $totalCol12 + $totalCol15 + $allDetails[0]['WEIGHT_AP_AMT'] + $allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT'])  ?></td>
+
+
+                </tr>
+
+                
+
+                </table>
+                
+    <div class="wrapper font-common">
+        <div id="employeeDtl1">
+            <ul>
+                
+                <li style="margin-top:-10px;"><i>1. The above fare has not been spent on any of the free rides and is utilised appropriately.</i></li>
+                <li style="margin-top:-10px;"><i>2. I acknowledge that travel has been accomplished on the class/category as written.</i></li>
+                <li style="margin-top:-10px;"><i>3. Cloth allowance amount  of Rs.&nbsp;&nbsp; has not been claimed prior  this visit.</i></li>
+               
+                <li style="margin-top:-10px;"><span style="font-weight:bold;color:#c00000;"><u>Disclaimer</u></span></li>
+                <li style="margin-top:-10px;"><span style="color:#c00000;">All the details furnished here with in accordance with approved Travel Requisition form no. &nbsp;&nbsp; dated </span></li>
+
+
+                <li style="margin-top:-10px;"><span style="color:#c00000;">I duly acknowledge that the total amount for the Travel of Rs  <?php echo($totalCol17 + $totalCol12 + $totalCol15 + $allDetails[0]['WEIGHT_AP_AMT'] + $allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT']) ?> mentioned in the above bill is true. If found to be false, I will submit in accordance with the act. </span></li>
+
+                <!-- <li>
+                    Advance taken for travel in Rs. < ?= $detail['REQUESTED_AMOUNT'] ?> expenses incured during travel in Rs.
+                    Balance amount after expenses Rs. < ?php echo $balance; ?>
+                </li>
+                <li>Total Expenses(in words): < ?= $totalExpenseInWords; ?> </li> -->
+            </ul>
+        </div>
+    </div>
+
+    <div class="wrapper font-common signature">
+    <div class="signChecked">
+            <div class="border-dotted" style="margin-left: 30%;">
+                Signature
+            </div>
+        </div>
+        <div class="signRecommender1">
+            <p style="height:14px"><label><?php if($allDetails[0]['STATUS'] == 'AP'){echo ($totalCol17 + $totalCol12 + $totalCol15 + $allDetails[0]['WEIGHT_AP_AMT'] + $allDetails[0]['YEARLY_SETTTLEMENT_AP_AMT']);} ?></label></p>
+            <div class="border-dotted" style="margin-left: 30%;">
+                Amount Approved 
+            </div>
+        </div>
+        <div class="signRecommender1">
+            <p style="height:14px"><label><?php if($allDetails[0]['STATUS'] == 'AP'){echo ucwords(strtolower($allDetails[0]['APPROVED_BY']));} ?></label></p>
+            <div class="border-dotted" style="margin-left: 30%;">
+                Recommended By 
+            </div>
+        </div>
+        <div class="signApprover1">
+            <p style="height:14px; text-align:center;"><label> <?php if($allDetails[0]['STATUS'] == 'AP'){echo ucwords(strtolower($allDetails[0]['APPROVED_BY']));} ?></label></p>
+            <div class="border-dotted" style="margin-left: 30%;">
+                Approved by
+            </div>
+        </div>
+    </div>
+                </div>
+</div>
+<div class="col-md-12" style="text-align:center;display:<?php echo ($allDetails[0]['STATUS'] == 'AP') ? 'block' : 'none'; ?>">
+    <a class="btn btn-success" id="print"> Print</a>
+</div>

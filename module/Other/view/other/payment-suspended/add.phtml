@@ -1,0 +1,47 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\accident-and-death')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-8 col-sm-offset-2">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+            </div>
+            <div class="portlet-body">
+                <form>
+                    <div class="form-group ">
+                        <?php print $this->formLabel($employees); ?>
+                        <?php print $this->formElement($employees); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($startDate); ?>
+                        <?php print $this->formElement($startDate); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($endDate); ?>
+                        <?php print $this->formElement($endDate); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($reason); ?>
+                        <?php print $this->formElement($reason); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($suspendedRate); ?>
+                        <?php print $this->formElement($suspendedRate); ?>
+                    </div>
+                    <div class="form-group">
+                        <?php print $this->formLabel($suspensionAmount); ?>
+                        <?php print $this->formElement($suspensionAmount); ?>
+                    </div>
+
+
+
+                    <?php print $this->formSubmit($submit); ?>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

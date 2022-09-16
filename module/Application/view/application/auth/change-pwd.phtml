@@ -1,0 +1,46 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/scripts/app.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-toastr/toastr.min.js'))
+        ->appendFile($this->basePath('js/custom.js'))
+        ->appendFile($this->basePath('js/application/UpdatePassword/ChangePwd.js'));
+?>
+
+<?php
+if ($this->messages) {
+    foreach ($this->messages as $message) {
+        print '<div class="alert alert-warning alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+        <strong>Warning!</strong> ';
+        print $message;
+        print '</div>';
+    }
+} 
+?>
+
+<div class="form-title codeTitle">
+    <span class="form-title">Dear <?=$userName?>, Please update a new password Before login</span>
+</div>
+
+<form action="<?=$this->url('updatePwd', ['action' => 'changePwd'])?>" id="updatePwdForm" method="post">
+    <input type="hidden" name='username' value="<?=$userName?>">
+    <div class="form-group">
+        <label class="passwordLabel">Enter Old Password</label>
+        <input required="required" type="password" class="form-control" name="oldpassword" id="oldpassword"/>
+    </div>
+    <div class="form-group">
+        <label class="passwordLabel">Enter New Password</label>
+        <input required="required" type="password" class="form-control" name="password" id="password"/>
+    </div>
+    <div class="form-group">
+        <label class="passwordLabel">Re-Enter New Password</label>
+        <input required="required" type="password" class="form-control" name="rePassword" id="rePassword"/>
+        <span class="errorMsg"></span>
+    </div>
+    <div class="form-actions codeBottom" style="margin-top:30px !important;">
+        <div class="pull-left">
+            <input type="submit" name="submit" class="btn btn-primary btn-block uppercase loginbtn codeSubmit" value="Submit">
+            <a href="<?= $this->url("login"); ?>" class="btn default btn-block uppercase loginbtn codeCancel" style="color:#000 !important">Cancel</a>
+        </div>
+    </div>
+</form>

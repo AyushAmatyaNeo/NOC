@@ -1,0 +1,83 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/setup/recommend-approve/edit.js'));
+?>
+
+<?php
+$form->setAttribute('role', 'form');
+$form->setAttribute('class', 'roleTransfer-form');
+
+$recommendBy = $form->get('recommender');
+$approvedBy = $form->get('approver');
+
+$recommendBy->setValueOptions($employeeList);
+$approvedBy->setValueOptions($employeeList);
+
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Transfer');
+
+$form->setAttribute('action', $this->url('roleTransfer', ['action' => 'transferRole']));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+
+$form->prepare();
+?>
+
+<script>
+    document.selectedAlternateRecommneder = <?php echo json_encode($alternateRecommendor); ?>;
+    document.selectedAlternateApprover = <?php echo json_encode($alternateApprover); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\roleTransfer')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div>
+    <div class="row margin-top-20">
+        <div class="col-sm-12">
+            <div class="portlet box custom-box">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-user"></i>Role Transfer
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <?php
+                    print $this->form()->openTag($form);
+                    ?>
+                    <input name="employeeId" type="hidden"  value="<?php echo $id ?>"/>
+
+                    <div class="row">
+                        <div class='col-sm-4'>
+                            <div class="form-group">
+                                <?php print $this->formLabel($recommendBy); ?>
+                                <?php print $this->formElement($recommendBy); ?>
+                                <?php print $this->formElementErrors()->render($recommendBy, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class='col-sm-4'>
+                            <div class="form-group">
+                                <?php print $this->formLabel($approvedBy); ?>
+                                <?php print $this->formElement($approvedBy); ?>
+                                <?php print $this->formElementErrors()->render($approvedBy, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <?php
+                    print $this->formSubmit($submit);
+                    print $this->form()->closeTag();
+                    ?>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,209 @@
+<?php
+//$this->headScript()->appendFile($this->basePath('js/advance/advance-setup/edit.js'));
+?>
+
+<?php
+
+$advanceCode = $form->get('advanceCode');
+$advanceEname = $form->get('advanceEname');
+$advanceLname = $form->get('advanceLname');
+$allowedTo = $form->get('allowedTo');
+$allowedMonthGap = $form->get('allowedMonthGap');
+$allowUncleardAdvance = $form->get('allowUncleardAdvance');
+$maxSalaryRate = $form->get('maxSalaryRate');
+$maxAdvanceMonth = $form->get('maxAdvanceMonth');
+$deductionType = $form->get('deductionType');
+$deductionRate = $form->get('deductionRate');
+$deductionIn = $form->get('deductionIn');
+$allowOverrideRate = $form->get('allowOverrideRate');
+$minOverrideRate = $form->get('minOverrideRate');
+$allowOverrideMonth = $form->get('allowOverrideMonth');
+$maxOverrideMonth = $form->get('maxOverrideMonth');
+$overrideRecommenderFlag = $form->get('overrideRecommenderFlag');
+$overrideApproverFlag = $form->get('overrideApproverFlag');
+
+
+
+
+$submit = $form->get('submit');
+
+$form->setAttribute('action', $this->url('advance-setup', ['action' => 'edit', "id" => $id]));
+$form->prepare();
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\advance-setup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($advanceCode); ?>
+                            <?php print $this->formElement($advanceCode); ?>
+                            <?php print $this->formElementErrors()->render($advanceCode, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($advanceEname); ?>
+                            <?php print $this->formElement($advanceEname); ?>
+                            <?php print $this->formElementErrors()->render($advanceEname, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($advanceLname); ?>
+                            <?php print $this->formElement($advanceLname); ?>
+                            <?php print $this->formElementErrors()->render($advanceLname, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($allowedTo); ?>
+                            <?php print $this->formElement($allowedTo); ?>
+                            <?php print $this->formElementErrors()->render($allowedTo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($allowUncleardAdvance); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowUncleardAdvance); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($allowedMonthGap); ?>
+                            <?php print $this->formElement($allowedMonthGap); ?>
+                            <?php print $this->formElementErrors()->render($allowedMonthGap, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($maxSalaryRate); ?>
+                            <?php print $this->formElement($maxSalaryRate); ?>
+                            <?php print $this->formElementErrors()->render($maxSalaryRate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($maxAdvanceMonth); ?>
+                            <?php print $this->formElement($maxAdvanceMonth); ?>
+                            <?php print $this->formElementErrors()->render($maxAdvanceMonth, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($deductionType); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($deductionType); ?>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($deductionRate); ?>
+                            <?php print $this->formElement($deductionRate); ?>
+                            <?php print $this->formElementErrors()->render($deductionRate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($deductionIn); ?>
+                            <?php print $this->formElement($deductionIn); ?>
+                            <?php print $this->formElementErrors()->render($deductionIn, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($allowOverrideRate); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowOverrideRate); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($minOverrideRate); ?>
+                            <?php print $this->formElement($minOverrideRate); ?>
+                            <?php print $this->formElementErrors()->render($minOverrideRate, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($allowOverrideMonth); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($allowOverrideMonth); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($maxOverrideMonth); ?>
+                            <?php print $this->formElement($maxOverrideMonth); ?>
+                            <?php print $this->formElementErrors()->render($maxOverrideMonth, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($overrideRecommenderFlag); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($overrideRecommenderFlag); ?>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4" >
+                        <div class="form-group">
+                            <?php print $this->formLabel($overrideApproverFlag); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($overrideApproverFlag); ?>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+
+

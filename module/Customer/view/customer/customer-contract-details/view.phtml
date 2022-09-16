@@ -1,0 +1,72 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/customer/customer-contract-details/view.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.contractId = '<?= $id ?>';
+    document.contractDetail =<?= json_encode($contractDetail); ?>;
+    document.designationList =<?= json_encode($designationList); ?>;
+    document.dutyTypeList =<?= json_encode($dutyTypeList); ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\customer-setup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+        </div>
+
+        <form action="<?= $this->url("customer-contract-details", ["action" => "add", "id" => $id]); ?>"  method="post">
+
+            <div class="row margin-top-20">
+                <div class="col-md-12">
+
+                    <table class="table table-bordered" id="tblContractDetails">
+                        <tbody>
+                            <tr>
+                                <td>Designation</td>
+                                <td>Duty Type</td>
+                                <td>Rate</td>
+                                <td></td>
+                            </tr>
+                            <?php
+                            foreach ($contractDetail as $data) {
+                                ?>
+                                <tr>
+                            <input type="hidden" value='<?= $data['DESIGNATION_ID'] ?>' name='designation[]' class='designation' >
+                            <input type="hidden" value='<?= $data['DUTY_TYPE_ID'] ?>' name='dutyType[]' class='dutyType'>
+
+                            <td><?= $data['DESIGNATION_TITLE'] ?></td>
+                            <td><?= $data['DUTY_TYPE_NAME'] ?></td>
+                            <td><input  required="required" value='<?= $data['RATE'] ?>'  name="rate[]" type="number" class="rate" step="0.01" ></td>
+                            </tr>
+
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+
+            <div class="row">
+                <input type="submit" value="Update">
+            </div>
+
+
+        </form>
+    </div>
+</div>

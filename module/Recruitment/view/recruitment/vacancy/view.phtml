@@ -1,0 +1,212 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Vacancy')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'))
+        ->appendFile($this->basePath('js/recruitment/vacancy/view.js'));
+        
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'RecruitmentVacancy');
+
+$openingId = $form->get('OpeningId');
+$openingId->setValueOptions($Openings);
+$openingId->setAttributes(["disabled" => "disabled"]);
+$QualificationId = $form->get('QualificationId');
+$QualificationId->setValueOptions($QualificationList);
+$QualificationId->setAttributes(["disabled" => "disabled"]);
+$ServiceTypesId = $form->get('ServiceTypesId');
+$ServiceTypesId->setValueOptions($ServiceTypes);
+$ServiceTypesId->setAttributes(["disabled" => "disabled"]);
+$ServiceEventsId = $form->get('ServiceEventsId');
+$ServiceEventsId->setValueOptions($ServiceEvents);
+$ServiceEventsId->setAttributes(["disabled" => "disabled"]);
+$InclusionId = $form->get('InclusionId');
+$InclusionId->setValueOptions($InclusionList);
+$InclusionId->setAttributes(["disabled" => "disabled"]);
+$SkillId = $form->get('SkillId');
+$SkillId->setValueOptions($Skills);
+$SkillId->setAttributes(["disabled" => "disabled"]);
+$LevelId = $form ->get('LevelId');
+$LevelId->setValueOptions($LevelList);
+$LevelId->setAttributes(["disabled" => "disabled"]);
+$Vacancy_type = $form->get('Vacancy_type');
+$Vacancy_type->setValueOptions($Vacancy_types);
+$Vacancy_type->setAttributes(["disabled" => "disabled"]);
+$Experience = $form->get('Experience');
+$Experience->setAttributes(["disabled" => "disabled"]);
+$Vacancy_no = $form->get('Vacancy_no');
+$Vacancy_no->setAttribute('disabled', 'disabled');
+$AdNo = $form->get('AdNo');
+$AdNo->setAttributes(["disabled" => "disabled"]);
+$VacancyReservationNo = $form->get('VacancyReservationNo');
+$VacancyReservationNo->setAttributes(["disabled" => "disabled"]);
+$Remark = $form->get('Remark');
+$Remark->setAttributes(["disabled" => "disabled"]);
+$PositionId = $form->get('PositionId');
+$PositionId->setValueOptions($Positions);
+$PositionId->setAttributes(["disabled" => "disabled"]);
+$DepartmentId = $form->get('DepartmentId');
+$DepartmentId->setValueOptions($DepartmentList);
+$DepartmentId->setAttributes(["disabled" => "disabled"]);
+
+$submit = $form->get('submit');
+
+// $form->setAttribute('action', $this->url('vacancy', ['action' => 'action', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.inc = '<?php echo $inc ?>'; 
+</script>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Vacancy Detail
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="border-bottom">
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Vacancy_no); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($Vacancy_no); ?>
+                            <?php print $this->formElementErrors()->render($Vacancy_no, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($openingId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($openingId); ?>
+                            <?php print $this->formElementErrors()->render($openingId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Vacancy_type); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($Vacancy_type); ?>
+                            <?php print $this->formElementErrors()->render($Vacancy_type, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($ServiceTypesId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($ServiceTypesId); ?>
+                            <?php print $this->formElementErrors()->render($ServiceTypesId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($ServiceEventsId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($ServiceEventsId); ?>
+                            <?php print $this->formElementErrors()->render($ServiceEventsId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Experience); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($Experience); ?>
+                            <?php print $this->formElementErrors()->render($Experience, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($LevelId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($LevelId); ?>
+                            <?php print $this->formElementErrors()->render($LevelId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($QualificationId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($QualificationId); ?>
+                            <?php print $this->formElementErrors()->render($QualificationId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($PositionId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($PositionId); ?>
+                            <?php print $this->formElementErrors()->render($PositionId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($DepartmentId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($DepartmentId); ?>
+                            <?php print $this->formElementErrors()->render($DepartmentId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($VacancyReservationNo); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($VacancyReservationNo); ?>
+                            <?php print $this->formElementErrors()->render($VacancyReservationNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($AdNo); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($AdNo); ?>
+                            <?php print $this->formElementErrors()->render($AdNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($InclusionId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($InclusionId); ?>
+                            <?php print $this->formElementErrors()->render($InclusionId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($SkillId); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($SkillId); ?>
+                            <?php print $this->formElementErrors()->render($SkillId, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Remark); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($Remark); ?>
+                            <?php print $this->formElementErrors()->render($Remark, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>                 
+            </div>
+        </div>
+    </div>
+</div>

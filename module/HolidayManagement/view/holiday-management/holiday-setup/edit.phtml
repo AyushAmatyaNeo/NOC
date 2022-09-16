@@ -1,0 +1,232 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/bootstrap-multiselect/css/bootstrap-multiselect.css'));
+
+$this->headLink()
+    ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/bootstrap-multiselect/js/bootstrap-multiselect.js'));
+
+$this->headScript()
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('js/search.js'))
+    ->appendFile($this->basePath('js/HolidayManagement/HolidaySetup/edit.js'));
+
+?>
+<?php
+$holidayEname = $form->get('holidayEname');
+$holidayLname = $form->get('holidayLname');
+$startDate = $form->get('startDate');
+$endDate = $form->get('endDate');
+$halfday = $form->get('halfday');
+$remarks = $form->get('remarks');
+$assignOnEmployeeSetup = $form->get('assignOnEmployeeSetup');
+$fiscalYear = $form->get('fiscalYear');
+$fiscalYear->setValueOptions($fiscalYearKV);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('id', 'holiday-Form');
+$form->setAttribute('action', $this->url('holidaysetup', ['action' => 'edit', 'id' => $id]));
+$form->prepare();
+
+?>
+
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.searchSelectedValues =<?php echo json_encode($searchSelectedValues); ?>;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\holidaysetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($fiscalYear); ?>
+                            <?php print $this->formElement($fiscalYear); ?>
+                            <?php print $this->formElementErrors()->render($fiscalYear, ['class' => 'help-block error']); ?>                        
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group <?= empty($holidayEname->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($holidayEname); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($holidayEname); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($holidayEname, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="form-group <?= empty($holidayLname->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($holidayLname); ?>
+                            <?php print $this->formElement($holidayLname); ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($holidayLname, ['class' => 'help-block error']); ?>
+                    </div>
+
+                </div>
+
+
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group  required  <?= empty($startDate->getMessages()) ? "" : "error" ?>">
+                                    <?php print $this->formLabel($startDate) ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($startDate) ?>
+                                </div>
+                                <?php print $this->formElementErrors()->render($startDate, ['class' => 'help-block error']) ?>
+                            </div>    
+
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliStartDate">&nbsp;</label>
+                                    <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                           class="form-control" value="">
+                                </div>    
+                            </div> 
+                        </div>
+                    </div>
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group required  <?= empty($endDate->getMessages()) ? "" : "error" ?>">
+                                    <?php print $this->formLabel($endDate) ?>
+                                    <span class="required" aria-required="true">*</span>
+                                    <?php print $this->formElement($endDate) ?>
+                                </div>
+                                <?php print $this->formElementErrors()->render($endDate, ['class' => 'help-block error']) ?>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliEndDate">&nbsp;</label>
+                                    <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                           class="form-control" value="">
+                                </div>
+                            </div>     
+                        </div>   
+
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <?php print $this->formLabel($halfday); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($halfday); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($halfday, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+
+                <div class=" row">
+                    <div class="col-sm-6">
+                        <div class="form-group padding-0">
+                            <?php print $this->formLabel($assignOnEmployeeSetup); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($assignOnEmployeeSetup); ?>
+                            </div>
+                        </div>
+                        <?php print $this->formElementErrors()->render($assignOnEmployeeSetup, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-2">
+                        <label>Company</label>
+                        <select multiple class="form-control" name="company[]" id="companyId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Branch</label>
+                        <select multiple class="form-control" name="branch[]" id="branchId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Department</label>
+                        <select multiple class="form-control" name="department[]" id="departmentId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Designation</label>
+                        <select multiple class="form-control" name="designation[]" id="designationId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Position</label>
+                        <select multiple class="form-control" name="position[]" id="positionId">
+                        </select>
+                    </div>
+                </div>
+                <div class="row margin-top-10">
+                    <div class="col-sm-2">
+                        <label>Service Type</label>
+                        <select multiple class="form-control" name="serviceType[]" id="serviceTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Service Event Type</label>
+                        <select multiple class="form-control" name="serviceEventType[]" id="serviceEventTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee Type</label>
+                        <select multiple class="form-control" name="employeeType[]" id="employeeTypeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Employee</label>
+                        <select multiple class="form-control" name="employee[]" id="employeeId">
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <label>Gender</label>
+                        <select multiple class="form-control" name="gender[]" id="genderId">
+                        </select>
+                    </div>
+                </div>
+
+                <div class="row margin-top-20">
+                    <div class="col-sm-12">
+                        <?php print $this->formSubmit($submit); ?>
+                    </div>
+                </div>
+                <?php print $this->form()->closeTag(); ?>
+            </div>
+
+        </div>
+    </div>
+</div>

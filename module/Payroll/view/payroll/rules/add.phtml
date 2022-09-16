@@ -1,0 +1,160 @@
+<?php
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/codemirror/lib/codemirror.css'));
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/codemirror/addon/hint/show-hint.css'));
+
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/codemirror/lib/codemirror.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/codemirror/addon/hint/show-hint.js'));
+$this->headScript()->appendFile($this->basePath('js/Payroll/Rules/formula-writer.js'));
+$this->headScript()->appendFile($this->basePath('js/Payroll/Rules/add.js'));
+?>
+
+<?php
+$payCode = $form->get('payCode');
+$payEdesc = $form->get('payEdesc');
+$payLdesc = $form->get('payLdesc');
+$payTypeFlag = $form->get('payTypeFlag');
+$priorityIndex = $form->get('priorityIndex');
+$includeInTax = $form->get('includeInTax');
+$includeInSalary = $form->get('includeInSalary');
+$includePastValue = $form->get('includePastValue');
+$includeFutureValue = $form->get('includeFutureValue');
+$remarks = $form->get('remarks');
+$formula = $form->get('formula');
+$acCode = $form->get('acCode');
+$submit = $form->get('submit');
+//
+$form->setAttribute('action', $this->url('rules', ['action' => 'add']));
+$form->prepare();
+?>
+<script>
+    window.formulaData =<?php echo $formulaData ?>;
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\rules')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payCode); ?>
+                            <?php print $this->formElement($payCode); ?>
+                            <?php print $this->formElementErrors()->render($payCode, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payEdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($payEdesc); ?>
+                            <?php print $this->formElementErrors()->render($payEdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payLdesc); ?>
+                            <?php print $this->formElement($payLdesc); ?>
+                            <?php print $this->formElementErrors()->render($payLdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($priorityIndex); ?>
+                            <?php print $this->formElement($priorityIndex); ?>
+                            <?php print $this->formElementErrors()->render($priorityIndex, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($payTypeFlag); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($payTypeFlag); ?>Past
+                            </div>
+                            <?php print $this->formElementErrors()->render($payTypeFlag, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($includeInTax); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeInTax); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($includeInTax, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($includeInSalary); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeInSalary); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($includeInSalary, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($includePastValue); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includePastValue); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($includePastValue, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($includeFutureValue); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($includeFutureValue); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($includeFutureValue, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-6 col-lg-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($acCode); ?>
+                            <?php print $this->formElement($acCode); ?>
+                            <?php print $this->formElementErrors()->render($acCode, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-12 col-lg-12">
+                        <div class="form-group">
+                            <?php print $this->formLabel($formula); ?>
+                            <?php print $this->formElement($formula); ?>
+                            <?php print $this->formElementErrors()->render($formula, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

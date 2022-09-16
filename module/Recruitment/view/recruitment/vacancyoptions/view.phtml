@@ -1,0 +1,107 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Vacancy')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/recruitment/vacancyoptions/view.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+
+        
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'vacancyoptions');
+$VacancyId = $form->get('VacancyId');
+$VacancyId->setValueOptions($VacancyList);
+$VacancyId->setAttributes(["disabled" => "disabled"]);
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+// $form->setAttribute('action', $this->url('vacancy', ['action' => 'action', 'id' => $id]));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.OptionList = <?= json_encode($OptionList); ?>;
+    document.detail = <?= json_encode($detail); ?>;
+</script>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Vacancy Detail
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">                
+            <div class="border-bottom">
+                <!--Vacancy Options details addition-->
+                <div class="row">                    
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                                <?php print $this->formLabel($VacancyId); ?>
+                                <?php print $this->formElement($VacancyId); ?>
+                                <?php print $this->formElementErrors()->render($VacancyId, ['class' => 'help-block']); ?>
+                            </div> 
+                    </div>
+                </div>
+                <div class="row" >
+                    <div class="col-md-11" >
+                        <table id="vacancyoptionsDetails" class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th colspan="3">Option Details</th>       
+                                    <th colspan="2">Amount</th>             
+                                    <th colspan="1">Remarks</th>  
+                                </tr>
+                                <tr>
+                                    <th>Options List</th>
+                                    <th>Open / Internal</th>
+                                    <th>Quota</th>      
+                                    <th>Normal Amount</th>
+                                    <th>Late Amount</th>        
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <?=$detail['OPTION_ID']?>
+                                    </td>
+                                    <td>                                        
+                                        <?=$detail['OPEN_INTERNAL']?>                                        
+                                    </td>  
+                                    <td>
+                                    <?=$detail['QUOTA']?>
+                                    </td>
+                                    <td>
+                                    <?=$detail['NORMAL_AMT']?>
+                                    </td>
+                                    <td>
+                                    <?=$detail['LATE_AMT']?>
+                                    </td>     
+                                    <td>
+                                    <?=$detail['REMARKS']?>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>   
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+print $this->form()->closeTag();
+?>
+

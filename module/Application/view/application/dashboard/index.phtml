@@ -1,0 +1,32 @@
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<?php $counter = 0; ?>
+<?php foreach ($dashboardItems as $dashboardItem) : ?>
+    <?php if ($counter % 2 == 0) { ?>
+        <div class="row">
+        <?php } ?>
+        <?php
+        print $this->partial($dashboardItem['path'], $dashboardItem['data']);
+        ?>
+        <?php if ($counter % 2 == 1 || ($counter + 1 == sizeof($dashboardItems))) { ?>
+        </div>
+    <?php } ?>
+    <?php $counter++; ?>
+<?php endforeach; ?>
+
+
+
+
+

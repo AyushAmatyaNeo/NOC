@@ -1,0 +1,138 @@
+
+  <div class="row">
+                <div class="col-md-12">
+                    <div class="mytask-todo">
+                        <div class="taskbox">
+
+                            <div class="portlet light portlet-inner-task-wrapper-two boxborder">
+                                <div class="portlet-title">
+                                    <div class="caption caption-md">
+                                        <i class="fa fa-tasks font-green-sharp"></i>
+                                        <span class="caption-subject font-green-sharp bold">My Tasks</span>
+                                    </div>
+                                    <div class="task pull-right">
+                                        <div class="date-date">
+                                            <span><?php print date('d'); ?></span>
+                                            <div class="taskaddbtn">
+                                                <a href="#"> <i class="fa fa-plus" aria-hidden="true"></i></a>
+                                            </div> 
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+                                <?php $employeeTask = [["DESIGNATION_TITLE" => "TEST", "FULL_NAME" => "TEST", "TASK_EDESC" => "TEST"]]; ?>
+                                <?php if ($employeeTask) : ?>
+                                    <div class="task-list">
+                                        <ul>
+                                            <?php foreach ($employeeTask as $task): ?>
+                                                <li>
+                                                    <div class="task-list-content clearfix">
+                                                        <h4><?php print $task['TASK_EDESC']; ?></h4>
+                                                        <div class="positon">Position: <?php print $task['DESIGNATION_TITLE']; ?></div>
+                                                        <div class="name"><?php print $task['FULL_NAME']; ?></div>
+                                                    </div>
+                                                </li>
+                                            <?php endforeach; ?>
+                                        </ul>
+                                        <ul>
+                                            <li>
+                                                <div class="task-list-content clearfix">
+                                                    <h4>Approve/Reject Requisition</h4>
+                                                    <div class="positon">Position: Logistics Executive</div>
+                                                    <div class="name">Muna Kunwor</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="task-list-content clearfix">
+                                                    <h4>Interview for new recruitment</h4>
+                                                    <div class="positon">Position: Logistics Executive</div>
+                                                    <div class="name">Muna Kunwor</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="task-list-content clearfix">
+                                                    <h4>Evaluation of XYZ</h4>
+                                                    <div class="positon">Position: Logistics Executive</div>
+                                                    <div class="name">Muna Kunwor</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="task-list-content clearfix">
+                                                    <h4>Meeting at 4 pm</h4>
+                                                    <div class="positon">Position: Logistics Executive</div>
+                                                    <div class="name">Muna Kunwor</div>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="task-list-content clearfix">
+                                                    <h4>Publish notice</h4>
+                                                    <div class="positon">Position: Logistics Executive</div>
+                                                    <div class="name">Muna Kunwor</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                <?php else : ?>
+                                    <div class="notask">
+                                        <div class="notask-box">
+                                            <h4><i class="fa fa-universal-access" aria-hidden="true"></i>No Task Available</h4>
+                                        </div>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div> 
+
+
+                        <div class="datepickeform">
+                            <div class="portlet light portlet-inner-datepicker-wrapper-two boxborder">
+
+                                <div class="portlet-title">
+                                    <div class="caption caption-md">
+                                        <i class="fa fa-check-square-o font-green-sharp" aria-hidden="true"></i>
+                                        <span class="caption-subject font-green-sharp bold">TO Do</span>
+                                    </div>     
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Due for today <?php print date('d F Y'); ?> </label>
+                                            <input id="inp-task-dt" class="pickdate form-control form-control-inline input-medium date-picker" size="16" type="text" value=""/>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Task</label>
+                                            <input id="inp-task-name" class="form-control" placeholder="Task Name" type="text">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label">Employee</label>
+                                            <div>
+                                                <select id="lst-task-emp" class="select2_category form-control" data-placeholder="Select Employee" tabindex="1">
+                                                    <?php print $taskAssignEmployeeListOptionsHtml; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <!--                                        <div class="form-group">
+                                                                                    <input type="button" id="task-save" value="Save" />
+                                                                                </div> -->
+                                        <button type="button" class="btn btn-theme  savebutton" id="task-save btn" value="Save">
+                                            <i class="fa fa-floppy-o" aria-hidden="true"></i>
+                                            Save
+                                        </button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>

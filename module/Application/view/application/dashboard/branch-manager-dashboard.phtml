@@ -1,0 +1,611 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/bootstrap-datepicker/css/datepicker3.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/fullcalendar/fullcalendar.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/datatables/extensions/Scroller/css/dataTables.scroller.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/datatables/extensions/ColReorder/css/dataTables.colReorder.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/datatables/datatables.min.css'))
+        ->appendStylesheet($this->basePath('css/dashboard.hrm.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-daterangepicker/moment.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/fullcalendar/fullcalendar.min.js'))
+        ->appendFile($this->basePath('assets/admin/pages/scripts/components-pickers.js'))
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/datatables/datatables.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/datatables/extensions/TableTools/js/dataTables.tableTools.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/datatables/extensions/ColReorder/js/dataTables.colReorder.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/datatables/extensions/Scroller/js/dataTables.scroller.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/datatables/plugins/bootstrap/datatables.bootstrap.js'))
+        ->appendFile($this->basePath('assets/global/plugins/highcharts/js/highcharts.js'))
+        ->appendFile($this->basePath('assets/global/plugins/highcharts/js/highcharts-3d.js'))
+        ->appendFile($this->basePath('assets/global/plugins/highcharts/modules/no-data-to-display.js'))
+//    ->appendFile($this->basePath('assets/global/plugins/highcharts/modules/exporting.js'))
+        ->appendFile($this->basePath('jquery_lazyload-master/jquery.lazyload.min.js'))
+        ->appendFile($this->basePath('assets/global/scripts/metronic.js'))
+        ->appendFile($this->basePath('js/dashboard/bm-dashboard.js'));
+
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/lobilist-master/dist/lobilist.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/lobilist-master/dist/lobilist.min.js'))
+        ->appendFile($this->basePath('js/dashboard/todo.js'));
+
+$taskAssignEmployeeListOptionsHtml = "";
+
+$departmentAttendanceData = [];
+foreach ($departmentAttendance as $deptAttn) {
+    if (!isset($departmentAttendanceData[$deptAttn['DEPARTMENT_NAME']])) {
+        $departmentAttendanceData[$deptAttn['DEPARTMENT_NAME']] = [
+            'PRESENT' => 0,
+            'ABSENT' => 0
+        ];
+    }
+    $departmentAttendanceData[$deptAttn['DEPARTMENT_NAME']][$deptAttn['PRESENT_STATUS']] = $deptAttn['ATTN_COUNT'];
+}
+?>
+
+<style type="text/css">
+    .highcharts-credits {
+        display:none;
+    }
+</style>
+
+<script type="text/javascript">
+    document.xndr = []; // Gender
+    document.xndrhc = []; // Gender Head Count
+<?php foreach ($headCountGender as $ghc) : ?>
+        document.xndr.push('<?php print $ghc['GENDER_NAME']; ?>');
+        document.xndrhc.push(<?php print $ghc['HEAD_COUNT'] ?>);
+<?php endforeach; ?>
+
+    document.odept = []; // Office Department
+    document.odepthc = []; // Department Head Count
+<?php foreach ($headCountDepartment as $dhc) : ?>
+        document.odept.push('<?php print $dhc['DEPARTMENT_NAME']; ?>');
+        document.odepthc.push(<?php print $dhc['HEAD_COUNT']; ?>);
+<?php endforeach; ?>
+
+    document.brln = []; // Branch Location
+    document.brlnhc = []; // Department Head Count
+<?php foreach ($headCountLocation as $lhc) : ?>
+        document.brln.push('<?php print $lhc['BRANCH_NAME']; ?>');
+        document.brlnhc.push(<?php print $lhc['HEAD_COUNT']; ?>);
+<?php endforeach; ?>
+
+    document.deptattn = <?php print json_encode($departmentAttendanceData); ?>; // Departments Attendance
+    document.trainingUrl = '<?php print $this->url('trainingAssign', ["action" => 'index']); ?>';
+    document.travelUrl = '<?php print $this->url('travelStatus', ["action" => 'index']); ?>';
+    document.leaveUrl = '<?php print $this->url('leavestatus', ["action" => 'index']); ?>';
+</script>
+<script>
+    document.todoAddUrl = '<?php echo $this->url('task', ['action' => 'add']); ?>';
+    document.todoUpdateUrl = '<?php echo $this->url('task', ['action' => 'update']); ?>';
+    document.todoDeleteUrl = '<?php echo $this->url('task', ['action' => 'delete']); ?>';
+    document.todoTaskList = <?php echo json_encode($todoList); ?>;
+    document.todoTaskUpdateStatus = '<?php echo $this->url('task', ['action' => 'updateStatus']); ?>';
+    document.getManagerDashboardUrl = '<?php echo $this->url('dashboard', ['action' => 'fetchManagerDashBoardDetails']); ?>'
+</script>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+
+<?php
+$presentUrl = $this->url('managerReport', ['action' => 'index', 'id' => 1]);
+$OnLeaveUrl = $this->url('managerReport', ['action' => 'index', 'id' => 2]);
+$OnTrainingUrl = $this->url('managerReport', ['action' => 'index', 'id' => 3]);
+$OnTravelUrl = $this->url('managerReport', ['action' => 'index', 'id' => 4]);
+$wohUrl = $this->url('managerReport', ['action' => 'index', 'id' => 5]);
+$lateInUrl = $this->url('managerReport', ['action' => 'index', 'id' => 6]);
+$earlyOutUrl = $this->url('managerReport', ['action' => 'index', 'id' => 7]);
+$missPunchUrl = $this->url('managerReport', ['action' => 'index', 'id' => 8]);
+$pendingleaveUrl = $this->url('managerReport', ['action' => 'index', 'id' => 1]);
+?>
+
+
+
+<div class="employeedashboard">
+    <div class="emplyoee-dashboard col-md-12">
+        <div class="row">
+            <div class="employe-descbox">
+                <div class="col-sm-1 col-md-1 profile_pic">
+                    <img id="employeeImage" src="<?php print $this->basePath("img/nobody_m.original.jpg"); ?>">
+                </div>
+                <div class="col-sm-3 col-md-3 employee-details">
+                    <h4 class="font-weight-bold" id="employeeFullName"></h4>
+                    <span id="employeeOfficialEmail"></span><br>
+                    <span id="employeeDesignationTitle"></span><br>
+                    <span id="employeeServiceDate"></span><br>
+                </div>
+                <div class="col-md-5">
+                    <div class="row detailsbox">
+                        <a href="<?php echo $presentUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg1" >
+                                    <span id="employeePresentDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">Present</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="<?php echo $OnLeaveUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg2">
+                                    <span id="employeeLeaveDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">On Leave</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="<?php echo $OnTrainingUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg3">
+                                    <span id="employeeTrainingDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">Training</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a  href="<?php echo $OnTravelUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg4">
+                                    <span id="employeeTravelDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">On Tour</div>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="<?php echo $wohUrl ?>">
+                            <div class="col-xs-6 col-sm-3 col-md-2 hexcustom">
+                                <div class="employee_details-box hexagon-bg5">
+                                    <span id="employeeWOHDays">0</span>
+                                    <div class="face1"></div>
+                                    <div class="face2"></div>
+                                    <div class="headtitle">WOH</div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xs-12  col-sm-7 col-md-3">
+                    <div class="col-hris row attendence-box">
+                        <ul>
+                            <a title="Yesterday" href="<?php echo $lateInUrl ?>">
+                                <li class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="hris efficiency efficiency-bg1">
+                                        <span id="employeeLateInDays">0</span>
+                                        <div>Late In</div>
+                                    </div>
+                                </li>
+                            </a>
+                            <a title="Yesterday" href="<?php echo $earlyOutUrl ?>">
+                                <li class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="hris efficiency efficiency-bg2">
+                                        <span id="employeeEarlyOutDays">0</span>
+                                        <div>Early Out</div>
+                                    </div>
+                                </li>
+                            </a>
+                            <a title="Yesterday" href="<?php echo $missPunchUrl ?>">
+                                <li class="col-xs-4 col-sm-4 col-md-4">
+                                    <div class="hris efficiency efficiency-bg3">
+                                        <span id="employeeMissPunch">0</span>
+                                        <div>Missed Punch</div>
+                                    </div>
+                                </li>
+                            </a>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row chart-row">
+                <div class="col-md-12 col-chart-dept-attn">
+                    <div class="portlet-body">
+                        <div class="portlet light boxborder">
+                            <div id="chart-department-attendance" style="height:500px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 col-chart-dept-hc">
+                    <div class="portlet-body">
+                        <div class="portlet light boxborder">
+                            <div id="chart-department-headcount" style="height:400px"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="portlet-body">
+                        <div class="portlet light boxborder" style="padding-left:0;padding-right:0;">
+                            <div class="col-md-6  col-chart-loc-hc">
+                                <div id="chart-location-headcount" style="height:400px"></div>
+                            </div>
+                            <div class="col-md-6  col-chart-xndr-hc">
+                                <div id="chart-gender-headcount" style="height:400px"></div>
+                            </div>
+                            <div class="clearfix"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="profile-content">
+                        <div class="row">
+                            <div class="col-md-12 noticeboard">
+                                <div class="portlet-body">
+                                    <div class="portlet light boxborder">
+                                        <div class="portlet-title tabbable-line">
+                                            <div class="caption caption-md">
+                                                <i class="fa fa-newspaper-o font-green-sharp" aria-hidden="true"></i>
+                                                <span class="caption-subject font-green-sharp bold">Notice Board</span>
+                                            </div>
+                                        </div>
+                                        <div class="noticeboard-list row">
+                                            <ul>
+                                                <?php if (count($employeeNotice) > 0) : ?>
+                                                    <?php foreach ($employeeNotice as $notice) : ?>
+                                                        <li style="width:100%;">
+                                                            <div class="calendardate-box col-xs-4 col-sm-2 col-md-2">
+                                                                <span><?php print $notice['NEWS_DAY']; ?></span><br>
+                                                                <?php print $notice['NEWS_MONTH_YEAR']; ?>
+                                                            </div>
+                                                            <div class="notice-details col-xs-8 col-sm-10 col-md-10">
+                                                                <h5 class="title-color caption-subject  bold"><?php print $notice['NEWS_TITLE']; ?></h5>
+                                                                <p><?php print $notice['NEWS_EDESC']; ?></p>
+                                                            </div>
+                                                        </li>
+                                                    <?php endforeach; ?>
+                                                <?php else : ?>
+                                                    <li style="width:100%;">
+                                                        <div class="calendardate-box col-xs-4 col-sm-2 col-md-2">
+                                                            <span><?php print date('d'); ?></span><br>
+                                                            <?php print date('M Y'); ?>
+                                                        </div>
+                                                        <div class="notice-details col-xs-8 col-sm-10 col-md-10">
+                                                            <h5 class="title-color caption-subject  bold">No notice found</h5>
+                                                            <p>Notice will be display when new notice is published</p>
+                                                        </div>
+                                                    </li>
+                                                <?php endif; ?>
+                                            </ul>
+                                        </div>
+                                        <!--END TABS-->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END PORTLET -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet box">
+                        <div class="portlet-title background-green">
+                            <div class="caption employee_search">
+                                <i class="fa fa-user"></i>Search Employee
+                            </div>
+                            <div class="tools">
+                                <a href="javascript:;" class="collapse">
+                                </a>
+                            </div>
+                        </div>
+                        <div class="portlet-body hrm-dashboard-employee-list">
+                            <div class="tabbable-custom nav-justified">
+                                <div class="tab-content tab-content-box">
+                                    <div class="tab-pane active" id="tab_1_1_1">
+                                        <div class="portlet box blue-hoki1 employee-search-table">
+                                            <div class="portlet-body">
+                                                <table class="table table-striped table-bordered table-hover" id="sample_1">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Code</th>
+                                                            <th>Name</th>
+                                                            <th>Designation</th>
+                                                            <th>Department</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <?php foreach ($employeeList as $employee) : ?>
+                                                            <tr data-empid="<?php print $employee['EMPLOYEE_ID']; ?>">
+                                                                <td><?php print $employee['EMPLOYEE_CODE']; ?></td>
+                                                                <td><?php print $employee['FULL_NAME']; ?></td>
+                                                                <td><?php print $employee['DESIGNATION_TITLE']; ?></td>
+                                                                <td><?php print $employee['DEPARTMENT_NAME']; ?></td>
+                                                                <?php
+                                                                $taskAssignEmployeeListOptionsHtml .= "<option data-empid=\"{$employee['EMPLOYEE_ID']}\" data-dsg=\"{$employee['DESIGNATION_TITLE']}\" value=\"{$employee['EMPLOYEE_ID']}\">{$employee['FULL_NAME']}</option>";
+                                                                ?>
+                                                            </tr>
+                                                        <?php endforeach; ?>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="employee-facilities row">
+                                            <div class="flist col-xs-4 col-sm-2 col-md-2">
+                                                <div class="iconbox">
+                                                    <i class="fa fa-user fonticon fonticon-disabled circlebgone ln-hrd-emp-lst ln-hrd-emp-payroll" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="description">Payroll</div>
+                                            </div>
+                                            <div class="flist col-xs-4 col-sm-2 col-md-2">
+                                                <div class="iconbox">
+                                                    <i class="fa fa-users fonticon fonticon-disabled circlebgtwo ln-hrd-emp-lst ln-hrd-emp-recruitment" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="description">Recruitment</div>
+                                            </div>
+                                            <div class="flist col-xs-4 col-sm-2 col-md-2">
+                                                <div class="iconbox">
+                                                    <i class="fa fa-television fonticon fonticon-disabled circlebgthree ln-hrd-emp-lst ln-hrd-emp-training" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="description">Training</div>
+                                            </div>
+                                            <div class="flist  col-xs-4 col-sm-2 col-md-2">
+                                                <div class="iconbox">
+                                                    <i class="fa fa-ticket fonticon fonticon-disabled circlebgfour ln-hrd-emp-lst ln-hrd-emp-travel" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="description">Travel</div>
+                                            </div>
+                                            <div class="flist col-xs-4 col-sm-2 col-md-2">
+                                                <div class="iconbox">
+                                                    <i class="fa fa-gavel fonticon fonticon-disabled circlebgfive ln-hrd-emp-lst ln-hrd-emp-leave" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="description">Leave</div>
+                                            </div>
+                                            <div class="flist  col-xs-4 col-sm-2 col-md-2">
+                                                <div class="iconbox">
+                                                    <i class="fa fa-bar-chart fonticon fonticon-disabled circlebgsix ln-hrd-emp-lst ln-hrd-emp-payslip" aria-hidden="true"></i>
+                                                </div>
+                                                <div class="description">Pay Slip</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="birthday-wishes">
+                    <div class="col-md-12 col-sm-12">
+                        <?php
+                        // Display Today's Birthday As Active
+                        $todayBirthdayActive = ((isset($employeesBirthday) && isset($employeesBirthday['TODAY']) && $employeesBirthday['TODAY'])) ? true : false;
+                        ?>
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light boxborder">
+                            <div class="portlet-title tabbable-line tabline">
+                                <div class="caption">
+                                    <i class="fa fa-birthday-cake font-green-sharp"></i>
+                                    <span class="caption-subject font-green-sharp bold">Birthday Wishes</span>
+                                </div>
+                                <ul class="nav nav-tabs">
+                                    <li class="ln-birthday <?php print $todayBirthdayActive ? 'active' : ''  ?>">
+                                        <a id="ln-birthday-today" class="ln-nav-tab-birthday" href="javascript:void(0);" data-toggle="tab" aria-expanded="true">Today</a>
+                                    </li>
+                                    <li class="ln-birthday <?php print $todayBirthdayActive ? '' : 'active'  ?>">
+                                        <a id="ln-birthday-upcoming" class="ln-nav-tab-birthday" href="javascript:void(0);" data-toggle="tab" aria-expanded="false">Upcoming</a>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="row">
+                                <div class="tab-content birday-person-list">
+                                    <div class="tab-pane tab-pane-birthday">
+                                        <div id="tab-birthday-today" style="display:<?php print $todayBirthdayActive ? 'block' : 'none'  ?>">
+                                            <?php if ($todayBirthdayActive) : ?>
+                                                <?php foreach ($employeesBirthday['TODAY'] as $todayBirthday) : ?>
+                                                    <div class="person-list clearfix">
+                                                        <div class="col-xs-5 col-md-3 col-sm-3">
+                                                            <div class="person-pic">
+                                                                <img class="lazy"  data-original="<?php print $todayBirthday['FILE_PATH'] ? $this->basePath('uploads/' . $todayBirthday['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>" alt="person picture">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-7 col-md-5 col-sm-6">
+                                                            <div class="person-details">
+                                                                <h4><?php print $todayBirthday['FULL_NAME']; ?></h4>
+                                                                <span><?php print $todayBirthday['DESIGNATION_TITLE']; ?></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-7 col-md-4 col-sm-3">
+                                                            <span class="birth-date">
+                                                                <?php print $todayBirthday['EMP_BIRTH_DATE']; ?>
+                                                                <a href="<?php print $this->url('birthday', ['action' => 'wish', 'id' => $todayBirthday['EMPLOYEE_ID']]); ?>" class="btn btn-link pull-right">wish</a>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else: ?>
+                                                <div class="dashborder clearfix">
+                                                    <div class="col-xs-5 col-md-3 col-sm-3">
+                                                        <div class="person-pic birthday-pic">
+                                                            <img src="<?php print $this->basePath('img/nobody_m.original.jpg'); ?>" alt="person picture">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-5 col-sm-6">
+                                                        <div class="nobirthday-text">
+                                                            <h4>No Birthday Available Today</h4>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-4 col-sm-3">
+                                                        <span class="calendar_date"><i class="fa fa-calendar" aria-hidden="true"></i>&nbsp;<?php print date('jS F') ?></span>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+
+                                        <div id="tab-birthday-upcoming" style="display:<?php print $todayBirthdayActive ? 'none' : 'block'  ?>">
+                                            <?php if (isset($employeesBirthday) && isset($employeesBirthday['UPCOMING']) && $employeesBirthday['UPCOMING']) : ?>
+                                                <?php foreach ($employeesBirthday['UPCOMING'] as $upcomingBirthday) : ?>
+                                                    <div class="person-list clearfix">
+                                                        <div class="col-xs-5 col-md-3 col-sm-3">
+                                                            <div class="person-pic">
+                                                                <img class="lazy"  data-original="<?php print $upcomingBirthday['FILE_PATH'] ? $this->basePath('uploads/' . $upcomingBirthday['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>" alt="person picture">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-7 col-md-5 col-sm-6">
+                                                            <div class="person-details">
+                                                                <h4><?php print $upcomingBirthday['FULL_NAME']; ?></h4>
+                                                                <span><?php print $upcomingBirthday['DESIGNATION_TITLE']; ?></span>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-xs-7 col-md-4 col-sm-3">
+                                                            <span class="birth-date"><i class="fa fa-calendar"></i><?php print $upcomingBirthday['EMP_BIRTH_DATE']; ?></span>
+                                                        </div>
+                                                    </div>
+                                                <?php endforeach; ?>
+                                            <?php else : ?>
+                                                <div class="dashborder clearfix">
+                                                    <div class="col-xs-5 col-md-3 col-sm-3">
+                                                        <div class="person-pic birthday-pic">
+                                                            <img src="<?php print $this->basePath('img/nobody_m.original.jpg'); ?>" alt="person picture">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-xs-7 col-md-5 col-sm-6">
+                                                        <div class="nobirthday-text">
+                                                            <h4>No Upcoming Birthdays Found!!!</h4>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            <?php endif; ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div id="lobilist">
+
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="portlet light bordered">
+                        <div class="portlet-title tabbable-line">
+                            <div class="caption">
+                                <i class="icon-bubble font-dark hide"></i>
+                                <span class="caption-subject font-hide bold uppercase">Employees</span>
+                            </div>
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#portlet_hired_this_month" data-toggle="tab"> Hired this month </a>
+                                </li>
+                                <li>
+                                    <a href="#portlet_left_this_month" data-toggle="tab"> Left this month </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="portlet-body">
+                            <div class="tab-content scroller" style="height:305px">
+                                <div class="tab-pane active" id="portlet_hired_this_month">
+                                    <div class="row">
+                                        <?php if (isset($newEmployees)): ?>
+                                            <?php foreach ($newEmployees as $emp): ?>
+                                                <div class="col-md-4">
+                                                    <!--begin: widget 1-1 -->
+                                                    <div class="mt-widget-1">
+                                                        <div class="mt-icon">
+                                                            <a href="#">
+                                                                <i class="icon-plus"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="mt-img">
+                                                            <img height="80" width="80" src="<?php print $emp['FILE_PATH'] ? $this->basePath('uploads/' . $emp['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>"> </div>
+                                                        <div class="mt-body">
+                                                            <h3 class="mt-username"><?php print $emp['FULL_NAME']; ?></h3>
+                                                            <p class="mt-user-title"><?php print $emp['DESIGNATION_TITLE']; ?> </p>
+                                                            <div class="mt-stats">
+                                                                <div class="btn-group btn-group btn-group-justified">
+                                                                    <a href="javascript:;" class="btn font-green">
+                                                                        <i class="fa fa-plus"></i> <?php print $emp['JOIN_DATE']; ?> </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end: widget 1-1 -->
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                                <div class="tab-pane" id="portlet_left_this_month">
+                                    <div class="row">
+                                        <?php if (isset($leftEmployees)): ?>
+                                            <?php foreach ($leftEmployees as $emp): ?>
+                                                <div class="col-md-4">
+                                                    <!--begin: widget 1-1 -->
+                                                    <div class="mt-widget-1">
+                                                        <div class="mt-icon">
+                                                            <a href="#">
+                                                                <i class="fa fa-minus-circle font-red"></i>
+                                                            </a>
+                                                        </div>
+                                                        <div class="mt-img">
+                                                            <img height="80" width="80" src="<?php print $emp['FILE_PATH'] ? $this->basePath('uploads/' . $emp['FILE_PATH']) : $this->basePath('img/nobody_m.original.jpg'); ?>"> </div>
+                                                        <div class="mt-body">
+                                                            <h3 class="mt-username"><?php print $emp['FULL_NAME']; ?></h3>
+                                                            <p class="mt-user-title"><?php print $emp['DESIGNATION_TITLE']; ?> </p>
+                                                            <div class="mt-stats">
+                                                                <div class="btn-group btn-group btn-group-justified">
+                                                                    <!--                                                                    <a href="javascript:;" class="btn font-green">
+                                                                                                                                            <i class="fa fa-plus"></i> <?php print $emp['JOIN_DATE']; ?> </a>-->
+                                                                    <a href="javascript:;" class="btn font-red">
+                                                                        <i class="fa fa-minus"></i> <?php print $emp['EXIT_DATE']; ?> </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!--end: widget 1-1 -->
+                                                </div>
+                                            <?php endforeach; ?>
+                                        <?php endif; ?>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+</div>
+

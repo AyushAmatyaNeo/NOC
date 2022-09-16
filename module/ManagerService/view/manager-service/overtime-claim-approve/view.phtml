@@ -1,0 +1,201 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'));
+$this->headScript()->appendFile($this->basePath('js/manager-service/overtime-claim-approve/view.js'));
+
+?>
+
+<script>
+    document.urlOvertime = '<?= $this->url("overtimeRequest", ["action" => "index"]) ?>';
+    document.id = <?=$id?>;
+    document.subDetails = <?php echo json_encode($subDetails) ?>;
+    document.approveRejectLink = '<?= $this->url("overtimeclaimapprove", ["action" => "approveReject", "id"=>$id, "role"=>$role]) ?>'
+</script>
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="excelExport">
+                                <i class="fa fa-file-excel-o" ></i>
+                                Export to Excel
+                            </a>
+                        </li>
+                        <li >
+                            <a href="javascript:;" id="pdfExport">
+                                <i class="fa fa-file-pdf-o" ></i> 
+                                Export to PDF 
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="control-label">Employee</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['FULL_NAME']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Date</label>
+                    <input disabled type="text" class="form-control" value="<?php echo ($detail['REQUESTED_DT_AD'] . ' A.D.    |    ' . $detail['REQUESTED_DT_BS'].' B.S.')?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Your Role</label>
+                    <input disabled type="text" class="form-control" value="<?php
+                                            if ($role == 3) {
+                                                echo 'Approver';
+                                            } else if ($role == 2) {
+                                                echo 'Recommender';
+                                            } else if ($role == 4) {
+                                                echo 'Recommender\Approver';
+                                            }
+                                            ?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Month</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['MONTH_DESC']?>">
+                </div>
+            </div>
+            <?php /* <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Requested OT Hours</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_OT_HOURS']?>">
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Requested OT Days</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_OT_DAYS']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Lunch Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_LUNCH_ALLOWANCE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Night Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_NIGHT_ALLOWANCE']?>">
+                </div>
+            </div> */ ?>
+
+            <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Approved OT Hours</label>
+                    <input disabled type="text" id = "appOtHours" class="form-control" value="<?php echo $detail['TOTAL_APP_OT_HOURS']?>">
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Approved OT Days</label>
+                    <input disabled type="text" id = "appOtDays" class="form-control" value="<?php echo $detail['TOTAL_APP_OT_DAYS']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Approved Lunch Allowance</label>
+                    <input disabled type="text" id="lunchAllowance" class="form-control" value="<?php echo $detail['TOTAL_APP_LUNCH_ALLOWANCE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Approved Night Allowance</label>
+                    <input disabled type="text" id="appNightAllowance" class="form-control" value="<?php echo $detail['TOTAL_APP_NIGHT_ALLOWANCE']?>">
+                </div>
+            </div>
+            <?php /* <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Locking Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_LOCKING_ALLOWANCE']?>">
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Satta Bida</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_SUBSTITUTE_LEAVE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Dashain Tihar Bida</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_DASHAIN_TIHAR_LEAVE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Requested Total Satta Bida</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_REQ_GRAND_TOTAL_LEAVE']?>">
+                </div>
+            </div> */ ?>
+
+            <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Approved Locking Allowance</label>
+                    <input disabled type="text" id="appLockingAllowance" class="form-control" value="<?php echo $detail['TOTAL_APP_LOCKING_ALLOWANCE']?>">
+                </div>
+
+                <div class="col-sm-3">
+                    <label class="control-label">Approved Satta Bida</label>
+                    <input disabled type="text" id="totalLeave" class="form-control" value="<?php echo $detail['TOTAL_APP_SUBSTITUTE_LEAVE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Approved Dashain Tihar Bida</label>
+                    <input disabled type="text" id = 'dashainTiharBida' class="form-control" value="<?php echo $detail['TOTAL_APP_DASHAIN_TIHAR_LEAVE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Approved Total Satta Bida</label>
+                    <input disabled type="text" id='totalSattaBida' class="form-control" value="<?php echo $detail['TOTAL_APP_GRAND_TOTAL_LEAVE']?>">
+                </div>
+            </div>
+            <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Status</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['STATUS']?>">
+                </div>
+            </div>
+            
+            <div id="table" style="margin-top:20px;">
+            </div>
+            <?php
+            if ($role == 2) {
+                ?>
+                    <div
+                        class="form-group margin-top-30 required">
+                        <label>Reason for action [From Recommender]</label>
+                        <textarea class="form-control" rows="4" style="height: auto !important;" id="recommenderRemarks" name="recommenderRemarks"></textarea>
+                    </div>
+            <?php } ?>
+            <?php
+            if ($role == 3) {
+                ?>
+                    <div
+                        class="form-group margin-top-30 required">
+                        <label>Reason for action [From Approver]</label>
+                        <textarea class="form-control" rows="4" style="height: auto !important;" id="approverRemarks" name="approverRemarks"></textarea>
+                    </div>
+            <?php } ?>
+            <?php
+            if ($role == 4) {
+                ?>
+                    <div
+                        class="form-group margin-top-30 required">
+                        <label>Reason for action [From Recommender/Approver]</label>
+                        <textarea class="form-control" rows="4" style="height: auto !important;" id="raRemarks" name="raRemarks"></textarea>
+                    </div>
+            <?php } ?>
+
+            <input type="submit" name="submit" id="btnReject" class="btn btn-danger btnApproveReject" value="Reject">
+            <input type="submit" name="submit" id="btnApprove" class="btn btn-primary btnApproveReject pull-right" value="Approve">
+
+        </div>
+
+        
+    </div>
+</div>

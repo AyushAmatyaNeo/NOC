@@ -1,0 +1,187 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-confirmation/bootstrap-confirmation.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/moment.min.js'));
+$this->headScript()->appendFile($this->basePath('assets/global/plugins/combodate/js/combodate.js'));
+$this->headScript()->appendFile($this->basePath('js/customer/contract-employees/index.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<script>
+    document.updateLink = '<?= $this->url("contract-employees", ["action" => "update"]); ?>';
+    document.deleteLink = '<?= $this->url("contract-employees", ["action" => "delete"]); ?>';
+    document.viewLink = '<?= $this->url("contract-employees", ["action" => "view"]); ?>';
+    document.acl =<?php echo json_encode($acl); ?>;
+    document.customerList =<?php echo json_encode($customerList); ?>;
+    document.designationList =<?php echo json_encode($designationList); ?>;
+    document.pullContractList = '<?= $this->url("contract-employees", ["action" => "fetchAllContractCustomerWise"]); ?>';
+    document.pullContractDetails = '<?= $this->url("contract-employees", ["action" => "fetchContractDetails"]); ?>';
+    document.pullDesignationWiseEmpAssign = '<?= $this->url("contract-employees", ["action" => "fetchContractDesginationWiseEmployeeAssign"]); ?>';
+    document.pullContractWiseEmployeeAssign = '<?= $this->url("contract-employees", ["action" => "fetchContractWiseEmployeeAssign"]); ?>';
+    document.addContractEmpAssign = '<?= $this->url("contract-employees", ["action" => "addContractEmpAssign"]); ?>';
+    document.fetchContractEmpLocDesWise = '<?= $this->url("contract-employees", ["action" => "fetchContractEmpLocDesWise"]); ?>';
+    document.employeeList =<?= json_encode($employeeList); ?>;
+    document.dutyTypeList =<?= json_encode($dutyTypeList); ?>;
+    document.pullCdContractDesignationDutyType = '<?= $this->url("contract-employees", ["action" => "pullCdContractDesignationDutyType"]); ?>';
+    document.pullEmployeeAssignDataById = '<?= $this->url("contract-employees", ["action" => "pullEmployeeAssignDataById"]); ?>';
+    document.pullEmployeeRate = '<?= $this->url("contract-employees", ["action" => "pullEmployeeRate"]); ?>';
+
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\customer-contract')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+        </div>
+
+        <div class="row margin-top-20">
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select id="CustomerSelect" class="form-control">
+                    </select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <select id="ContractSelect" class="form-control"></select>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <input type="button" id="viewBtn" class="btn btn-success button-sm" value="view">
+            </div>
+
+        </div>
+
+
+        <div class="row margin-top-20">
+            <div class="col-md-12">
+                <a class="btn btn-primary button-sm" id="addModalBtn">ADD</a>
+            </div>
+
+        </div>
+
+
+        <div class="row margin-top-20">
+            <div class="col-md-12">
+
+                <div style="height:500px;overflow:auto;" id='assignTableDiv' class="table-responsive">
+                    <table class="table" id="assignTable">
+
+                    </table>
+
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!--modal to assign employee Assign-->
+<div class="modal fade" id="addModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add New Employee</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Designation :</label>
+                        <select  class="form-control" required='required' id="addDesignation" name='designation'></select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Duty Type :</label>
+                        <select class="form-control"  required='required'  id="addDutyType" name='dutyType' ></select>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Rate</label>
+                        <input class="form-control"   id="addRate" name='rate' type='number'></br>
+                    </div>
+
+                </div>
+
+                <div class="row">
+                    <div class="col-md-5">
+                        <label>Quantity :</label>
+                        <input type='number'class="form-control" required="required" id='addQauntity' name='qauntity'' >
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button id="addBtn" type="button" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<style>
+
+    /*    .select2-container.select2-container--default.select2-container--open  {
+            z-index: 5000;
+        }*/
+
+</style>
+

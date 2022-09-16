@@ -1,0 +1,72 @@
+<div class="tab-pane <?= ($tab==6)?"active":""; ?>" id="portlet_tab2_6">
+    <form method="post" action="<?= $this->url("appraisalReport",['action'=>'view','appraisalId'=>$appraisalId,'employeeId'=>$employeeId]) ?>" name="performanceAppraisalForm" id="hrAppraisalReview">
+                <h3 >For Use Of HR</h3>
+    <div class="row">
+        <div class="col-md-12">
+        <i>
+        <?php
+        echo $stagesInstrunction[9];
+        ?>
+        </i>
+        </div>
+        <?php
+        $disabledHrComment = ($assignedAppraisalDetail['STAGE_ID']!=9)?'disabled':'';?>
+        <div class="col-md-12 margin-bottom-10">
+            <div style="">
+                <div class="row questionWrapRow">
+                    <div class="questionWrap">
+                        <div  class="col-md-12 margin-bottom-5 appQuestion"> 
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Overall Comment</b>
+                                    <textarea name="hrComment" id="hrComment" class="form-control" style="height:50px!important" required="required" <?= $disabledHrComment; ?>><?= $assignedAppraisalDetail['HR_FEEDBACK']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Strength</b>
+                                    <textarea name="hrStrength" id="hrStrength" class="form-control" style="height:50px!important" required="required" <?= $disabledHrComment; ?>><?= $assignedAppraisalDetail['HR_STRENGTH']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Weakness</b>
+                                    <textarea name="hrWeakness" id="hrWeakness" class="form-control" style="height:50px!important" required="required" <?= $disabledHrComment; ?>><?= $assignedAppraisalDetail['HR_WEAKNESS']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Areas of Improvement</b>
+                                    <textarea name="hrAreasOfImprovement" id="hrAreasOfImprovement" class="form-control" style="height:50px!important" required="required" <?= $disabledHrComment; ?>><?= $assignedAppraisalDetail['HR_AREAS_OF_IMPROVEMENT']; ?></textarea>
+                                </div>
+                            </div>
+                        
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <b style="font-size:12px;">Steps for improvements</b>
+                                    <textarea name="hrStepsForImprovement" id="hrStepsForImprovement" class="form-control" style="height:50px!important" required="required" <?= $disabledHrComment; ?>><?= $assignedAppraisalDetail['HR_STEPS_FOR_IMPROVEMENT']; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        <?php if ($assignedAppraisalDetail['STAGE_ID']==9){?>
+    <div class="row margin-top-10">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <button type="submit" id="submit" class="btn btn-success pull-right">
+                    SUBMIT
+                </button>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
+    </form>
+</div>

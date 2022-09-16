@@ -1,0 +1,30 @@
+.floating-profile{
+    font-size: 0.8em;
+    position: fixed;
+    bottom: 0;
+    right:0;
+    margin: 10px;
+    width: 250px;
+    height: 400px;
+    background-color: whitesmoke;
+    z-index: 1000;
+}
+
+.profile-image{
+    margin-top: 10px;
+    width: 80px;
+    margin-left: 50px;
+}
+
+.profile-body{
+    padding:10px;
+}
+
+.profile-header{
+    padding-top: 0.1em;
+    padding-left: 10px;
+    padding-right: 10px;
+    height: 1.6em;
+    background-color: wheat;
+}
+

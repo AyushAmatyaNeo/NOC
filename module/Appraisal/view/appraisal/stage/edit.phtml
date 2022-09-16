@@ -1,0 +1,143 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+$this->headScript()->appendFile($this->basePath('js/appraisal/stage/add.js'));
+//print_r($form); die();
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'appraisalStage-form');
+
+$stageEdesc = $form->get('stageEdesc');
+$stageNdesc = $form->get('stageNdesc');
+$remarks = $form->get('remarks');
+$orderNo = $form->get('orderNo');
+$startDate = $form->get('startDate');
+$endDate = $form->get('endDate');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('stage', ['action' => 'edit', 'id' => $id]));
+
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+$form->prepare();
+?>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Stage')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($stageEdesc); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($stageEdesc); ?>
+                            <?php print $this->formElementErrors()->render($stageEdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($stageNdesc); ?>
+                            <?php print $this->formElement($stageNdesc); ?>
+                            <?php print $this->formElementErrors()->render($stageNdesc, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($orderNo); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($orderNo); ?>
+                            <?php print $this->formElementErrors()->render($orderNo, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" row">
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($startDate); ?>
+                                    <?php print $this->formElement($startDate); ?>
+                                    <?php print $this->formElementErrors()->render($startDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliStartDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                               class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($endDate); ?>
+                                    <?php print $this->formElement($endDate); ?>
+                                    <?php print $this->formElementErrors()->render($endDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliEndDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                               class="form-control" value="">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,387 @@
+/***
+Login page
+***/
+/* bg color */
+.login {
+    background-color:#EEEEEE !important;
+}
+.login a {
+    color: #edf4f8 !important;
+}
+
+.login .logo {
+    margin: 0 auto;
+    margin-top: 100px;
+    padding: 15px;
+    text-align: center;
+}
+
+.login .content {
+    /*background-color: #eee;*/
+
+    margin: 130px auto 10px;
+    overflow: hidden;
+    padding: 10px 30px 30px;
+    position: relative;
+    width: 400px;
+    box-shadow: 4px 4px 8px 2px #ccc;
+    border:solid #ddd 1px !important;
+    background-color:#fff;
+}
+
+.login .form-title {
+    margin-bottom: 20px;
+}
+
+.login .form-title {
+    color: #333;
+    font-size: 15px;
+    font-weight: 400 !important;
+}
+
+.login .form-subtitle {
+    color: #555;
+    font-size: 14px;
+    font-weight: 300 !important;
+    padding-left: 10px;
+}
+
+.login .content h4 {
+    color: #555;
+}
+
+.login .content .hint {
+    color: #b7d1e2;
+    padding: 0;
+    font-size: 14px;
+    margin: 15px 0 7px 0;
+}
+
+.login .content .login-form,
+.login .content .forget-form {
+    padding: 0px;
+    margin: 0px;
+}
+
+.login .content .form-control {
+    border: none;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    height: 43px;
+    color: #555 !important;
+}
+.login .content .form-control:focus, .login .content .form-control:active {
+    border: 1px solid #4BB830 !important;
+}
+.login .content .form-control::-moz-placeholder{
+    color: #999 !important;
+    opacity: 1;
+}
+.login .content .form-control:-ms-input-placeholder {
+    color: #999 !important;
+}
+.login .content .form-control::-webkit-input-placeholder {
+    color: #999 !important;
+}
+
+.login .content select.form-control {
+    padding-left: 9px;
+    padding-right: 9px;
+}
+
+.login .content .forget-form {
+    display: none;
+}
+
+.login .content .register-form {
+    display: none;
+}
+
+.login .content .form-title {
+    font-weight: 300;
+    margin-bottom: 25px;
+}
+
+.login .content .form-actions {
+    clear: both;
+    border: 0px;
+    padding: 0px 30px 25px 30px;
+    margin-left: -30px;
+    margin-right: -30px;
+}
+
+.form-actions .forget-password-block {
+    padding-top: 7px;
+}
+
+.login-options {
+    margin-top: 30px;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    border-top: 1px solid #69a0c4;
+    border-bottom: 1px solid #69a0c4;
+}
+
+.login-options h4 {
+    margin-top: 8px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #b7d1e2 !important;
+}
+
+.login .forget-password {
+    font-size: 14px;
+}
+
+.login-options .social-icons {
+    float: right;
+    padding-top: 3px;
+}
+
+.login-options .social-icons li a {
+    border-radius: 15px 15px 15px 15px !important;
+    -moz-border-radius: 15px 15px 15px 15px !important;
+    -webkit-border-radius: 15px 15px 15px 15px !important;
+}
+
+.login .content .forget-form .form-actions {
+    border: 0;
+    margin-bottom: 0;
+    padding-bottom: 20px;
+}
+
+.login .content .register-form .form-actions {
+    border: 0;
+    margin-bottom: 0;
+    padding-bottom: 0px;
+}
+
+.login .content .form-actions .checkbox {
+    margin-top: 8px;
+    display: inline-block;
+}
+
+.login .content .form-actions .btn {
+    margin-top: 1px;
+}
+
+.login .btn-primary {
+    background-color:#3DB223;
+    border: 1px solid #72a9cc;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 25px !important;
+}
+.login .btn-primary:hover {
+    border: 1px solid #90bbd7;
+    background-color: #5995bb;
+    color: #8fc4e5;
+}
+
+.login .btn-default {
+    background-color: #5995bb;
+    border: 1px solid #72a9cc;
+    color: #8fc4e5;
+    font-weight: 600;
+    padding: 10px 25px !important;
+}
+.login .btn-default:hover {
+    border: 1px solid #90bbd7;
+    background-color: #5995bb;
+    color: #8fc4e5;
+}
+
+.login .content .forget-password {
+    color: #333 !important;
+    font-size: 15px;
+}
+
+.login .content .rememberme {
+    margin-top: 8px;
+}
+
+.login .content .check {
+    color: #333 !important;
+}
+
+.login .content .create-account {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.login .content .create-account p a {
+    font-weight: 300;
+    font-size: 16px;
+    color: #ffffff;
+}
+
+.login .content .create-account a {
+    display: inline-block;
+    margin-top: 5px;
+}
+
+/* footer copyright */
+.login .copyright {
+    text-align: center;
+    margin: 10px auto 30px 0;
+    padding: 10px;
+    color: #c9dce9;
+    font-size: 13px;
+}
+.loginbtn
+{
+    width:auto !important;
+
+}
+.login .btn-primary
+{
+    padding:6px 15px !important;
+}
+.loginbtn:hover
+{
+    background-color:#333 !important;
+    color:#fff !important;
+    box-shadow: none !important;
+
+}
+.error-message
+{
+    color:red !important;
+}
+.bigtext
+{
+    font-weight:bold !important;
+}
+.signin-btn
+{
+    margin-left:0px !important;
+    padding-left:0px !important;
+    width:47%;
+}
+
+login-form label .checkIn,.login .content .rememberme,.login-form label.checkIn.check
+{
+    font-size:11px !important;
+}
+
+.login-form .forget-password
+{
+    font-size:11px !important;
+}
+
+.login-form input.form-control
+{
+
+    border-radius: 0 !important;
+
+    font-size: 11px !important;
+    height: 33px !important;
+}
+.login .content
+{
+    width:326px !important;
+}
+
+
+@media (max-width: 1400px) {
+    .login .logo {
+        margin-top: 5px;
+        margin-bottom: 30px;
+    }
+}
+@media (max-width: 480px) {
+    /***
+    Login page
+    ***/
+    .login .logo {
+        margin-top: 30px;
+        padding: 0px;
+    }
+    .signin-btn{
+        width:100%;
+    }
+    .login .content {
+        width: 245px;
+    }
+
+    .login .content h3 {
+        font-size: 22px;
+    }
+
+    .login .checkbox {
+        font-size: 13px;
+    }
+}
+
+
+.codeTitle{
+    padding-bottom: 5px !important;
+    border-bottom: 1px solid #e9edef !important;
+    margin-bottom:10px !important;
+}
+
+.codeLabel{
+        font-size: 11px !important;
+        margin-bottom: 25px !important;
+}
+
+.codeInput{
+    float: left;
+    height: 35px;
+}
+
+.codeList{
+    float: left;
+}
+
+.codeList ul{
+    list-style: none;
+    font-size: 11px;
+}
+
+
+.codeList ul li.bold{
+        font-weight: bold;
+}
+.forget-password{
+    font-size: 11px !important;
+}
+
+.codeBottom{
+     margin-top: 80px;
+}
+
+.codeSubmit{
+    float:left;
+}
+
+.codeCancel{
+    float:left;
+    color:#000 !important;
+    padding:6px 12px 5px !important;
+}
+
+a.codeCancel:hover{
+    color:#ffffff !important;
+}
+
+.errorMsg{
+    color: red;
+    font-size: 11px;
+    float: left;
+}
+
+
+
+.passwordLabel {
+    font-size:11px;
+}
+
+.font-Size-12px{
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .width-100{
+        width: 100%;
+    }

@@ -1,0 +1,277 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+
+$this->headScript()
+        ->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('js/asset/issue/index.js'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+?>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php }
+?>
+
+<script>
+    document.ids =<?php echo json_encode(["assetTypeId" => -1, "asset" => -1, "assetStatusId" => -1]) ?>;
+    document.url = '<?= $this->url("assetIssue", ["action" => "getAssetIssueList"]) ?>';
+    document.assetfilterListUrl = '<?= $this->url("assetIssue", ["action" => "getAssetFilterList"]) ?>';
+    document.issue = [];
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+</script>
+
+<?php
+//echo '<pre>';
+//print_r($assets);
+//die();
+$assetReturnUrl = $this->url('assetIssue', ['action' => 'returnAsset', 'id' => $id]);
+?>
+
+
+
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\assetIssue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+<div id="leaveStatusList" ng-app="hris" ng-controller="assetListController">
+
+    <div class="portlet light bg-inverse">
+
+        <div class="portlet-title">
+            <div class="tools">
+                <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                <a href="" class="fullscreen" data-original-title="" title=""> </a>
+            </div>
+            <div class="actions">
+                <div class="btn-group">
+                    <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                        <i class="fa fa-copy"></i> Tools
+                        <i class="fa fa-angle-down "></i>
+                    </a>
+                    <ul class="dropdown-menu pull-right">
+                        <li >
+                            <a href="javascript:;" id="export">
+                                <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-2">
+                    <select class="form-control" name="company" id="companyId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="branchId" id="branchId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="department" id="departmentId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="designation" id="designationId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="position" id="positionId">
+                    </select>
+                </div>
+            </div>
+            <div class="row margin-top-10">
+                <div class="col-sm-2">
+                    <select class="form-control" name="serviceType" id="serviceTypeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="serviceEventType" id="serviceEventTypeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="employeeType" id="employeeTypeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <select class="form-control" name="employee" id="employeeId">
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <?php print $this->formElement($assetType); ?>
+                </div>
+
+            </div>
+            <div class="row margin-top-10">
+                <div class="col-sm-2">
+                    <?php print $this->formElement($assets); ?>
+                </div> 
+
+                <div class="col-sm-2">
+                    <?php print $this->formElement($assetStatus); ?>
+                </div> 
+
+
+
+                <div class=" col-sm-offset-4 col-sm-4">
+                    <button id="reset" class="btn default btn-sm pull-right hris-reset-btn ">
+                        Reset
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                    <button ng-click="view()" id="viewEmployees" class="btn btn-default btn-sm pull-right">
+                        Search
+                        <i class="fa fa-search"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div id="assetIssueTable">
+
+        </div>
+    </div>
+
+
+
+    <script id="rowTemplate" type="text/x-kendo-tmpl">
+        <tr>
+        <td>    
+        #: (ASSET_EDESC == null) ? '-' : ASSET_EDESC #
+        </td>
+        <td> 
+        #: (FULL_NAME == null) ? ' ' : FULL_NAME #
+        </td>
+        <td>    
+        #: (ISSUE_DATE == null) ? '-' : ISSUE_DATE #
+        </td>
+        <td>    
+        #: (QUANTITY == null) ? '-' : QUANTITY #
+        </td>
+        <td>    
+        #: (RETURN_DATE == null) ? '-' : RETURN_DATE #
+        </td>
+        <td>    
+        #: (RETURNED_DATE == null) ? '-' : RETURNED_DATE #
+        </td>
+        <td>
+        # if(RETURNABLE=='Y'&&RETURNED!='Y'){#
+        <a class="btn-edit" data-issueid="#:ISSUE_ID#" data-assetid="#:ASSET_ID#" data-rdate=#:RETURN_DATE# 
+        href="\\#" data-asset="#:ASSET_EDESC#" data-quantity="#:QUANTITY#" 
+        data-employee=" #: (FULL_NAME == null) ? ' ' : FULL_NAME #" data-target="\\#myModal" id="btnReturn"  style="height:17px;">
+        <i class="fa fa-send-o"></i>
+        </a>
+        # } #
+        </a>
+        </td>
+        </tr>
+    </script>
+
+
+
+    <div id="myModal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Asset Return</h4>
+                </div>
+                <div class="modal-body">
+                    <form action="<?= $assetReturnUrl ?>" id="assetReturnForm" method="post">
+                        <input  name="redirectPage" type="hidden" value="indexPage">
+                        <input id="assetId" name="assetId" type="hidden" >
+                        <input id="issueId" name="issueId" type="hidden">
+                        <input id="issueBal" name="issueBal" type="hidden">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <lable>Employee : </lable>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label class="form-group" id="returnEmployee"></label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <lable>Asset : </lable>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label class="form-group" id="returnAsset"></label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <lable>Quantity : </lable>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label class="form-group" id="returnQuantity" ></label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <lable>Return Date : </lable>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <label class="form-group" id='rDate'></label>
+                            </div>    
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3 form-group">
+                                <lable>Returned Date : </lable>
+                            </div>
+
+                            <div class="col-sm-3">
+                                <input required="required" id="returnedDate" name="returndeDate" class="form-control" type="text">
+                            </div>
+
+                            <div class="col-sm-3">
+                                <input type="text"   id="returnedDateNepali" class="form-control " value="">
+                            </div>    
+                        </div>
+
+                        <div class='row'>
+                            <div class=' col-sm-offset-3 col-sm-4'>
+                                <input class="btn btn-default " type="submit">
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal" id="">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>

@@ -1,0 +1,314 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('assets/pages/scripts/ui-modals.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/jstree/dist/jstree.min.js'))
+        ->appendFile($this->basePath('js/system/menu-setup/index.js'))
+        ->appendFile($this->basePath('js/angular.min.js'))
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-master/ui-bootstrap-tpls-2.2.0.min.js'))
+        ->appendFile($this->basePath('js/system/menu-setup/menuController.js'));
+?>
+<link href="<?= $this->basePath('assets/global/plugins/simple-line-icons/simple-line-icons.min.css') ?>"
+      rel="stylesheet" type="text/css"/>
+<link href="<?= $this->basePath('assets/global/plugins/jstree/dist/themes/default/style.min.css') ?>"
+      rel="stylesheet" type="text/css"/>
+
+<link href="<?= $this->basePath('assets/global/plugins/jquery-nestable/jquery.nestable.css') ?>"
+      rel="stylesheet" type="text/css"/>
+<script>
+    document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.menuLink = '<?= $this->url("menusetup", ["action" => "menu"]) ?>';
+    document.menuInsertionLink = '<?= $this->url("menusetup", ["action" => "menuInsertion"]) ?>';
+    document.menuUpdateLink = '<?= $this->url("menusetup", ["action" => "menuUpdate"]) ?>';
+    document.menuDeleteLink = '<?= $this->url("menusetup", ["action" => "menuDelete"]) ?>';
+    document.pullMenuDetailLink = '<?= $this->url("menusetup", ["action" => "pullMenuDetail"]) ?>';
+    document.permissionAssignLink = '<?= $this->url("menusetup", ["action" => "permissionAssign"]) ?>';
+    document.pullRolePermissionListLink = '<?= $this->url("menusetup", ["action" => "pullRolePermissionList"]) ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\menusetup')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div ng-app="hris">
+    <div class="row margin-top-20">
+        <div ng-controller="menuUpdateController">
+            <div class="col-sm-4">
+                <div class="portlet box custom-box">
+                    <div class="portlet-title">
+                        <div class="row">
+                            <div class="col-md-9" style="padding-right: 0px;">
+                                <div class="input-group" style="margin-top:2%;">
+                                    <span class="input-group-addon" id="basic-addon1"><i
+                                            class="fa fa-search"></i></span>
+                                    <input type="text" id="search" class="form-control" placeholder="Menus"
+                                           aria-describedby="basic-addon1">
+                                </div>
+                            </div>
+                            <div class="col-md-3 rlPadding">
+                                <div class="btn-group open" style="margin-top:12%;">
+                                    <a class="btn btn-success btn-sm" ng-click="open(false)"  id="addParent">
+                                        <i class="fa fa-plus"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div id="tree_3" class="tree-demo"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-8">
+                <div class="portlet box custom-box">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <span ng-bind="menuDtl.menuName"></span>
+                        </div>
+                        <div class="btn-group pull-right open" style="margin-top:1%">
+                            <a class="btn btn-success btn-sm" ng-click="!isDisabled && open(true)"  id="addChild">
+                                <i class="fa fa-plus"></i>Add Child
+                            </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="tabbable-line menusetuptab" style="padding-top:0px">
+                            <ul class="nav nav-tabs">
+                                <li class="active">
+                                    <a href="#portlet_tab2_1" data-toggle="tab" aria-expanded="false"> Update </a>
+                                </li>
+                                <li class="">
+                                    <a href="#portlet_tab2_2" data-toggle="tab" aria-expanded="false"> Role Assign </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content margin-top-15" >
+                            <div class="tab-pane active" id="portlet_tab2_1">
+                                <div id="editForm" style="display: none;">
+                                    <form name="userForm" ng-submit="submitForm()" novalidate>
+                                        <div class="form-group">
+                                            <label for="form-menuCode">Menu Code</label>
+                                            <input name="menuCode" id="form-menuCode"
+                                                   class="form-menuCode form-control"
+                                                   type="text" value="" ng-model="menuDtl.menuCode">
+                                            <div ng-show="userForm.$submitted || userForm.menuCode.$touched">
+                                                <ul ng-show="userForm.menuCode.$error.required" class="help-block error">
+                                                    <li>Menu Code is required.</li>
+                                                </ul>
+                                            </div>
+                                            <input name="menuId" required="required" id="form-menuId"
+                                                   class="form-menuId form-control"
+                                                   type="hidden" value="" ng-model="menuDtl.menuId">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-menuName">Menu Name</label>
+                                            <input name="menuName" required="required" id="form-menuName"
+                                                   class="form-menuName form-control"
+                                                   type="text" value="" ng-model="menuDtl.menuName">
+                                            <div ng-show="userForm.$submitted || userForm.menuName.$touched">
+                                                <ul ng-show="userForm.menuName.$error.required" class="help-block error">
+                                                    <li>Menu Name is required.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-route">Route</label>
+                                            <input name="route" required="required" id="form-route" class="form-route form-control"
+                                                   type="text"
+                                                   value="" ng-model="menuDtl.route">
+                                            <div ng-show="userForm.$submitted || userForm.route.$touched">
+                                                <ul ng-show="userForm.route.$error.required" class="help-block error">
+                                                    <li>Route is required.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-action">Action</label>
+                                            <input name="action" required="required" id="form-action" class="form-action form-control"
+                                                   type="text"
+                                                   value="" ng-model="menuDtl.action">
+                                            <div ng-show="userForm.$submitted || userForm.action.$touched">
+                                                <ul ng-show="userForm.action.$error.required" class="help-block error">
+                                                    <li>Action is required.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-menuIndex">Menu Index</label>
+                                            <input name="menuIndex" required="required" id="form-menuIndex" class="form-menuIndex form-control"
+                                                   type="number"
+                                                   value="" ng-model="menuDtl.menuIndex" min="0" max="99999"/>
+                                            <span id="menuIndexErr" ng-show="menuIndexErr">
+                                                <ul class="help-block error">
+                                                    <li>Menu Index Already Exist!!</li>
+                                                </ul>
+                                            </span>
+                                            <div ng-show="userForm.$submitted || userForm.menuIndex.$touched">
+                                                <ul ng-show="userForm.menuIndex.$error.required" class="help-block error">
+                                                    <li>Menu Index is required.</li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-menuName">Icon Class</label>
+                                            <input name="iconClass" id="form-iconClass" class="form-iconClass form-control" type="text" value="" ng-model="menuDtl.iconClass">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-menuDescription">Menu Description</label>
+                                            <textarea name="menuDescription" id="form-menuDescription"
+                                                      class="form-menuDescription form-control"
+                                                      style="height: 50px;" ng-model="menuDtl.menuDescription"></textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="form-isVisible">Visible</label>
+                                            <div class="md-radio-inline">
+                                                <div class="md-radio">
+                                                    <input checked="checked" type="radio" value="Y" name="isVisible" id="isVisible+Yes" ng-model="menuDtl.isVisible" class="md-radiobtn radioButton">
+                                                    <label for="isVisible+Yes">
+                                                        <span class="inc"></span>
+                                                        <span class="check"></span>
+                                                        <span class="box"></span> Yes
+                                                    </label>
+                                                </div>
+                                                <div class="md-radio">
+                                                    <input type="radio" value="N" name="isVisible" id="isVisible+No" ng-model="menuDtl.isVisible" class="md-radiobtn radioButton">
+                                                    <label for="isVisible+No">
+                                                        <span class="inc"></span>
+                                                        <span class="check"></span>
+                                                        <span class="box"></span> No
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <button type="submit" value="add" class="btn green">Submit</button>
+                                        <input type="button" class="btn green pull-right" ng-click="deleteMenu();" id="delete" value="Delete" />
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="portlet_tab2_2">
+                                <div id="rolePanel"  style="display: none;">
+                                    <ul id="roleList">
+                                        <li ng-repeat="role1 in roleList">
+                                            {{role1.ROLE_NAME}}
+                                            <div class="md-checkbox pull-right">
+                                                <input type="checkbox" id="{{role1.ROLE_NAME}}" class="md-check" ng-click="assignRole(role1)" ng-model="role1.checked">
+                                                <label for="{{role1.ROLE_NAME}}">
+                                                    <span class="inc"></span>
+                                                    <span class="check"></span>
+                                                    <span class="box"></span></label>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+        <button type="button" class="close" ng-click="cancel()" aria-hidden="true"></button>
+        <h4 class="modal-title">New Entry</h4>
+        </div>
+        <form name="userForm" novalidate>
+        <div class="modal-body" style="background-color:#ffffff; padding-bottom:0px !important;">
+        <div class="form-group">
+        <label for="form-menuCode">Menu Code</label>
+        <input name="menuCode" id="form-menuCode"
+        class="form-menuCode form-control"
+        type="text" value="" ng-model="menuDtl.menuCode">
+        <div ng-show="userForm.$submitted || userForm.menuCode.$touched">
+        <ul ng-show="userForm.menuCode.$error.required" class="help-block error">
+        <li>Menu Code is required.</li>
+        </ul>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="form-menuName">Menu Name</label>
+        <input name="menuName" required="required" id="form-menuName"
+        class="form-menuName form-control"
+        type="text" value="" ng-model="menuDtl.menuName">
+        <div ng-show="userForm.$submitted || userForm.menuName.$touched">
+        <ul ng-show="userForm.menuName.$error.required" class="help-block error">
+        <li>Menu Name is required.</li>
+        </ul>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="form-route">Route</label>
+        <input name="route" required="required" id="form-route" class="form-route form-control"
+        type="text"
+        value="" ng-model="menuDtl.route">
+        <div ng-show="userForm.$submitted || userForm.route.$touched">
+        <ul ng-show="userForm.route.$error.required" class="help-block error">
+        <li>Route is required.</li>
+        </ul>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="form-action">Action</label>
+        <input name="action" required="required" id="form-action" class="form-action form-control"
+        type="text"
+        value="" ng-model="menuDtl.action">
+        <div ng-show="userForm.$submitted || userForm.action.$touched">
+        <ul ng-show="userForm.action.$error.required" class="help-block error">
+        <li>Action is required.</li>
+        </ul>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="form-menuIndex">Menu Index</label>
+        <input name="menuIndex" required="required" id="form-menuIndex" class="form-menuIndex form-control"
+        type="number"
+        value="" ng-model="menuDtl.menuIndex">
+        <span id="menuIndexErr" ng-show="menuIndexErr">
+        <ul class="help-block error">
+        <li>Menu Index Already Exist!!</li>
+        </ul>
+        </span>
+        <div ng-show="userForm.$submitted || userForm.menuIndex.$touched">
+        <ul ng-show="userForm.menuIndex.$error.required" class="help-block error">
+        <li>Menu Index is required.</li>
+        </ul>
+        </div>
+        </div>
+        <div class="form-group">
+        <label for="form-menuName">Icon Class</label>
+        <input name="iconClass" id="form-iconClass" class="form-iconClass form-control" type="text" value="" ng-model="menuDtl.iconClass">
+        </div>
+        <div class="form-group">
+        <label for="form-menuDescription">Menu Description</label>
+        <textarea name="menuDescription" id="form-menuDescription"
+        class="form-menuDescription form-control"
+        style="height: 50px;" ng-model="menuDtl.menuDescription"></textarea>
+        </div>
+        <div class="form-group">
+        <label for="form-isVisible">Visible</label>
+        <div class="md-radio-inline">
+        <div class="md-radio">
+        <input checked="checked" type="radio" value="Y" name="isVisible" id="isVisible+Yes" ng-model="menuDtl.isVisible" class="md-radiobtn radioButton">
+        <label for="isVisible+Yes">
+        <span class="inc"></span>
+        <span class="check"></span>
+        <span class="box"></span> Yes
+        </label>
+        </div>
+        <div class="md-radio">
+        <input type="radio" value="N" name="isVisible" id="isVisible+No" ng-model="menuDtl.isVisible" class="md-radiobtn radioButton">
+        <label for="isVisible+No">
+        <span class="inc"></span>
+        <span class="check"></span>
+        <span class="box"></span> No
+        </label>
+        </div>
+        </div>
+        </div>
+        </div>
+        <div class="modal-footer" style="padding-top:0px !important;">
+        <button type="button" class="btn dark btn-outline" ng-click="cancel()">Close</button>
+        <button type="submit" class="btn green" ng-click="submitForm()">Submit</button>
+        </div>
+        </form>
+    </script>
+
+</div>

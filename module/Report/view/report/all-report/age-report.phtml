@@ -1,0 +1,80 @@
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+        ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+$this->headScript()
+        ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+        ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+        ->appendFile($this->basePath('js/search.js'))
+        ->appendFile($this->basePath('js/Report/AllReport/age-report.js'));
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+?>
+<script>
+    document.searchValues =<?php echo json_encode($searchValues); ?>;
+    document.getFiscalYearMonthLink = '<?php echo $this->url('allreport', ['action' => 'getFiscalYearMonth']); ?>';
+    document.ageWs = '<?php echo $this->url('allreport', ['action' => 'ageReport']); ?>';
+    document.preference =<?php echo json_encode($preference) ?>;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\allreport')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+
+
+<div class="portlet light bg-inverse">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-paper-plane font-green-haze"></i>
+            <span class="caption-subject bold font-green-haze uppercase"> Search</span>
+        </div>
+        <div class="tools">
+            <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+            <a href="" class="fullscreen" data-original-title="" title=""> </a>
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a id="export" href="javascript:;" class="hris-export-to-excel" hris-export-to-excel-target="withOTReport">
+                            <i class="fa fa-file-excel-o" ></i> Export to Excel </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>Age > </label>
+                <input class="form-control reset-field" name="company" id="greaterThan">
+                </input>
+            </div>
+            <div class="col-sm-2">
+                <label>Age < </label>
+                <input class="form-control reset-field" name="branchId" id="lessThan">
+                </input>
+            </div>
+            <div class="col-sm-4" style="margin-top: 15px;">
+                <button  id="search" class="btn btn-default btn-sm ">
+                    Search
+                    <i class="fa fa-search"></i>
+                </button>
+                <button id="reset" class="btn default btn-sm  hris-reset-btn">
+                    Reset
+                    <i class="fa fa-refresh"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="ageReport">
+</div>

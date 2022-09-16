@@ -1,0 +1,68 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/SelfService/payroll/taxslip.js'));
+?>
+<script>
+    document.getFiscalYearMonthLink = '<?php echo $this->url('payroll', ['action' => 'getFiscalYearMonth']); ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\payroll')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="portlet box yellow">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-money"></i>Salary Sheet 
+        </div>
+        <div class="actions">
+            <div class="btn-group">
+                <a class="btn btn-sm blue-soft" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                    <i class="fa fa-copy"></i> Tools
+                    <i class="fa fa-angle-down "></i>
+                </a>
+                <ul class="dropdown-menu pull-right">
+                    <li >
+                        <a href="javascript:;" id="excelExport">
+                            <i class="fa fa-file-excel-o" ></i> 
+                            Export to Excel 
+                        </a>
+                    </li>
+                    <li >
+                        <a href="javascript:;" id="pdfExport">
+                            <i class="fa fa-file-pdf-o" ></i> 
+                            Export to PDF 
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <div class="portlet-body">
+        <input type="hidden" id="employeeId" value="<?php echo $employeeId; ?>" />
+        <div class="row">
+            <div class="col-sm-2">
+                <select id="fiscalYearId">
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <select id="monthId">
+                </select>
+            </div>
+
+            <div class="col-sm-2 col-sm-offset-4">
+                <button id="viewBtn" class="btn btn-info pull-right">View</button>
+            </div>
+        </div>
+        <div id="taxSheetView" class="margin-top-10">
+            <table class="table table-bordered">
+                <tr><td colspan="4"><h3><b><span id="yearMonthDetails"></span></b></h3>  </td> </tr>
+                <thead>
+                <th colspan="2">Addition</th>
+                <th colspan="2">Deduction</th>
+                <th colspan="2">Tax</th>
+                </thead>
+                <tbody id="taxSheetBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

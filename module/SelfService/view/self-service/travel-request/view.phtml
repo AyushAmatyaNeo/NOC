@@ -1,0 +1,469 @@
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\travelRequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+$this->headLink()
+        ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'))
+        ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+ 
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+        ->appendFile($this->basePath('js/nepali-datepicker-ext.js'));
+
+$this->headScript()
+        ->appendFile($this->basePath('dropzone/dropzone.min.js'))
+        ->appendFile($this->basePath('js/SelfService/travel-request/view.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'travelRequest-form');
+
+$jvNumber = $form->get('jvNumber');
+$chequeNumber = $form->get('chequeNumber');
+$bank = $form->get('bank');
+
+$fromDate = $form->get('fromDate');
+$fromDate->setAttributes(["disabled" => "disabled"]);
+$toDate = $form->get('toDate');
+$toDate->setAttributes(["disabled" => "disabled"]);
+$departure = $form->get('departure');
+$departure->setAttributes(["disabled" => "disabled"]);
+$destination = $form->get('destination');
+$destination->setAttributes(["disabled" => "disabled"]);
+$purpose = $form->get('purpose');
+$purpose->setAttributes(["disabled" => "disabled"]);
+$requestedType = $form->get('requestedType');
+$requestedType->setValueOptions([$detail['REQUESTED_TYPE'] => $detail['REQUESTED_TYPE_DETAIL']]);
+$requestedType->setAttributes(["disabled" => "disabled"]);
+$transportType = $form->get('transportTypeList');
+$transportType->setAttribute('multiple','multiple');
+$transportType->setValueOptions($transportTypes);
+//$transportType->setValueOptions([$detail['TRANSPORT_TYPE_LIST'][0] => $detail['TRANSPORT_TYPE_LIST_DETAIL'][0]]);
+$transportType->setAttributes(['disabled' => "disabled"]);
+
+$requestedAmount = $form->get('requestedAmount');
+$requestedAmount->setAttributes(["disabled" => "disabled"]);
+$remarks = $form->get('remarks');
+$remarks->setAttributes(["disabled" => "disabled"]);
+$recommendedRemarks = $form->get('recommendedRemarks');
+$recommendedRemarks->setAttributes(["disabled" => "disabled"]);
+$approvedRemarks = $form->get('approvedRemarks');
+$approvedRemarks->setAttributes(["disabled" => "disabled"]);
+$noOfDays = $form->get('noOfDays');
+$noOfDays->setAttributes(["disabled" => "disabled"]);
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('travelRequest', ['action' => 'add']));
+
+
+$form->prepare();
+print $this->form()->openTag($form);
+?>
+<script>
+    document.urlCss = '<?= $this->basePath('css/custom.css') ?>';
+    document.uploadUrl = '<?= $this->url("travelRequest", ["action" => "fileUpload"]); ?>';
+    document.pushDCFileLink = '<?php echo $this->url('travelRequest', ['action' => 'pushDCFileLink']); ?>';
+    document.pullFilebyId = '<?php echo $this->url('travelRequest', ['action' => 'pullFilebyId']); ?>';
+    document.id = '<?php echo $id; ?>';
+    document.status = '<?php echo $status; ?>';
+</script>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Travel Request Detail
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="border-bottom">
+                <div class="form-group">
+                    <div class="row div-font-11">
+                        <div class="col-sm-4">
+                            <table width="100%">
+                                <tr height="30">
+                                    <td>
+                                        Requested Date
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $detail['REQUESTED_DATE']; ?>
+                                    </td>
+                                </tr>
+                                <tr height="30">
+                                    <td>
+                                        Status
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $detail['STATUS_DETAIL']; ?>
+                                    </td>
+                                </tr>
+
+
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table width="100%">
+                                <tr height="30">
+                                    <td>
+                                        Recommender
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $recommender; ?>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div class="col-sm-4">
+                            <table width="100%">  
+                                <tr height="30">
+                                    <td>
+                                        Approver
+                                    </td>
+                                    <td width="15">:</td>
+                                    <td>
+                                        <?php echo $approver; ?>
+                                    </td>
+                                </tr>                               
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class=" row">
+                <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($jvNumber); ?>
+                            <input readonly class= "form-jvNumber form-control" value = '<?php echo $Jvdetails['JV_NUMBER']; ?>'>
+                            <?php print $this->formElementErrors()->render($jvNumber, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($chequeNumber); ?>
+                            <input readonly class= "form-chequeNumber form-control" value = '<?php echo $Jvdetails['CHEQUE_NUMBER']; ?>'>
+                            <?php print $this->formElementErrors()->render($chequeNumber, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($bank); ?>
+                            <input readonly class= "form-control" value = '<?php echo $Jvdetails['BANK_NAME']; ?>'>
+                            <?php print $this->formElementErrors()->render($bank, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($fromDate); ?>
+                                    <div class="input-group date" id="fromDate">
+                                        <?php print $this->formElement($fromDate); ?>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($fromDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliStartDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliStartDate" id="nepaliStartDate1"
+                                               class="form-control" value="" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>    
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <?php print $this->formLabel($toDate); ?>
+                                    <div class="input-group date" id="toDate">
+                                        <?php print $this->formElement($toDate); ?>
+                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                    <?php print $this->formElementErrors()->render($toDate, ['class' => 'help-block']); ?>
+                                </div>
+                            </div>     
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <label for="nepaliEndDate">&nbsp;</label>
+                                    <div class="input-group">
+                                        <input type="text" name="nepaliEndDate" id="nepaliEndDate1"
+                                               class="form-control" value="" disabled="disabled">
+                                    </div>
+                                </div>
+                            </div>     
+                        </div>     
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div
+                            class="form-group required <?= empty($noOfDays->getMessages()) ? "" : "error" ?>">
+                                <?php print $this->formLabel($noOfDays); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($noOfDays); ?>
+                            <span id="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                        <?php print $this->formElementErrors()->render($noOfDays, ['class' => 'help-block error']); ?>
+                    </div>
+                </div>
+
+                
+                <div class=" row">
+                    <?php if(!$itnaryId){ ?>
+                     <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($departure); ?>
+                            <?php print $this->formElement($departure); ?>
+                            <?php print $this->formElementErrors()->render($departure, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($destination); ?>
+                            <?php print $this->formElement($destination); ?>
+                            <?php print $this->formElementErrors()->render($destination, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div>
+                    <?php } ?>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($purpose); ?>
+                            <?php print $this->formElement($purpose); ?>
+                            <?php print $this->formElementErrors()->render($purpose, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($requestedType); ?>
+                            <?php print $this->formElement($requestedType); ?>
+                            <?php print $this->formElementErrors()->render($requestedType, ['class' => 'help-block']); ?>
+                        </div>   
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($transportType); ?>
+                            <?php print $this->formElement($transportType); ?>
+                            <?php print $this->formElementErrors()->render($transportType, ['class' => 'help-block']); ?>
+                        </div> 
+                    </div>
+                    
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($requestedAmount); ?>
+                            <?php print $this->formElement($requestedAmount); ?>
+                            <?php print $this->formElementErrors()->render($requestedAmount, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($remarks); ?>
+                            <?php print $this->formElement($remarks); ?>
+                            <?php print $this->formElementErrors()->render($remarks, ['class' => 'help-block']); ?>
+                        </div>
+                    </div>
+                </div>   
+
+                <?php if(!empty($files)){ ?>
+                        <div class="row"> 
+                            <div class="col-sm-6"> 
+                                <label>Attachments</label>
+                                    <div style="overflow: scroll; height:100px;" >
+                                        <ul> 
+                                            <?php foreach($files as $file){ ?>
+                                                <a target="_blank" href="<?='../../../uploads/travel_documents/'.$file['FILE_IN_DIR_NAME']?>">
+                                                    <li><?=$file['FILE_NAME']?></li></a>
+                                            <?php } ?>
+                                        </ul>
+                                    </div>
+                                </div>
+                        </div>
+                    <?php } ?>
+
+                <?php if (isset($detail['SUB_EMPLOYEE_ID'])) { ?>
+                    <div class="form-group padding-0">
+                        <label for="noOfDays">
+                            Substitute Employee 
+                        </label>
+                        <div>
+                            <select disabled="disabled" class="form-control" name="travelSubstitute">
+                                <option style="cursor: pointer;" selected><?php echo $detail['SUB_EMPLOYEE_NAME']; ?></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div
+                        class="form-group margin-top-10 required">
+                        <label>Reason for action [From Sub. Employee] <?php echo $detail['SUB_APPROVED_FLAG_DETAIL']; ?></label>
+                        <textarea disabled="disabled" name="subRemarks" id="form-subRemarks" class="form-subRemarks form-control" style="height: 50px; font-size:12px">
+                            <?php echo $detail['SUB_REMARKS']; ?>
+                        </textarea>
+                    </div>
+                <?php } ?>
+                
+                <div class="row">
+                        <div class="col-md-12">
+                            <?php
+                             if ($itnaryId) {
+                            echo $this->partial('travel/travel-itnary-request/itnaryPartialView.phtml', [
+                                'itnaryId' => $itnaryId,
+                                'travelItnaryDet' => $travelItnaryDet,
+                                'travelItnaryMemDet' => $travelItnaryMemDet
+                            ]);
+                             }
+                            ?>
+
+                        </div>
+                    </div>
+                
+                
+            </div>
+            <?php if ($detail['SUB_APPROVED_FLAG'] == 'Y') { ?>
+                <div
+                    class="form-group margin-top-10 required <?= empty($recommendedRemarks->getMessages()) ? "" : "error" ?>">
+                    <label>Reason for action [From Recommender]</label>
+                    <?php print $this->formElement($recommendedRemarks); ?>
+                </div>
+                <div
+                    class="form-group required <?= empty($approvedRemarks->getMessages()) ? "" : "error" ?>">
+                    <label>Reason for action [From Approver]</label>
+                    <?php print $this->formElement($approvedRemarks); ?>
+                </div>
+            <?php } else if ($detail['SUB_APPROVED_FLAG'] == 'N') { ?>
+                <div class="form-group" style="font-size:11px;">[note:You have to re-send leave detail!!!!]</div>
+            <?php } ?>
+            <div class= "row">
+                <div class=" col-md-6 form-group">
+                    <table id="fileDetailsTbl" class="table">
+                        <tr>
+                            <th>Document</th>
+                            <th>&nbsp;</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<?php
+print $this->form()->closeTag();
+?>
+<div style="border:1px solid; display: none;" id="printableArea" class="col-md-8">
+    <div class="row">
+        <div class="col-md-8 col-sm-offset-2">
+            <ul id="headingList">
+                <li>
+                    <h2 style="color:#c00000;"><?= strtoupper($detail['COMPANY_NAME']); ?></h2></li>
+                <li><h3>Travel Order Form</h3></li>
+                <li style="margin-top:-25px;"><h5>As per the bylaw 101 sub bylaw 3 of Paragraph 10 of EAB, 2063</h5></li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row font-common" style="min-height: 70px; width:100%">
+        <div class="dtlTravel" style="width:63%;">
+            <ul id="personalInfo" style="color:#17365d;">
+            <li style="margin-top:20px;">JV NUMBER: <span style="color:black;"><?php echo $Jvdetails['JV_NUMBER']; ?></span></li>
+            <li style="margin-top:20px;">Cheque Number: <span style="color:black;"><?php echo $Jvdetails['CHEQUE_NUMBER']; ?></span></li>
+            <li style="margin-top:20px;">Bank: <span style="color:black;"><?php echo $Jvdetails['BANK_NAME']; ?></span></li>
+            <li style="margin-top:20px;">Issue Number: <span style="color:black;"><?php echo $issueNum; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;1.&nbsp;&nbsp;&nbsp;&nbsp;Name of employee: <span style="color:black;"><?php echo $detail['FULL_NAME']; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;2.&nbsp;&nbsp;&nbsp;&nbsp;Designation: <span style="color:black;"><?php echo $detail['DESIGNATION_TITLE']; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;3.&nbsp;&nbsp;&nbsp;&nbsp;Office: <span style="color:black;"><?php echo $detail['BRANCH_NAME']; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;4.&nbsp;&nbsp;&nbsp;&nbsp;Propose of Travel: <span style="color:black;"><?php echo $detail['PURPOSE']; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;5.&nbsp;&nbsp;&nbsp;&nbsp;Destination: <span style="color:black;"><?php echo $detail['DESTINATION']; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;6.&nbsp;&nbsp;&nbsp;&nbsp;Mode of Transportation: <span style="color:black;"><?php echo $detail['TRANSPORT_TYPE_LIST_DETAIL_STR']; ?></span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;7.&nbsp;&nbsp;&nbsp;&nbsp;Duration of Travel: 
+                    <ul style="color:black;" id="personalInfo">
+                        <li style="margin-top:10px;">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;From: &nbsp;&nbsp;&nbsp;&nbsp;AD: <?= $detail['FROM_DATE']; ?> &nbsp;&nbsp;&nbsp;&nbsp; BS: <?= $detail['FROM_DATE_BS']; ?>
+                        </li>
+                        <li>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;To: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;AD: <?= $detail['TO_DATE']; ?> &nbsp;&nbsp;&nbsp;&nbsp; BS: <?= $detail['TO_DATE_BS']; ?>
+                        </li>
+                        <li>
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Total: <?= $detail['DURATION']; ?> Day<?= ($detail['DURATION'] > 1) ? "s" : "" ?>
+                        </li>
+                    </ul>
+                </li>
+                <li style="margin-top:20px; width:140%;">&nbsp;&nbsp;&nbsp;&nbsp;8.&nbsp;&nbsp;&nbsp;&nbsp;Advance Required For Travel:<span style="color:black;"> Rs. <?= $detail['REQUESTED_AMOUNT'] ?> (<?= $advanceAmount; ?>)</span></li>
+                <li style="margin-top:20px;">&nbsp;&nbsp;&nbsp;&nbsp;9.&nbsp;&nbsp;&nbsp;&nbsp;Any special order during Travel: 
+                <div style="margin-left:50px; margin-top:10px;">
+                    <textarea rows="5" cols="85" style="padding:5px;"><?= $detail['APPROVED_REMARKS'] ?></textarea>
+                </div>
+                </li>
+                <li style="margin-top:40px;color:black;font-weight:bold;">Travelling Persons Signature: </li>
+                <li style="margin-top:40px;color:black;font-weight:bold;">Recommended By: <?= $detail['NAME_RECOMMENDER']; ?></li>
+                <li style="margin-top:40px;color:black;font-weight:bold;">Approved By: <?= $detail['NAME_APPROVER']; ?></li>
+                <div class="row" style="width:150%; color:black; margin-top:50px;">
+            <h4 style="margin-bottom:3px;">Note:</h4>
+ 
+                <p>
+                Three Copies of this travel bill is to be made, one used during advance, one for HR department and third for the purpose of travel bill.
+                </p>
+        </div>
+            </ul>
+            
+        </div>
+        
+        <div class="dtlDate" style="width:37%;">
+            <ul id="personalInfo">
+                <li>Requested Date: &nbsp;&nbsp;&nbsp;&nbsp; AD: <?php echo $detail['REQUESTED_DATE']; ?>&nbsp;&nbsp;&nbsp;&nbsp;<br>BS: <?php echo $detail['REQUESTED_DATE_BS']; ?>&nbsp;&nbsp;&nbsp;&nbsp;</li>
+            </ul>
+        </div>  
+    </div>
+</div>
+
+<div class="col-md-12" style="text-align:center;display:<?php echo $detail['STATUS'] == 'AP' ? 'block' : 'block'; ?>">
+    <a class="btn btn-success" id="print"> Print</a>
+</div>
+
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload .pdf or .txt or .jpg or .png files only.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>

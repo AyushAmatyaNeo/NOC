@@ -1,0 +1,20 @@
+BEGIN
+  FOR cur_rec IN
+  (SELECT USERNAME
+  FROM all_users
+  WHERE USERNAME IN ('HRIS_MODERN','JWL_HRIS_APR5','LAXMI_HRIS_APR28','KUMARI_HRIS_MAY4','ITNEPAL_HRIS_APR2')
+  )
+  LOOP
+    BEGIN
+     DBMS_OUTPUT.PUT_LINE ('INSERT
+          INTO '||cur_rec.USERNAME ||'.HRIS_MENUS  
+        (SELECT *    
+        FROM HRIS.HRIS_MENUS M    
+        WHERE M.MENU_ID NOT IN      
+      (SELECT MENU_ID FROM '|| cur_rec.USERNAME ||'.HRIS_MENUS))' );
+    EXCEPTION
+    WHEN OTHERS THEN
+      DBMS_OUTPUT.put_line ( 'Error' );
+    END;
+  END LOOP;
+END;

@@ -1,0 +1,43 @@
+<?php
+$this->headScript()
+        ->appendFile($this->basePath('js/training/training-attendance/attendance.js'));
+?>
+
+<script>
+    document.updateUrl = '<?= $this->url("trainingAtt", ["action" => "updateTrainingAtd"]); ?>';
+    document.trainingId = '<?= $trainingId; ?>';
+    document.employeeList = <?= json_encode($list); ?>;
+    document.dates = <?= json_encode($dates); ?>;
+    document.attendance = <?= json_encode($attendance); ?>;
+</script>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\trainingAtt')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="margin-top-20">
+    <div class="portlet light bg-inverse">
+        <div class="portlet-title">
+        </div>
+        <div class="portlet-body">
+            <div class="row">
+                <div class="col-sm-12">
+                    <table id="attendance-table" class="table table-striped">
+                        <thead>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <button class="btn btn-success pull-right" id="updateAttendanceBtn">
+                        Update
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
