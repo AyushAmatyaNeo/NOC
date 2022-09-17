@@ -29,6 +29,8 @@
                 'EMPLOYEE_CODE': 'EID',
                 'POSITION_NAME': 'Position',
                 'SERVICE_TYPE_NAME': 'Service',
+                'MONTH_EDESC': 'MONTH',
+                'SALARY_TYPE_NAME': 'Salary Type',
             }
 
             var columns = [

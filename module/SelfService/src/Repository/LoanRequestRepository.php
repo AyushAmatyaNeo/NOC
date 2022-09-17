@@ -63,7 +63,9 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
             new Expression("LR.APPROVED_BY AS APPROVED_BY"),
             new Expression("LR.APPROVED_REMARKS AS APPROVED_REMARKS"),
             new Expression("LR.RECOMMENDED_REMARKS AS RECOMMENDED_REMARKS"),
-            new Expression("LR.LOAN_ID AS LOAN_ID")
+            new Expression("LR.LOAN_ID AS LOAN_ID"),
+            new Expression("LR.MONTHID"),
+            new Expression("LR.FISCAL_YEAR_ID"),
                 ], true);
 
         $select->from(['LR' => LoanRequest::TABLE_NAME])
@@ -223,13 +225,10 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
         $this->emiTableGateway->insert($emiModel->getArrayCopyForDB());
     }
 
-    public function fetchLoanDetailView($employeeId){
-        $sql = "select * from hris_employee_emi_detail";
-
-        $statement = $this->adapter->query($sql);
-        print_r($sql);die;
-        $result = $statement->execute();
-        return $result->current();;
+    public function fetchLoanDetailView($loanId){
+        $sql = "select * from hris_employee_emi_detail WHERE loan_request_id = {$loanId}";
+        
+        return $this->rawQuery($sql);
 
         
     }

@@ -272,11 +272,17 @@ class IncomingDocRepository extends HrisRepository implements RepositoryInterfac
     }
     public function getCode($date, $locationId){
         // print_r ($date);die();
+<<<<<<< HEAD
 		
+=======
+		$sql = "select reg_temp_code from dc_registration_draft where reg_draft_id  = (select max(reg_draft_id) from dc_registration_draft where location_id = {$locationId})";
+		$maxCode = $this->rawQuery($sql);
+>>>>>>> origin/ayush-nepal
 
         $sql = "select location_code from hris_locations where location_id = {$locationId}";
         $locationCode = $this->rawQuery($sql)[0]['LOCATION_CODE'];
 
+<<<<<<< HEAD
 		$sql = "select fiscal_year_name, fiscal_year_id from hris_fiscal_years where to_date('{$date}', 'DD-MON-YYYY') between start_date and end_date";
 		$ficalYear = $this->rawQuery($sql)[0]['FISCAL_YEAR_NAME'];
         $fiscalYearId = $this->rawQuery($sql)[0]['FISCAL_YEAR_ID'];
@@ -284,6 +290,11 @@ class IncomingDocRepository extends HrisRepository implements RepositoryInterfac
         $sql = "select reg_temp_code from dc_registration_draft where reg_draft_id  = (select max(reg_draft_id) from dc_registration_draft where location_id = {$locationId} and status='E')";
 		$maxCode = $this->rawQuery($sql);
 
+=======
+		$sql = "select fiscal_year_name from hris_fiscal_years where to_date('{$date}', 'DD-MON-YYYY') between start_date and end_date";
+		$ficalYear = $this->rawQuery($sql)[0]['FISCAL_YEAR_NAME'];
+		$code = '';
+>>>>>>> origin/ayush-nepal
 		if(empty($maxCode[0]['REG_TEMP_CODE'])){
 			$code = '00001/'.$locationCode.'/'.$ficalYear;
 		}

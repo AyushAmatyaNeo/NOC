@@ -5,19 +5,20 @@ namespace ManagerService\Repository;
 use Application\Model\Model;
 use Application\Repository\RepositoryInterface;
 use SelfService\Model\LoanRequest;
+use SelfService\Model\LoanEmiDetail;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Sql;
 use Zend\Db\TableGateway\TableGateway;
+use Application\Repository\HrisRepository;
 
-class LoanApproveRepository implements RepositoryInterface {
 
-    private $tableGateway;
-    private $adapter;
+class LoanApproveRepository extends HrisRepository implements RepositoryInterface {
 
     public function __construct(AdapterInterface $adapter) {
         $this->adapter = $adapter;
         $this->tableGateway = new TableGateway(LoanRequest::TABLE_NAME, $adapter);
+        $this->emiTableGateway = new TableGateway(LoanEmiDetail::TABLE_NAME, $adapter);
     }
 
     public function add(Model $model) {
@@ -60,6 +61,7 @@ class LoanApproveRepository implements RepositoryInterface {
             new Expression("LR.APPROVED_BY AS APPROVED_BY"),
             new Expression("LR.RECOMMENDED_REMARKS AS RECOMMENDED_REMARKS"),
             new Expression("LR.APPROVED_REMARKS AS APPROVED_REMARKS"),
+            new Expression("LR.INTEREST_RATE AS INTEREST_RATE")
                 ], true);
 
         $select->from(['LR' => LoanRequest::TABLE_NAME])
@@ -130,5 +132,11 @@ class LoanApproveRepository implements RepositoryInterface {
         $statement = $this->adapter->query($sql);
         $result = $statement->execute();
         return $result;
+    }
+    public function fetchLoanDetailView($loanId){
+        $sql = "select * from hris_employee_emi_detail WHERE loan_request_id = {$loanId}";
+        
+        return $this->rawQuery($sql);
+        
     }
 }

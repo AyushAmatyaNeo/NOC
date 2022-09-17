@@ -1058,9 +1058,13 @@ to_service_group_id decimal(7),
 to_service_sub_group_id decimal(7));
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> 4554561073661868960e71f3f793f69e4d08ed22
+=======
+
+>>>>>>> origin/ayush-nepal
 
 ------------loan request-----------------
 
@@ -1153,6 +1157,7 @@ CREATE TABLE HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL
 
 
 
+<<<<<<< HEAD
 	-- Recruitment--
 	1. ALTER TABLE HRIS_REC_VACANCY_APPLICATION ADD (APPLICATION_TYPE varchar(255));
 	2. CREATE TABLE HRIS_REC_INSTRUCTIONS (
@@ -1193,6 +1198,8 @@ CREATE TABLE HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL
 		);
 
 	
+=======
+>>>>>>> origin/ayush-nepal
 alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL add(OT_REMARKS varchar(5000));
 
 
@@ -1230,4 +1237,19 @@ remaining_principal decimal(7));
 alter table HRIS_EMPLOYEE_EMI_DETAIL alter(
 LOAN_AMOUNT decimal(9,2));
 
+<<<<<<< HEAD
+=======
+alter table hris_employee_loan_request add(
+MONTH_ID decimal(7),
+FISCAL_YEAR_ID decimal(7));
+
+
+rename column hris_employee_loan_request.monthly_installment_rate to monthly_interest_rate;
+
+
+alter table hris_employee_loan_request alter(
+MONTHLY_INTEREST_RATE decimal(7,2));
+
+
+>>>>>>> origin/ayush-nepal
 ---------------------------------------------------------------------------------------------------------

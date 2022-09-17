@@ -61,6 +61,8 @@ class LoanApproveController extends AbstractActionController {
         $request = $this->getRequest();
 
         $detail = $this->loanApproveRepository->fetchById($id);
+        $loanDetailView  = $this->loanApproveRepository->fetchLoanDetailView($id);
+
         $status = $detail['STATUS'];
         $approvedDT = $detail['APPROVED_DATE'];
 
@@ -138,7 +140,8 @@ class LoanApproveController extends AbstractActionController {
                     'employeeId' => $this->employeeId,
                     'requestedEmployeeId' => $requestedEmployeeID,
                     'id' => $id,
-                    'loans' => EntityHelper::getTableKVListWithSortOption($this->adapter, Loan::TABLE_NAME, Loan::LOAN_ID, [Loan::LOAN_NAME], [Loan::STATUS => "E"], Loan::LOAN_ID, "ASC", null, false, true)
+                    'loans' => EntityHelper::getTableKVListWithSortOption($this->adapter, Loan::TABLE_NAME, Loan::LOAN_ID, [Loan::LOAN_NAME], [Loan::STATUS => "E"], Loan::LOAN_ID, "ASC", null, false, true),
+                    'loanDetailView' => $loanDetailView
         ]);
     }
 
@@ -283,7 +286,7 @@ class LoanApproveController extends AbstractActionController {
         $model->requestId = $loanModel->loanRequestId;
         $model->amount = $loanModel->requestedAmount;
         $financeDataRepo->add($model);
-        $financeDataRepo->financialDataGlEntry($model->financeDataId);
+        // $financeDataRepo->financialDataGlEntry($model->financeDataId);
     }
 
 }

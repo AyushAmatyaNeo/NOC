@@ -47,6 +47,12 @@ $approvedRemarks = $form->get('approvedRemarks');
 $approvedRemarks->setAttributes(['required' => 'true']);
 $repaymentInstallments = $form->get('repaymentInstallments');
 $repaymentInstallments->setAttributes(["disabled" => "disabled"]);
+$repaymentInstallments = $form->get('repaymentInstallments');
+$repaymentInstallments->setAttributes(["disabled" => "disabled"]);
+$interestRate = $form->get('interestRate');
+$interestRate->setAttributes(["disabled" => "disabled"]);
+$appliedLoan = $form->get('appliedLoan');
+$appliedLoan->setAttributes(["disabled" => "disabled"]);
 
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'Approve');
@@ -275,6 +281,73 @@ print $this->form()->openTag($form);
                     ?>
                     <input type="submit" name="submit" class="btn btn-danger pull-right" value="Reject">
                 <?php } ?>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="row" >
+                        <div style="margin-left: 20px; margin-top: 20px;" >
+                            <table id="loanEmiTable" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th colspan="12" style="text-align:center; font-weight:bold; font-size:15px; background-color:Black; color: white; ">
+                                        EMI Details</th>
+                                    </tr>
+                                    <tr>
+                                        <th>
+                                            Interest rate
+                                        </th>
+                                        <th>
+                                            <?php print $this->formElement($interestRate); ?>
+                                            <?php print $this->formElementErrors()->render($interestRate, ['class' => 'help-block']); ?>
+                                        </th>
+                                        <th>
+                                            Loan Amount
+                                        </th>
+                                        <th><?php print $this->formElement($appliedLoan); ?>
+                                        <?php print $this->formElementErrors()->render($appliedLoan, ['class' => 'help-block']); ?>
+                                        </th>
+                                        <th>Installment(Tenure)</th>
+                                        <th>
+                                            <?php print $this->formElement($repaymentInstallments); ?>
+                                            <?php print $this->formElementErrors()->render($repaymentInstallments, ['class' => 'help-block']); ?>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th style="width:50px">S.NO.</th>
+                                        <th style="width:170px">Loan Amount</th>
+                                        <th style="width:90px">Installment</th>
+                                        <th style="width:90px">Interest</th>
+                                        <th style="width:90px">Principal repaid</th>
+                                        <th style="width:90px">Remaining Principal</th>
+                                        <th style="width:30px">Paid</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php $i = 1; foreach($loanDetailView as $viewdetail){
+                                        
+                                        ?>
+                                        <tr>
+                                            <td><?= $i ?></td>
+                                            <td><?= $viewdetail['LOAN_AMOUNT']; ?></td>
+                                            <td><?= $viewdetail['INSTALLMENT']; ?></td>
+                                            <td><?= $viewdetail['INTEREST']; ?> </td>
+                                            <td><?= $viewdetail['PRINCIPAL_REPAID']; ?></td>
+                                            <td><?= $viewdetail['REMAINING_PRINCIPAL']; ?></td>
+                                            <td></td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    } ?>
+                                </tbody>
+                            </table>
+                
+                        </div>
+                </div>            
+            </div>
 
             </div>
 

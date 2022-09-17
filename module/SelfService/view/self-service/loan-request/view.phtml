@@ -224,7 +224,21 @@ print $this->form()->openTag($form);
                             <span class="required" aria-required="true">*</span>
                             <?php print $this->formElement($monthlyInstallmentAmount); ?>
                             <?php print $this->formElementErrors()->render($monthlyInstallmentAmount, ['class' => 'help-block']); ?>
-                        </div>               
+                        </div>  
+                        
+                        <div class = "form-group">
+                            <label class="control-label">Month</label>
+                            <select class="form-control" id="monthId" value = "<?php $monthId?>" disabled >
+                            </select>
+                        </div>          
+                    </div>
+                    
+                    <div class="col-sm-2">
+                        <div class="form-group">
+                            <label class="control-label">Year</label>
+                            <select class="form-control" id="fiscalYearId" value = "<?php $fiscalYearId?>" disabled>
+                            </select>
+                        </div>    
                     </div>  
                 </div>
 
@@ -306,7 +320,21 @@ print $this->form()->openTag($form);
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    
+                                    <?php $i = 1; foreach($loanDetailView as $viewdetail){
+                                        
+                                        ?>
+                                        <tr>
+                                            <td><?= $i ?></td>
+                                            <td><?= $viewdetail['LOAN_AMOUNT']; ?></td>
+                                            <td><?= $viewdetail['INSTALLMENT']; ?></td>
+                                            <td><?= $viewdetail['INTEREST']; ?> </td>
+                                            <td><?= $viewdetail['PRINCIPAL_REPAID']; ?></td>
+                                            <td><?= $viewdetail['REMAINING_PRINCIPAL']; ?></td>
+                                            <td></td>
+                                        </tr>
+                                        <?php
+                                        $i++;
+                                    } ?>
                                 </tbody>
                             </table>
                 

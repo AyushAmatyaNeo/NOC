@@ -17,17 +17,13 @@
                 width: 65, locked: true
             },
             {
-                title: 'Claim Satta Bida',
+                title: 'Claim Leave',
                 template: "<input type='checkbox' #:CHECKBOX_STATUS# disabled id='#:ATTENDANCE_DT#' class='k-checkbox row-checkbox'><label class='k-checkbox-label' for='#:ATTENDANCE_DT#'></label>",
-                width: 120, locked: true,
-                headerAttributes: {
-                    "class": "table-header-cell k-text-right",
-                    style: "font-size: 11px"
-                  }
+                width: 120, locked: true
             },
-            { field: "DAY_DETAIL", title: "Day Detail", width:"200px", locked: true },
-            // { field: "EMPLOYEE_CODE", title: "Employee Code", width:"80px", locked: true },
-            // { field: "FULL_NAME", title: "Employee Name", width:"120px", locked: true },
+            { field: "DAY_CODE", title: "Day Code", width:"50px", locked: true },
+            { field: "EMPLOYEE_CODE", title: "Employee Code", width:"80px", locked: true },
+            { field: "FULL_NAME", title: "Employee Name",width:"120px", locked: true },
             { field: "ATTENDANCE_DT", title: "Attendance Date (AD)", width:"100px", locked: true},  
             { field: "ATTENDANCE_DT_BS", title: "Attendance Date (BS)", width:"100px", locked: true},  
             {

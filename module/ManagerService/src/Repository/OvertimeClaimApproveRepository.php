@@ -42,8 +42,11 @@ class OvertimeClaimApproveRepository extends HrisRepository  implements Reposito
         M.MONTH_EDESC || '-' || M.YEAR AS MONTH_DESC ,
         OCR.TOTAL_REQ_OT_HOURS,
         OCR.TOTAL_APP_OT_HOURS,
+<<<<<<< HEAD
         OCR.TOTAL_REQ_OT_DAYS, 
         OCR.TOTAL_APP_OT_DAYS,
+=======
+>>>>>>> origin/ayush-nepal
         OCR.TOTAL_APP_GRAND_TOTAL_LEAVE,
         OCR.created_dt as requested_dt_ad,
         BS_DATE(OCR.created_dt) as requested_dt_bs,
@@ -51,7 +54,11 @@ class OvertimeClaimApproveRepository extends HrisRepository  implements Reposito
         LEAVE_STATUS_DESC(OCR.STATUS) AS STATUS,
         CASE WHEN OCR.STATUS = 'RQ' THEN 'Y' ELSE 'N' END AS ALLOW_DELETE,
         rec_app_role({$id},  RA.RECOMMEND_BY, RA.APPROVED_BY) AS ROLE,
+<<<<<<< HEAD
          rec_app_role_NAME({$id},  RA.RECOMMEND_BY, RA.APPROVED_BY) AS ROLE_NAME
+=======
+         rec_app_role_NAME(1,  RA.RECOMMEND_BY, RA.APPROVED_BY) AS ROLE_NAME
+>>>>>>> origin/ayush-nepal
     FROM HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST OCR 
     LEFT JOIN HRIS_MONTH_CODE M ON (M.MONTH_ID = OCR.MONTH_ID)
     LEFT JOIN HRIS_EMPLOYEES E ON (E.EMPLOYEE_ID = OCR.EMPLOYEE_ID)
@@ -59,8 +66,13 @@ class OvertimeClaimApproveRepository extends HrisRepository  implements Reposito
     LEFT JOIN HRIS_EMPLOYEES ER ON (ER.EMPLOYEE_ID = RA.RECOMMEND_BY)
     LEFT JOIN HRIS_EMPLOYEES EA ON (EA.EMPLOYEE_ID = RA.APPROVED_BY)
     WHERE 1 =1
+<<<<<<< HEAD
     AND ((OCR.STATUS='RQ' AND RA.RECOMMEND_BY = {$id})
     	OR (OCR.STATUS='RC' AND RA.APPROVED_BY = {$id}))";
+=======
+    AND ((OCR.STATUS='RQ' AND (RA.RECOMMEND_BY = {$id} or {$id} in (select R_A_ID from HRIS_ALTERNATE_R_A where employee_id= OCR.EMPLOYEE_ID and R_A_FLAG='R'))
+    	OR (OCR.STATUS='RC' AND (RA.APPROVED_BY = {$id} or {$id} in (select R_A_ID from HRIS_ALTERNATE_R_A where employee_id = OCR.EMPLOYEE_ID and R_A_FLAG='A')))))";
+>>>>>>> origin/ayush-nepal
       // echo('<pre>');print_r($sql);die;
       return $this->rawQuery($sql);
     }
@@ -127,19 +139,25 @@ class OvertimeClaimApproveRepository extends HrisRepository  implements Reposito
 
     public function fetchSubDetailById($id){
       $sql = "SELECT 
+<<<<<<< HEAD
       FL.functional_level_edesc,
 L.location_edesc,
+=======
+>>>>>>> origin/ayush-nepal
       OCD.OVERTIME_CLAIM_DETAIL_ID as ID,
           OCD.ATTENDANCE_DT,
           BS_DATE(OCD.ATTENDANCE_DT) as ATTENDANCE_DT_BS,
           OCD.CREATED_BY,
           OCD.CREATED_DT,
           OCD.DAY_CODE,
+<<<<<<< HEAD
           case when HHM.HOLIDAY_ENAME is null then
        TO_CHAR(HAD.attendance_dt,'DY')
        ELSE
        TO_CHAR(HAD.attendance_dt,'DY') || ' (' 
        || HHM.HOLIDAY_ENAME || ')' END as DAY_DETAIL,
+=======
+>>>>>>> origin/ayush-nepal
           E.EMPLOYEE_CODE,
           E.FULL_NAME,
           TO_NVARCHAR( OCD.IN_TIME, 'HH:MI AM') as IN_TIME,
@@ -161,6 +179,7 @@ L.location_edesc,
           OCD.CANCELED_BY_RA,
           OCD.OT_REMARKS,
             CASE WHEN OCD.CANCELED_BY_RA = 'Y' THEN 'CHECKED' ELSE '' END AS CANCEL_STATUS,
+<<<<<<< HEAD
           CASE WHEN OCD.TYPE_FLAG = 'L' THEN 'CHECKED' ELSE '' END AS CHECKBOX_STATUS,
           case when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR >= 6)
           THEN 1 
@@ -177,6 +196,12 @@ L.location_edesc,
       left join hris_functional_levels FL on (E.functional_level_id = FL.functional_level_id)
       left join hris_locations L on (L.location_id = E.location_id)
       WHERE OCD.OVERTIME_CLAIM_ID = {$id} order by OCD.attendance_dt";
+=======
+          CASE WHEN OCD.TYPE_FLAG = 'L' THEN 'CHECKED' ELSE '' END AS CHECKBOX_STATUS
+      FROM HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL OCD 
+      LEFT JOIN HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST OCR ON (OCR.OVERTIME_CLAIM_ID = OCD.OVERTIME_CLAIM_ID)
+      LEFT JOIN HRIS_EMPLOYEES E ON (E.EMPLOYEE_ID = OCR.EMPLOYEE_ID) WHERE OCD.OVERTIME_CLAIM_ID = {$id} order by OCD.attendance_dt";
+>>>>>>> origin/ayush-nepal
       return $this->rawQuery($sql);
   }
 

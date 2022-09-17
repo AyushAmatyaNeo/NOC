@@ -151,6 +151,8 @@ class LoanRequest extends AbstractActionController {
             $principalAmount= $postedData['principalAmount'];
             $installmentAmount= $postedData['installmentAmount'];
             $principalRemainingAmount = $postedData['principalRemainingAmount'];
+            $monthId= $postedData['monthId'];
+            $fiscalYearId = $postedData['fiscalYearId'];
             $this->form->setData($request->getPost());
 
             // echo('<pre>');print_r($this->form);die;
@@ -165,6 +167,8 @@ class LoanRequest extends AbstractActionController {
                 $model->status = 'RQ';
                 $model->deductOnSalary = 'Y';
                 $model->filePath = !empty($postedData['fileUploadList']) ? $postedData['fileUploadList'] : '' ;
+                $model->monthId = $monthId;
+                $model->fiscalYearId = $fiscalYearId;
                 // echo('<pre>');print_r($model);die;
                 $this->repository->add($model);
 
@@ -206,6 +210,7 @@ class LoanRequest extends AbstractActionController {
         $empDetail = $this->repository->getLoanInfo($this->employeeId);
 
         $loanDetail = $this->repository->getDetailLoanInfo($this->employeeId);
+        
         $loanArrDetail = [];
         foreach ($loanDetail as $ld){
             $loanArrDetail[$ld['PAY_ID']] = $ld['VAL'];
@@ -254,13 +259,15 @@ class LoanRequest extends AbstractActionController {
         $model = new LoanRequestModel();
         $detail = $this->repository->fetchById($id);
         $loanDetailView  = $this->repository->fetchLoanDetailView($id);
+        // print_r($loanDetailView);die;
         $status = $detail['STATUS'];
         $approvedDT = $detail['APPROVED_DATE'];
         $recommended_by = $fullName($detail['RECOMMENDED_BY']);
         $approved_by = $fullName($detail['APPROVED_BY']);
+        $monthId =$detail['MONTH_ID'];
+        $fiscalYearId = $detail['FISCAL_YEAR_ID']; 
         $authRecommender = ($status == 'RQ' || $status == 'C') ? $recommenderName : $recommended_by;
         $authApprover = ($status == 'RC' || $status == 'RQ' || $status == 'C' || ($status == 'R' && $approvedDT == null)) ? $approverName : $approved_by;
-
         $model->exchangeArrayFromDB($detail);
         $this->form->bind($model);
 
@@ -275,6 +282,9 @@ class LoanRequest extends AbstractActionController {
                     'approver' => $authApprover,
                     'loans' => LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId),
                     'id' => $id ,
+                    'loanDetailView' => $loanDetailView,
+                    'monthId'=>$monthId,
+                    'fiscalYearId'=>$fiscalYearId,
         ]);
     }
 

@@ -153,7 +153,7 @@
                     $('#overtimeDetail tbody').append(appendData);
                 }
                 calculateAllDetails(selectItems);
-                app.renderKendoGrid($table, data);
+                app.renderKendoGrid($table, dataForKendo);
                 if(success.data.length > 0){
                     $claimBtnDiv.show();
                 }else{

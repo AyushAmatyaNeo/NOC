@@ -12,7 +12,6 @@ $this->headScript()
 $form->setAttribute('role', 'form');
 $form->setAttribute('id', 'loan-form');
 
-
 $loanId = $form->get('loanId');
 $loanId->setValueOptions($loans);
 $repaymentInstallments = $form->get('repaymentInstallments');
@@ -65,7 +64,6 @@ $modernTechnology->setValue($loanArrDetail[103]);
 
 $appliedLoan = $form->get('appliedLoan');
 $period = $form->get('period');
-$loanDate = $form->get('loanDate');
 $reason = $form->get('reason');
 $filePath = $form->get('filePath');
 
@@ -86,6 +84,8 @@ $form->prepare();
     document.uploadUrl = '<?= $this->url('loanRequest', ['action' => 'fileUpload']); ?>';
     document.wsValidateLoanRequest = '<?= $this->url("loanRequest", ["action" => "validateLoanRequest"]); ?>';
     document.urlTest = '<?= $this->url("loanRequest", ["action" => "index"]); ?>';
+    document.getFiscalYearMonthLink = '<?php echo $this->url('overtimeClaim', ['action' => 'getFiscalYearMonth']); ?>';
+
 </script>
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\loanRequest')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
@@ -165,13 +165,14 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <span class="required" aria-required="true">*</span>
                             <?php print $this->formElement($interestRate); ?>
                             <?php print $this->formElementErrors()->render($interestRate, ['class' => 'help-block']); ?>
-                        </div>        
+                        </div>  
+                              
                         <div class="form-group">
                                 <?php print $this->formLabel($monthlyInterestRate); ?>
                                 <span class="required" aria-required="true">*</span>
                                 <?php print $this->formElement($monthlyInterestRate); ?>
                                 <?php print $this->formElementErrors()->render($monthlyInterestRate, ['class' => 'help-block']); ?>
-                        </div>         
+                        </div>       
                     </div>
 
                     <div class="col-sm-2">
@@ -180,17 +181,22 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <span class="required" aria-required="true">*</span>
                             <?php print $this->formElement($monthlyInstallmentAmount); ?>
                             <?php print $this->formElementErrors()->render($monthlyInstallmentAmount, ['class' => 'help-block']); ?>
-                        </div>               
+                        </div>
+                            <div class = "form-group">
+                            <label class="control-label">Month</label>
+                            <select class="form-control" id="monthId">
+                            </select>
+                        </div>            
                     </div>
                     <div class="col-sm-2">
-                                <div class="form-group">
-                                    <?php print $this->formLabel($loanDate); ?>
-                                    <span class="required" aria-required="true">*</span>
-                                    <?php print $this->formElement($loanDate); ?>
-                                    <?php print $this->formElementErrors()->render($loanDate, ['class' => 'help-block']); ?>
-                                </div>
+                        <div class="form-group">
+                            <label class="control-label">Year</label>
+                            <select class="form-control" id="fiscalYearId">
+                            </select>
+                        </div>   
                     </div>    
                 </div>
+
                 <div class="row" style="color:#1f3864;">
                     <div class="col-xs-12 col-sm-4 col-md-3 col-box" >
                         <div class="row bottomgap">

@@ -48,7 +48,9 @@ class LoanRequest extends Model{
     const MODERN_TECHNOLOGY ="MODERN_TECHNOLOGY";
     const REPAYMENT_INSTALLMENTS ="REPAYMENT_INSTALLMENTS";
     const MONTHLY_INSTALLMENT_AMOUNT ="MONTHLY_INSTALLMENT_AMOUNT";
-    const MONTHLY_INSTALLMENT_RATE ="MONTHLY_INSTALLMENT_RATE";
+    const MONTHLY_INTEREST_RATE ="MONTHLY_INTEREST_RATE";
+    const MONTH_ID = "MONTH_ID";
+    const FISCAL_YEAR_ID = "FISCAL_YEAR_ID";
      
     public $loanRequestId;
     public $employeeId;
@@ -96,6 +98,8 @@ class LoanRequest extends Model{
     public $repaymentInstallments;
     public $monthlyInstallmentAmount;
     public $monthlyInterestRate;
+    public $monthId;
+    public $fiscalYearId;
     
     public $mappings = [
         'loanRequestId'=> self::LOAN_REQUEST_ID,
@@ -141,7 +145,9 @@ class LoanRequest extends Model{
         'modernTechnology'=>self::MODERN_TECHNOLOGY,
         'repaymentInstallments'=>self::REPAYMENT_INSTALLMENTS,
         'monthlyInstallmentAmount'=>self::MONTHLY_INSTALLMENT_AMOUNT,
-        'monthlyInterestRate'=>self::MONTHLY_INSTALLMENT_RATE
+        'monthlyInterestRate'=>self::MONTHLY_INTEREST_RATE,
+        'monthId'=> self::MONTH_ID,
+        'fiscalYearId'=>self::FISCAL_YEAR_ID,
 
     ];
     
