@@ -164,7 +164,7 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
          where service_type_id = E.service_type_id 
          and functional_level_id = ifnull(E.acting_FUNCTIONAL_LEVEL_ID, E.functional_level_id)
          and position_id = E.position_id) as BASIC_SALARY,
-         (select flat_value from hris_flat_value_detail where employee_id = e.employee_id and flat_id = 16) as flat_value,
+         (select flat_value from hris_flat_value_detail where employee_id = e.employee_id and flat_id = 16 and fiscal_year_id = (select fiscal_year_id from hris_fiscal_years where current_date between start_date and end_date)) as flat_value,
          (select \"1DAY_SALARY\" from hris_employees_grade_ceiling_master_setup 
          where service_type_id = E.service_type_id and functional_level_id = E.FUNCTIONAL_LEVEL_ID
          and position_id = E.position_id) as one_day FROM HRIS_EMPLOYEES E WHERE E.EMPLOYEE_ID = {$empId}";
