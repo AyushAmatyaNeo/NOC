@@ -19,6 +19,8 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
+use Application\Helper\EntityHelper;
+
 
 class LoanRequest extends AbstractActionController {
 
@@ -215,13 +217,17 @@ class LoanRequest extends AbstractActionController {
         foreach ($loanDetail as $ld){
             $loanArrDetail[$ld['PAY_ID']] = $ld['VAL'];
         }
-        // print_r($loanDetail);die;
+        // print_r(LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId));
+        $months = EntityHelper::getTableKVList($this->adapter, "HRIS_MONTH_CODE", "MONTH_ID", ["MONTH_EDESC"], ["FISCAL_YEAR_ID = 8"],null,false,'MONTH_EDESC','desc');
+        // print_r($months);die;
         
         return Helper::addFlashMessagesToArray($this, [
                     'employeeId' => $this->employeeId,
                     'form' => $this->form,
                     'rateDetails' => Helper::extractDbData($this->repository->getLoanDetails()),
                     'loans' => LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId),
+                    'month'=>$months,
+                    'year'=>EntityHelper::getTableKVList($this->adapter, "HRIS_FISCAL_YEARS", "FISCAL_YEAR_ID", ["FISCAL_YEAR_NAME"], null,null,false,'FISCAL_YEAR_ID','desc'),
                     'empCitVal' => $empCitVal,
                     'empDetail'=>$empDetail,
                     'loanArrDetail' =>$loanArrDetail,
@@ -272,6 +278,7 @@ class LoanRequest extends AbstractActionController {
         $this->form->bind($model);
 
         $employeeName = $fullName($detail['EMPLOYEE_ID']);
+        
 
         return Helper::addFlashMessagesToArray($this, [
                     'form' => $this->form,
@@ -281,6 +288,8 @@ class LoanRequest extends AbstractActionController {
                     'recommender' => $authRecommender,
                     'approver' => $authApprover,
                     'loans' => LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId),
+                    'months'=>EntityHelper::getTableKVList($this->adapter, "HRIS_MONTH_CODE", "MONTH_ID", ["MONTH_EDESC"], ["FISCAL_YEAR_ID = 8"],null,false,'MONTH_EDESC','desc'),
+                    'years'=>EntityHelper::getTableKVList($this->adapter, "HRIS_FISCAL_YEARS", "FISCAL_YEAR_ID", ["FISCAL_YEAR_NAME"], null,null,false,'FISCAL_YEAR_ID','desc'),
                     'id' => $id ,
                     'loanDetailView' => $loanDetailView,
                     'monthId'=>$monthId,

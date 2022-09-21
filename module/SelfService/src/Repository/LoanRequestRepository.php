@@ -215,6 +215,7 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
             $parameter.="null";
         }
         $sql="SELECT HRIS_FN_LOAN_CHECK($parameter) AS ERROR FROM DUMMY";
+        // print_r($sql);die;
         $statement = $this->adapter->query($sql);
         $result = $statement->execute();
         return $result->current();

@@ -272,7 +272,11 @@
             var amnt = $('#receivedPercent').val() > 25;
             var empId = $('#employeeId').val();
             var loanId = $("#loanId").val();
-            checkForErrors(empId, loanId,amnt);
+            var period = $("#period").val();
+            var loanAmount =  $(".appliedLoan").val();
+            var monthlyImstallmentRate =  $("#monthlyInstallmentAmount").val();
+            var cit  = parseFloat($("#cit").val());
+            checkForErrors(empId, loanAmount,period,monthlyImstallmentRate,loanId,cit);
         });
 
         

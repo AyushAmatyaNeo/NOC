@@ -14,6 +14,10 @@ $form->setAttribute('id', 'loan-form');
 
 $loanId = $form->get('loanId');
 $loanId->setValueOptions($loans);
+$months = $form->get('monthId');
+$months->setValueOptions($month);
+$years = $form->get('fiscalYearId');
+$years->setValueOptions($year);
 $repaymentInstallments = $form->get('repaymentInstallments');
 $interestRate = $form->get('interestRate');
 $monthlyInstallmentAmount = $form->get('monthlyInstallmentAmount');
@@ -183,18 +187,20 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <?php print $this->formElementErrors()->render($monthlyInstallmentAmount, ['class' => 'help-block']); ?>
                         </div>
                             <div class = "form-group">
-                            <label class="control-label">Month</label>
-                            <select class="form-control" id="monthId">
-                            </select>
+                            <?php print $this->formLabel($years); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($years); ?>
+                            <?php print $this->formElementErrors()->render($years, ['class' => 'help-block']); ?>
                         </div>            
                     </div>
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label class="control-label">Year</label>
-                            <select class="form-control" id="fiscalYearId">
-                            </select>
-                        </div>   
-                    </div>    
+                            <?php print $this->formLabel($months); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($months); ?>
+                            <?php print $this->formElementErrors()->render($months, ['class' => 'help-block']); ?>
+                        </div>               
+                    </div> 
                 </div>
 
                 <div class="row" style="color:#1f3864;">
