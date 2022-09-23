@@ -25,19 +25,22 @@ class OpeningController extends HrisController
     public function indexAction()
     {
         $request = $this->getRequest();
-                if ($request->isPost()) {
-                    try {
-                        $data = (array) $request->getPost();
-                        $rawList = $this->repository->getFilteredRecords($data); 
-                        $list = iterator_to_array($rawList, false);   
-                        
-                        return new JsonModel(['success' => true, 'data' => $list, 'error' => '']);
-                    } catch (Exception $e) {
-                        return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);
-                    }
-                }
+
+        if ($request->isPost()) {
+            try {
+                $data = (array) $request->getPost();
+                $rawList = $this->repository->getFilteredRecords($data); 
+                $list = iterator_to_array($rawList, false);   
+                
+                return new JsonModel(['success' => true, 'data' => $list, 'error' => '']);
+            } catch (Exception $e) {
+                return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);
+            }
+        }
+
         
         $statusSE = $this->getRecStatusSelectElement(['name' => 'status', 'id' => 'status', 'class' => 'form-control reset-field', 'label' => 'Status']);
+        
         // $GenderSE = $this->getRecGenderSelectElement(['name' => 'Gender', 'id' => 'Gender', 'class' => 'form-control reset-field', 'label' => 'Gender']);
         
         return $this->stickFlashMessagesTo([

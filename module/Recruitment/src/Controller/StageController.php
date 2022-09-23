@@ -51,12 +51,15 @@ class StageController extends HrisController {
             if ($this->form->isValid()) 
             {
                 $Stage_data = new StageModel();
+                
+                
                 $Stage_data->exchangeArrayFromForm($this->form->getData());
                 $Stage_data->RecStageId = ((int) Helper::getMaxId($this->adapter, StageModel::TABLE_NAME, StageModel::REC_STAGE_ID)) + 1;
                 $Stage_data->CreatedBy = $this->employeeId;
                 $Stage_data->CreatedDt = Helper::getcurrentExpressionDate();
                 $Stage_data->IsFinal  = 'N';
                 $Stage_data->Status = 'E'; 
+
                 // echo '<pre>'; print_r($Stage_data); die();               
                 $this->repository->add($Stage_data);
                 $this->flashmessenger()->addMessage("Stage Data Successfully added!!");

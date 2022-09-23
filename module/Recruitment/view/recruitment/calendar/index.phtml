@@ -67,7 +67,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
     </div>    
     <!-- Fiter Section  -->
     <div class="portlet-body">
-        <input type="hidden" name="employeeId" id="employeeId" value="<?php echo $employeeId; ?>"/>
+        <input type="hidden" name="employeeId" id="employeeId" value="<?php echo (isset($employeeId)) ? $employeeId : ''; ?>"/>
             <div class="row">          
                 <!-- <div class="col-sm-2">
                     <div class="form-group">                

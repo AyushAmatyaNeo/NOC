@@ -385,13 +385,6 @@ class LeaveRequestRepository extends HrisRepository implements RepositoryInterfa
         $fromDate = $boundedParameter['fromDate'];
         $boundedParameter['toDate']="to_date('{$toDate}','DD-MON-YYYY')";
         $toDate = $boundedParameter['toDate'];
-<<<<<<< HEAD
-        // print_r('asdf');die;
-        // EntityHelper::rawQueryResult($this->adapter, "
-        //         CALL HRIS_({$new['START_DATE']->getExpression()},{$new['EMPLOYEE_ID']},{$new['END_DATE']->getExpression()});
-        //         ");
-=======
->>>>>>> origin/ayush-nepal
 
         $rawResult = $this->rawQuery("SELECT HRIS_AVAILABLE_LEAVE_DAYS($fromDate,$toDate,$employeeId,$leaveId,'$halfDay') AS AVAILABLE_DAYS FROM DUMMY");
         return $rawResult[0];

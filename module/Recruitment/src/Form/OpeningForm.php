@@ -31,7 +31,7 @@ class OpeningForm {
      * @Annotion\Type("Zend\Form\Element\Number")
      * @Annotation\Required(true)
      * @Annotation\Filter({"name":"StringTrim","name":"StripTags"})
-     * @Annotation\Options({"label":"Total Vacancy Number: खाली पद संख्या"})
+     * @Annotation\Options({"label":"Total Vacancy No.: खाली पद संख्या"})
      * @Annotation\Validator({"name":"StringLength", "options":{"max":"7"}})
      * @Annotation\Attributes({ "id":"Vacancy_total_no", "class":"Vacancy_total_no form-control" })
      */
