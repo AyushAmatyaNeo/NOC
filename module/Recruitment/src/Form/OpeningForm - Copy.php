@@ -20,7 +20,7 @@ class OpeningForm {
     public $OpeningNo;
     /**
      * @Annotion\Type("Zend\Form\Element\Number")
-     * @Annotation\Required(false)
+     * @Annotation\Required(true)
      * @Annotation\Filter({"name":"StringTrim","name":"StripTags"})
      * @Annotation\Options({"label":"Total Reservation  : मांग पद संख्या"})
      * @Annotation\Validator({"name":"StringLength", "options":{"max":"7"}})

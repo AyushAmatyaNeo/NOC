@@ -18,6 +18,10 @@ class OpeningRepository extends HrisRepository
 
     public function add(Model $opening_data) 
     {
+        // echo "data insert via here";
+        // echo "<pre>";
+        // print_r($opening_data->getArrayCopyForDB());
+        // die;
         $addData=$opening_data->getArrayCopyForDB();
         // echo '<pre>'; print_r($addData); die();
         $this->tableGateway->insert($addData);

@@ -5,7 +5,7 @@ return [
         // 'driver' => 'oci8',
         'driver' => 'odbc',
         'connection_string' => '(DESCRIPTION =
-        (ADDRESS = (PROTOCOL = TCP)(HOST = 10.10.10.92)(PORT = 30015))
+        (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.100.1)(PORT = 30015))
         (CONNECT_DATA =
         (SERVER = DEDICATED)
         (SERVICE_NAME = SAPHANA)
@@ -23,7 +23,8 @@ return [
         ],
     ],
 ];
-        // (ADDRESS = (PROTOCOL = TCP)(HOST = 10.10.11.92)(PORT = 30015))
+        // (ADDRESS = (PROTOCOL = TCP)(HOST = 172.16.100.1)(PORT = 30015))
+// (ADDRESS = (PROTOCOL = TCP)(HOST = 10.10.10.92)(PORT = 30015))
 
 //for postgres sql
 //return [

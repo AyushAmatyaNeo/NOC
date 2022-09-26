@@ -54,10 +54,16 @@ class OpeningController extends HrisController
     {
         $request = $this->getRequest();
         if ($request->isPost()) {
+
+            
+
             $this->form->setData($request->getPost());
+
+            // echo "<pre>";
+            // print_r($this->form->setData($request->getPost()));
+            // die;
             if ($this->form->isValid()) 
             {
-                // echo '<pre>'; print_r($request->getPost()); die();
                 $opening_data = new OpeningVacancy();
                 $opening_data->exchangeArrayFromForm($this->form->getData());
                 $opening_data->OpeningId = ((int) Helper::getMaxId($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID)) + 1;
@@ -69,10 +75,12 @@ class OpeningController extends HrisController
                 $opening_data->Instruction_Edesc = strip_tags(html_entity_decode($request->getPost('Instruction_Edesc')));
                 $opening_data->Instruction_Ndesc = strip_tags(html_entity_decode($request->getPost('Instruction_Ndesc')));
                 // $opening_data->CreatedDt = date('Y-m-d');  // HANA accept this format
+
+                
                 $this->repository->add($opening_data);
                 $this->flashmessenger()->addMessage("Opening Data Successfully added!!!");
                 return $this->redirect()->toRoute("opening");
-            }
+            } 
         }
         return new ViewModel(Helper::addFlashMessagesToArray(
                     $this, [

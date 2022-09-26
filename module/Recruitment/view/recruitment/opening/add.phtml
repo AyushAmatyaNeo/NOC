@@ -90,10 +90,11 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <?php print $this->formElementErrors()->render($Vacancy_total_no, ['class' => 'help-block']); ?>                            
                         </div>                        
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <?php print $this->formLabel($ReservationNo); ?>
-                            <span class="required" aria-required="true">*</span>
+                            <!-- <span class="required" aria-required="true">*</span> -->
+                            <span class="required" aria-required="true">(optional)</span>
                             <?php print $this->formElement($ReservationNo); ?>
                             <?php print $this->formElementErrors()->render($ReservationNo, ['class' => 'help-block']); ?>                            
                         </div>                        
@@ -155,13 +156,13 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                     <div class="col-sm-6">
                         <div class="form-group">
                             <Label>Opening Notes In English</Label>
-                            <textarea name="Instruction_Edesc" id="summernote"  cols="30" rows="10"></textarea>
+                            <textarea name="Instruction_Edesc" id="summernote" cols="30" rows="10"></textarea>
                         </div>
                     </div>
                     <div class="col-sm-6">
                         <div class="form-group">
                             <Label>Opening Notes In Nepali</Label> <br>
-                            <textarea name="Instruction_Ndesc" id="summernote3"  cols="30" rows="10"></textarea>
+                            <textarea name="Instruction_Ndesc" id="summernote3" cols="30" rows="10"></textarea>
                         </div>
                     </div>
                 </div>

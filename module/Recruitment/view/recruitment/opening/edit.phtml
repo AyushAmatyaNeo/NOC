@@ -62,9 +62,8 @@ print $this->form()->openTag($form);
                     <div class="col-sm-2">
                         <div class="form-group">
                             <?php print $this->formLabel($OpeningNo); ?>
-                            <div class="input-group" id="OpeningNo">
-                                <?php print $this->formElement($OpeningNo); ?>
-                            </div>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($OpeningNo); ?>
                             <?php print $this->formElementErrors()->render($OpeningNo, ['class' => 'help-block']); ?>
                         </div>  
                     </div>
@@ -76,10 +75,11 @@ print $this->form()->openTag($form);
                             <?php print $this->formElementErrors()->render($Vacancy_total_no, ['class' => 'help-block']); ?>                            
                         </div>                        
                     </div>
-                    <div class="col-sm-2">
+                    <div class="col-sm-3">
                         <div class="form-group">
                             <?php print $this->formLabel($ReservationNo); ?>
-                            <span class="required" aria-required="true">*</span>
+                            <span class="required" aria-required="true">(optional)</span>
+                            <!-- <span class="required" aria-required="true">*</span> -->
                             <?php print $this->formElement($ReservationNo); ?>
                             <?php print $this->formElementErrors()->render($ReservationNo, ['class' => 'help-block']); ?>                            
                         </div>                        
@@ -89,6 +89,7 @@ print $this->form()->openTag($form);
                     <div class="col-sm-2">
                         <div class="form-group">
                             <?php print $this->formLabel($Start_dt); ?>
+                            <span class="required" aria-required="true">*</span>
                             <?php print $this->formElement($Start_dt); ?>
                             <?php print $this->formElementErrors()->render($Start_dt, ['class' => 'help-block']); ?>
                         </div>
@@ -104,6 +105,7 @@ print $this->form()->openTag($form);
                     <div class="col-sm-2">
                         <div class="form-group">
                             <?php print $this->formLabel($End_dt); ?>
+                            <span class="required" aria-required="true">*</span>
                             <?php print $this->formElement($End_dt); ?>
                             <?php print $this->formElementErrors()->render($End_dt, ['class' => 'help-block']); ?>
                         </div>
@@ -119,6 +121,7 @@ print $this->form()->openTag($form);
                     <div class="col-sm-2">
                         <div class="form-group">
                             <?php print $this->formLabel($Extended_dt); ?>
+                            <span class="required" aria-required="true">*</span>
                             <?php print $this->formElement($Extended_dt); ?>
                             <?php print $this->formElementErrors()->render($Extended_dt, ['class' => 'help-block']); ?>
                         </div>
