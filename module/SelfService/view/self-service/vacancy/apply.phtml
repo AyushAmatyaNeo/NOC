@@ -26,11 +26,11 @@ $submit = $form->get('submit');
 $submit->setAttribute('value', 'Apply');
 ?>
     <script>
-        document.ajaxurl = '<?= $this->basePath('selfservice/vacancies/inclusionamount') ?>';
+        document.ajaxurl = '<?= $this->url('vacancies', ['action' => 'inclusionamount']); ?>';
         document.eduDetail =<?= json_encode($eduDegrees); ?>;
         document.eduFaculty = <?= json_encode($eduFaculty); ?>;
-        document.eduUniversity = <?= json_encode($eduUniversity) ?>
-        document.eduCourses = <?= json_encode($eduCourses) ?> 
+        document.eduUniversity = <?= json_encode($eduUniversity); ?>;
+        document.eduCourses = <?= json_encode($eduCourses); ?> ;
     </script>
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\vacancies')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>

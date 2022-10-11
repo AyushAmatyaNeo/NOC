@@ -23,7 +23,7 @@
 
         function LevelValue(){
             var pos = $('#PositionId').val();
-            app.pullDataById('http://localhost/hana-noc/neo-hris/public/recruitment/vacancylevel/pulllevelId', {
+            app.pullDataById(document.pullLevelId, {
                 'designation_id'  : pos            
             }).then(function (response) {
                 if (response.success) {
@@ -33,7 +33,7 @@
                     for(var i=0; i <= ((response.data).length); i++ ) {
                         if((parseInt(response.data[i].FUNCTIONAL_LEVEL_ID) <= 8) || (parseInt(response.data[i].FUNCTIONAL_LEVEL_ID) == 16)){
                             $('#FunctionalLevelId').append('<option value="'+response.data[i].FUNCTIONAL_LEVEL_ID+'">'+ response.data[i].FUNCTIONAL_LEVEL_NO +'</option>');
-                            break;
+                            //break;
                         }
                         else{
                             $('#FunctionalLevelId').append('<option value="'+response.data[i].FUNCTIONAL_LEVEL_ID+'">'+ response.data[i].FUNCTIONAL_LEVEL_NO +'</option>')

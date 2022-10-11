@@ -252,8 +252,8 @@ class UserApplicationRepository extends HrisRepository{
                 ->join(['DES' => 'HRIS_DESIGNATIONS'],'DES.DESIGNATION_ID=VAC.POSITION_ID', 'status', 'left')
                 ->join(['EF' => 'HRIS_EMPLOYEE_FILE'],'EF.FILE_CODE=UR.PROFILE_PICTURE_ID', 'STATUS', 'left')
                 ->join(['DEP' => 'HRIS_DEPARTMENTS'],'DEP.DEPARTMENT_ID=VAC.DEPARTMENT_ID', 'status', 'left') 
-                ->where(["REC.STATUS='E'"])
-                ->where(["REC.APPLICATION_TYPE = 'INTERNAL' "]);
+                ->where(["REC.STATUS='E'"]);
+                // ->where(["REC.APPLICATION_TYPE = 'INTERNAL' "]);
                 
             if (($search['OpeningNo'] != null)) {
                 $select->where([
@@ -289,7 +289,7 @@ class UserApplicationRepository extends HrisRepository{
         // $select->order("REC.PERSONAL_ID ASC");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
-        // print_r($statement->getSql()); die();
+        // echo('<pre>');print_r($statement->getSql()); die();
         $result = $statement->execute($boundedParameter);
         // print_r($statement->getSql()); die();
         return $result;

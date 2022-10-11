@@ -412,6 +412,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                          $loanArrDetail[82] + $loanArrDetail[84] + $loanArrDetail[83] + $loanArrDetail[85] + $loanArrDetail[104] + $loanArrDetail[99] +
                                           $loanArrDetail[100] + $loanArrDetail[103] + $loanArrDetail[96] + $loanArrDetail[98];   ?>
                                         Total Deduction:
+                                        <input type= "text" id ='totalAmountFixed' hidden value = "<?php echo $total_amount + $loanArrDetail[18]?>" readonly>
                                         <input type= "text" id ='totalAmount'class = "form-control" name ='totalAmount' value = "<?php echo $total_amount + $loanArrDetail[18]?>" readonly>
                                     </td>               
                                 </tr>
@@ -525,9 +526,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                 </div>            
             </div>
             <input type="number" hidden id = 'totalDeductionWithoutCit' name ='totalDeductionWithoutCit' value ="<?php echo $total_amount?>">
-
-
-
+            <input type="number" hidden id = 'totalDeductionWithoutCitFixed' value ="<?php echo $total_amount?>">
         </div>
     </div>
 </div>
