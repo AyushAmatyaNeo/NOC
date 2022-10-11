@@ -64,8 +64,8 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
             new Expression("LR.APPROVED_REMARKS AS APPROVED_REMARKS"),
             new Expression("LR.RECOMMENDED_REMARKS AS RECOMMENDED_REMARKS"),
             new Expression("LR.LOAN_ID AS LOAN_ID"),
-            new Expression("LR.MONTH_ID"),
-            new Expression("LR.FISCAL_YEAR_ID"),
+            new Expression("LR.MONTH_ID AS MONTH_ID"),
+            new Expression("LR.FISCAL_YEAR_ID AS FISCAL_YEAR_ID"),
                 ], true);
 
         $select->from(['LR' => LoanRequest::TABLE_NAME])
@@ -79,6 +79,7 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
         ]);
         $select->order("LR.REQUESTED_DATE DESC");
         $statement = $sql->prepareStatementForSqlObject($select);
+        // print_r($statement);die;
         $result = $statement->execute();
         return $result->current();
     }

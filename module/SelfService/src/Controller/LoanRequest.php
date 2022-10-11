@@ -20,7 +20,7 @@ use Zend\Form\Annotation\AnnotationBuilder;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Application\Helper\EntityHelper;
-
+use Application\Model\Months;
 
 class LoanRequest extends AbstractActionController {
 
@@ -193,6 +193,7 @@ class LoanRequest extends AbstractActionController {
                     $emiModel->paidFlag= 'N';
                     $this->repository->emiAdd($emiModel);
                 }
+                
 
                 $this->flashmessenger()->addMessage("Loan Request Successfully added!!!");
                 try {
@@ -219,7 +220,7 @@ class LoanRequest extends AbstractActionController {
             $loanArrDetail[$ld['PAY_ID']] = $ld['VAL'];
         }
         // print_r(LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId));
-        $months = EntityHelper::getTableKVList($this->adapter, "HRIS_MONTH_CODE", "MONTH_ID", ["MONTH_EDESC"], ["FISCAL_YEAR_ID = 8"],null,false,'MONTH_EDESC','desc');
+        $months = EntityHelper::getTableKVList($this->adapter, "HRIS_MONTH_CODE", "MONTH_ID", ["MONTH_EDESC"], ["FISCAL_YEAR_ID = 8"],null,true,'MONTH_EDESC','desc');
         // print_r($months);die;
         
         return Helper::addFlashMessagesToArray($this, [
@@ -228,7 +229,7 @@ class LoanRequest extends AbstractActionController {
                     'rateDetails' => Helper::extractDbData($this->repository->getLoanDetails()),
                     'loans' => LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId),
                     'month'=>$months,
-                    'year'=>EntityHelper::getTableKVList($this->adapter, "HRIS_FISCAL_YEARS", "FISCAL_YEAR_ID", ["FISCAL_YEAR_NAME"], null,null,false,'FISCAL_YEAR_ID','desc'),
+                    'year'=>EntityHelper::getTableKVList($this->adapter, "HRIS_FISCAL_YEARS", "FISCAL_YEAR_ID", ["FISCAL_YEAR_NAME"], null,null,true,'FISCAL_YEAR_ID','desc'),
                     'empCitVal' => $empCitVal,
                     'empDetail'=>$empDetail,
                     'loanArrDetail' =>$loanArrDetail,
@@ -266,11 +267,12 @@ class LoanRequest extends AbstractActionController {
         $model = new LoanRequestModel();
         $detail = $this->repository->fetchById($id);
         $loanDetailView  = $this->repository->fetchLoanDetailView($id);
-        // print_r($loanDetailView);die;
+        // print_r($detail);die;
         $status = $detail['STATUS'];
         $approvedDT = $detail['APPROVED_DATE'];
         $recommended_by = $fullName($detail['RECOMMENDED_BY']);
         $approved_by = $fullName($detail['APPROVED_BY']);
+        // print_r($detail['MONTH_ID']);die;
         $monthId =$detail['MONTH_ID'];
         $fiscalYearId = $detail['FISCAL_YEAR_ID']; 
         $authRecommender = ($status == 'RQ' || $status == 'C') ? $recommenderName : $recommended_by;
@@ -280,6 +282,8 @@ class LoanRequest extends AbstractActionController {
 
         $employeeName = $fullName($detail['EMPLOYEE_ID']);
         
+        $months = EntityHelper::getTableKVList($this->adapter, "HRIS_MONTH_CODE", "MONTH_ID", ["MONTH_EDESC"], ["FISCAL_YEAR_ID = 8"],null,true,'MONTH_EDESC','desc');
+        $years=EntityHelper::getTableKVList($this->adapter, "HRIS_FISCAL_YEARS", "FISCAL_YEAR_ID", ["FISCAL_YEAR_NAME"], null,null,false,'FISCAL_YEAR_ID','desc');
 
         return Helper::addFlashMessagesToArray($this, [
                     'form' => $this->form,
@@ -289,8 +293,8 @@ class LoanRequest extends AbstractActionController {
                     'recommender' => $authRecommender,
                     'approver' => $authApprover,
                     'loans' => LoanAdvanceHelper::getLoanList($this->adapter, $this->employeeId),
-                    'months'=>EntityHelper::getTableKVList($this->adapter, "HRIS_MONTH_CODE", "MONTH_ID", ["MONTH_EDESC"], ["FISCAL_YEAR_ID = 8"],null,false,'MONTH_EDESC','desc'),
-                    'years'=>EntityHelper::getTableKVList($this->adapter, "HRIS_FISCAL_YEARS", "FISCAL_YEAR_ID", ["FISCAL_YEAR_NAME"], null,null,false,'FISCAL_YEAR_ID','desc'),
+                    'month'=>$months,
+                    'year'=>$years,
                     'id' => $id ,
                     'loanDetailView' => $loanDetailView,
                     'monthId'=>$monthId,

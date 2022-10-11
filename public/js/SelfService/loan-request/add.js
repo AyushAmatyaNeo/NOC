@@ -24,7 +24,7 @@
             const principalArr = [...principal].map(input => input.value);
             const installment = document.getElementsByClassName('installment');
             const installmentArr = [...installment].map(input => input.value);
-            const principalRemaining = document.getElementsByClassName('principal');
+            const principalRemaining = document.getElementsByClassName('principalRemaining');
             const principalRemainingArr = [...principalRemaining].map(input => input.value);
             
             const searchData = {
@@ -70,9 +70,11 @@
                 basicGrade :$('#basicGrade').val(),
                 netAmnt:$('#netAmnt').val(),
                 salaryGrade:$('#salaryGrade').val(),
+                monthId:$('#monthId').val(),
+                fiscalYearId:$('#fiscalYearId').val()
              };
              app.serverRequest(document.loanData, searchData).then(function (success){
-                // window.location.href = document.urlTest;
+                window.location.href = document.urlTest;
              });
         });
 
@@ -99,7 +101,7 @@
                     var rate = (1 + monthlyInterestRate / 100) ** repaymentInstallments ;
                     var monthlyInstallmentAmount = (appliedLoan * (monthlyInterestRate/100) *rate)/(rate-1);
                     var cit = parseFloat($("#cit").val());
-                    var totalDeduction =parseFloat($('#totalDeductionWithoutCit').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)) +  parseFloat($("#cit").val());
+                    var totalDeduction =parseFloat($('#totalDeductionWithoutCitFixed').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)) +  parseFloat($("#cit").val());
                     $(".interestRate").val(interestRate);
                     document.rateDetails[i].IS_RATE_FLEXIBLE == 'Y' ? $("#interestRate").removeAttr('readonly') : $("#interestRate").attr('readonly', 'readonly') ;
                     $(".appliedLoan").val(appliedLoan);
@@ -115,12 +117,10 @@
                     
 
                     if (((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) < 25){
-                        console.log('first');
-                        document.getElementById("testBtn").disabled = true;
+                        document.getElementsByClassName('testBtn').disabled = true;
                         $('#comment').show();}
                     else{
-                        document.getElementById("testBtn").disabled = false;
-                        console.log('second');
+                        document.getElementsByClassName('testBtn').disabled = false;
                         $('#comment').hide();
                     }
                     
