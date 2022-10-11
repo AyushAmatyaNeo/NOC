@@ -71,8 +71,7 @@ $period = $form->get('period');
 $reason = $form->get('reason');
 $filePath = $form->get('filePath');
 
-$submit = $form->get('submit');
-$submit->setAttribute('value', 'SUBMIT');
+
 
 $form->setAttribute('action', $this->url('loanRequest', ['action' => 'add']));
 
@@ -472,10 +471,6 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                 <?php print $this->formElementErrors()->render($reason, ['class' => 'help-block']); ?>
                 </div>
 
-                <?php
-                print $this->formSubmit($submit);
-                print $this->form()->closeTag();
-                ?>
 
                     <div style="display: block;" class="row margin-top-20" id="printBtnDiv" >
                                     <div class="col-md-12" style="text-align:center;">

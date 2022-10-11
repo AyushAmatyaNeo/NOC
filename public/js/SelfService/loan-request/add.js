@@ -115,10 +115,12 @@
                     
 
                     if (((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) < 25){
-                        document.getElementById("submitBtn").disabled = true;
+                        console.log('first');
+                        document.getElementById("testBtn").disabled = true;
                         $('#comment').show();}
                     else{
-                        document.getElementById("submitBtn").disabled = false;
+                        document.getElementById("testBtn").disabled = false;
+                        console.log('second');
                         $('#comment').hide();
                     }
                     
@@ -183,10 +185,12 @@
             $('#receivedWOcit').val(((totalSalary - totalDeduction + cit)/totalSalary*100).toFixed(2) + ' %');
             $('#totalAmount').val(totalDeduction);
             if (((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) < 25){
-                document.getElementById("submitBtn").disabled = true;
+                document.getElementById("testBtn").disabled = true;
+                console.log('if');
                 $('#comment').show();}
                 else{
-                    document.getElementById("submitBtn").disabled = false;
+                    document.getElementById("testBtn").disabled = false;
+                    console.log('else');
                     $('#comment').hide();
                 }
         });
@@ -261,9 +265,9 @@
 
 
 
-        $submitBtn.on('click', function(){
+        $testBtn.on('click', function(){
             if ($('#receivedPercent').val() < 25){
-                $('#submitBtn').prop('disabled', true );
+                console.log($('#receivedPercent'));
                 $form.prop('error-message', 'It is Below 25%');
                 app.showMessage('It is Below 25%', 'error');
                 app.showMessage('It is Below 25%', 'error');
@@ -276,15 +280,15 @@
             var loanAmount =  $(".appliedLoan").val();
             var monthlyImstallmentRate =  $("#monthlyInstallmentAmount").val();
             var cit  = parseFloat($("#cit").val());
-            checkForErrors(empId, loanAmount,period,monthlyImstallmentRate,loanId,cit);
+            // checkForErrors(empId, loanAmount,period,monthlyImstallmentRate,loanId,cit);
         });
 
         
 
 
-        var checkForErrors = function (empId, loanId, loanAmount, installment, citVal) {
+        var checkForErrors = function (empId, loanAmount, period,loanId, installment, citVal) {
             
-            app.pullDataById(document.wsValidateLoanRequest, {empId:empId, loanId:loanId, loanAmount:loanAmount, installment:installment, citVal:citVal}).then(function (response) {
+            app.pullDataById(document.wsValidateLoanRequest, {empId:empId, loanAmount:loanAmount, period:period,loanId:loanId, installment:installment, citVal:citVal}).then(function (response) {
                 if (response.data['ERROR'] == "ALLOW") {
                     $form.prop('valid', 'true');
                     $form.prop('error-message', '');

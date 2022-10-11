@@ -190,6 +190,7 @@ class LoanRequest extends AbstractActionController {
                     $emiModel->createdBy= $this->employeeId;
                     $emiModel->modifiedDt = Helper::getcurrentExpressionDate();
                     $emiModel->modifiedBy= $this->employeeId;
+                    $emiModel->paidFlag= 'N';
                     $this->repository->emiAdd($emiModel);
                 }
 
@@ -416,7 +417,8 @@ class LoanRequest extends AbstractActionController {
             $request = $this->getRequest();
             if ($request->isPost()) {
                 $postedData = $request->getPost();
-                $error = $this->repository->validateLoanRequest($postedData['empId'], $postedData['loanId'], $postedData['loanAmount'], $postedData['installment'], $postedData['citVal']);
+                // print_r($postedData['period']);die;
+                $error = $this->repository->validateLoanRequest($postedData['empId'], $postedData['loanAmount'],$postedData['period'], $postedData['loanId'], $postedData['installment'], $postedData['citVal']);
                 return new CustomViewModel(['success' => true, 'data' => $error, 'error' => '']);
             } else {
                 throw new Exception("The request should be of type post");

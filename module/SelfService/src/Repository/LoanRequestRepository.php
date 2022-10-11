@@ -64,7 +64,7 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
             new Expression("LR.APPROVED_REMARKS AS APPROVED_REMARKS"),
             new Expression("LR.RECOMMENDED_REMARKS AS RECOMMENDED_REMARKS"),
             new Expression("LR.LOAN_ID AS LOAN_ID"),
-            new Expression("LR.MONTHID"),
+            new Expression("LR.MONTH_ID"),
             new Expression("LR.FISCAL_YEAR_ID"),
                 ], true);
 
@@ -187,7 +187,7 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
         return $this->rawQuery($sql);
     }
 
-    public function validateLoanRequest($empId, $loanId, $loanAmount, $installment, $citVal){
+    public function validateLoanRequest($empId,$loanAmount,$period, $loanId, $installment, $citVal){
         $parameter = "";
         if($empId){
             $parameter.=$empId.",";
@@ -195,7 +195,12 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
             $parameter.="null,";
         }
         if($loanAmount){
-            $parameter.=$loanAmount.",null,";
+            $parameter.=$loanAmount.",";
+        }else{
+            $parameter.="null,null,";
+        }
+        if($period){
+            $parameter.=$period.",";
         }else{
             $parameter.="null,null,";
         }

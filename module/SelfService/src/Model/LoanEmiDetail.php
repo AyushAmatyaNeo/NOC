@@ -19,6 +19,7 @@ class LoanEmiDetail extends Model{
     const CREATED_BY = "CREATED_BY";
     const MODIFIED_DT = "MODIFIED_DT";
     const MODIFIED_BY = "MODIFIED_BY";
+    const PAID_FLAG = "PAID_FLAG";
 
     
     public $emiId;
@@ -35,6 +36,7 @@ class LoanEmiDetail extends Model{
     public $createdBy;
     public $modifiedDt;
     public $modifiedBy;
+    public $paidFlag;
 
     
     public $mappings = [
@@ -52,6 +54,7 @@ class LoanEmiDetail extends Model{
          'createdBy'=>self::CREATED_BY,
          'modifiedDt'=>self::MODIFIED_DT,
          'modifiedBy'=>self::MODIFIED_BY,
+         'paidFlag'=>self::PAID_FLAG,
 
     ];
     
