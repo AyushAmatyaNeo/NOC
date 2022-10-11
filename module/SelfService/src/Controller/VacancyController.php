@@ -52,7 +52,8 @@ class VacancyController extends HrisController
         if ($request->isPost()) {
             try {
                 $data = (array) $request->getPost();
-                $rawList = $this->repository->getFilteredRecords($data);
+                // print_r($this->employeeId);die;
+                $rawList = $this->repository->getFilteredRecords($data, $this->employeeId);
                 $list = iterator_to_array($rawList, false);
                 return new JsonModel(['success' => true, 'data' => $list, 'error' => '']);
             } catch (Exception $e) {
@@ -199,10 +200,11 @@ class VacancyController extends HrisController
 
             $this->form->setData($request->getPost());
             $storingDocumentDatas = [];
-            // echo '<pre>'; print_r($postData); die;
+            // echo '<pre>'; print_r($postData);
+            // print_r(implode('_',explode(' ','higher Secondary School'))); die;
             foreach($certificates as $certificate){
                 $degree = '';
-                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[$certificate['ACADEMIC_DEGREE_NAME']], $certificate['ACADEMIC_DEGREE_NAME'].' Certificate');
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME']))], implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME'])).'_Certificate');
             }
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['right_finger_scan'], 'CitizenshipR');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['left_finger_scan'], 'CitizenshipL');
@@ -249,6 +251,8 @@ class VacancyController extends HrisController
                        'MODIFIED_DT' => '',
                        'REMARKS' => '',
                       );
+                    move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
+                    // echo('<pre>');print_r($storingDocumentData['tmp_name']);print_r($storingDocumentData['movingPath']);die;
                     move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['empFilePath']);
                     $this->repository->insertEmployeeDocuments($empFile);
                  }
@@ -341,6 +345,7 @@ class VacancyController extends HrisController
     }
     public function perfomanceAction()
     {
+        // print_r('asdf');die;
         $request = $this->getRequest();
         $postData = $request->getPost();
 
@@ -400,6 +405,7 @@ class VacancyController extends HrisController
         $casLeaveLater = $this->repository->casLeaveLater($eid);
 
         // var_dump($casLeave[0]['TOTALLEAVE']);die;
+        // print_r($detail);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,

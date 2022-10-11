@@ -40,26 +40,27 @@
                 title: 'Select All',                
                 headerTemplate: "<input type='checkbox' id='header-chb' class='k-checkbox header-checkbox'><label class='k-checkbox-label' for='header-chb'></label>",
                 template: "<input type='checkbox' id='#:APPLICATION_ID#'  class='k-checkbox row-checkbox'><label class='k-checkbox-label' for='#:APPLICATION_ID#'></label>",
-                width: 50
+                width: 50,
+                lock: true
             },
-            {field: "REGISTRATION_NO", title: "Reg.No",  width: 80},
+            {field: "REGISTRATION_NO", title: "Reg.No",  width: 80, lock: true},
             // {field: "PROFILE_IMG", title: "Photo",  width: 100},
-            {field: "PROFILE_IMG", title: "Photo",  width: 70,
+            {field: "PROFILE_IMG", title: "Photo",  width: 70, lock: true,
                 template: "<div class = 'user-photo' " +
                     "style='background-image: url(#:PROFILE_IMG#);'></div>"
                     },
-            {field: "FULL_NAME",title:"Full Name", width: 120,
+            {field: "FULL_NAME",title:"Full Name", width: 120, lock: true,
                 template:"#= FIRST_NAME # #= MIDDLE_NAME # #= LAST_NAME #"
             },
-            {field: "VACANCY_TYPE", title: "Vacancy Type",  width: 80},
-            {field: "APPLICATION_AMOUNT", title: "Amount",  width: 50},
-            {field: "AD_NO", title: "Ad No",width: 80},
-            {field: "SERVICE_TYPE_ID", title: "Service Type",width: 80},  
-            {field: "SERVICE_EVENTS_ID", title: "Service Event",width: 80},
-            {field: "POSITION_ID", title: "Designation",width: 100},
-            {field: "DEPARTMENT_ID", title: "Department",width: 120},
-            {field: "STAGE_ID", title: "Stage",width: 80},        
-            {field: "APPLICATION_ID", title: "Action", width: 60,  template: actiontemplateConfig}
+            {field: "VACANCY_TYPE", title: "Vacancy Type",  width: 80,lock: true},
+            {field: "APPLICATION_AMOUNT", title: "Amount",  width: 50, lock: false},
+            {field: "AD_NO", title: "Ad No",width: 80, lock: false},
+            {field: "SERVICE_TYPE_ID", title: "Service Type",width: 80, lock: false},  
+            {field: "SERVICE_EVENTS_ID", title: "Service Event",width: 80, lock: false},
+            {field: "POSITION_ID", title: "Designation",width: 100, lock: false},
+            {field: "DEPARTMENT_ID", title: "Department",width: 120, lock: false},
+            {field: "STAGE_ID", title: "Stage",width: 80, lock: false},        
+            {field: "APPLICATION_ID", title: "Action", width: 60,  template: actiontemplateConfig, lock: false}
         ], null, null, null, 'User List');
 
 
