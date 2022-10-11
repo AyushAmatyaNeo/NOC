@@ -200,6 +200,26 @@
         var employeeId = $('#employeeId').val();
         window.app.floatingProfile.setDataFromRemote(employeeId);
 
+        var myDropzone;
+        Dropzone.autoDiscover = false;
+        myDropzone = new Dropzone("div#dropZoneContainer", {
+            url: document.uploadUrl,
+            autoProcessQueue: false,
+            maxFiles: 1,
+            addRemoveLinks: true,
+            init: function () {
+                this.on("success", function (file, success) {
+                    if (success.success) {
+                        imageUpload(success.data);
+                    }
+                });
+                this.on("complete", function (file) {
+                    this.removeAllFiles(true);
+                });
+            }
+        });
+
+
         $('#addDocument').on('click', function () {
             if(tbItem>1){
                 window.alert("You can upload only 1 file");

@@ -472,11 +472,30 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                 <?php print $this->formElementErrors()->render($reason, ['class' => 'help-block']); ?>
                 </div>
 
+                <div class="row">
+                    <div class=" col-md-6 form-group">
+                        <table id="fileDetailsTbl" class="table">
+                            <tr>
+                                <th>Document</th> 
+                                <th>&nbsp;</th>
+                                <th>Action</th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="col-md-3">
+                        <button id="addDocument" type="button" class="btn btn-primary">
+                            Add
+                        </button>
+                    </div>
+                </div>
+
+                <!--bootstrap modal-->
+
 
                     <div style="display: block;" class="row margin-top-20" id="printBtnDiv" >
                                     <div class="col-md-12" style="text-align:center;">
                                     <br>
-                                    <a class="btn btn-success" id="testBtn" class = "testBtn"> Test</a>
+                                    <a class="btn btn-success" id="testBtn" class = "testBtn">Submit</a>
                                     </div>
                     </div> 
                 </div>
@@ -531,3 +550,33 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
     </div>
 </div>
 
+<div id="documentUploadModel" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Document Upload</h4>
+            </div>
+            <div class="modal-body">
+                <div class="modal-body" id="modal-body">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <!--<div id="dropZoneContainer" >-->
+                            <div id="dropZoneContainer"  class="dropzone">
+                            </div>
+                            <div id="uploadErr">Please upload the Document.</div>
+                        </div>
+                    </div>
+                </div> 
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button id='uploadSubmitBtn' class="btn btn-primary" type="button" >OK</button>
+            <button id='uploadCancelBtn' class="btn btn-warning" type="button" >Cancel</button>
+            <!--<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>-->
+        </div>
+    </div>
+</div>
