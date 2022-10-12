@@ -170,7 +170,6 @@ class LoanRequest extends AbstractActionController {
                 $model->deductOnSalary = 'Y';
                 $model->filePath = !empty($postedData['fileUploadList']) ? $postedData['fileUploadList'] : '' ;
                 $model->monthId = $monthId;
-                $model->fiscalYearId = $fiscalYearId;
                 // echo('<pre>');print_r($model);die;
                 $this->repository->add($model);
 

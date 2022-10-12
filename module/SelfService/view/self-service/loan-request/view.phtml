@@ -61,6 +61,8 @@ $monthlyInterestRate = $form->get('monthlyInterestRate');
 $monthlyInterestRate->setAttributes(["disabled" => "disabled"]);
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'SUBMIT');
+$documentDt = $form->get('documentDt');
+$documentDt->setAttribute('disabled', 'disabled');
 
 $form->setAttribute('action', $this->url('loanRequest', ['action' => 'add']));
 

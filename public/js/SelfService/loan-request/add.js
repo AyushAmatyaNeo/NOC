@@ -71,10 +71,11 @@
                 netAmnt:$('#netAmnt').val(),
                 salaryGrade:$('#salaryGrade').val(),
                 monthId:$('#monthId').val(),
-                fiscalYearId:$('#fiscalYearId').val()
+                fiscalYearId:$('#fiscalYearId').val(),
+                fileUploadList: $('#loanFile').val()
              };
              app.serverRequest(document.loanData, searchData).then(function (success){
-                window.location.href = document.urlTest;
+                // window.location.href = document.urlTest;
              });
         });
 
@@ -249,7 +250,7 @@
 
                     tbItem=tbItem+1;
                     $('#fileDetailsTbl').append('<tr>'
-                            + '<input type="hidden" name="fileUploadList" value="' + success.data.fileName + '"><td>' + success.data.oldFileName + '</td>'
+                            + '<input type="hidden" name="fileUploadList" id = "loanFile" value="' + success.data.fileName + '"><td>' + success.data.oldFileName + '</td>'
                             + '<td><a target="blank" href="' + document.basePath + '/uploads/loan_files/' + success.data.fileName + '"><i class="fa fa-download"></i></a></td>'
                             + '<td><button type="button" class="btn btn-danger deleteFile">DELETE</button></td></tr>');
                 }
