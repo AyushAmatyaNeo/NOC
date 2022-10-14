@@ -291,8 +291,9 @@ class EmployeeController extends HrisController {
                             $this->flashmessenger()->addMessage('Citizenship Issue date should be greater than Birthdate or Citizenship Issue Date is invalid.');
                             return $this->redirect()->toRoute('employee', ['action' => 'edit', 'id' => $id, 'tab' => 3]);
                         }
-
+                        // echo('<pre>');print_r($formThreeModel);die;
                         $this->repository->edit($formThreeModel, $id);
+                        // echo('<pre>');print_r($formThreeModel);die;
                         return $this->redirect()->toRoute('employee', ['action' => 'edit', 'id' => $id, 'tab' => 4]);
                     }
                     break;

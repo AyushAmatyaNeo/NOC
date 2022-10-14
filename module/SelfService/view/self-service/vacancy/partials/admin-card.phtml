@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Page Title</title>
+    </head>
+    <style>
+        body{
+            font-size: 14px;
+        }
+        .admit-card-wrapper{
+            padding: 0 30px;
+        }
+        .header{
+            text-align: center;
+            margin: 60px 0;
+        }
+        .header h2{
+            margin: 0;
+        }
+        .header h3{
+            margin: 0;
+        }
+        .header p{
+            margin: 0;
+        }
+        .header img{
+            width: 120px;
+            float: right;
+        }
+        .flex-box{
+            display: flex;
+            justify-content: space-between;
+            /* padding: 0 30px; */
+        }
+        .applicant-info{
+            width: 50%;
+        }
+        .table td, .table th{
+            padding: 5px;
+        }
+        .bordered-table{
+            border-spacing: 0;
+        }
+        .bordered-table td, .bordered-table th{
+            border: 1px solid;
+        }
+        .document-img img{
+            width: 300px;
+            height: 200px;
+        }
+        .applicant-info p{
+            margin:  30px 0 40px;
+        }
+        .signature-box{
+            display: flex;
+            justify-content: flex-end;
+        }
+        .signature-box .sign1{
+            margin-right: 145px;
+        }
+        .rules-wrapper ol{
+            padding-left: 10px;
+        }
+        .noc-stamp{
+            position: absolute;
+            right: 120px;
+        }
+        @media print{
+            body{
+                font-size: 12px;
+            }
+        }
+    </style>
+    <body>
+        <div class="admit-card-wrapper">
+            <div class="header">
+                <img src="<?php echo $this->basePath('img/noc.png')?>" class="noc-stamp">
+                <img src="<?php echo $this->basePath('uploads/').$employeeDetail['EMPLOYEE_FILE_PATH']?>">
+                <h2>नेपाल आयल निगम लिमिटेड</h1>
+                <h3>केन्द्रिय कार्यालय, टेकु</h6>
+                <p>खुला तथ समावेशी प्रतियोगात्मक परियोगत्मक परिक्षाको प्रवेश पत्र</p>
+                <p>लिखित अन्तर्वार्ता</p>
+            </div>
+            <div class="flex-box">
+                <div class="applicant-info">
+                    <table class="table name-table">
+                        <tr>
+                            <td>Roll no.</td>
+                            <td>80</td>
+                        </tr>
+                        <tr>
+                            <td>Name, Surname</td>
+                            <td>DIMAN SINGH KHATRI</td> 
+                        </tr>
+                        <tr>
+                            <td>Name, Surname</td>
+                            <td>DIMAN SINGH KHATRI</td> 
+                        </tr>
+                    </table>
+                    <table class="table bordered-table">
+                        <tr>
+                            <td>Bigyapan Number</td>
+                            <td>50/2077-78</td>
+                        </tr>
+                        <tr>
+                            <td>Pad/Taha</td>
+                            <td>Sahaayak Prabandhak (prashaasan)/Taha 6</td> 
+                        </tr>
+                        <tr>
+                            <td>Sewa/samuha</td>
+                            <td>Aprawidhik/Prashasan</td> 
+                        </tr>
+                        <tr>
+                            <td>Sammilit huna chaaheko samuha</td>
+                            <td>Khulaa</td>
+                        </tr>
+                        <tr>
+                            <td>Nagarikta number</td>
+                            <td>521020/4828(Dang)</td>
+                        </tr>
+                    </table>
+                    <p>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग</p>
+                    <table class="table bordered-table">
+                        <tr>
+                            <td>S. No.</td>
+                            <td>Patra</td>
+                            <td>Miti, Samaya, Sthan</td>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Pratham</td>
+                            <td>Sahaayak Prabandhak (prashaasan)/Taha 6</td> 
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>Dittiya</td>
+                            <td>Aprawidhik/Prashasan</td> 
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>Tritiya</td>
+                            <td>Khulaa</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="document-img">
+                    <div class="idcard-front">
+                        <img src="<?php echo $this->basePath($applicantsDocumentInernalForm['CitizenshipF']) ?>">
+                    </div>
+                    <div class="idcard-back" style="margin-top:10px;">
+                        <img src="<?php echo $this->basePath($applicantsDocumentInernalForm['CitizenshipB']) ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="signature-box">
+                <p class="sign1">Applicant's Sign
+                <img src="<?php echo $this->basePath($applicantsDocumentInernalForm['signature']) ?>">
+                </p>
+                <p class="sign2">Director's Sign</p>
+            </div>
+            <div class="rules-wrapper">
+                <p><b>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको:</b></p>
+                <ol>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                </ol>
+            </div>
+        </div>
+    </body>
+</html>

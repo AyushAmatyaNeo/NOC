@@ -134,7 +134,7 @@
                                 <input type="number" class='VacancyNo' name='VacancyNo[]' required="required"  />
                             </div>
                         </td>
-                            <td>
+                            <td class="departmentInput">
                                 <label>Department</label>
                                 <div style="overflow:hidden">
                                     <select class='DepartmentId' name='DepartmentId[]' required="required" >

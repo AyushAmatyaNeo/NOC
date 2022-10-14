@@ -122,7 +122,7 @@ class UserApplicationController extends HrisController
         // echo '<pre>'; print_r( $eduDatas);
         // echo '<pre>'; print_r($VacancyData[0]);
 
-        // echo '<pre>'; print_r($applicationData[0]); die;
+        // echo '<pre>'; print_r($DocDatas); die;
 
         return Helper::addFlashMessagesToArray($this, [
                     'vacancyData' => $VacancyData[0],

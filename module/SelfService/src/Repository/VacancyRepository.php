@@ -65,7 +65,8 @@ class VacancyRepository extends HrisRepository{
                 
                 // $select->where(["REC.VACANCY_ID" => $id]);
                 
-                ->where(["REC.STATUS='E' AND HOP.STATUS='E' AND REC.VACANCY_TYPE = 'INTERNAL'
+                ->where(["REC.STATUS='E' AND HOP.STATUS='E' AND REC.VACANCY_TYPE in ('INTERNAL_FORM',
+                'INTERNAL_APPRAISAL')
                 AND REC.LEVEL_ID in 
 (select functional_level_id from hris_functional_levels where order_id in 
 (select order_id - 1 from hris_functional_levels where functional_level_id in (
@@ -366,19 +367,24 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     public function getInclusions($uid, $type, $vid)
     {
     //    var_dump($uid, $type, $vid); die;
-       $sql = ("SELECT * from hris_rec_vacancy_application WHERE USER_ID = {$uid} AND AD_NO = {$vid} AND APPLICATION_TYPE = '{$type}'");
+       $sql = ("SELECT * from hris_rec_vacancy_application WHERE USER_ID = {$uid} AND AD_NO = {$vid} AND APPLICATION_TYPE = '{$type}' and status='E'");
        $application = $this->rawQuery($sql);
     //    print_r($sql);die;
        $aid = $application[0]['APPLICATION_ID'];
-       $query = ("SELECT * FROM HRIS_REC_APPLICATION_PERSONAL where APPLICATION_ID = {$aid} AND STATUS = 'E'");
-    //    print_r($query);die;
-       $application_personal = $this->rawQuery($query);
-       $result = [
-           'application' => $application,
-           'application_personal' => $application_personal,
-           'aid' => $aid,
-       ];
-       return $result;
+       if($aid){
+        $query = ("SELECT * FROM HRIS_REC_APPLICATION_PERSONAL where APPLICATION_ID = {$aid} AND STATUS = 'E'");
+        //    print_r($query);die;
+        $application_personal = $this->rawQuery($query);
+        $result = [
+            'application' => $application,
+            'application_personal' => $application_personal,
+            'aid' => $aid,
+        ];
+        return $result;
+       }else{
+        return;
+       }
+       
         
     }
     public function casLeaveEarlier($eid)
@@ -408,14 +414,18 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
         // var_dump($aid, $uid); die;
         $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE USER_ID = {$uid} AND APPLICATION_ID = {$aid} and status='E'";
         $result = $this->rawQuery($sql);
-        // var_dump($result); die;
+        // var_dump($sql); die;
         return $result;
     }
     public function checkVacancyStatus($v_id, $e_id)
     {
-        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID  from HRIS_REC_VACANCY_APPLICATION WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} and status='E'";
+        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID,
+        CASE WHEN
+	 stage_id in (
+select rec_stage_id from hris_rec_stages where order_no >= (select order_no from hris_rec_stages where rec_stage_id = 8))
+then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} and status='E'";
         $result = $this->rawQuery($sql);
-        // var_dump($result); die;
+        // var_dump($sql); die;
         return $result;
     }
     public function getRegNo($id){
@@ -458,7 +468,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
     public function updateDocuments($data, $folder, $u_id, $v_id)
     {
-        $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE VACANCY_ID = {$v_id} AND USER_ID = {$u_id} AND DOC_FOLDER = '{$folder}'";
+        $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE VACANCY_ID = {$v_id} AND USER_ID = {$u_id} AND DOC_FOLDER = '{$folder}' AND STATUS='E'";
         $result = $this->rawQuery($sql);
 
         $filePath =  __DIR__ . "/../../../../public/".$result[0]['DOC_PATH'].$result[0]['DOC_NEW_NAME'];
@@ -471,7 +481,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
     public function updateEduDocuments($data, $fid, $eid)
     {
-        $sql = "SELECT * FROM HRIS_EMPLOYEE_FILE WHERE FILE_ID = {$fid} AND EMPLOYEE_ID = {$eid} ";
+        $sql = "SELECT * FROM HRIS_EMPLOYEE_FILE WHERE FILE_ID = {$fid} AND EMPLOYEE_ID = {$eid} and status='E' ";
         $result = $this->rawQuery($sql);
         $id = $result[0]['FILE_CODE'];
         $data ['CREATED_DT'] = $result[0]['CREATED_DT'];

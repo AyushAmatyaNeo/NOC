@@ -358,14 +358,14 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 										</td>
                                         <?php
                                         foreach ($existingDocuments as $key => $existingDocument) {
-                                            if (array_key_exists($certificate['ACADEMIC_DEGREE_NAME'],$existingDocument)) {
+                                            if (array_key_exists($certificate['ACADEMIC_DEGREE_NAME'].' Certificate',$existingDocument)) {
                                                ?> <td class='certInput'>
                                                 <a class="btn-delete"
-                                                    href="<?= $this->basePath() . "/uploads/" . $existingDocument['path']; ?>"
+                                                    href="<?= $this->basePath() . "/uploads/documents/" . implode('_',explode(' ',$existingDocument['name'])) . "/" . $existingDocument['path']; ?>"
                                                     download="<?php echo  $existingDocument['name']; ?>" style="height:27px;">
                                                     <i class="fa fa-download"></i>
                                                  </a>
-                                                 <a class="btn-delete" href="#" onclick="uploadDocument()"> <i class="fa fa-edit"></i></a>
+                                                 <?php /* <a class="btn-delete" href="#" onclick="uploadDocument()"> <i class="fa fa-edit"></i></a>
                                                  <div class="modal fade" id="documentUploadModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
@@ -384,14 +384,10 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                                         </div>
                                                         </div>
                                                     </div>
-                                                    </div>
+                                                    </div>*/?>
                                              </td>
 
                                              <?php break;
-                                            }else {
-                                                ?>  <td class='certInput'>
-                                                <input type="file" class="form-control-file" id="<?php $CertId = str_replace(' ', '_', $certificate['ACADEMIC_DEGREE_NAME']); echo $CertId;  ?>" name="<?php echo $CertId; ?>" onchange="return certificateValidation($id = '<?php $CertId = str_replace(' ', '_', $certificate['ACADEMIC_DEGREE_NAME']); echo $CertId;  ?>')" accept=".png,.pdf,.jpg,.jpeg" required/>
-                                                 </td><?php 
                                             }
                                         }
                                         ?>
@@ -428,10 +424,10 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                 <?php foreach($inclusions as $inclusion) {?>
                                 <div class="col-xs-6 col-sm-6 col-md-2 col-box">
                                 <?php if (in_array( $inclusion['INCLUSION_ID'], $inclusionIds)) {?>
-                                   <input class="form-check-input inclusion" type="checkbox" name="inclusion[]" checked value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                   <input disabled class="form-check-input inclusion" type="checkbox" name="inclusion[]" checked value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
                                     <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
                                 <?php } else { ?>
-                                    <input class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                    <input disabled class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
                                     <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
                                 <?php } ?>
                                    
@@ -542,18 +538,34 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 				<tr>
 					<td>
 						<div id="imagePreviewright_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
-							<img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath($applicantsDocument['CitizenshipR']) ?>" />
-						</div>
+							<img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath($applicantsDocument['FingerPrintR']) ?>" />
+                            <label for="FingerPrintR">Finger Print Right</label>
+                        </div>
 					</td>
 					<td>
 						<div id="imagePreviewleft_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
-							<img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath($applicantsDocument['CitizenshipL']) ?>" alt="Left Finger" />
+							<img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath($applicantsDocument['FingerPrintL']) ?>" alt="Left Finger" />
+                            <label for="FingerPrintR">Finger Print Left</label>
 						</div>
 					</td>
                     
 					<td>
 						<div id="imagePreviewsignature" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
 							<img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath($applicantsDocument['signature'])?>" alt="Recent Signature" />
+                            <label for="FingerPrintR">Signature</label>
+						</div>
+					</td>
+
+                    <td>
+						<div id="imagePreviewright_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+							<img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath($applicantsDocument['CitizenshipF']) ?>" />
+                            <label for="FingerPrintR">Citizenship Front</label>
+						</div>
+					</td>
+					<td>
+						<div id="imagePreviewleft_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+							<img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath($applicantsDocument['CitizenshipB']) ?>" alt="Left Finger" />
+                            <label for="FingerPrintR">Citizenship Back</label>
 						</div>
 					</td>
 				</tr>
@@ -561,7 +573,6 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 					<td style="border-top:0;">
 						<div class="form-group">
 							<input type="hidden" name="image_ids[]" value="right_finger_scan" />
-							<input type="file" class="form-control-file" name="right_finger_scan" id="right_finger_scan" onchange="return fileValidation($id = 'right_finger_scan')" >
 							<p class="size"></p>
 							<?php if (isset($upload_error_photo)) {
 								echo $upload_error_photo;
@@ -571,14 +582,12 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 					<td style="border-top:0;">
 						<div class="form-group">
                             <input type="hidden" name="image_ids[]" value="left_finger_scan" />
-							<input type="file" class="form-control-file" name="left_finger_scan" id="left_finger_scan" onchange="return fileValidation($id = 'left_finger_scan')" >
 							<p class="size"></p>
 						</div>
 					</td>
                     <td style="border-top:0;">
                         <div class="form-group">
                             <input type="hidden" name="image_ids[]" value="signature" />
-                            <input type="file" class="form-control-file" name="signature" id="signature" onchange="return fileValidation($id = 'signature')" >
                             <p class="size"></p>
                         </div>
                     </td>

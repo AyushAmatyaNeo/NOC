@@ -1646,10 +1646,10 @@ if ($this->messages) {
                                             <?php print $file['DOC_OLD_NAME']; ?>
                                         </td>
                                         <td>
-                                            <a target="_blank" href="<?= $file['DOC_PATH']; ?>">View</a>
+                                            <a target="_blank" href="<?=$this->basePath() . "/". $file['DOC_PATH']."/".$file['DOC_NEW_NAME']; ?>">View</a>
                                         </td>
                                         <td width="10%">
-                                            <a class="btn-delete" href="<?= $file['DOC_PATH']; ?>" download="<?php echo $file['DOC_OLD_NAME']; ?>" style="height:27px;">
+                                            <a class="btn-delete" href="<?=$this->basePath() . "/". $file['DOC_PATH']."/".$file['DOC_NEW_NAME']; ?>" style="height:27px;">
                                                 <i class="fa fa-download"></i>
                                             </a>
                                         </td>

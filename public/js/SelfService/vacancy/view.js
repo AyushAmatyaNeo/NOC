@@ -6,22 +6,22 @@
         var $form = $('#RecruitmentVacancy');
         var myDropzone;
         Dropzone.autoDiscover = false;
-        myDropzone = new Dropzone("div#dropZoneContainer", {
-            url: document.ViewUrl,
-            autoProcessQueue: false,
-            maxFiles: 1,
-            addRemoveLinks: true,
-            init: function () {
-                this.on("success", function (file, success) {
-                    if (success.success) {
-                        pullimageUpload(success.data);
-                    }
-                });
-                this.on("complete", function (file) {
-                    this.removeAllFiles(true);
-                });
-            }
-        });
+        // myDropzone = new Dropzone("div#dropZoneContainer", {
+        //     url: document.ViewUrl,
+        //     autoProcessQueue: false,
+        //     maxFiles: 1,
+        //     addRemoveLinks: true,
+        //     init: function () {
+        //         this.on("success", function (file, success) {
+        //             if (success.success) {
+        //                 pullimageUpload(success.data);
+        //             }
+        //         });
+        //         this.on("complete", function (file) {
+        //             this.removeAllFiles(true);
+        //         });
+        //     }
+        // });
 
         $('#viewOnlyDocument').on('click', function (data) {
             window.app.pullDataById(document.pullVacancyFileLink, {
@@ -67,6 +67,10 @@
         var $print = $('#print');
         $print.on('click', function () {
             app.exportDomToPdf('printableArea', document.urlCss);
+        });
+
+        $('#downloadAdminCard').on('click', function () {
+            app.exportDomToPdf('adminCard', document.urlCss);
         });
 
     });
