@@ -83,7 +83,7 @@ class LoanRequestForm{
 
     /**
      * @Annotation\Type("Zend\Form\Element\Select")
-     * @Annotation\Required(true)
+     * @Annotation\Required(false)
      * @Annotation\Filter({"name":"StripTags","name":"StringTrim"})
      * @Annotation\Options({"disable_inarray_validator":"true","label":"Fiscal Years"})
      * @Annotation\Attributes({ "id":"fiscalYearId","class":"form-control"})

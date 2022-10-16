@@ -30,9 +30,14 @@ $this->headScript()
 
 $form->setAttribute('role', 'form');
 $form->setAttribute('id', 'loanAdvance-form');
-
 $loanId = $form->get('loanId');
 $loanId->setValueOptions($loans);
+$months = $form->get('monthId');
+$months->setValueOptions($month);
+$months->setAttributes(["disabled" => "disabled"]);
+$years = $form->get('fiscalYearId');
+$years->setValueOptions($year);
+$years->setAttributes(["disabled" => "disabled"]);
 $loanId->setAttributes(["disabled" => "disabled"]);
 $appliedLoan = $form->get('appliedLoan');
 $appliedLoan->setAttributes(["disabled" => "disabled"]);
@@ -56,6 +61,8 @@ $monthlyInterestRate = $form->get('monthlyInterestRate');
 $monthlyInterestRate->setAttributes(["disabled" => "disabled"]);
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'SUBMIT');
+$documentDt = $form->get('documentDt');
+$documentDt->setAttribute('disabled', 'disabled');
 
 $form->setAttribute('action', $this->url('loanRequest', ['action' => 'add']));
 
@@ -154,28 +161,6 @@ print $this->form()->openTag($form);
                                 <?php print $this->formElementErrors()->render($loanId, ['class' => 'help-block']); ?>
                             </div>               
                         </div>
-
-
-                        <div class="col-sm-4">
-                            <div class="form-group">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <?php print $this->formLabel($loanDate); ?>
-                                            <?php print $this->formElement($loanDate); ?>
-                                        <?php print $this->formElementErrors()->render($loanDate, ['class' => 'help-block']); ?>
-                                    </div>     
-                                    <div class="col-sm-6">
-                                        <div class="form-group">
-                                            <label for="nepaliDate">&nbsp;</label>
-                                            <div class="input-group">
-                                                <input type="text" name="nepaliDate" id="nepaliDate"
-                                                       class="form-control" value="" disabled="disabled">
-                                            </div>
-                                        </div>
-                                    </div>     
-                                </div>        
-                            </div>
-                        </div>
                     </div>
 
                     <div class=" row">
@@ -225,18 +210,22 @@ print $this->form()->openTag($form);
                             <?php print $this->formElement($monthlyInstallmentAmount); ?>
                             <?php print $this->formElementErrors()->render($monthlyInstallmentAmount, ['class' => 'help-block']); ?>
                         </div>  
-                        
-                        <div class = "form-group">
-                            <label class="control-label">Month</label>
-                            <select class="form-control" id="monthId" value = "<?php $monthId?>" disabled >
-                            </select>
-                        </div>          
+                
+                        <div class="form-group">
+                            <?php print $this->formLabel($months); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($months); ?>
+                            <?php print $this->formElementErrors()->render($months, ['class' => 'help-block']); ?>
+                        </div>               
+             
                     </div>
                     
                     <div class="col-sm-2">
                         <div class="form-group">
-                            <label class="control-label">Year</label>
-                            <select class="form-control" id="fiscalYearId" value = "<?php $fiscalYearId?>" disabled>
+                        <?php print $this->formLabel($years); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($years); ?>
+                            <?php print $this->formElementErrors()->render($years, ['class' => 'help-block']); ?>
                             </select>
                         </div>    
                     </div>  
