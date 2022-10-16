@@ -24,7 +24,7 @@
             const principalArr = [...principal].map(input => input.value);
             const installment = document.getElementsByClassName('installment');
             const installmentArr = [...installment].map(input => input.value);
-            const principalRemaining = document.getElementsByClassName('principal');
+            const principalRemaining = document.getElementsByClassName('principalRemaining');
             const principalRemainingArr = [...principalRemaining].map(input => input.value);
             
             const searchData = {
@@ -70,9 +70,12 @@
                 basicGrade :$('#basicGrade').val(),
                 netAmnt:$('#netAmnt').val(),
                 salaryGrade:$('#salaryGrade').val(),
+                monthId:$('#monthId').val(),
+                fiscalYearId:$('#fiscalYearId').val(),
+                fileUploadList: $('#loanFile').val()
              };
              app.serverRequest(document.loanData, searchData).then(function (success){
-                window.location.href = document.urlTest;
+                // window.location.href = document.urlTest;
              });
         });
 
@@ -99,7 +102,7 @@
                     var rate = (1 + monthlyInterestRate / 100) ** repaymentInstallments ;
                     var monthlyInstallmentAmount = (appliedLoan * (monthlyInterestRate/100) *rate)/(rate-1);
                     var cit = parseFloat($("#cit").val());
-                    var totalDeduction =parseFloat($('#totalDeductionWithoutCit').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)) +  parseFloat($("#cit").val());
+                    var totalDeduction =parseFloat($('#totalDeductionWithoutCitFixed').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)) +  parseFloat($("#cit").val());
                     $(".interestRate").val(interestRate);
                     document.rateDetails[i].IS_RATE_FLEXIBLE == 'Y' ? $("#interestRate").removeAttr('readonly') : $("#interestRate").attr('readonly', 'readonly') ;
                     $(".appliedLoan").val(appliedLoan);
@@ -107,18 +110,18 @@
                     $(".repaymentInstallments").val(repaymentInstallments);
                     $("#monthlyInterestRate").val(monthlyInterestRate.toFixed(2));
                     $("#monthlyInstallmentAmount").val(monthlyInstallmentAmount.toFixed(2));
-                    $('#totalAmount').val(parseFloat($('#totalAmount').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
-                    $('#totalDeductionWithoutCit').val(parseFloat($('#totalDeductionWithoutCit').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
+                    $('#totalAmount').val(parseFloat($('#totalAmountFixed').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
+                    $('#totalDeductionWithoutCit').val(parseFloat($('#totalDeductionWithoutCitFixed').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
                     $('#receivedPercent').val(((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) + ' %');
                     $('#receivedWOcit').val(((totalSalary - totalDeduction + cit)/totalSalary*100).toFixed(2) + ' %');
                     $('#permissibleDeduction').val(-((totalSalary * 0.25) - totalSalary + totalDeduction - cit).toFixed(2));
                     
 
                     if (((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) < 25){
-                        document.getElementById("submitBtn").disabled = true;
+                        document.getElementsByClassName('testBtn').disabled = true;
                         $('#comment').show();}
                     else{
-                        document.getElementById("submitBtn").disabled = false;
+                        document.getElementsByClassName('testBtn').disabled = false;
                         $('#comment').hide();
                     }
                     
@@ -183,10 +186,12 @@
             $('#receivedWOcit').val(((totalSalary - totalDeduction + cit)/totalSalary*100).toFixed(2) + ' %');
             $('#totalAmount').val(totalDeduction);
             if (((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) < 25){
-                document.getElementById("submitBtn").disabled = true;
+                document.getElementById("testBtn").disabled = true;
+                console.log('if');
                 $('#comment').show();}
                 else{
-                    document.getElementById("submitBtn").disabled = false;
+                    document.getElementById("testBtn").disabled = false;
+                    console.log('else');
                     $('#comment').hide();
                 }
         });
@@ -195,6 +200,26 @@
 
         var employeeId = $('#employeeId').val();
         window.app.floatingProfile.setDataFromRemote(employeeId);
+
+        var myDropzone;
+        Dropzone.autoDiscover = false;
+        myDropzone = new Dropzone("div#dropZoneContainer", {
+            url: document.uploadUrl,
+            autoProcessQueue: false,
+            maxFiles: 1,
+            addRemoveLinks: true,
+            init: function () {
+                this.on("success", function (file, success) {
+                    if (success.success) {
+                        imageUpload(success.data);
+                    }
+                });
+                this.on("complete", function (file) {
+                    this.removeAllFiles(true);
+                });
+            }
+        });
+
 
         $('#addDocument').on('click', function () {
             if(tbItem>1){
@@ -225,7 +250,7 @@
 
                     tbItem=tbItem+1;
                     $('#fileDetailsTbl').append('<tr>'
-                            + '<input type="hidden" name="fileUploadList" value="' + success.data.fileName + '"><td>' + success.data.oldFileName + '</td>'
+                            + '<input type="hidden" name="fileUploadList" id = "loanFile" value="' + success.data.fileName + '"><td>' + success.data.oldFileName + '</td>'
                             + '<td><a target="blank" href="' + document.basePath + '/uploads/loan_files/' + success.data.fileName + '"><i class="fa fa-download"></i></a></td>'
                             + '<td><button type="button" class="btn btn-danger deleteFile">DELETE</button></td></tr>');
                 }
@@ -261,9 +286,9 @@
 
 
 
-        $submitBtn.on('click', function(){
+        $testBtn.on('click', function(){
             if ($('#receivedPercent').val() < 25){
-                $('#submitBtn').prop('disabled', true );
+                console.log($('#receivedPercent'));
                 $form.prop('error-message', 'It is Below 25%');
                 app.showMessage('It is Below 25%', 'error');
                 app.showMessage('It is Below 25%', 'error');
@@ -272,15 +297,19 @@
             var amnt = $('#receivedPercent').val() > 25;
             var empId = $('#employeeId').val();
             var loanId = $("#loanId").val();
-            checkForErrors(empId, loanId,amnt);
+            var period = $("#period").val();
+            var loanAmount =  $(".appliedLoan").val();
+            var monthlyImstallmentRate =  $("#monthlyInstallmentAmount").val();
+            var cit  = parseFloat($("#cit").val());
+            // checkForErrors(empId, loanAmount,period,monthlyImstallmentRate,loanId,cit);
         });
 
         
 
 
-        var checkForErrors = function (empId, loanId, loanAmount, installment, citVal) {
+        var checkForErrors = function (empId, loanAmount, period,loanId, installment, citVal) {
             
-            app.pullDataById(document.wsValidateLoanRequest, {empId:empId, loanId:loanId, loanAmount:loanAmount, installment:installment, citVal:citVal}).then(function (response) {
+            app.pullDataById(document.wsValidateLoanRequest, {empId:empId, loanAmount:loanAmount, period:period,loanId:loanId, installment:installment, citVal:citVal}).then(function (response) {
                 if (response.data['ERROR'] == "ALLOW") {
                     $form.prop('valid', 'true');
                     $form.prop('error-message', '');

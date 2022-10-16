@@ -1,6 +1,7 @@
 <?php
 $this->headLink()
     ->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'))
+    ->appendStylesheet($this->basePath('css/recruitment.css'))
     ->appendStylesheet($this->basePath('dropzone/dropzone.min.css'));
 
 $this->headScript()
@@ -156,7 +157,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                 </div>
                 <!--Vacancy list details addition-->
                 <div class="row">
-                    <div class="col-md-11" id="vacancyDetails">
+                    <div class="col-md-12" id="vacancyDetails">
                         <table class="vacancyDetails table table-bordered" id="vacancyDetails">
                             <thead>
                                 <tr>
@@ -172,7 +173,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                             <input type="number" class='VacancyNo form-control' name='VacancyNo[]'   value="" required="required" />
                                         </div>
                                     </td>
-                                    <td>
+                                    <td class="departmentInput">
                                         <label>Department</label>
                                         <span class="required" aria-required="true">*</span>
                                         <div style="overflow:hidden">
@@ -267,13 +268,14 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-md-1">
+                    <!-- <div class="col-md-1">
                         <input class="vacancyAddBtn btn btn-primary" id="addvacancyrow" type="button" value="Add Vacancy+">
-                    </div>
+                    </div> -->
                 </div>
                 <?php
                 print $this->formSubmit($submit);
                 ?>
+                <input class="vacancyAddBtn btn btn-primary" id="addvacancyrow" type="button" value="Add Vacancy+">
                 <!-- <button id="reset" type="reset" class="btn default btn-sm hris-reset-btn">Reset<i class="fa fa-refresh"></i></button> -->
                 <?php
                 print $this->form()->closeTag();

@@ -127,7 +127,7 @@ class VacancyController extends HrisController
         $Skills = EntityHelper::getTableList($this->adapter, 'HRIS_REC_SKILL', ['SKILL_ID','SKILL_NAME'], ['STATUS' => 'E']);
         $OpeningVacancyNo = EntityHelper::getTableList($this->adapter, 'HRIS_REC_OPENINGS', ['OPENING_ID','VACANCY_TOTAL_NO','RESERVATION_NO'], ['STATUS' => 'E']);
         // $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL" => "INTERNAL");
-        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL" => "INTERNAL");
+        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_" => "INTERNAL", );
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,

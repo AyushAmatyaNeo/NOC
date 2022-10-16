@@ -106,6 +106,7 @@ class VacancyLevelRepository extends HrisRepository
         $select->where(["REC.DESIGNATION_LID LIKE '%$id%'"]);
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
+        // echo('<pre>');print_r($statement);die;
         $result = $statement->execute($boundedParameter);
         return $result;
     }

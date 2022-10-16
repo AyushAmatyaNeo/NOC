@@ -41,6 +41,7 @@ class UserApplicationController extends HrisController
                 $rawListInternal = $this->repository->applicationDataInternal($data);                        
                 $listOpen = iterator_to_array($rawList, false);
                 $listInternals = iterator_to_array($rawListInternal, false);
+                // print_r($listInternals);die;
                 foreach($listInternals as $listInternal) {
                     $uri = $this->getRequest()->getUri();
                     $baseUrl = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());

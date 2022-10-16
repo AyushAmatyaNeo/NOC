@@ -74,12 +74,30 @@ class LoanRequestForm{
 
     /**
      * @Annotation\Type("Zend\Form\Element\Select")
-     * @Annotation\Required(false)
+     * @Annotation\Required(true)
      * @Annotation\Filter({"name":"StripTags","name":"StringTrim"})
      * @Annotation\Options({"disable_inarray_validator":"true","label":"Loan Name"})
      * @Annotation\Attributes({ "id":"loanId","class":"form-control"})
      */
     public $loanId;
+
+    /**
+     * @Annotation\Type("Zend\Form\Element\Select")
+     * @Annotation\Required(false)
+     * @Annotation\Filter({"name":"StripTags","name":"StringTrim"})
+     * @Annotation\Options({"disable_inarray_validator":"true","label":"Fiscal Years"})
+     * @Annotation\Attributes({ "id":"fiscalYearId","class":"form-control"})
+     */
+    public $fiscalYearId;
+
+    /**
+     * @Annotation\Type("Zend\Form\Element\Select")
+     * @Annotation\Required(false)
+     * @Annotation\Filter({"name":"StripTags","name":"StringTrim"})
+     * @Annotation\Options({"disable_inarray_validator":"true","label":"Month"})
+     * @Annotation\Attributes({ "id":"monthId","class":"form-control"})
+     */
+    public $monthId;
 
 
     /**
