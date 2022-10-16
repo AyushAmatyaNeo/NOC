@@ -386,15 +386,19 @@ class EmployeeRepository extends HrisRepository implements RepositoryInterface {
 
     public function edit(Model $model, $id) {
         $tempArray = $model->getArrayCopyForDB();
+
         if(array_key_exists('WOH_FLAG', $model)){
             if($tempArray['WOH_FLAG'] == null){
                 $tempArray['WOH_FLAG'] = $this->getWohRewardFromPosition($tempArray['POSITION_ID'])['WOH_FLAG'];
             }
         }
-        if($tempArray['ACTING_POSITION_ID']==''){
-            $tempArray['ACTING_POSITION_ID']=null;
-        }        
+        if(array_key_exists('ACTING_POSITION_ID', $tempArray)){
+            if($tempArray['ACTING_POSITION_ID']==''){
+                $tempArray['ACTING_POSITION_ID']=null;
+            } 
+        }
         // echo('<pre>'); print_r($tempArray);die;
+               
         $this->tableGateway->update($tempArray, ['EMPLOYEE_ID' => $id]);
     }
 

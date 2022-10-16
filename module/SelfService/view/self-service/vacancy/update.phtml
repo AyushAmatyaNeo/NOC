@@ -381,15 +381,16 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 										</td>
                                         <?php
                                         foreach ($existingDocuments as $key => $existingDocument) {
-                                            if (array_key_exists($certificate['ACADEMIC_DEGREE_NAME'],$existingDocument)) {
+                                            if (array_key_exists($certificate['ACADEMIC_DEGREE_NAME'].' Certificate',$existingDocument)) {
                                                ?> <td class='certInput'>
                                                 <a class="btn-delete"
-                                                    href="<?= $this->basePath() . "/uploads/" . $existingDocument['path']; ?>"
+                                                    href="<?= $this->basePath() . "/uploads/documents/" . implode('_',explode(' ',$existingDocument['name'])) . "/"  . $existingDocument['path']; ?>"
                                                     download="<?php echo  $existingDocument['name']; ?>" style="height:27px;">
                                                     <i class="fa fa-download"></i>
                                                  </a>
-                                                 <a class="btn-delete" href="#" onclick="uploadDocument()"> <i class="fa fa-edit"></i></a>
-                                                 <div class="modal fade" id="documentUploadModel" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                                 <a class="btn-delete" href="#" onclick=<?php echo ("uploadDocument('".implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME']))."')")?>> <i class="fa fa-edit"></i></a>
+                                                 <!-- <input type="text" value ='asdf' class='fileType'> -->
+                                                 <div class="modal fade" id=<?php echo"documentUploadModel".implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME']))?> tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                                     <div class="modal-dialog" role="document">
                                                         <div class="modal-content">
                                                         <div class="modal-header">
@@ -695,9 +696,9 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 		}
     }
 
-    function uploadDocument() {
-        console.log();
-        $('#documentUploadModel').modal('show');
+    function uploadDocument(id) {
+        // console.log('#documentUploadModel'+id);
+        $('#documentUploadModel'+id).modal('show');
     }
     function uploadCancelBtn(params) {
         console.log(params);

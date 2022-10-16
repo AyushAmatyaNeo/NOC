@@ -108,20 +108,24 @@
             console.log(position_id);
 
             if (val.length > 1) {
-                window.app.pullDataById(document.ajaxurl, {
+                app.serverRequest(document.ajaxurl, {
                     'level_id': level_id,
                     'position_id': position_id
                 }).then(function (success) {
                     console.log(success);
                     if (success.success) {
                         var now = new Date();
-                    
                         var year = now.getFullYear();
                         var month = now.getMonth() + 1;
                         var day = now.getDate();
-                        month = (month < 10) ? (month = "-0" + month) : month;
-                        day = (day < 10) ? (day = "-0" + day) : day;
-                        var Unix_today = new Date(year+'.'+month+'.'+day).getTime() / 1000;
+                        // console.log(year+'-'+month+'-'+day);
+                        // console.log(success.data.END_DATE);
+                        // console.log(new Date(year+'-'+month+'-'+day).getTime() / 1000);
+                        // console.log(new Date(success.data.END_DATE).getTime());
+
+                        // month = (month < 10) ? (month = "-0" + month) : month;
+                        // day = (day < 10) ? (day = "-0" + day) : day;
+                        var Unix_today = new Date(year+'-'+month+'-'+day).getTime() / 1000;
                         Unix_end = new Date(success.data.END_DATE).getTime() / 1000;
                         if (val.length == 1) {
                             if (Unix_end >= Unix_today) {

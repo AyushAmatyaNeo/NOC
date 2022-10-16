@@ -52,7 +52,8 @@ class VacancyController extends HrisController
         if ($request->isPost()) {
             try {
                 $data = (array) $request->getPost();
-                $rawList = $this->repository->getFilteredRecords($data);
+                // print_r($this->employeeId);die;
+                $rawList = $this->repository->getFilteredRecords($data, $this->employeeId);
                 $list = iterator_to_array($rawList, false);
                 return new JsonModel(['success' => true, 'data' => $list, 'error' => '']);
             } catch (Exception $e) {
@@ -73,13 +74,14 @@ class VacancyController extends HrisController
     public function viewAction()
     {
 
-
+// print_r($this->storageData['employee_detail']);die;
         $id = (int) $this->params()->fromRoute('id');
         if ($id === 0) {
             return $this->redirect()->toRoute("vacancy");
         }
 
         $detail = $this->repository->fetchById($id);
+        // echo('<pre>');print_r($detail);die;
         $inclusion = Helper::extractDbData($this->VacancyInclusionRepository->fetchById($id));
         $skills =  explode(',', $detail['SKILL_ID']);
         $Inclusions =  explode(',', $detail['INCLUSION_ID']);
@@ -88,12 +90,13 @@ class VacancyController extends HrisController
         $model->SkillId = $skills;
         $model->InclusionId = $Inclusions;
         $this->form->bind($model);
-        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL" => "INTERNAL");
+        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_FORM" => "INTERNAL-FORM","INTERNAL_APPRAISAL" => "INTERNAL-APPRAISAL", );
         $empId = $this->employeeId;
         $user_id = $this->repository->userId($empId);
         $employeeFirstJoin = $this->repository->inclusionAppliedCheck($empId);
         $employeeLastJoin = $this->repository->inclusionPromoCheck($empId);
         $vacancyApplyStage = $this->repository->checkVacancyStatus($id, $user_id[0]['USER_ID']);
+        // print_r($vacancyApplyStage);die;
         $inc = 'N';
         
         $employeeFirstJoinDate = $employeeFirstJoin['JOIN_DATE'];
@@ -123,7 +126,29 @@ class VacancyController extends HrisController
         }
         $date = date('Y-m-d');
         $curentJob['DURATION'] =  $date - $curentJob['StartDate'];
-        // var_dump($curentJob); die;
+        // print_r($curentJob); die;
+        $applicantsDocumentInernalForm = [];
+        $appliedDataInternalForm = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
+        if($appliedDataInternalForm){
+            $applicationStoredDocumentsInternalForm = $this->repository->getAppliedStoredDocuments($appliedDataInternalForm['aid'], $user_id[0]['USER_ID']);
+            // echo('<pre>');print_r($applicationStoredDocuments);die;
+            foreach ($applicationStoredDocumentsInternalForm as $applicationStoredDocument) {
+                if ($applicationStoredDocument['DOC_FOLDER'] == "Signature") {
+                    $applicantsDocumentInernalForm['signature'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR") {
+                    $applicantsDocumentInernalForm['FingerPrintR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL") {
+                    $applicantsDocumentInernalForm['FingerPrintL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF") {
+                    $applicantsDocumentInernalForm['CitizenshipF'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB") {
+                    $applicantsDocumentInernalForm['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+                }
+            }
+        }
+        
+        // echo('<pre>');print_r($detail);die;
+
         return Helper::addFlashMessagesToArray($this, [
             'id' => $id,
             'form' => $this->form,
@@ -143,6 +168,9 @@ class VacancyController extends HrisController
             'Vacancy_types' => $Vacancy_types,
             'InclusionList' => EntityHelper::getTableKVListWithSortOption($this->adapter, OptionsModel::TABLE_NAME, OptionsModel::OPTION_ID, [OptionsModel::OPTION_EDESC], ["STATUS" => "E"], OptionsModel::OPTION_EDESC, "ASC", null, [null => '---'], true),
             'Skills' => EntityHelper::getTableKVListWithSortOption($this->adapter, SkillModel::TABLE_NAME, SkillModel::SKILL_ID, [SkillModel::SKILL_NAME], ["STATUS" => "E"], SkillModel::SKILL_NAME, "ASC", null, [null => '---'], true),
+            'employeeDetail' => $this->storageData['employee_detail'],
+            'applicantsDocumentInernalForm' => $applicantsDocumentInernalForm,
+            // 'detail' => $detail
         ]);
     }
     public function applyAction()
@@ -172,24 +200,7 @@ class VacancyController extends HrisController
         // var_dump($user_id[0]['USER_ID']);die;
         $existingDocuments = [];
         foreach ($documentsEducation as $document) {
-            if ($document['FILE_NAME'] == 'SLC Certificate') {
-                $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }
-            if ($document['FILE_NAME'] == 'Intermediate Certificate') {
-                $existingDocuments[] = array("+2/Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }    
-            if ($document['FILE_NAME'] == 'Bachelor Certificate') {
-                $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }       
-            if ($document['FILE_NAME'] == 'Master Certificate') {
-                $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            } 
-            if ($document['FILE_NAME'] == 'M.Phil Certificate') {
-                $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }      
-            if ($document['FILE_NAME'] == 'P.HD. Certificate') {
-                $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }  
+            $existingDocuments[] = array($document['FILE_NAME']=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']); 
         }
         if ($request->isPost()) {
             $postData = array_merge_recursive(
@@ -199,13 +210,16 @@ class VacancyController extends HrisController
 
             $this->form->setData($request->getPost());
             $storingDocumentDatas = [];
-            // echo '<pre>'; print_r($postData); die;
+            // echo '<pre>'; print_r($postData);die;
+            // print_r(implode('_',explode(' ','higher Secondary School'))); die;
             foreach($certificates as $certificate){
                 $degree = '';
-                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[$certificate['ACADEMIC_DEGREE_NAME']], $certificate['ACADEMIC_DEGREE_NAME'].' Certificate');
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME']))], implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME'])).'_Certificate');
             }
-            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['right_finger_scan'], 'CitizenshipR');
-            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['left_finger_scan'], 'CitizenshipL');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['right_finger_scan'], 'FingerPrintR');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['left_finger_scan'], 'FingerPrintL');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['front_citizen'], 'CitizenshipF');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['back_citizen'], 'CitizenshipB');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['signature'], 'Signature');
 
             // echo '<pre>'; print_r($storingDocumentDatas); die;
@@ -233,7 +247,10 @@ class VacancyController extends HrisController
                      'CREATED_DATE' =>  date('Y-m-d'),
                      'STATUS' => 'E',
                  );
-                 if ($storingDocumentData['folder'] != 'CitizenshipR' && $storingDocumentData['folder'] != 'Signature' && $storingDocumentData['folder'] != 'CitizenshipL') {
+                 if ($storingDocumentData['folder'] != 'FingerPrintR' &&
+                 $storingDocumentData['folder'] != 'FingerPrintL' &&
+                 $storingDocumentData['folder'] != 'CitizenshipF' &&
+                 $storingDocumentData['folder'] != 'CitizenshipB' && $storingDocumentData['folder'] != 'Signature') {
                     $filecode = $this->repository->fileType($storingDocumentData['extension']);
 
                     $fileSetId = $this->repository->fileSetId($storingDocumentData['folder']);
@@ -249,6 +266,8 @@ class VacancyController extends HrisController
                        'MODIFIED_DT' => '',
                        'REMARKS' => '',
                       );
+                    move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
+                    // echo('<pre>');print_r($storingDocumentData['tmp_name']);print_r($storingDocumentData['movingPath']);die;
                     move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['empFilePath']);
                     $this->repository->insertEmployeeDocuments($empFile);
                  }
@@ -341,6 +360,7 @@ class VacancyController extends HrisController
     }
     public function perfomanceAction()
     {
+        // print_r('asdf');die;
         $request = $this->getRequest();
         $postData = $request->getPost();
 
@@ -400,6 +420,7 @@ class VacancyController extends HrisController
         $casLeaveLater = $this->repository->casLeaveLater($eid);
 
         // var_dump($casLeave[0]['TOTALLEAVE']);die;
+        // print_r($detail);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,
@@ -453,24 +474,26 @@ class VacancyController extends HrisController
         // var_dump($user_id[0]['USER_ID']);die;
         $existingDocuments = [];
         foreach ($documentsEducation as $document) {
-            if ($document['FILE_NAME'] == 'SLC Certificate') {
-                $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }
-            if ($document['FILE_NAME'] == 'Intermediate Certificate') {
-                $existingDocuments[] = array("Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }    
-            if ($document['FILE_NAME'] == 'Bachelor Certificate') {
-                $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }       
-            if ($document['FILE_NAME'] == 'Master Certificate') {
-                $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            } 
-            if ($document['FILE_NAME'] == 'M.Phil Certificate') {
-                $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }      
-            if ($document['FILE_NAME'] == 'P.HD. Certificate') {
-                $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }  
+            $existingDocuments[] = array($document['FILE_NAME']=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+
+            // if ($document['FILE_NAME'] == 'SLC Certificate') {
+            //     $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }
+            // if ($document['FILE_NAME'] == 'Intermediate Certificate') {
+            //     $existingDocuments[] = array("Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }    
+            // if ($document['FILE_NAME'] == 'Bachelor Certificate') {
+            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }       
+            // if ($document['FILE_NAME'] == 'Master Certificate') {
+            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // } 
+            // if ($document['FILE_NAME'] == 'M.Phil Certificate') {
+            //     $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }      
+            // if ($document['FILE_NAME'] == 'P.HD. Certificate') {
+            //     $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }  
         }
         if ($request->isPost()) {
             $postData = array_merge_recursive(
@@ -485,11 +508,12 @@ class VacancyController extends HrisController
             foreach($certificates as $certificate){
                 $degree = '';
                 
-               if ($postData[$certificate['ACADEMIC_DEGREE_NAME']]['name'] != null) {
-                    $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[$certificate['ACADEMIC_DEGREE_NAME']], $certificate['ACADEMIC_DEGREE_NAME'].' Certificate');
+               if ($postData[implode('_',explode(' ',ucfirst($certificate['ACADEMIC_DEGREE_NAME'])))]['name'] != null) {
+                    $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[implode('_',explode(' ',ucfirst($certificate['ACADEMIC_DEGREE_NAME'])))], implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME'])).'_Certificate');
                } 
                 // echo '<pre>'; print_r($storingDocumentDatas); die;
             }
+            // echo('<pre>');print_r($storingDocumentDatas);die;
             if ($postData['right_finger_scan']['name'] != "") {
                 $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['right_finger_scan'], 'CitizenshipR');
             }
@@ -499,7 +523,7 @@ class VacancyController extends HrisController
                 $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['signature'], 'Signature');
             }
 
-            // var_dump($postData); die;
+            // echo('<pre>');print_r($storingDocumentDatas); die;
             $incs = implode(',',$postData['inclusion']);
 
             $data['hris_personal'] = array(
@@ -526,6 +550,7 @@ class VacancyController extends HrisController
                        'MODIFIED_DT' =>  date('Y-m-d'),
                       );
                     //   echo '<pre>'; print_r($storingDocumentData); die;
+                    move_uploaded_file($storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
                     move_uploaded_file($storingDocumentData['tmp_name'], $storingDocumentData['empFilePath']);
                     $this->repository->updateEduDocuments($empFile, $fileSetId[0]['FILE_ID'], $eid);
                  }
@@ -597,6 +622,7 @@ class VacancyController extends HrisController
                 $applicantsDocument['CitizenshipL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
             }
         }
+        // print_r($certificates);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,
@@ -692,6 +718,7 @@ class VacancyController extends HrisController
     }
     public function viewApplicationFormAction()
     {
+        // print_r($this->profile);die;
         $request = $this->getRequest();    
         
         $id = (int) $this->params()->fromRoute('id');
@@ -717,27 +744,32 @@ class VacancyController extends HrisController
         $documentsEducation = $this->repository->eduDocuments($eid);
         $user_id = $this->repository->userId($eid);
         // var_dump($user_id[0]['USER_ID']);die;
+        // print_r($certificates);
+        // print_r('<pre>');print_r($documentsEducation);
         $existingDocuments = [];
         foreach ($documentsEducation as $document) {
-            if ($document['FILE_NAME'] == 'SLC Certificate') {
-                $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }
-            if ($document['FILE_NAME'] == 'Intermediate Certificate') {
-                $existingDocuments[] = array("+2/Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }    
-            if ($document['FILE_NAME'] == 'Bachelor Certificate') {
-                $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }       
-            if ($document['FILE_NAME'] == 'Master Certificate') {
-                $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            } 
-            if ($document['FILE_NAME'] == 'M.Phil Certificate') {
-                $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }      
-            if ($document['FILE_NAME'] == 'P.HD. Certificate') {
-                $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            }  
+            $existingDocuments[] = array($document['FILE_NAME']=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // if ($document['FILE_NAME'] == 'SLC Certificate') {
+            //     $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }
+            // if ($document['FILE_NAME'] == 'Intermediate Certificate') {
+            //     $existingDocuments[] = array("+2/Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }    
+            // if ($document['FILE_NAME'] == 'Bachelor Certificate') {
+            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }       
+            // if ($document['FILE_NAME'] == 'Master Certificate') {
+            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // } 
+            // if ($document['FILE_NAME'] == 'M.Phil Certificate') {
+            //     $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }      
+            // if ($document['FILE_NAME'] == 'P.HD. Certificate') {
+            //     $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }  
         }
+        // print_r($certificates);
+        // print_r($existingDocuments);die;
         
         $appliedData = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
         $inclusionIds = (explode(',',$appliedData['application_personal'][0]['INCLUSION_ID']));
@@ -745,15 +777,21 @@ class VacancyController extends HrisController
 
         $applicationStoredDocuments = $this->repository->getAppliedStoredDocuments($appliedData['aid'], $user_id[0]['USER_ID']);
         $applicantsDocument = [];
+        // echo('<pre>');print_r($applicationStoredDocuments);die;
         foreach ($applicationStoredDocuments as $applicationStoredDocument) {
             if ($applicationStoredDocument['DOC_FOLDER'] == "Signature") {
                 $applicantsDocument['signature'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipR") {
-                $applicantsDocument['CitizenshipR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipL") {
-                $applicantsDocument['CitizenshipL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR") {
+                $applicantsDocument['FingerPrintR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL") {
+                $applicantsDocument['FingerPrintL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF") {
+                $applicantsDocument['CitizenshipF'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB") {
+                $applicantsDocument['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
             }
         }
+        // print_r($existingDocuments);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,

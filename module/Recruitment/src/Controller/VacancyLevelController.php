@@ -169,7 +169,7 @@ class VacancyLevelController extends HrisController
                 $data = (array) $request->getPost();
                 $rawList = $this->repository->pullLevelData($data['designation_id']);
                 $list = iterator_to_array($rawList, false);
-                // echo '<pre>'; print_r($rawList);                          
+                // echo '<pre>'; print_r($data);                          
                 return new JsonModel(['success' => true, 'data' => $list, 'error' => '']);
             } catch (Exception $e) {
                 return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);

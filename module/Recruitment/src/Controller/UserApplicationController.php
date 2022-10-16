@@ -41,6 +41,7 @@ class UserApplicationController extends HrisController
                 $rawListInternal = $this->repository->applicationDataInternal($data);                        
                 $listOpen = iterator_to_array($rawList, false);
                 $listInternals = iterator_to_array($rawListInternal, false);
+                // print_r($listInternals);die;
                 foreach($listInternals as $listInternal) {
                     $uri = $this->getRequest()->getUri();
                     $baseUrl = sprintf('%s://%s', $uri->getScheme(), $uri->getHost());
@@ -121,7 +122,7 @@ class UserApplicationController extends HrisController
         // echo '<pre>'; print_r( $eduDatas);
         // echo '<pre>'; print_r($VacancyData[0]);
 
-        // echo '<pre>'; print_r($applicationData[0]); die;
+        // echo '<pre>'; print_r($DocDatas); die;
 
         return Helper::addFlashMessagesToArray($this, [
                     'vacancyData' => $VacancyData[0],

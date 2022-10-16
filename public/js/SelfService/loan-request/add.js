@@ -72,7 +72,7 @@
                 salaryGrade:$('#salaryGrade').val(),
              };
              app.serverRequest(document.loanData, searchData).then(function (success){
-                window.location.href = document.urlTest;
+                // window.location.href = document.urlTest;
              });
         });
 
@@ -107,8 +107,8 @@
                     $(".repaymentInstallments").val(repaymentInstallments);
                     $("#monthlyInterestRate").val(monthlyInterestRate.toFixed(2));
                     $("#monthlyInstallmentAmount").val(monthlyInstallmentAmount.toFixed(2));
-                    $('#totalAmount').val(parseFloat($('#totalAmount').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
-                    $('#totalDeductionWithoutCit').val(parseFloat($('#totalDeductionWithoutCit').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
+                    $('#totalAmount').val(parseFloat($('#totalAmountFixed').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
+                    $('#totalDeductionWithoutCit').val(parseFloat($('#totalDeductionWithoutCitFixed').val())+ parseFloat(monthlyInstallmentAmount.toFixed(2)));
                     $('#receivedPercent').val(((totalSalary - totalDeduction)/totalSalary*100).toFixed(2) + ' %');
                     $('#receivedWOcit').val(((totalSalary - totalDeduction + cit)/totalSalary*100).toFixed(2) + ' %');
                     $('#permissibleDeduction').val(-((totalSalary * 0.25) - totalSalary + totalDeduction - cit).toFixed(2));
@@ -272,7 +272,11 @@
             var amnt = $('#receivedPercent').val() > 25;
             var empId = $('#employeeId').val();
             var loanId = $("#loanId").val();
-            checkForErrors(empId, loanId,amnt);
+            var period = $("#period").val();
+            var loanAmount =  $(".appliedLoan").val();
+            var monthlyImstallmentRate =  $("#monthlyInstallmentAmount").val();
+            var cit  = parseFloat($("#cit").val());
+            checkForErrors(empId, loanAmount,period,monthlyImstallmentRate,loanId,cit);
         });
 
         

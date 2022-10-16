@@ -35,6 +35,7 @@ $form->prepare();
 ?>
 <script>
     document.url = '<?= $this->url("restful", ["action" => "index"]) ?>';
+    document.pullLevelId = '<?= $this->url('vacancylevel',['action'=>'pulllevelId']); ?>';
 </script> 
 
 <div class="page-bar">

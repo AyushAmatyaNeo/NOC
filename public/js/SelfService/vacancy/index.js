@@ -37,8 +37,10 @@
             {field: "DEPARTMENT_ID", title: "Department",width: 140},
             {field: "QUALIFICATION_ID", title: "Qualification",width: 120},
             {field: "POSITION_ID", title: "Position",width: 80},
+            {field: "FUNCTIONAL_LEVEL_EDESC", title: "Functional Level",width: 80},
             {field: "VACANCY_RESERVATION_NO", title: "Reservation No",width: 80},    
-            {field: "VACANCY_ID", title: "Action", template: action,width: 150}
+            {field: "VACANCY_ID", title: "Action", template: action,width: 150},
+            
 
 
         ],null, null, null, 'Vacancy List');

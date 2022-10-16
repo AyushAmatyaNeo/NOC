@@ -34,7 +34,7 @@ class VacancyRepository extends HrisRepository{
         $this->tableGateway->insert($array);        
     }
     
-    public function getFilteredRecords($search) {        
+    public function getFilteredRecords($search, $empId) {        
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([            
@@ -51,6 +51,7 @@ class VacancyRepository extends HrisRepository{
             new Expression("REC.REMARK AS REMARKS"),
             new Expression("HQ.ACADEMIC_DEGREE_NAME AS QUALIFICATION_ID"),
             new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),
+            new Expression("HFL.FUNCTIONAL_LEVEL_EDESC AS FUNCTIONAL_LEVEL_EDESC"),
             ], true);
 
         $select->from(['REC' => RecruitmentVacancy::TABLE_NAME])
@@ -60,10 +61,16 @@ class VacancyRepository extends HrisRepository{
                 ->join(['HOP' => 'HRIS_SERVICE_TYPES'], 'HOP.SERVICE_TYPE_ID=REC.SERVICE_TYPES_ID', 'SERVICE_TYPE_ID', 'left')
                 ->join(['DES' => 'HRIS_DESIGNATIONS'],'DES.DESIGNATION_ID=REC.POSITION_ID', 'status', 'left') 
                 ->join(['OPN' => 'HRIS_REC_OPENINGS'],'OPN.OPENING_ID=REC.OPENING_ID', 'status', 'left') 
+                ->join(['HFL' => 'HRIS_FUNCTIONAL_LEVELS'],'HFL.FUNCTIONAL_LEVEL_ID=REC.LEVEL_ID', 'status', 'left') 
                 
                 // $select->where(["REC.VACANCY_ID" => $id]);
                 
-                ->where(["REC.STATUS='E' AND HOP.STATUS='E' AND REC.VACANCY_TYPE = 'INTERNAL'"]);
+                ->where(["REC.STATUS='E' AND HOP.STATUS='E' AND REC.VACANCY_TYPE in ('INTERNAL_FORM',
+                'INTERNAL_APPRAISAL')
+                AND REC.LEVEL_ID in 
+(select functional_level_id from hris_functional_levels where order_id in 
+(select order_id - 1 from hris_functional_levels where functional_level_id in (
+select functional_level_id from hris_employees where employee_id = $empId)))"]);
 
         if (($search['openingId'] != null)) {
             $select->where([
@@ -91,10 +98,14 @@ class VacancyRepository extends HrisRepository{
             ]);
         }
 
+        // $select->where([ "REC.LEVEL_ID in (select functional_level_id from hris_functional_levels where order_no in (select order_number - 1 from hris_functional_levels where functional_level_id in (select functional_level_id from hris_employees where employee_id = $empId))"]);
+
         $select->order("REC.VACANCY_ID ASC");
         $boundedParameter = [];
         
         $statement = $sql->prepareStatementForSqlObject($select);
+        // echo('<pre>');print_r($statement);die;
+
         // print_r ($statement->getSql()); die();
         $result = $statement->execute($boundedParameter);
         return $result;
@@ -164,6 +175,7 @@ class VacancyRepository extends HrisRepository{
             new Expression("REC.VACANCY_ID AS VACANCY_ID"),
             new Expression("REC.VACANCY_NO AS VACANCY_NO"),
             new Expression("REC.OPENING_ID AS OPENING_ID"),
+            new Expression("HO.OPENING_NO AS OPENING_NO"),
             new Expression("REC.VACANCY_TYPE AS VACANCY_TYPE"),
             new Expression("LVL.FUNCTIONAL_LEVEL_NO AS FUNCTIONAL_LEVEL_NO"),
             new Expression("REC.LEVEL_ID AS LEVEL_ID"),
@@ -191,7 +203,8 @@ class VacancyRepository extends HrisRepository{
                 ->join(['SEV' => 'HRIS_REC_SERVICE_EVENTS_TYPES'],'SEV.SERVICE_EVENT_ID=REC.SERVICE_EVENTS_ID', 'STATUS','left')
                 ->join(['DEP' => 'HRIS_DEPARTMENTS'],'DEP.DEPARTMENT_ID=REC.DEPARTMENT_ID', 'status', 'left')
                 ->join(['DES' => 'HRIS_DESIGNATIONS'],'DES.DESIGNATION_ID=REC.POSITION_ID', 'status', 'left')
-                ->join(['DN' => 'HRIS_ACADEMIC_DEGREES'],'REC.QUALIFICATION_ID=DN.ACADEMIC_DEGREE_ID', 'status', 'left');
+                ->join(['DN' => 'HRIS_ACADEMIC_DEGREES'],'REC.QUALIFICATION_ID=DN.ACADEMIC_DEGREE_ID', 'status', 'left')
+                ->join(['HO' => 'HRIS_REC_OPENINGS'],'HO.OPENING_ID=REC.OPENING_ID', 'status', 'left');
 
         $select->where(["REC.VACANCY_ID='{$id}'"]); //change to this if not working. remove below 2 line.
         $boundedParameter = [];      
@@ -229,7 +242,7 @@ class VacancyRepository extends HrisRepository{
             new Expression("ADD.MAIL_TOLE AS MAIL_TOLE"),
 
             new Expression("REC.POSITION_ID AS POSITION_ID"),
-            new Expression("LVL.FUNCTIONAL_LEVEL_ID AS FUNCTIONAL_LEVEL_NAME"),
+            new Expression("LVL.FUNCTIONAL_LEVEL_EDESC AS FUNCTIONAL_LEVEL_NAME"),
             new Expression("REC.FUNCTIONAL_LEVEL_ID AS FUNCTIONAL_LEVEL_ID"),
             new Expression("DEP.DEPARTMENT_NAME AS DEPARTMENT_ID"),
             new Expression("SER.SERVICE_TYPE_NAME AS SERVICE_TYPE_NAME"),
@@ -324,7 +337,7 @@ class VacancyRepository extends HrisRepository{
     }
     public function eduDocuments($eid)
     {
-        $sql = ("SELECT HRIS_EMPLOYEE_FILE.FILE_PATH, HRIS_EMPLOYEE_FILE_SETUP.FILE_NAME  FROM HRIS_EMPLOYEE_FILE LEFT JOIN HRIS_EMPLOYEE_FILE_SETUP ON HRIS_EMPLOYEE_FILE.FILE_ID = HRIS_EMPLOYEE_FILE_SETUP.FILE_ID where HRIS_EMPLOYEE_FILE.EMPLOYEE_ID = {$eid}");
+        $sql = ("SELECT HRIS_EMPLOYEE_FILE.FILE_PATH, HRIS_EMPLOYEE_FILE_SETUP.FILE_NAME  FROM HRIS_EMPLOYEE_FILE LEFT JOIN HRIS_EMPLOYEE_FILE_SETUP ON HRIS_EMPLOYEE_FILE.FILE_ID = HRIS_EMPLOYEE_FILE_SETUP.FILE_ID where HRIS_EMPLOYEE_FILE.EMPLOYEE_ID = {$eid} and HRIS_EMPLOYEE_FILE.status = 'E'");
         $result = $this->rawQuery($sql);
         return $result;
 
@@ -342,7 +355,7 @@ class VacancyRepository extends HrisRepository{
     {
         $sql = ("SELECT HRIS_EMPLOYEE_FILE_SETUP.FILE_ID FROM HRIS_EMPLOYEE_FILE_SETUP where FILE_NAME LIKE '{$fileName}'");
         $result = $this->rawQuery($sql);
-        // var_dump($fileName); die;
+        // var_dump($sql); die;
         return $result;
 
     }
@@ -354,17 +367,24 @@ class VacancyRepository extends HrisRepository{
     public function getInclusions($uid, $type, $vid)
     {
     //    var_dump($uid, $type, $vid); die;
-       $sql = ("SELECT * from hris_rec_vacancy_application WHERE USER_ID = {$uid} AND AD_NO = {$vid} AND APPLICATION_TYPE = '{$type}' AND STATUS = 'E'");
+       $sql = ("SELECT * from hris_rec_vacancy_application WHERE USER_ID = {$uid} AND AD_NO = {$vid} AND APPLICATION_TYPE = '{$type}' and status='E'");
        $application = $this->rawQuery($sql);
+    //    print_r($sql);die;
        $aid = $application[0]['APPLICATION_ID'];
-       $query = ("SELECT * FROM HRIS_REC_APPLICATION_PERSONAL where APPLICATION_ID = {$aid} AND STATUS = 'E'");
-       $application_personal = $this->rawQuery($query);
-       $result = [
-           'application' => $application,
-           'application_personal' => $application_personal,
-           'aid' => $aid,
-       ];
-       return $result;
+       if($aid){
+        $query = ("SELECT * FROM HRIS_REC_APPLICATION_PERSONAL where APPLICATION_ID = {$aid} AND STATUS = 'E'");
+        //    print_r($query);die;
+        $application_personal = $this->rawQuery($query);
+        $result = [
+            'application' => $application,
+            'application_personal' => $application_personal,
+            'aid' => $aid,
+        ];
+        return $result;
+       }else{
+        return;
+       }
+       
         
     }
     public function casLeaveEarlier($eid)
@@ -392,16 +412,20 @@ class VacancyRepository extends HrisRepository{
     public function getAppliedStoredDocuments($aid, $uid)
     {
         // var_dump($aid, $uid); die;
-        $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE USER_ID = {$uid} AND APPLICATION_ID = {$aid} ";
+        $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE USER_ID = {$uid} AND APPLICATION_ID = {$aid} and status='E'";
         $result = $this->rawQuery($sql);
-        // var_dump($result); die;
+        // var_dump($sql); die;
         return $result;
     }
     public function checkVacancyStatus($v_id, $e_id)
     {
-        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID  from HRIS_REC_VACANCY_APPLICATION WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} ";
+        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID,
+        CASE WHEN
+	 stage_id in (
+select rec_stage_id from hris_rec_stages where order_no >= (select order_no from hris_rec_stages where rec_stage_id = 8))
+then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} and status='E'";
         $result = $this->rawQuery($sql);
-        // var_dump($result); die;
+        // var_dump($sql); die;
         return $result;
     }
     public function getRegNo($id){
@@ -444,7 +468,7 @@ class VacancyRepository extends HrisRepository{
     }
     public function updateDocuments($data, $folder, $u_id, $v_id)
     {
-        $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE VACANCY_ID = {$v_id} AND USER_ID = {$u_id} AND DOC_FOLDER = '{$folder}'";
+        $sql = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS WHERE VACANCY_ID = {$v_id} AND USER_ID = {$u_id} AND DOC_FOLDER = '{$folder}' AND STATUS='E'";
         $result = $this->rawQuery($sql);
 
         $filePath =  __DIR__ . "/../../../../public/".$result[0]['DOC_PATH'].$result[0]['DOC_NEW_NAME'];
@@ -457,7 +481,7 @@ class VacancyRepository extends HrisRepository{
     }
     public function updateEduDocuments($data, $fid, $eid)
     {
-        $sql = "SELECT * FROM HRIS_EMPLOYEE_FILE WHERE FILE_ID = {$fid} AND EMPLOYEE_ID = {$eid} ";
+        $sql = "SELECT * FROM HRIS_EMPLOYEE_FILE WHERE FILE_ID = {$fid} AND EMPLOYEE_ID = {$eid} and status='E' ";
         $result = $this->rawQuery($sql);
         $id = $result[0]['FILE_CODE'];
         $data ['CREATED_DT'] = $result[0]['CREATED_DT'];
@@ -477,9 +501,9 @@ class VacancyRepository extends HrisRepository{
     }
     public function inclusionamount($level,$position){
         // var_dump($level,$position); die;
-        $sql = ("SELECT NORMAL_AMOUNT,LATE_AMOUNT,INCLUSION_AMOUNT,END_DATE,EXTENDED_DATE FROM HRIS_REC_VACANCY_LEVELS NV
+        $sql = ("SELECT ifnull(NORMAL_AMOUNT,0) as NORMAL_AMOUNT,ifnull(LATE_AMOUNT,0) as LATE_AMOUNT,ifnull(INCLUSION_AMOUNT,0) as INCLUSION_AMOUNT,END_DATE,EXTENDED_DATE FROM HRIS_REC_VACANCY_LEVELS NV
         LEFT JOIN HRIS_REC_OPENINGS HO ON NV.OPENING_ID = HO.OPENING_ID
-        WHERE FUNCTIONAL_LEVEL_ID = {$level} AND POSITION_ID = {$position} ORDER BY EFFECTIVE_DATE DESC");
+        WHERE FUNCTIONAL_LEVEL_ID = {$level} AND POSITION_ID = {$position} AND NV.STATUS ='E' ORDER BY EFFECTIVE_DATE DESC");
         $result = $this->rawQuery($sql);
         return $result;
     }
