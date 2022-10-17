@@ -16,8 +16,8 @@
         }
         window.app.checkUniqueConstraints(inputFieldId,formId,tableName,columnName,checkColumnName,selfId);
 
-        $('#PositionId').on('change',LevelValue);
-        LevelValue();
+        // $('#PositionId').on('change',LevelValue);
+        // LevelValue();
         // $('#PositionId').on('change',LevelValue)
         
 

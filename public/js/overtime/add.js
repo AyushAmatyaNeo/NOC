@@ -65,9 +65,9 @@
                         leaveCount = 1;
                     }
                     leaveSum += leaveCount;
-                    if(i==holidayDetail['LP']['date'] || i==holidayDetail['GP']['date']){
+                    if(i==holidayDetail['LP']['date'] || i==holidayDetail['GP']['date'] || i==holidayDetail['SAP']['date'] || i==holidayDetail['DH1']['date'] || i==holidayDetail['DH2']['date']){
                         dashainTiharSattaBida += leaveCount;
-                    }else if(i==holidayDetail['BT']['date']){
+                    }else if(i==holidayDetail['BT']['date'] || i==holidayDetail['NAW']['date'] || i==holidayDetail['AST']['date'] || i==holidayDetail['DAS']['date']){
                         dashainTiharSattaBida += (leaveCount*2);
                     }
                 }else{

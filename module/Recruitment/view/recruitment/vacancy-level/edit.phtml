@@ -24,7 +24,7 @@ $InclusionAmount =  $form->get('InclusionAmount');
 $MinAge = $form->get('MinAge');
 $MaxAge = $form->get('MaxAge');
 $FunctionalLevelId = $form->get('FunctionalLevelId');
-// $FunctionalLevelId->setValueOptions($LevelList);
+$FunctionalLevelId->setValueOptions($LevelList);
 
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'SUBMIT');

@@ -1185,9 +1185,9 @@ class OvertimeClaimRepository extends HrisRepository implements RepositoryInterf
         0.5 when (OT_HOUR_POINT >= 6 and DAY_CODE = 'H') then
         1 else
         0 end as LEAVE_REWARD,
-        CASE WHEN  (ELIGIBLE_LOCKING = 'Y' AND OUT_TIME > '20:10:00') THEN
+CASE WHEN  (ELIGIBLE_LOCKING = 'Y' AND OUT_TIME > '20:10:00') THEN
         300 ELSE
-        0 END AS LOCKING_ALLOWANCE
+        0 END AS LOCKING_ALLOWANCE	
    from ( select
         E.Employee_code,
         case when E.employee_id in 
@@ -1224,20 +1224,33 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
            or had.overall_status = 'WD') 
        then (seconds_between(had.in_time,
         had.out_time)/60)/60 
-        when (((WEEKDAY (TO_DATE (had.attendance_dt,
+		 when (((WEEKDAY (TO_DATE (had.attendance_dt,
         'YYYY-MM-DD'))) = 4 ) and {$monthId}=83)
        then (seconds_between(had.in_time,
         had.out_time)/60 - hs.total_working_hr)/60 
         when (((WEEKDAY (TO_DATE (had.attendance_dt,
-        'YYYY-MM-DD'))) = 4 ))
-        when (WEEKDAY (TO_DATE (had.attendance_dt,
+        'YYYY-MM-DD'))) = 4 ) and {$monthId}=83)
+       then (seconds_between(had.in_time,
+        had.out_time)/60 - hs.total_working_hr)/60
+		when (WEEKDAY (TO_DATE (had.attendance_dt,
         'YYYY-MM-DD'))) = 4 
        then (seconds_between(had.in_time,
         had.out_time)/60 - 300)/60 
        else (seconds_between(had.in_time,
         had.out_time)/60 - hs.total_working_hr)/60 
        end as OT_HOUR_POINT,
-       HRIS_GET_NIGHT_ALLOWANCE(to_char(had.out_time, 'HH:MI:SS AM'), E.employee_id) as NIGHT_ALLOWANCE 
+       HRIS_GET_NIGHT_ALLOWANCE(to_char(had.out_time, 'HH:MI:SS AM'), E.employee_id) as NIGHT_ALLOWANCE,
+       case when (HHM.holiday_code in ('LP',
+			'GP',
+			'SAP',
+			'DH1',
+			'DH2')) then 2 
+			when (HHM.holiday_code in ('BT',
+			'NAW',
+			'AST',
+			'DAS')) then 3
+		else 1
+		END as bonus_multi
        from hris_attendance_detail had 
        left join hris_employees E on (E.employee_id=had.employee_id) 
        left join hris_designations hd on (hd.designation_id=E.designation_id) 
@@ -1261,6 +1274,7 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
    and attendance_dt not in (select attendance_dt from HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL where overtime_claim_id in 
    (select overtime_claim_id from HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST where employee_id = {$empId}) and status not in ('R','C'))
    order by attendance_dt";
+//    echo('<pre>');print_r($sql);die;
         return $this->rawQuery($sql);
     }
 
@@ -1271,7 +1285,7 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
         where fiscal_year_id = (select fiscal_year_id from hris_month_code where month_id = $monthId)) and 
         (select end_date from hris_fiscal_years
         where fiscal_year_id = (select fiscal_year_id from hris_month_code where month_id = $monthId))
-        and holiday_code is not null";
+        and holiday_code is not null and status='E'";
         return $this->rawQuery($sql);
     }
 
