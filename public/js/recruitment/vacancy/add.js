@@ -35,7 +35,6 @@
     $(document).on('change','.VacancyReservationNo',CheckReservationNo);
 
     $(document).on('change','.VacancyNo',function () {
-        console.log('here');
         window.app.pullDataById(document.uniqueCheck, {
              'vacancyNo': '567',
         }).then(function (success) {
@@ -332,6 +331,7 @@
                 // Add Vacancy Data
                 $("#Total_vacancy").html(totalQuota);
                 $("#Total_vacancy").attr({ 'value': totalQuota });
+                // $("#Total_vacancy").addClass('form-control');
                 $("#Total_vacancy").css({ "border-style": "ridge", "font-size": "12px", "padding-left": "12px" });
                 // Add Reservation Data
                 $("#Reservation_no").html(totalrservation);

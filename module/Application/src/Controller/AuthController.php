@@ -33,7 +33,7 @@ class AuthController extends AbstractActionController {
 
     public function __construct(AuthenticationService $authService, AdapterInterface $adapter) {
         $this->authservice = $authService;
-        $this->storage = $authService->getStorage();
+        $this->storage = $authService->getStorage(); 
         $this->adapter = $adapter;
 
         $preferenceRepo = new SystemSettingRepository($adapter);
@@ -78,6 +78,8 @@ class AuthController extends AbstractActionController {
     public function loginAction() {
         //to make register attendance by default checked on login page:: condition start
         $type = $this->params()->fromRoute('type');
+
+        
         if ($type !== null) {
             $this->getSessionStorage()->forgetMe();
             $this->getAuthService()->clearIdentity();
@@ -87,6 +89,7 @@ class AuthController extends AbstractActionController {
         if ($this->getAuthService()->hasIdentity()) {
             return $this->redirect()->toRoute('dashboard');
         }
+
         $form = $this->getForm();
         return new ViewModel([
             'form' => $form,
@@ -97,39 +100,42 @@ class AuthController extends AbstractActionController {
     }
 
     public function authenticateAction() { 
+
         $form = $this->getForm();
         $redirect = 'login';
         $request = $this->getRequest();
         if ($request->isPost()) {
+            
             $form->setData($request->getPost());
             if ($form->isValid()) {
 				try {
                 
-                 /*
-                 * To check First Time Password 
-                 */
-                // $firstTimePwdChange=$this->checkFirstTimePasswordChange($request->getPost('username'),$request->getPost('password'));
-                // if ($firstTimePwdChange) {
-                //     return $firstTimePwdChange;
-                // }
-                /*
-                 * End Of First Time Password 
-                 */
+                
+                    /*
+                     * To check First Time Password 
+                     */
+                    // $firstTimePwdChange=$this->checkFirstTimePasswordChange($request->getPost('username'),$request->getPost('password'));
+                    // if ($firstTimePwdChange) {
+                    //     return $firstTimePwdChange;
+                    // }
+                    /*
+                     * End Of First Time Password 
+                     */
                 
                 
                 
-                /*
-                 * password expiration check | comment this code if this feature is not needed
-                 */
-//                 $needPwdChange = $this->checkPasswordExpire($request->getPost('username'),$request->getPost('password'));
-// //                print_r($needPwdChange);
-// //                die();
-//                 if ($needPwdChange) {
-//                     return $needPwdChange;
-//                 }
-                /*
-                 * end of password expiration check
-                 */
+                    /*
+                     * password expiration check | comment this code if this feature is not needed
+                     */
+    //                 $needPwdChange = $this->checkPasswordExpire($request->getPost('username'),$request->getPost('password'));
+    // //                print_r($needPwdChange);
+    // //                die();
+    //                 if ($needPwdChange) {
+    //                     return $needPwdChange;
+    //                 }
+                    /*
+                     * end of password expiration check
+                     */
                 /*
                  * user authentication
                  */
@@ -140,14 +146,26 @@ class AuthController extends AbstractActionController {
                         ->getDbSelect()->where("STATUS = 'E' AND IS_LOCKED = 'N'");
 
                 $result = $this->getAuthService()->authenticate();
+
                 foreach ($result->getMessages() as $message) {
                     $this->flashmessenger()->addMessage($message);
                 }
-
+                
                 if ($result->isValid()) {
+
+                    $resultRow = $this->getAuthService()->getAdapter()->getResultRowObject();
+
                     if (isset($_COOKIE[$request->getPost('username')])) {
-                        setcookie($request->getPost('username'), '', 1, "/");
+                        echo "setting cookies"; die;
+                        // setcookie($request->getPost('username'), '', 1, "/");
+
+                        /*
+                         *  9/21/2022
+                         *  change on cookies time for 1 day
+                         */
+                        setcookie($request->getPost('username'), '', time() + (86400 * 30), "/");
                     }
+
                     //after authentication success get the user specific details
                     $resultRow = $this->getAuthService()->getAdapter()->getResultRowObject();
                     
@@ -168,16 +186,18 @@ class AuthController extends AbstractActionController {
                     $employeeRepo = new EmployeeRepository($this->adapter);
                     $employeeDetail = $employeeRepo->employeeDetailSession($resultRow->EMPLOYEE_ID);
 
+
                     $companyRepo = new \Setup\Repository\CompanyRepository($this->adapter);
                     $companyDetail = $companyRepo->fetchById($employeeDetail['COMPANY_ID']);
 
                     $monthRepo = new MonthRepository($this->adapter);
                     $fiscalYear = $monthRepo->getCurrentFiscalYear();
 
-
                     $repository = new RolePermissionRepository($this->adapter);
                     $rawMenus = $repository->fetchAllMenuByRoleId($resultRow->ROLE_ID);
                     $menus = Helper::extractDbData($rawMenus);
+
+
 
                     $roleRepo = new RoleSetupRepository($this->adapter);
                     $acl = $roleRepo->fetchById($resultRow->ROLE_ID);

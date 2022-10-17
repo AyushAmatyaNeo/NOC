@@ -38,7 +38,7 @@ return [
                         'action' => 'login',
                     ],
                 ],
-                'may_terminate' => true,
+                'may_terminate' => true, 
                 'child_routes' => [
                     'process' => [
                         'type' => Segment::class,

@@ -43,6 +43,7 @@ class VacancyStageController extends HrisController {
         
         $statusSE = $this->getRecStatusSelectElement(['name' => 'status', 'id' => 'status', 'class' => 'form-control reset-field', 'label' => 'Status']);
         $stages =  $this->repository->getFilteredStages();
+
         return $this->stickFlashMessagesTo([
             'status' => $statusSE,
             'Stages' => $stages,
