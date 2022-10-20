@@ -997,5 +997,28 @@ END AS DISABLED_FLAG FROM HRIS_EMPLOYEES WHERE  EMPLOYEE_ID=?";
 
     }
 
+    public function getLoanFinalTest($employeeId){
+        $sql = "SELECT 
+        INSTALLMENT AS INSTALLMENT
+        from HRIS_EMPLOYEE_EMI_DETAIL pd
+        left join hris_employee_loan_request lr on (pd.Loan_Request_Id=lr.loan_request_id)
+        where 
+        lr.loan_status='OPEN'
+        and Lr.Employee_Id={$employeeId}
+        and lr.loan_id=17
+        AND PD.PAID_FLAG = 'N'
+        AND LT.STATUS = 'AP'
+        ORDER BY SNO ASC LIMIT 1";
+
+        $resultList = $this->rawQuery($sql);
+
+        if (!(sizeof($resultList) == 1)) {
+            throw new Exception('No Report Found.');
+        }else{
+            return $resultList[0]['INSTALLMENT'];
+
+        }
+            }
+
     
 }

@@ -61,8 +61,7 @@ $monthlyInterestRate = $form->get('monthlyInterestRate');
 $monthlyInterestRate->setAttributes(["disabled" => "disabled"]);
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'SUBMIT');
-$documentDt = $form->get('documentDt');
-$documentDt->setAttribute('disabled', 'disabled');
+
 
 $form->setAttribute('action', $this->url('loanRequest', ['action' => 'add']));
 
@@ -299,13 +298,13 @@ print $this->form()->openTag($form);
                                         </th>
                                     </tr>
                                     <tr>
-                                        <th style="width:50px">S.NO.</th>
-                                        <th style="width:170px">Loan Amount</th>
-                                        <th style="width:90px">Installment</th>
-                                        <th style="width:90px">Interest</th>
-                                        <th style="width:90px">Principal repaid</th>
-                                        <th style="width:90px">Remaining Principal</th>
-                                        <th style="width:30px">Paid</th>
+                                        <th>S.NO.</th>
+                                        <th>Loan Amount</th>
+                                        <th>Installment</th>
+                                        <th>Interest</th>
+                                        <th>Principal repaid</th>
+                                        <th>Remaining Principal</th>
+                                        <th>Paid</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -319,7 +318,7 @@ print $this->form()->openTag($form);
                                             <td><?= $viewdetail['INTEREST']; ?> </td>
                                             <td><?= $viewdetail['PRINCIPAL_REPAID']; ?></td>
                                             <td><?= $viewdetail['REMAINING_PRINCIPAL']; ?></td>
-                                            <td></td>
+                                            <td><?= $viewdetail['PAID_FLAG']; ?></td>
                                         </tr>
                                         <?php
                                         $i++;

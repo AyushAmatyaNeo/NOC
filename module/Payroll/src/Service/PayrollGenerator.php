@@ -77,6 +77,7 @@ class PayrollGenerator {
         "OVERTIME_LOCKING_ALLOWANCE",
         "OVERTIME_ANNUAL_TAXABLE_INCOME",
         "TOTAL_MONTHLY_TAXABLE_INCOME",
+        "LOAN_TEST"
 
 
     ];

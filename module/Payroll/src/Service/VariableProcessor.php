@@ -343,6 +343,13 @@ class VariableProcessor {
                 $processedValue = $this->payrollRepo->getTotalMonthlyTaxableIncome($this->employeeId, $this->monthId);
                 break;
 
+            /*
+             * LOAN_TEST
+             */
+            case PayrollGenerator::VARIABLES[49]:
+                $processedValue = $this->payrollRepo->getLoanFinalTest($this->employeeId);
+                break;
+
 
             default:
                 break;

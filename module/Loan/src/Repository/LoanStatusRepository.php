@@ -280,20 +280,21 @@ class LoanStatusRepository implements RepositoryInterface {
     }
 
     public function payDetailsList($id){
-      $sql = "SELECT HLPD.SNO, HLPD.PAYMENT_ID, HE.FULL_NAME, HLMS.INTEREST_RATE, HLMS.LOAN_NAME,
-      HLPD.FROM_DATE, HLPD.TO_DATE, 
-      TO_DECIMAL(HLPD.AMOUNT, 10, 2) as AMOUNT,
-	 TO_DECIMAL(HLPD.PRINCIPLE_AMOUNT, 10, 2) as PRINCIPLE_AMOUNT,
-	 TO_DECIMAL(HLPD.INTEREST_AMOUNT, 10, 2) as INTEREST_AMOUNT, HLPD.PAID_FLAG AS PAID 
-      FROM HRIS_LOAN_PAYMENT_DETAIL HLPD
-      JOIN HRIS_EMPLOYEE_LOAN_REQUEST HELR ON HELR.LOAN_REQUEST_ID = HLPD.LOAN_REQUEST_ID
-      JOIN HRIS_EMPLOYEES HE ON HELR.EMPLOYEE_ID = HE.EMPLOYEE_ID
-      JOIN HRIS_LOAN_MASTER_SETUP HLMS ON HLMS.LOAN_ID = HELR.LOAN_ID
-      WHERE HELR.LOAN_REQUEST_ID = ? ORDER BY HLPD.SNO";
+      $sql = "SELECT heed.sno,heed.loan_amount as amount , helr.interest_rate, HE.FULL_NAME, hlms.loan_name, HELR.LOAN_STATUS,
+      HMC.MONTH_EDESC, HFY.FISCAL_YEAR_NAME,
+            ( heed.interest / 30 ) * (select days_between (from_date,current_date) from 
+            hris_month_code where current_date between from_date and to_date) as interest
+            from hris_employee_emi_detail heed
+            left join hris_employee_loan_request helr on ( helr.loan_request_id = heed.loan_request_id )
+            left join hris_employees he on (he.employee_id = heed.employee_id)
+            left join hris_loan_master_setup hlms on (hlms.loan_id = helr.loan_id)
+            LEFT JOIN HRIS_MONTH_CODE HMC ON (HELR.MONTH_ID = HMC.MONTH_ID)
+            LEFT JOIN HRIS_FISCAL_YEARS HFY ON (HFY.FISCAL_YEAR_ID = HELR.FISCAL_YEAR_ID)
+            where heed.loan_request_id = {$id} 
+            and heed.paid_flag = 'N' order by heed.sno limit 1";
 
-      $boundedParameter['id'] = $id;
       $statement = $this->adapter->query($sql);
-      $result = $statement->execute($boundedParameter);
+      $result = $statement->execute();
       return $result;
     }
  
