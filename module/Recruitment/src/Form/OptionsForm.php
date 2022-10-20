@@ -34,6 +34,15 @@ class OptionsForm {
     public $Remarks;
         
     /**
+     * @Annotation\Type("Zend\Form\Element\Radio")
+     * @Annotation\Required(true)
+     * @Annotation\Filter({"name":"StringTrim","name":"StripTags"})
+     * @Annotation\Options({"value_options":{"Y":"Yes","N":"No"},"label":"Upload Flag"})
+     * @Annotation\Attributes({ "id":"UploadFlag","class":"UploadFlag form-control"})
+     */
+    public $UploadFlag;
+    
+    /**
      * @Annotation\Type("Zend\Form\Element\Submit")
      * @Annotation\Attributes({"value":"Submit","class":"btn btn-success"})
      */

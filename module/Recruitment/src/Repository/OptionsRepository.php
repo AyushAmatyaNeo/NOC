@@ -55,6 +55,7 @@ class OptionsRepository extends HrisRepository
             new Expression("REC.OPTION_ID AS OPTION_ID"),
             new Expression("REC.OPTION_EDESC AS OPTION_EDESC"),
             new Expression("REC.OPTION_NDESC AS OPTION_NDESC"),
+            new Expression("REC.UPLOAD_FLAG AS UPLOAD_FLAG"),
             new Expression("REC.REMARKS AS REMARKS"),
             new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),
             // new Expression("REC.STATUS AS STATUS"),

@@ -18,6 +18,7 @@ class OptionsModel extends Model {
     const MODIFIED_DT           =  "MODIFIED_DT";
     const DELETED_BY            =  "DELETED_BY";
     const DELETED_DT            =  "DELETED_DT";
+    const UPLOAD_FLAG            =  "UPLOAD_FLAG";
 
 
     public $OptionId;
@@ -30,7 +31,7 @@ class OptionsModel extends Model {
     public $ModifiedBy;
     public $ModifiedDt;
     public $DeletedBy;
-    public $DeletedDt;
+    public $UploadFlag;
    
 
     public $mappings = [
@@ -45,6 +46,7 @@ class OptionsModel extends Model {
         'ModifiedDt'        => self::MODIFIED_DT,
         'DeletedBy'         => self::DELETED_BY,
         'DeletedDt'         => self::DELETED_DT,
+        'UploadFlag'        => self::UPLOAD_FLAG,
     ];
 }
 

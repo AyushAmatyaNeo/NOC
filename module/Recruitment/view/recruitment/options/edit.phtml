@@ -18,6 +18,7 @@ $OptionsEdesc = $form ->get('OptionsEdesc');
 $OptionsNdesc = $form ->get('OptionsNdesc');
 $Remarks = $form->get('Remarks');
 $submit = $form->get('submit');
+$UploadFlag = $form ->get('UploadFlag');
 $submit->setAttribute('value', 'SUBMIT');
 
 // $form->setAttribute('action', $this->url('vacancy', ['action' => 'action', 'id' => $id]));
@@ -60,6 +61,15 @@ print $this->form()->openTag($form);
                             <?php print $this->formElementErrors()->render($OptionsNdesc, ['class' => 'help-block']); ?>
                         </div>
                     </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <?php print $this->formLabel($UploadFlag); ?>
+                            <div class="md-radio-inline">
+                                <?php $customRenderer($UploadFlag); ?>
+                            </div>
+                            <?php print $this->formElementErrors()->render($UploadFlag, ['class' => 'help-block']); ?>
+                        </div>
+                    </div> 
                     
                 </div>
                 <div class="row">
