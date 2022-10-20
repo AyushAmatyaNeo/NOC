@@ -546,12 +546,12 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 				<tr>
 					<td>
 						<div id="imagePreviewright_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
-							<img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath('img/recent_left_finger.png')?>" />
+							<img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath('img/recent_right_finger.png')?>" />
 						</div>
 					</td>
 					<td>
 						<div id="imagePreviewleft_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
-							<img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath('img/recent_right_finger.png')?>" alt="Left Finger" />
+							<img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath('img/recent_left_finger.png')?>" alt="Left Finger" />
 						</div>
 					</td>
 					<td>
@@ -559,12 +559,22 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 							<img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath('img/recent_sign.png')?>" alt="Recent Signature" />
 						</div>
 					</td>
+                    <td>
+						<div id="imagePreviewfront_citizen" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+							<img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath('img/front_citizen.png')?>" alt="Recent Signature" />
+						</div>
+					</td>
+                    <td>
+						<div id="imagePreviewback_citizen" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+							<img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath('img/back_citizen.png')?>" alt="Recent Signature" />
+						</div>
+					</td>
 				</tr>
 				<tr>
 					<td style="border-top:0;">
 						<div class="form-group">
 							<input type="hidden" name="image_ids[]" value="right_finger_scan" />
-							<input type="file" class="form-control-file" name="right_finger_scan" id="right_finger_scan" onchange="return fileValidation($id = 'right_finger_scan')" required>
+							<input type="file" style="width:200px;" class="form-control-file" name="right_finger_scan" id="right_finger_scan" onchange="return fileValidation($id = 'right_finger_scan')" required>
 							<p class="size"></p>
 							<?php if (isset($upload_error_photo)) {
 								echo $upload_error_photo;
@@ -574,14 +584,28 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 					<td style="border-top:0;">
 						<div class="form-group">
                             <input type="hidden" name="image_ids[]" value="left_finger_scan" />
-							<input type="file" class="form-control-file" name="left_finger_scan" id="left_finger_scan" onchange="return fileValidation($id = 'left_finger_scan')" required>
+							<input type="file" style="width:200px;" class="form-control-file" name="left_finger_scan" id="left_finger_scan" onchange="return fileValidation($id = 'left_finger_scan')" required>
 							<p class="size"></p>
 						</div>
 					</td>
                     <td style="border-top:0;">
                         <div class="form-group">
                             <input type="hidden" name="image_ids[]" value="signature" />
-                            <input type="file" class="form-control-file" name="signature" id="signature" onchange="return fileValidation($id = 'signature')" required>
+                            <input type="file" style="width:200px;" class="form-control-file" name="signature" id="signature" onchange="return fileValidation($id = 'signature')" required>
+                            <p class="size"></p>
+                        </div>
+                    </td>
+                    <td style="border-top:0;">
+                        <div class="form-group">
+                            <input type="hidden" name="image_ids[]" value="front_citizen" />
+                            <input type="file" style="width:200px;" class="form-control-file" name="front_citizen" id="front_citizen" onchange="return fileValidation($id = 'front_citizen')" required>
+                            <p class="size"></p>
+                        </div>
+                    </td>
+                    <td style="border-top:0;">
+                        <div class="form-group">
+                            <input type="hidden" name="image_ids[]" value="back_citizen" />
+                            <input type="file" style="width:200px;" class="form-control-file" name="back_citizen" id="back_citizen" onchange="return fileValidation($id = 'back_citizen')" required>
                             <p class="size"></p>
                         </div>
                     </td>

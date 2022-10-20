@@ -146,72 +146,75 @@ print $this->form()->openTag($form);
                 <tbody>
                     <thead style="background-color: red; color: white;">
                         <tr>
+                            <?php 
+                                if($detail['VACANCY_TYPE'] == 'INTERNAL_FORM'){
+                            ?>
                             <td class="text-center bold">
                                 आन्तरिक प्रतियोगितात्मक परीक्षाको दरखास्त फारम 
                             </td>
+                            <?php 
+                                }elseif($detail['VACANCY_TYPE'] == 'INTERNAL_APPRAISAL'){
+                            ?>
                             <td class="text-center bold">
                                 जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि दरखास्त फारम
                             </td>
+                            <?php 
+                                }
+                            ?>
                         </tr>
                     </thead>
                     
                     <tr> <?php //echo $this->basePath('selfservice/vacancies/perfomance/') ?>
+                        <?php 
+                            if($detail['VACANCY_TYPE'] == 'INTERNAL_FORM'){
+                        ?>
                         <td class="text-center">
-                        <?php
-                        $a=0;
-                        $b=0;
-                        // var_dump('here');
-                        if (count($vacancyApplyStage) > 0) {
-                            foreach ($vacancyApplyStage as $value) {
-                                if ($value['USER_ID'] == $user_id && $value['APPLICATION_TYPE'] == "Internal-form") {
-                                   $a = 1;
-                                   break;
-                                } else {
-                                    $a = 0;
-                                }
-                            }
-                            foreach ($vacancyApplyStage as $value) {
-                                if ($value['USER_ID'] == $user_id && $value['APPLICATION_TYPE'] == "Internal-performance") {
-                                    $b = 1;
+                            <?php
+                            $a=0;
+                            $b=0;
+                            $a_admin_generated = 0;
+                            $b_admin_generated = 0;
+                            // var_dump('here');
+                            if (count($vacancyApplyStage) > 0) {
+                                foreach ($vacancyApplyStage as $value) {
+                                    if ($value['USER_ID'] == $user_id && $value['APPLICATION_TYPE'] == "Internal-form") {
+                                    $a = 1;
+                                    if($value['ADMIN_CARD_GENERATED'] == 'Y'){
+                                            $a_admin_generated = 1;
+                                    }
                                     break;
-                                 } else {
-                                     $b =0;
-                                 }
-                            }
-                        }
-                        if ($curentJob['FUNCTIONAL_LEVEL_NO'] < 6 ) {
-                            if ($curentJob['INCLUSION'] == 'N') {
-                                if ($curentJob['DURATION'] > 1) {
-                                    if ($a == 1) {?>
-                                        <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                    <i class="fa fa-arrow-right icon-black"></i> Edit</a>
-                                    <a href="<?php echo $this->basePath('selfservice/vacancies/view-application-form/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                    <i class="fa fa-arrow-right icon-black"></i> View</a>
-                                    <?php } else { ?>
-                                        <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                        <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                                   <?php } 
+                                    } else {
+                                        $a = 0;
+                                    }
+                                }
+                                foreach ($vacancyApplyStage as $value) {
+                                    if ($value['USER_ID'] == $user_id && $value['APPLICATION_TYPE'] == "Internal-performance") {
+                                        $b = 1;
+                                        if($value['ADMIN_CARD_GENERATED'] == 'Y'){
+                                            $b_admin_generated = 1;
+                                        }
+                                        break;
+                                    } else {
+                                        $b =0;
+                                    }
                                 }
                             }
-                            else {
-                                if ($curentJob['DURATION'] > 2) { 
-                                    if ($a == 1) { ?>
-                                        <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                    <i class="fa fa-arrow-right icon-black"></i> Edit</a>
-                                    <a href="<?php echo $this->basePath('selfservice/vacancies/view-application-form/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                    <i class="fa fa-arrow-right icon-black"></i> View</a>
-                                    <?php } else { ?>
-                                        <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                        <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                              <?php }
-                               }
-                               else { ?>
-                                   <span>You can't apply to this Job</span> 
-                            <?php   }
-                            }
-                        } elseif ($curentJob['FUNCTIONAL_LEVEL_NO'] > 5) {
-                            if ($curentJob['INCLUSION'] == 'N') {
-                                if ($curentJob['DURATION'] > 3) { 
+                            if ($curentJob['FUNCTIONAL_LEVEL_NO'] < 6 ) {
+                                if ($curentJob['INCLUSION'] == 'N') {
+                                    if ($curentJob['DURATION'] > 1) {
+                                        if ($a == 1) {?>
+                                            <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> Edit</a>
+                                        <a href="<?php echo $this->basePath('selfservice/vacancies/view-application-form/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                        <?php } else { ?>
+                                            <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                            <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                                    <?php } 
+                                    }
+                                }
+                                else {
+                                    if ($curentJob['DURATION'] > 2) { 
                                         if ($a == 1) { ?>
                                             <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
                                         <i class="fa fa-arrow-right icon-black"></i> Edit</a>
@@ -220,91 +223,123 @@ print $this->form()->openTag($form);
                                         <?php } else { ?>
                                             <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
                                             <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                                    <?php   }
+                                <?php }
                                 }
-                            }else {
-                                  if ($curentJob['DURATION'] > 4) {
-                                        if ($a == 1) { ?>
-                                            <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                        <i class="fa fa-arrow-right icon-black"></i> Edit</a>
-                                        <a href="<?php echo $this->basePath('selfservice/vacancies/view-application-form/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                        <i class="fa fa-arrow-right icon-black"></i> View</a>
-                                        <?php } else { ?>
-                                            <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                            <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                                    <?php }
-                                }  else { ?>
-                                    you cant apply to this vacany
-                            <?php    }
-                            }
-                        } else { ?>
-                            
-                      <?php  } ?>
+                                else { ?>
+                                    <span>You can't apply to this Job</span> 
+                                <?php   }
+                                }
+                            } elseif ($curentJob['FUNCTIONAL_LEVEL_NO'] > 5) {
+                                
+                                if ($curentJob['INCLUSION'] == 'N') {
+                                    if ($curentJob['DURATION'] > 3) { 
+                                            if ($a == 1) { ?>
+                                                <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                            <i class="fa fa-arrow-right icon-black"></i> Edit</a>
+                                            <a href="<?php echo $this->basePath('selfservice/vacancies/view-application-form/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                            <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                            <?php if($a_admin_generated==1){?>
+                                                <a class="btn btn-success" id="downloadAdminCard">Download Admin Card</a>
+                                                <!-- <i class="fa fa-arrow-right icon-black"></i> View Admin Card</a> -->
+                                            <?php }else{?>
+                                                <h5>Your admin card will shortly be generated after payment.</h5>
+                                            <?php }} else { ?>
+                                                <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                                <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                                        <?php   }
+                                    }
+                                }else {
+                                    if ($curentJob['DURATION'] > 4) {
+                                            if ($a == 1) { ?>
+                                                <a href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                            <i class="fa fa-arrow-right icon-black"></i> Edit</a>
+                                            <a href="<?php echo $this->basePath('selfservice/vacancies/view-application-form/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                            <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                            <?php } else { ?>
+                                                <a href="<?php echo $this->basePath('selfservice/vacancies/apply/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                                <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                                        <?php }
+                                    }  else { ?>
+                                        you cant apply to this vacany
+                                <?php    }
+                                }
+                            } else { ?>
+                                
+                            <?php  } ?>
                         
                        
                         </td>
-
+                        <?php 
+                            }elseif($detail['VACANCY_TYPE'] == 'INTERNAL_APPRAISAL'){
+                        ?>
                         <td class="text-center">
-                       <?php if ($curentJob['FUNCTIONAL_LEVEL_NO'] < 6 ) {
-                            if ($curentJob['INCLUSION'] == 'N') {
-                                if ($curentJob['DURATION'] > 1) {
-                                    if ($b == 1) { ?>
-                                        <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> View</a>
-                        <?php } else { ?>
-                            <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                                   <?php } 
-                                }
-                            }
-                            else {
-                                if ($curentJob['DURATION'] > 2) { 
-                                    if ($b == 1) { ?>
-                                       <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> View</a>
-                        <?php } else { ?>
-                            <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                              <?php }
-                               }
-                               else { ?>
-                                   <span>You can't apply to this Job</span> 
-                            <?php   }
-                            }
-                        } elseif ($curentJob['FUNCTIONAL_LEVEL_NO'] > 5) {
-                            if ($curentJob['INCLUSION'] == 'N') {
-                                if ($curentJob['DURATION'] > 3) { 
-                                        if ($b == 1) { ?>
-                                           <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> View</a>
-                        <?php } else { ?>
-                            <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> Apply</a>
-                                    <?php   }
-                                }
-                            }else {
-                                  if ($curentJob['DURATION'] > 4) {
-                                        if ($b == 1) { ?>
-                                           <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> View</a>
-                        <?php } else { ?>
-                            <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
-                                <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                            <?php if ($curentJob['FUNCTIONAL_LEVEL_NO'] < 6 ) {
+                                    if ($curentJob['INCLUSION'] == 'N') {
+                                        if ($curentJob['DURATION'] > 1) {
+                                            if ($b == 1) { ?>
+                                                <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                <?php } else { ?>
+                                    <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                                        <?php } 
+                                        }
+                                    }
+                                    else {
+                                        if ($curentJob['DURATION'] > 2) { 
+                                            if ($b == 1) { ?>
+                                            <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                <?php } else { ?>
+                                    <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> Apply</a>
                                     <?php }
-                                }  else { ?>
-                                    you cant apply to this vacany
-                            <?php    }
-                            }
-                        } else { ?>
-                            
-                      <?php  } ?>
-                        <?php if ($b == 1) {?>
-                            
-                                <?php } ?>
+                                    }
+                                    else { ?>
+                                        <span>You can't apply to this Job</span> 
+                                    <?php   }
+                                    }
+                                } elseif ($curentJob['FUNCTIONAL_LEVEL_NO'] > 5) {
+                                    if ($curentJob['INCLUSION'] == 'N') {
+                                        if ($curentJob['DURATION'] > 3) { 
+                                                if ($b == 1) { ?>
+                                                <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                <?php } else { ?>
+                                    <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                                            <?php   }
+                                        }
+                                    }else {
+                                        if ($curentJob['DURATION'] > 4) {
+                                                if ($b == 1) { ?>
+                                                <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> View</a>
+                                <?php } else { ?>
+                                    <a href="<?php echo  $this->basePath('selfservice/vacancies/perfomance/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
+                                        <i class="fa fa-arrow-right icon-black"></i> Apply</a>
+                                            <?php }
+                                        }  else { ?>
+                                            you cant apply to this vacany
+                                    <?php    }
+                                    }
+                                } else { ?>
+                                    
+                            <?php  } ?>
+                                <?php if ($b == 1) {?>
+                                    
+                                        <?php } ?>
                         </td>
+                        <?php 
+                            }
+                        ?>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+</div>
+
+<div id="adminCard" class="col-md-8"  style="border:1px solid; display: none;">
+<?php print $this->partial('partials/admin-card.phtml'); ?>
 </div>

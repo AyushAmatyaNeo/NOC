@@ -127,7 +127,7 @@ class VacancyController extends HrisController
         $Skills = EntityHelper::getTableList($this->adapter, 'HRIS_REC_SKILL', ['SKILL_ID','SKILL_NAME'], ['STATUS' => 'E']);
         $OpeningVacancyNo = EntityHelper::getTableList($this->adapter, 'HRIS_REC_OPENINGS', ['OPENING_ID','VACANCY_TOTAL_NO','RESERVATION_NO'], ['STATUS' => 'E']);
         // $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL" => "INTERNAL");
-        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_" => "INTERNAL", );
+        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_FORM" => "INTERNAL-FORM","INTERNAL_APPRAISAL" => "INTERNAL-APPRAISAL", );
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,
@@ -165,7 +165,7 @@ class VacancyController extends HrisController
         $model->SkillId = $skills;
         $model->InclusionId = $Inclusions;
         $this->form->bind($model);
-        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL" => "INTERNAL");
+        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_FORM" => "INTERNAL-FORM","INTERNAL_APPRAISAL" => "INTERNAL-APPRAISAL");
         return Helper::addFlashMessagesToArray($this, [
             'id' => $id,
             'form' => $this->form,
@@ -221,7 +221,7 @@ class VacancyController extends HrisController
         $model->InclusionId = $inc;
         $this->form->bind($model);
         // echo '<pre>'; print_r($model); die();
-        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL" => "INTERNAL");
+        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_FORM" => "INTERNAL-FORM","INTERNAL_APPRAISAL" => "INTERNAL-APPRAISAL", );
         $OpeningVacancyNo = EntityHelper::getTableList($this->adapter, 'HRIS_REC_OPENINGS', ['OPENING_ID','VACANCY_TOTAL_NO','RESERVATION_NO'], ['STATUS' => 'E']);
         return Helper::addFlashMessagesToArray($this, [
             'id' => $id,

@@ -254,13 +254,14 @@ class OvertimeClaim extends HrisController {
                     $funcLvl = $otDetail['FUNCTIONAL_LEVEL_EDESC'];
                     $dayCode = $otDetail['DAY_CODE'];
                     $otHour = $otDetail['OT_HOUR'];
+                    $bonuMulti = $otDetail['BONUS_MULTI'];
                     $lunchExpense = 0;
                     if($otHour>=6){
-                        $otDays = 1;
+                        $otDays = 1 * $bonuMulti;
                     }elseif($otHour>=4.5 && $otHour<6){
-                        $otDays = 0.5;
+                        $otDays = 0.5 * $bonuMulti;
                     }else{
-                        $otDays = 0;
+                        $otDays = 0 * $bonuMulti;
                     }
                     if($funcLvl>=6){
                         if($dayCode=="H"){

@@ -12,7 +12,7 @@
             }
         });
         var $table = $('#OpeningTable');
-        console.log(document.openingList);
+        // console.log(document.openingList);
         app.populateSelect($('#OpeningId'), document.openingList , 'OPENING_ID', 'OPENING_NO', null,null);
         var action = `
             <div class="clearfix">

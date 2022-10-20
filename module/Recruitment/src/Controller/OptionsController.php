@@ -52,6 +52,7 @@ class OptionsController extends HrisController
             {
                 $opening_data = new OptionsModel();
                 $opening_data->exchangeArrayFromForm($this->form->getData());
+                // print_r($opening_data);die;
                 $opening_data->OptionId = ((int) Helper::getMaxId($this->adapter, OptionsModel::TABLE_NAME, OptionsModel::OPTION_ID)) + 1;
                 $opening_data->CreatedBy = $this->employeeId;
                 $opening_data->CreatedDt = Helper::getcurrentExpressionDate();
@@ -105,7 +106,8 @@ class OptionsController extends HrisController
                 
         return Helper::addFlashMessagesToArray($this, [
                     'form' => $this->form,
-                    'detail' => $detail
+                    'detail' => $detail,
+                    'customRenderer' => Helper::renderCustomView()
         ]);
     }
     public function deleteAction()

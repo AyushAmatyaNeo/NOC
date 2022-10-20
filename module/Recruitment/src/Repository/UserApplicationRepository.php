@@ -346,7 +346,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression(" UVA.APPLICATION_AMOUNT     AS APPLICATION_AMOUNT "),
             //Payment detail
             new Expression(" PAY.PAYMENT_TYPE           AS PAYMENT_TYPE "),
-            new Expression(" PAY.PAYMENT_NPR            AS PAYMENT_NPR "),
+            new Expression(" PAY.PAYMENT_AMOUNT            AS PAYMENT_NPR "),
             // DOCUMENT
             new Expression(" DOC.DOC_PATH               AS PROFILE_IMG "),
 
@@ -360,7 +360,7 @@ class UserApplicationRepository extends HrisRepository{
                 ->join(['STG' => 'HRIS_REC_STAGES'],'STG.REC_STAGE_ID=UVA.STAGE_ID', 'STATUS', 'left')
                 ->join(['HRD' => 'HRIS_DISTRICTS'],'HRD.DISTRICT_ID=UR.CTZ_ISSUE_DISTRICT_ID', 'ZONE_ID', 'left')
                 ->join(['DOC' => 'HRIS_REC_APPLICATION_DOCUMENTS'],'DOC.APPLICATION_ID=REC.APPLICATION_ID', 'DOC_TYPE', 'left')
-                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.APPLICATION_ID=REC.APPLICATION_ID', 'PAYMENT_RFID', 'left')
+                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.APPLICATION_ID=REC.APPLICATION_ID', 'PAYMENT_REFERENCE_ID', 'left')
                 ->where(["REC.STATUS='E'"])
                 ->where(["DOC.DOC_FOLDER = 'photograph'"]);
 
@@ -426,7 +426,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression(" UVA.APPLICATION_AMOUNT     AS APPLICATION_AMOUNT "),
             //Payment detail
             new Expression(" PAY.PAYMENT_TYPE           AS PAYMENT_TYPE "),
-            new Expression(" PAY.PAYMENT_NPR            AS PAYMENT_NPR "),
+            new Expression(" PAY.PAYMENT_AMOUNT            AS PAYMENT_NPR "),
             // // DOCUMENT
             // new Expression(" DOC.DOC_PATH               AS PROFILE_IMG "),
 
@@ -440,7 +440,7 @@ class UserApplicationRepository extends HrisRepository{
                 ->join(['URETH' => 'HRIS_ETHNICITIES'],'URETH.ETHNICITY_ID=UR.ETHNICITY_ID', 'STATUS', 'left')
                 ->join(['UVA' => 'HRIS_REC_VACANCY_APPLICATION'],'UVA.APPLICATION_ID=REC.APPLICATION_ID', 'APPLICATION_ID', 'left')
                 ->join(['STG' => 'HRIS_REC_STAGES'],'STG.REC_STAGE_ID=UVA.STAGE_ID', 'STATUS', 'left')
-                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.APPLICATION_ID=REC.APPLICATION_ID', 'PAYMENT_RFID', 'left')
+                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.APPLICATION_ID=REC.APPLICATION_ID', 'PAYMENT_REFERENCE_ID', 'left')
                 ->join(['DOC' => 'HRIS_EMPLOYEE_FILE'],'DOC.EMPLOYEE_ID=UR.EMPLOYEE_ID', 'STATUS', 'left')
                 ->join(['PERMPROV' => 'HRIS_PROVINCES'],'PERMPROV.PROVINCE_ID=UR.ADDR_PERM_PROVINCE_ID', 'STATUS', 'left')
                 ->join(['TEMPPROV' => 'HRIS_PROVINCES'],'TEMPPROV.PROVINCE_ID=UR.ADDR_TEMP_PROVINCE_ID', 'STATUS', 'left')
@@ -668,7 +668,7 @@ class UserApplicationRepository extends HrisRepository{
         $select->Where("DOC.DOC_FOLDER IN ('ethnicity','disability')");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
-        // print_r($statement->getSql()); die();
+        // echo('<pre>');print_r($boundedParameter);print_r($statement->getSql()); die();
         $result = $statement->execute($boundedParameter);
         return $result;
     }

@@ -41,6 +41,7 @@
             selfId=0;
         }   
         window.app.checkUniqueConstraints(inputFieldId,formId,tableName,columnName,checkColumnName,selfId);
+
         //-----------------------------------------------------------------------------------------------------------------------------------------//
         // File Upload
         var myDropzone;
