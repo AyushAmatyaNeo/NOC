@@ -154,7 +154,7 @@ class SalarySheetController extends HrisController {
                         $taxSheetRepo->add($taxSheet);
                     }
                     //to update loan Pyamnet Flag of employee start
-                    //$this->salarySheetRepo->updateLoanPaymentFlag($employeeId,$sheetNo);
+                    // $this->salarySheetRepo->updateLoanPaymentFlag($employeeId,$sheetNo);
                     //to update loan Pyamnet Flag of employee end
                     break;
                 case 3:

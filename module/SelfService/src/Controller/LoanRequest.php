@@ -190,6 +190,7 @@ class LoanRequest extends AbstractActionController {
                     $emiModel->modifiedDt = Helper::getcurrentExpressionDate();
                     $emiModel->modifiedBy= $this->employeeId;
                     $emiModel->paidFlag= 'N';
+                    $emiModel->sno= $x + 1;
                     $this->repository->emiAdd($emiModel);
                 }
                 

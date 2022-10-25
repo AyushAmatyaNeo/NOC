@@ -20,6 +20,7 @@ class LoanEmiDetail extends Model{
     const MODIFIED_DT = "MODIFIED_DT";
     const MODIFIED_BY = "MODIFIED_BY";
     const PAID_FLAG = "PAID_FLAG";
+    const SNO = "SNO";
 
     
     public $emiId;
@@ -37,7 +38,7 @@ class LoanEmiDetail extends Model{
     public $modifiedDt;
     public $modifiedBy;
     public $paidFlag;
-
+    public $sno;
     
     public $mappings = [
          'emiId'=> self::EMI_ID,
@@ -55,6 +56,7 @@ class LoanEmiDetail extends Model{
          'modifiedDt'=>self::MODIFIED_DT,
          'modifiedBy'=>self::MODIFIED_BY,
          'paidFlag'=>self::PAID_FLAG,
+         'sno'=>self::SNO,
 
     ];
     
