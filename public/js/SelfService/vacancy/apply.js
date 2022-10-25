@@ -12,67 +12,68 @@
         //         degrees = response.degrees;
         //     }
         //     console.log(degrees);
+
+        // <td>
+        //             <div for="edu_institute" class="form-group">
+        //                 <input type="text" name="edu_institute[]" class="form-control form-control-sm" required>
+        //             </div>
+        //         </td>
         var appendDataedu =
             `<tr>
-            <td>
-            <div for="edu_institute" class="form-group">
-                <input type="text" name="edu_institute[]" class="form-control form-control-sm" required>
-            </div>
-        </td>
-                                                <td>
-                                                    <div for="level_id" class="form-group">
-                                                    <select name="level_id[]" class="form-control form-control-sm level_id" required>
-                                                    <option value="">-- Select -- </option>
-                                                        
-                                                    </select>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                <div for="faculty" class="form-group">
-                                                <select name="faculty[]" id="faculty" class="form-control form-control-sm faculty" required>
-                                                    
-                                                </select>
-                                                 
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="form-group">
-                                                    <select class="form-control form-control-sm" id="" name="rank_type[]" required>
-                                                        <option value="">Select Level</option>
-                                                        <option value="GPA">GPA</option>
-                                                        <option value="Percentage">Percentage</option>
-                                                    </select>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div for="rank_value" class="form-group">
-                                                    <input type="text" name="rank_value[]" class="form-control form-control-sm" required>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div for="univerity_board" class="form-group" id="rank_value_error">
-                                                <select name="univerity_board[]" class="form-control form-control-sm university" required>
-                                                    <option value=""> Select University</option>
-                                                </select>
-                                                   
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div for="major_subject" class="form-group">
-                                                <select name="major_subject[]" class="form-control form-control-sm course" required>
-                                                <option value=""> Select Course</option>
-                                                </select>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div for="passed_year" class="form-group">
-                                                    <input type="number" name="passed_year[]" class="form-control form-control-sm" required>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <i class="fa fa-minus-circle btn-edu-remove" aria-hidden="true" style="color: red; cursor: pointer"></i>
-                                            </td>
-                                </tr>`;
+                <td>
+                    <div for="level_id" class="form-group">
+                    <select name="level_id[]" class="form-control form-control-sm level_id" required>
+                    <option value="">-- Select -- </option>
+                        
+                    </select>
+                    </div>
+                </td>
+                <td>
+                    <div for="univerity_board" class="form-group" id="rank_value_error">
+                    <select name="univerity_board[]" class="form-control form-control-sm university" required>
+                        <option value=""> Select University</option>
+                    </select>
+                    
+                    </div>
+                </td>
+                <td>
+                    <div for="faculty" class="form-group">
+                    <select name="faculty[]" id="faculty" class="form-control form-control-sm faculty" required>
+                        
+                    </select>
+                    
+                    </div>
+                </td>
+                <td>
+                    <div for="major_subject" class="form-group">
+                    <select name="major_subject[]" class="form-control form-control-sm course" required>
+                    <option value=""> Select Course</option>
+                    </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group">
+                        <select class="form-control form-control-sm" id="" name="rank_type[]" required>
+                            <option value="">Select Level</option>
+                            <option value="GPA">GPA</option>
+                            <option value="Percentage">Percentage</option>
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div for="rank_value" class="form-group">
+                        <input type="text" name="rank_value[]" class="form-control form-control-sm" required>
+                    </div>
+                </td>
+                <td>
+                    <div for="passed_year" class="form-group">
+                        <input type="number" name="passed_year[]" class="form-control form-control-sm" required>
+                    </div>
+                </td>
+                <td>
+                    <i class="fa fa-minus-circle btn-edu-remove" aria-hidden="true" style="color: red; cursor: pointer"></i>
+                </td>
+            </tr>`;
         $(btn_add_edu).click(function (e) {
             e.preventDefault();
             var edu_len = $(document).find('#educationalbody > tr').length;
@@ -104,13 +105,13 @@
             });
             var level_id = $('#rec_level_id').val();
             var position_id = $('#position_id').val();
-            console.log(level_id);
-            console.log(position_id);
+            console.log($('#rec_level_id').val());
+            console.log($('#position_id').val());
 
             if (val.length > 1) {
                 app.serverRequest(document.ajaxurl, {
-                    'level_id': level_id,
-                    'position_id': position_id
+                    'level_id': $('#rec_level_id').val(),
+                    'position_id': $('#position_id').val()
                 }).then(function (success) {
                     console.log(success);
                     if (success.success) {

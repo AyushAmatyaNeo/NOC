@@ -524,4 +524,15 @@ then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION
         $result = $this->rawQuery($q);
         return $result;
     }
+    
+    public function updateProfilePic($fileDetail, $empId){
+        $sql = "insert into hris_employee_file (file_code, file_path, status, created_dt, file_id) 
+        values ((select ifnull(max(file_code),0) +1 from hris_employee_file), '{$fileDetail['newImageName']}', 'E', current_date, 0)";
+        $result = $this->rawQuery($sql);
+
+        $updateSql = "update hris_employees set PROFILE_PICTURE_ID = (select ifnull(max(file_code),0) from hris_employee_file) where employee_id = $empId";
+        $result = $this->rawQuery($updateSql);
+
+        return;
+    }
 }   

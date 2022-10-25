@@ -69,14 +69,30 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <div class="col-xs-12 col-sm-3 col-md-3 col-box pull-right">
                                 <div class="profile-img-box">
                                     <!-- " /> -->
-                                    
                                     <?php if($EmployeeData['PROFILE_PATH'] != null) {?>
-                                        <img alt="profile image" class="profilepic" src="<?php echo $this->basePath('uploads/'). $EmployeeData['PROFILE_PATH']; ?>
+						                <div id="imagePreviewprofile_pic" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                            <img alt="profile image" class="profilepic" src="<?php echo $this->basePath('uploads/'). $EmployeeData['PROFILE_PATH']; ?>" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" name="image_ids[]" value="profile_pic" />
+                                            <label for="profile_pic" class="btn">Update</label>
+                                            <input type="file" style="visibility:hidden;" class="form-control-file" name="profile_pic" id="profile_pic" onchange="return fileValidation($id = 'profile_pic')">
+                                            <p class="size"></p>
+                                        </div>
                                     <?php }
                                     else{?>
-                                        <img alt="profile image" class="profilepic" src="<?php echo $this->basePath('uploads/'). 'default-profile-picture.jpg' ?>" />
+						                <div id="imagePreviewprofile_pic2" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                            <img alt="profile image" class="profilepic" src="<?php echo $this->basePath('uploads/'). 'default-profile-picture.jpg' ?>" />
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="hidden" name="image_ids[]" value="profile_pic2" />
+                                            <label for="profile_pic2" class="btn">Upload</label>
+                                            <input required type="file" style="visibility:hidden;" class="form-control-file" name="profile_pic2" id="profile_pic2" onchange="return fileValidation($id = 'profile_pic2')">
+                                            <p class="size"></p>
+                                        </div>
                                     <?php } ?>
                                     <span class="profilepic-label"><?php echo $applicationData['FULL_NAME']; ?> </span>
+                                    
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-3 col-md-3 col-box">
@@ -279,11 +295,11 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                             <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
                                                 <tr>
                                                     <td><label>Degree Acquired</label></td>
-                                                    <td><label>Level</label></td>
+                                                    <td><label>University / Board</label></td>
                                                     <td><label>Faculty</label></td>
+                                                    <td><label>Course Name</label></td>
                                                     <td><label>Rank Type</label></td>
                                                     <td><label>Rank Value</label></td>
-                                                    <td><label>University / Board</label></td>
                                                     <td><label>Passed Year</label></td>
                                                 </tr>
                                                 <?php
@@ -291,22 +307,22 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                                 ?>
                                                     <tr>
                                                         <td>
-                                                            <?php print $eduData['ACADEMIC_PROGRAM_ID']; ?>
-                                                        </td>
-                                                        <td>
                                                             <?php print $eduData['ACADEMIC_DEGREE_ID']; ?>
                                                         </td>
                                                         <td>
-                                                            <?php print $eduData['ACADEMIC_COURSE_ID']; ?>
+                                                            <?php print $eduData['ACADEMIC_UNIVERSITY_ID']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php print $eduData['ACADEMIC_PROGRAM_ID']; ?>
                                                         </td>                                                       
+                                                        <td>
+                                                            <?php print $eduData['ACADEMIC_COURSE_ID']; ?>
+                                                        </td>
                                                         <td>
                                                             <?php print $eduData['RANK_TYPE']; ?>
                                                         </td>
                                                         <td>
                                                             <?php print $eduData['RANK_VALUE']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?php print $eduData['ACADEMIC_UNIVERSITY_ID']; ?>
                                                         </td>
                                                         <td>
                                                             <?php print $eduData['PASSED_YEAR']; ?>
@@ -326,13 +342,22 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <h5 class="bold"> Add new or missing qualification using  <i class="fa fa-plus-circle" aria-hidden="true" style="color: green; cursor: pointer"></i>  sign</h5>
                             <table class="table table-responsive-md table-striped table-bordered table-sm" id="education">
                                 <thead>
-                                    <tr>
-                                        <!-- <th rowspan="2" width="25%">Educational Institute</th> -->
+                                    <?php /* <tr>
+                                        <th rowspan="2" width="25%">Educational Institute</th>
                                         <th rowspan="2">Level</th>
                                         <th rowspan="2">Faculty</th>
                                         <th colspan="2">Division</th>
                                         <th rowspan="2">University/Board</th>
                                         <th rowspan="2">Major Subject</th>
+                                        <th rowspan="2" width="10%">Passed Year (AD)</th>
+                                        <th rowspan="2"><i class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i></th>
+                                    </tr> */ ?>
+                                    <tr>
+                                        <th rowspan="2" width="25%">Degree Acquired</th>
+                                        <th rowspan="2">University / Board</th>
+                                        <th rowspan="2">Faculty</th>
+                                        <th rowspan="2">Course Name</th>
+                                        <th colspan="2">Division</th>
                                         <th rowspan="2" width="10%">Passed Year (AD)</th>
                                         <th rowspan="2"><i class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i></th>
                                     </tr>
@@ -370,7 +395,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 								</tr>
 							</thead>							
 							<tbody>
-								<tr>
+								<?php /* <tr>
 									<?php $c = 1; foreach($certificates as $certificate) {?>
 									<tr class="certificate">
 										<td><?php echo $c; ?></td>
@@ -408,7 +433,36 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 
 									</tr>
 									<?php $c++; } ?>
-								</tr>								
+								</tr>	*/ ?>
+                                <tr class="qualification">
+										<td>1</td>
+										<td>											
+											<div class="form-group">
+												<p>Qualification</p>										
+											</div>
+										</td>
+										<td class='certInput' id="td1">
+
+											<div class="row">
+												<div class="col-md-10">
+													<label for="trascript">Transcript/Grade Sheet/Marksheet <span style="color: red;">*</span></label>
+													<input required type="file" class="form-control-file" id="qualification_trascript" name="qualification_trascript" onchange="return certificateValidation($id = 'qualification_trascript')" accept=".png,.pdf,.jpg,.jpeg"/>
+													
+                                                    <label style="margin-top:20px;" for="character">Character Certificate <span style="color: red;">*</span></label>
+													<input required type="file" class="form-control-file" id="qualification_character" name="qualification_character" onchange="return certificateValidation($id = 'qualification_character')" accept=".png,.pdf,.jpg,.jpeg"/>
+													
+                                                    <label style="margin-top:20px;" for="equivalent">Equivalent Certificate <span>(optional)</span></label>
+													<input type="file" class="form-control-file" id="qualification_equivalent" name="qualification_equivalent" onchange="return certificateValidation($id = 'qualification_equivalent')" accept=".png,.pdf,.jpg,.jpeg"/>
+													
+                                                    <label style="margin-top:20px;" for="council">Council Certificate <span>(optional)</span></label>
+													<input type="file" class="form-control-file" id="qualification_council" name="qualification_council" onchange="return certificateValidation($id = 'qualification_council')" accept=".png,.pdf,.jpg,.jpeg"/>
+                                                    
+                                                    <label style="margin-top:20px;" for="council">Driving License <span>(optional)</span></label>
+													<input type="file" class="form-control-file" id="qualification_license" name="qualification_license" onchange="return certificateValidation($id = 'qualification_license')" accept=".png,.pdf,.jpg,.jpeg"/>
+												</div>
+											</div>
+										</td>										
+									</tr>							
 							</tbody>
 						</table>
 					</div>

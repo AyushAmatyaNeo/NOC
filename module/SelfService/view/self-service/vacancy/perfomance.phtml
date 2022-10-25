@@ -14,6 +14,8 @@ $this->headScript()
 
 $form->setAttribute('role', 'form');
 $form->setAttribute('id', 'perfomanceApplication-form');
+$form->setAttribute('enctype', 'multipart/form-data');
+
 
 // $fromDate = $form->get('fromDate');
 // $toDate = $form->get('toDate');
@@ -23,6 +25,13 @@ $form->setAttribute('id', 'perfomanceApplication-form');
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'Apply');
 ?>
+<script>
+        document.ajaxurl = '<?= $this->url('vacancies', ['action' => 'inclusionamount']); ?>';
+    document.eduDetail =<?= json_encode($eduDegrees); ?>;
+    document.eduFaculty = <?= json_encode($eduFaculty); ?>;
+    document.eduUniversity = <?= json_encode($eduUniversity); ?>;
+    document.eduCourses = <?= json_encode($eduCourses); ?> ;
+</script>
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\vacancies')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
 </div>
@@ -71,6 +80,8 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                         <label for="firstName">बढुवा हुने पद / तह :</label>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <input type="hidden" name="position" id="position_id" value="<?php echo $detail['POSITION_ID']; ?>">
+                                        <input type="hidden" name="rec_level_id" id="rec_level_id" value="<?php echo $detail['LEVEL_ID']; ?>">
                                         <?php echo $detail['POSITION_NAME'].' / '. $detail['FUNCTIONAL_LEVEL_NO'];?></div>
                                 </div>
                             </div>                            
@@ -125,7 +136,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                         <label for="firstName">पद / तह:</label>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                        <?php echo $EmployeeData['DESIGNATION_TITLE'].' / '. $EmployeeData['POSITION_ID'] ?></div>
+                                        <?php echo $EmployeeData['DESIGNATION_TITLE'].' / '. $EmployeeData['FUNCTIONAL_LEVEL_NAME'] ?></div>
                                 </div>
                             </div>  
                             <div class="row bottomgap">
@@ -187,7 +198,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                 </div>
                     <h5 class="bold">२. शैक्षित योग्यता ( विनियम ६। १२ ( १ ) अनुसारको मात्र )</h5>
                 <div class="row">
-                    <table class="table table-bordered">
+                    <?php /* <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <td class="text-center" style="width: 5%">सि. न.</td>
@@ -216,6 +227,267 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                 <td class="text-center"> <?php echo $eduLast['ACADEMIC_PROGRAM_ID'] ?></td>
                             </tr>
                         </tbody>
+                    </table> */ ?>
+                    <div id="quaConId">
+                        <div id="rootwizard" class="tabbable-custom">
+                            <div class="status-info">
+                                <p><i class="fa fa-info-circle ticon ticon"></i>Current qualification details</p>
+                                <div class="row clearfix e-setup">
+                                    <div class="col-sm-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
+                                                <tr>
+                                                    <td><label>Degree Acquired</label></td>
+                                                    <td><label>University / Board</label></td>
+                                                    <td><label>Faculty</label></td>
+                                                    <td><label>Course Name</label></td>
+                                                    <td><label>Rank Type</label></td>
+                                                    <td><label>Rank Value</label></td>
+                                                    <td><label>Passed Year</label></td>
+                                                </tr>
+                                                <?php
+                                                foreach ($EducationData as $eduData) {
+                                                ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?php print $eduData['ACADEMIC_DEGREE_ID']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php print $eduData['ACADEMIC_UNIVERSITY_ID']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php print $eduData['ACADEMIC_PROGRAM_ID']; ?>
+                                                        </td>                                                       
+                                                        <td>
+                                                            <?php print $eduData['ACADEMIC_COURSE_ID']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php print $eduData['RANK_TYPE']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php print $eduData['RANK_VALUE']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php print $eduData['PASSED_YEAR']; ?>
+                                                        </td>
+
+                                                    </tr>
+                                                <?php } ?>
+
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Add Education Table -->
+                        <div class="col-md-12">
+                            <h5 class="bold"> Add new or missing qualification using  <i class="fa fa-plus-circle" aria-hidden="true" style="color: green; cursor: pointer"></i>  sign</h5>
+                            <table class="table table-responsive-md table-striped table-bordered table-sm" id="education">
+                                <thead>
+                                    <?php /* <tr>
+                                        <th rowspan="2" width="25%">Educational Institute</th>
+                                        <th rowspan="2">Level</th>
+                                        <th rowspan="2">Faculty</th>
+                                        <th colspan="2">Division</th>
+                                        <th rowspan="2">University/Board</th>
+                                        <th rowspan="2">Major Subject</th>
+                                        <th rowspan="2" width="10%">Passed Year (AD)</th>
+                                        <th rowspan="2"><i class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i></th>
+                                    </tr> */ ?>
+                                    <tr>
+                                        <th rowspan="2" width="25%">Degree Acquired</th>
+                                        <th rowspan="2">University / Board</th>
+                                        <th rowspan="2">Faculty</th>
+                                        <th rowspan="2">Course Name</th>
+                                        <th colspan="2">Division</th>
+                                        <th rowspan="2" width="10%">Passed Year (AD)</th>
+                                        <th rowspan="2"><i class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i></th>
+                                    </tr>
+                                    <tr>
+                                        <th>Rank Type</th>
+                                        <th width="10%">Rank Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="educationalbody">                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <h6> <strong> </strong></h6>
+                 
+                    <div class="row clearfix e-setup">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box">
+                            <h5><strong> कागजात र प्रमाणपत्र (JPG | PNG मात्र)</strong> </h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="container">
+                    <div class="row" >
+						<div >							
+							<h4>Note: 1. This vacancy require up to <strong> <?php echo $detail['QUALIFICATION'];  ?> </strong> degree documents, please upload it all else your application will not get approved.</h4>
+							<h4>  2. Please upload all respective document in single a file.</h4>
+						</div>
+						<table class="table table-responsive-lg table-striped table-bordered table-sm">
+							<thead>
+								<tr class="UploadDoc">
+									<td>S.No</td>
+									<td>Document Name</td>
+									<td>Upload</td>
+									<!-- <td>Add</td> -->
+								</tr>
+							</thead>							
+							<tbody>
+								<?php /* <tr>
+									<?php $c = 1; foreach($certificates as $certificate) {?>
+									<tr class="certificate">
+										<td><?php echo $c; ?></td>
+										<td>											
+											<div class="form-group">
+												<p><?php echo ucfirst($certificate['ACADEMIC_DEGREE_NAME']);  ?></p>										
+											</div>
+										</td>
+                                        <?php
+                                        if ($existingDocuments) {
+                                                foreach ($existingDocuments as $key => $existingDocument) {
+                                                if (array_key_exists($certificate['ACADEMIC_DEGREE_NAME'],$existingDocument)) { ?> 
+                                                <td class='certInput'>
+                                                    <a class="btn-delete"
+                                                        href="<?= $this->basePath() . "/uploads/" . $existingDocument['path']; ?>"
+                                                        download="<?php echo  $existingDocument['name']; ?>" style="height:27px;">
+                                                        <i class="fa fa-download"></i>
+                                                    </a>
+                                                </td>
+
+                                            <?php  }else { ?>
+                                                    <td class='certInput'>
+                                                        <input type="file" class="form-control-file" id="<?php $CertId = str_replace(' ', '_', $certificate['ACADEMIC_DEGREE_NAME']); echo $CertId;  ?>" name="<?php echo $CertId; ?>" onchange="return certificateValidation($id = '<?php $CertId = str_replace(' ', '_', $certificate['ACADEMIC_DEGREE_NAME']); echo $CertId;  ?>')" accept=".png,.pdf,.jpg,.jpeg" required/>
+                                                    </td><?php 
+                                                }
+                                            }
+                                        } else { ?>
+                                            <td class='certInput'>
+                                            <input type="file" class="form-control-file" id="<?php $CertId = str_replace(' ', '_', $certificate['ACADEMIC_DEGREE_NAME']); echo $CertId;  ?>" name="<?php echo $CertId; ?>" onchange="return certificateValidation($id = '<?php $CertId = str_replace(' ', '_', $certificate['ACADEMIC_DEGREE_NAME']); echo $CertId;  ?>')" accept=".png,.pdf,.jpg,.jpeg" required/>
+                                        </td>
+                                       <?php  } ?>
+                                        
+                                       
+                                       
+
+									</tr>
+									<?php $c++; } ?>
+								</tr>	*/ ?>
+                                <tr class="qualification">
+										<td>1</td>
+										<td>											
+											<div class="form-group">
+												<p>Qualification</p>										
+											</div>
+										</td>
+										<td class='certInput' id="td1">
+
+											<div class="row">
+												<div class="col-md-10">
+													<label for="trascript">Transcript/Grade Sheet/Marksheet <span style="color: red;">*</span></label>
+													<input required type="file" class="form-control-file" id="qualification_trascript" name="qualification_trascript" onchange="return certificateValidation($id = 'qualification_trascript')" accept=".png,.pdf,.jpg,.jpeg"/>
+													
+                                                    <label style="margin-top:20px;" for="character">Character Certificate <span style="color: red;">*</span></label>
+													<input required type="file" class="form-control-file" id="qualification_character" name="qualification_character" onchange="return certificateValidation($id = 'qualification_character')" accept=".png,.pdf,.jpg,.jpeg"/>
+													
+                                                    <label style="margin-top:20px;" for="equivalent">Equivalent Certificate <span>(optional)</span></label>
+													<input type="file" class="form-control-file" id="qualification_equivalent" name="qualification_equivalent" onchange="return certificateValidation($id = 'qualification_equivalent')" accept=".png,.pdf,.jpg,.jpeg"/>
+													
+                                                    <label style="margin-top:20px;" for="council">Council Certificate <span>(optional)</span></label>
+													<input type="file" class="form-control-file" id="qualification_council" name="qualification_council" onchange="return certificateValidation($id = 'qualification_council')" accept=".png,.pdf,.jpg,.jpeg"/>
+                                                    
+                                                    <label style="margin-top:20px;" for="council">Driving License <span>(optional)</span></label>
+													<input type="file" class="form-control-file" id="qualification_license" name="qualification_license" onchange="return certificateValidation($id = 'qualification_license')" accept=".png,.pdf,.jpg,.jpeg"/>
+												</div>
+											</div>
+										</td>										
+									</tr>							
+							</tbody>
+						</table>
+					</div>
+                   
+                <hr>
+                    <div class="row clearfix e-setup">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box">
+                            <h5><strong>उम्मेदवारको ल्याप्चे सही छाप (अधिकतम 1 एमबी - JPG | PNG मात्र) :</strong> </h5>
+                        </div>
+                    </div>
+                    <table class="table table-responsive-lg table-sm form-cstm-table">
+                        <tr>
+                            <td>
+                                <div id="imagePreviewright_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath('img/recent_right_finger.png')?>" />
+                                </div>
+                            </td>
+                            <td>
+                                <div id="imagePreviewleft_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath('img/recent_left_finger.png')?>" alt="Left Finger" />
+                                </div>
+                            </td>
+                            <td>
+                                <div id="imagePreviewsignature" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath('img/recent_sign.png')?>" alt="Recent Signature" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="right_finger_scan" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="right_finger_scan" id="right_finger_scan" onchange="return fileValidation($id = 'right_finger_scan')" required>
+                                    <p class="size"></p>
+                                    <?php if (isset($upload_error_photo)) {
+                                        echo $upload_error_photo;
+                                    } ?>
+                                </div>
+                            </td>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="left_finger_scan" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="left_finger_scan" id="left_finger_scan" onchange="return fileValidation($id = 'left_finger_scan')" required>
+                                    <p class="size"></p>
+                                </div>
+                            </td>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="signature" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="signature" id="signature" onchange="return fileValidation($id = 'signature')" required>
+                                    <p class="size"></p>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div id="imagePreviewfront_citizen" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath('img/front_citizen.png')?>" alt="Recent Signature" />
+                                </div>
+                            </td>
+                            <td>
+                                <div id="imagePreviewback_citizen" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath('img/back_citizen.png')?>" alt="Recent Signature" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="front_citizen" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="front_citizen" id="front_citizen" onchange="return fileValidation($id = 'front_citizen')" required>
+                                    <p class="size"></p>
+                                </div>
+                            </td>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="back_citizen" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="back_citizen" id="back_citizen" onchange="return fileValidation($id = 'back_citizen')" required>
+                                    <p class="size"></p>
+                                </div>
+                            </td>
+                        </tr>
                     </table>
                     <h5 class="bold">द्रष्टब्य : </h5>
                     <p> १. माथि उल्लेखित सबै उपाधिहरुको प्रमाणित प्रतिलिपि पेश गर्नु पर्नेछ। <br>  
@@ -234,3 +506,85 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    	function fileValidation($id) {
+            var fileInput = document.getElementById($id);
+            var filePath = fileInput.value;
+
+		// Allowing file type
+		var allowedExtensions =
+			/(\.jpg|\.jpeg|\.png|\.pdf)$/i;
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Invalid file type, please select - JPG | PNG | JPEG ');
+			fileInput.value = '';
+			return false;
+		} else {
+			// Image preview
+			if (fileInput.files && fileInput.files[0]) {
+				var reader = new FileReader();
+				reader.onload = function(e) {
+					document.getElementById(
+							'imagePreview'+$id).innerHTML =
+						'<img style="width: 100%; height: 100%" src="' + e.target.result +
+						'"/>';
+				};
+
+				reader.readAsDataURL(fileInput.files[0]);
+			}
+		}
+		if (fileInput.files.length > 0) {
+            console.log(fileInput.files.length);
+            let i = 0;
+			for (i = 0; i <= fileInput.files.length - 1; i++) {
+				let fsize = fileInput.files.item(i).size;
+				let file = Math.round((fsize / 1024));
+                console.log(fsize);
+                console.log(file);
+
+				// The size of the file.
+				if (file >= 1024) {
+					alert(
+						"File too Big, please select a file less than 1mb");
+					fileInput.value = '';
+					return false;
+				} else {
+					document.getElementsByClassName('size').innerHTML = '<b>' +
+						file + '</b> KB';
+				}
+			}
+		}
+	}
+    function certificateValidation(params) {
+        var fileInput = document.getElementById($id);
+            var filePath = fileInput.value;
+		// Allowing file type
+		var allowedExtensions =
+			/(\.jpg|\.jpeg|\.png|\.pdf)$/i;
+		if (!allowedExtensions.exec(filePath)) {
+			alert('Invalid file type, please select - JPG | PNG | JPEG | PDF');
+			fileInput.value = '';
+			return false;
+		}
+        if (fileInput.files.length > 0) {
+            console.log(fileInput.files.length);
+            let i = 0;
+			for (i = 0; i <= fileInput.files.length - 1; i++) {
+				let fsize = fileInput.files.item(i).size;
+				let file = Math.round((fsize / 1024));
+                console.log(fsize);
+                console.log(file);
+
+				// The size of the file.
+				if (file >= 1024) {
+					alert(
+						"File too Big, please select a file less than 1mb");
+					fileInput.value = '';
+					return false;
+				} else {
+					document.getElementsByClassName('size').innerHTML = '<b>' +
+						file + '</b> KB';
+				}
+			}
+		}
+    }
+</script>

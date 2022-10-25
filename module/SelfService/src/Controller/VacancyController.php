@@ -212,17 +212,44 @@ class VacancyController extends HrisController
             $storingDocumentDatas = [];
             // echo '<pre>'; print_r($postData);die;
             // print_r(implode('_',explode(' ','higher Secondary School'))); die;
-            foreach($certificates as $certificate){
-                $degree = '';
-                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME']))], implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME'])).'_Certificate');
-            }
+            // foreach($certificates as $certificate){
+            //     $degree = '';
+            //     $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData[implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME']))], implode('_',explode(' ',$certificate['ACADEMIC_DEGREE_NAME'])).'_Certificate');
+            // }
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['right_finger_scan'], 'FingerPrintR');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['left_finger_scan'], 'FingerPrintL');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['front_citizen'], 'CitizenshipF');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['back_citizen'], 'CitizenshipB');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['signature'], 'Signature');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_trascript'], 'qualification_trascript');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_character'], 'qualification_character');
+            if($postData['qualification_equivalent']['name']){
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_equivalent'], 'qualification_equivalent');
+            }
+            if($postData['qualification_council']['name']){
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_council'], 'qualification_council');
+            }
+            if($postData['qualification_license']['name']){
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_license'], 'qualification_license');
+            }
+            $profilePicDatas = [];
 
-            // echo '<pre>'; print_r($storingDocumentDatas); die;
+            if($postData['profile_pic2']['name']){
+                $profilePicDatas[] = Helper::uploadFilesVacancy($postData['profile_pic2'], 'profile_pic2');
+            }
+            if($postData['profile_pic']['name']){
+                $profilePicDatas[] = Helper::uploadFilesVacancy($postData['profile_pic'], 'profile_pic');
+            }
+
+            // echo '<pre>'; print_r($profilePicDatas); die;
+            // $profilePicUploadPath = $this->basePath();
+            foreach ($profilePicDatas as $profilePic) {
+                $movingPathPp = getcwd().'/public/uploads/'.$profilePic['newImageName'];
+            // print_r($this->employeeId);die;
+                move_uploaded_file( $profilePic['tmp_name'], $movingPathPp);
+                $this->repository->updateProfilePic($profilePic, $this->employeeId);
+             }
+
             $incs = implode(',',$postData['inclusion']);
             $data['hris_personal'] = array(
                 'PERSONAL_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_PERSONAL', 'PERSONAL_ID')) + 1,
@@ -247,30 +274,30 @@ class VacancyController extends HrisController
                      'CREATED_DATE' =>  date('Y-m-d'),
                      'STATUS' => 'E',
                  );
-                 if ($storingDocumentData['folder'] != 'FingerPrintR' &&
-                 $storingDocumentData['folder'] != 'FingerPrintL' &&
-                 $storingDocumentData['folder'] != 'CitizenshipF' &&
-                 $storingDocumentData['folder'] != 'CitizenshipB' && $storingDocumentData['folder'] != 'Signature') {
-                    $filecode = $this->repository->fileType($storingDocumentData['extension']);
+                //  if ($storingDocumentData['folder'] != 'FingerPrintR' &&
+                //  $storingDocumentData['folder'] != 'FingerPrintL' &&
+                //  $storingDocumentData['folder'] != 'CitizenshipF' &&
+                //  $storingDocumentData['folder'] != 'CitizenshipB' && $storingDocumentData['folder'] != 'Signature') {
+                //     $filecode = $this->repository->fileType($storingDocumentData['extension']);
 
-                    $fileSetId = $this->repository->fileSetId($storingDocumentData['folder']);
-                    // var_dump($storingDocumentData['folder']);die;
-                     $empFile = array(
-                       'FILE_CODE' => ((int) Helper::getMaxId($this->adapter, 'HRIS_EMPLOYEE_FILE', 'FILE_CODE')) + 1,
-                       'EMPLOYEE_ID' => $eid,
-                       'FILETYPE_CODE' => $filecode[0]['FILETYPE_CODE'],
-                       'FILE_PATH' => $storingDocumentData['newImageName'],
-                       'STATUS'    => 'E',
-                       'CREATED_DT' =>  date('Y-m-d'),
-                       'FILE_ID' => $fileSetId[0]['FILE_ID'],
-                       'MODIFIED_DT' => '',
-                       'REMARKS' => '',
-                      );
-                    move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
-                    // echo('<pre>');print_r($storingDocumentData['tmp_name']);print_r($storingDocumentData['movingPath']);die;
-                    move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['empFilePath']);
-                    $this->repository->insertEmployeeDocuments($empFile);
-                 }
+                //     $fileSetId = $this->repository->fileSetId($storingDocumentData['folder']);
+                //     // var_dump($storingDocumentData['folder']);die;
+                //      $empFile = array(
+                //        'FILE_CODE' => ((int) Helper::getMaxId($this->adapter, 'HRIS_EMPLOYEE_FILE', 'FILE_CODE')) + 1,
+                //        'EMPLOYEE_ID' => $eid,
+                //        'FILETYPE_CODE' => $filecode[0]['FILETYPE_CODE'],
+                //        'FILE_PATH' => $storingDocumentData['newImageName'],
+                //        'STATUS'    => 'E',
+                //        'CREATED_DT' =>  date('Y-m-d'),
+                //        'FILE_ID' => $fileSetId[0]['FILE_ID'],
+                //        'MODIFIED_DT' => '',
+                //        'REMARKS' => '',
+                //       );
+                //     move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
+                //     // echo('<pre>');print_r($storingDocumentData['tmp_name']);print_r($storingDocumentData['movingPath']);die;
+                //     move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['empFilePath']);
+                //     $this->repository->insertEmployeeDocuments($empFile);
+                //  }
                 
                  move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
                  $this->repository->insertDocuments($documents);
@@ -290,25 +317,25 @@ class VacancyController extends HrisController
 
             // var_dump($data['hris_application']); die;
             $this->repository->insertApplication($data['hris_application']);
-            $eduCount = count($postData['edu_institute']);
+            $eduCount = count($postData['level_id']);
             if ($eduCount > 0) {
                 for($i=0; $i < $eduCount; $i++){
-                    $eduData = array(
-                        'EDUCATION_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_EDUCATION', 'EDUCATION_ID')) + 1,
-                        'APPLICATION_ID' =>$data['hris_personal']['APPLICATION_ID'],
-                        'USER_ID' =>  $user_id[0]['USER_ID'],
-                        'AD_NO' => $postData['ad_no'],
-                        'EDUCATION_INSTITUTE' => $postData['edu_institute'][$i],
-                        'LEVEL_ID' => $postData['level_id'][$i],
-                        'FACALTY' => $postData['faculty'][$i],
-                        'RANK_TYPE' => $postData['rank_type'][$i],
-                        'RANK_VALUE' => $postData['rank_value'][$i],
-                        'MAJOR_SUBJECT' => $postData['major_subject'][$i],
-                        'PASSED_YEAR' => $postData['passed_year'][$i],
-                        'STATUS' => 'E',
-                        'CREATED_DATE' =>  date('Y-m-d'),
-                        'UNIVERSITY_BOARD' =>  $postData['univerity_board'][$i]
-                    );
+                    // $eduData = array(
+                    //     'EDUCATION_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_EDUCATION', 'EDUCATION_ID')) + 1,
+                    //     'APPLICATION_ID' =>$data['hris_personal']['APPLICATION_ID'],
+                    //     'USER_ID' =>  $user_id[0]['USER_ID'],
+                    //     'AD_NO' => $postData['ad_no'],
+                    //     'EDUCATION_INSTITUTE' => $postData['edu_institute'][$i],
+                    //     'LEVEL_ID' => $postData['level_id'][$i],
+                    //     'FACALTY' => $postData['faculty'][$i],
+                    //     'RANK_TYPE' => $postData['rank_type'][$i],
+                    //     'RANK_VALUE' => $postData['rank_value'][$i],
+                    //     'MAJOR_SUBJECT' => $postData['major_subject'][$i],
+                    //     'PASSED_YEAR' => $postData['passed_year'][$i],
+                    //     'STATUS' => 'E',
+                    //     'CREATED_DATE' =>  date('Y-m-d'),
+                    //     'UNIVERSITY_BOARD' =>  $postData['univerity_board'][$i]
+                    // );
                     $eduEmpData = array(
                         'ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_EMPLOYEE_QUALIFICATIONS', 'ID')) + 1,
                         'EMPLOYEE_ID' => $eid,
@@ -323,7 +350,7 @@ class VacancyController extends HrisController
                         'CREATED_DT' =>  date('Y-m-d'),
                     );
                     // echo '<pre>'; print_r($eduData); die;
-                    $this->repository->insertEdu($eduData);
+                    // $this->repository->insertEdu($eduData);
                     $this->repository->insertEmpEdu($eduEmpData);
 
                 }     
@@ -369,9 +396,95 @@ class VacancyController extends HrisController
         $detail = $this->repository->InternalVacancyData($vacancy_id);
         $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
         $detail['form_no'] = $detail['AD_NO'].'-'.($regno['APP_ID']+1);
+        $Inclusions =  explode(',', $detail['INCLUSION_ID']);
+        foreach($Inclusions as $Inclusion){
+            $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
+        }
         // var_dump($detail);die;
 
         if ($request->isPost()) {
+            $postData = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            ); 
+
+            $this->form->setData($request->getPost());
+// echo('<pre>');print_r($postData);die;
+            $eduCount = count($postData['level_id']);
+            if ($eduCount > 0) {
+                for($i=0; $i < $eduCount; $i++){
+                    $eduEmpData = array(
+                        'ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_EMPLOYEE_QUALIFICATIONS', 'ID')) + 1,
+                        'EMPLOYEE_ID' => $this->employeeId,
+                        'ACADEMIC_PROGRAM_ID' => $postData['faculty'][$i],
+                        'ACADEMIC_DEGREE_ID' => $postData['level_id'][$i],
+                        'ACADEMIC_COURSE_ID' => $postData['major_subject'][$i],
+                        'ACADEMIC_UNIVERSITY_ID' => $postData['univerity_board'][$i],
+                        'RANK_TYPE' => $postData['rank_type'][$i],
+                        'RANK_VALUE' => $postData['rank_value'][$i],
+                        'PASSED_YR' => $postData['passed_year'][$i],
+                        'STATUS' => 'E',
+                        'CREATED_DT' =>  date('Y-m-d'),
+                    );
+                    // echo '<pre>'; print_r($eduEmpData); die;
+                    // $this->repository->insertEdu($eduData);
+                    $this->repository->insertEmpEdu($eduEmpData);
+
+                }     
+            }
+
+            $storingDocumentDatas = [];
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['right_finger_scan'], 'FingerPrintR');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['left_finger_scan'], 'FingerPrintL');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['front_citizen'], 'CitizenshipF');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['back_citizen'], 'CitizenshipB');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['signature'], 'Signature');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_trascript'], 'qualification_trascript');
+            $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_character'], 'qualification_character');
+            if($postData['qualification_equivalent']['name']){
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_equivalent'], 'qualification_equivalent');
+            }
+            if($postData['qualification_council']['name']){
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_council'], 'qualification_council');
+            }
+            if($postData['qualification_license']['name']){
+                $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_license'], 'qualification_license');
+            }
+            $profilePicDatas = [];
+
+            if($postData['profile_pic2']['name']){
+                $profilePicDatas[] = Helper::uploadFilesVacancy($postData['profile_pic2'], 'profile_pic2');
+            }
+            if($postData['profile_pic']['name']){
+                $profilePicDatas[] = Helper::uploadFilesVacancy($postData['profile_pic'], 'profile_pic');
+            }
+
+            foreach ($profilePicDatas as $profilePic) {
+                $movingPathPp = getcwd().'/public/uploads/'.$profilePic['newImageName'];
+                move_uploaded_file( $profilePic['tmp_name'], $movingPathPp);
+                $this->repository->updateProfilePic($profilePic, $this->employeeId);
+             }
+
+            // echo('<pre>');print_r($postData);die;
+
+            foreach ($storingDocumentDatas as $storingDocumentData) {
+                $documents = array(
+                     'REC_DOC_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_DOCUMENTS', 'REC_DOC_ID')) + 1,
+                     'APPLICATION_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_VACANCY_APPLICATION', 'APPLICATION_ID')) + 1,
+                     'VACANCY_ID' => $vacancy_id,
+                     'USER_ID'=> $user_id[0]['USER_ID'],
+                     'DOC_OLD_NAME' => $storingDocumentData['imageName'],
+                     'DOC_NEW_NAME' => $storingDocumentData['newImageName'],
+                     'DOC_PATH' => $storingDocumentData['path'],
+                     'DOC_FOLDER' => $storingDocumentData['folder'],
+                     'DOC_TYPE' => $storingDocumentData['extension'],
+                     'CREATED_DATE' =>  date('Y-m-d'),
+                     'STATUS' => 'E',
+                 );
+                
+                 move_uploaded_file( $storingDocumentData['tmp_name'], $storingDocumentData['movingPath']);
+                 $this->repository->insertDocuments($documents);
+             }
             $this->form->setData($request->getPost());
             $data['hris_personal'] = array(
                 'PERSONAL_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_PERSONAL', 'PERSONAL_ID')) + 1,
@@ -438,7 +551,11 @@ class VacancyController extends HrisController
                     'EmployeeData' => $employeeData,           
                     'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
                     'messages' => $this->flashmessenger()->getMessages(),
-                   
+                    'eduDegrees' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_DEGREES', ['ACADEMIC_DEGREE_ID' => "ACADEMIC_DEGREE_ID", 'ACADEMIC_DEGREE_NAME'=>"ACADEMIC_DEGREE_NAME"], ["STATUS" => "E"]),
+                    'eduFaculty' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_PROGRAMS', ['ACADEMIC_PROGRAM_ID' => "ACADEMIC_PROGRAM_ID", 'ACADEMIC_PROGRAM_NAME'=>"ACADEMIC_PROGRAM_NAME"], ["STATUS" => "E"]),
+                    'eduUniversity' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_UNIVERSITY', ['ACADEMIC_UNIVERSITY_ID' => "ACADEMIC_UNIVERSITY_ID", 'ACADEMIC_UNIVERSITY_NAME'=>"ACADEMIC_UNIVERSITY_NAME"], ["STATUS" => "E"]),
+                    'eduCourses' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_COURSES', ['ACADEMIC_COURSE_ID' => "ACADEMIC_COURSE_ID", 'ACADEMIC_COURSE_NAME'=>"ACADEMIC_COURSE_NAME"], ["STATUS" => "E"]),
+                    'inclusions' => $inclusions,
                 ]
             )
         );
@@ -654,6 +771,7 @@ class VacancyController extends HrisController
         try {
             $request = $this->getRequest();
             $data = $request->getPost();
+            // print_r($data);die;
             $returnData = $this->repository->inclusionamount($data['level_id'],$data['position_id']);
 
             return new JsonModel(['success' => true, 'data' => $returnData[0], 'message' => null,'here' => 'here']);
@@ -694,6 +812,36 @@ class VacancyController extends HrisController
         $casLeaveLater = $this->repository->casLeaveLater($eid);
 
         // var_dump($casLeave[0]['TOTALLEAVE']);die;
+        $appliedData = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-performance',$id);
+        $inclusionIds = (explode(',',$appliedData['application_personal'][0]['INCLUSION_ID']));
+        $applicationAmount = $appliedData['application'][0]['APPLICATION_AMOUNT'];
+
+        $applicationStoredDocuments = $this->repository->getAppliedStoredDocuments($appliedData['aid'], $user_id[0]['USER_ID']);
+        $applicantsDocument = [];
+        // echo('<pre>');print_r($applicationStoredDocuments);die;
+        foreach ($applicationStoredDocuments as $applicationStoredDocument) {
+            if ($applicationStoredDocument['DOC_FOLDER'] == "Signature") {
+                $applicantsDocument['signature'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR") {
+                $applicantsDocument['FingerPrintR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL") {
+                $applicantsDocument['FingerPrintL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF") {
+                $applicantsDocument['CitizenshipF'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB") {
+                $applicantsDocument['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }
+        }
+
+        $applicantsDocumentNew = [];
+
+        if ($applicationStoredDocuments) {
+            foreach($applicationStoredDocuments as $applicationStoredDocument){
+                $applicantsDocumentNew[$applicationStoredDocument['DOC_FOLDER']] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }
+        }
+        // echo('<pre>');print_r($applicantsDocument);
+        // print_r($applicantsDocumentNew);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,
@@ -711,7 +859,7 @@ class VacancyController extends HrisController
                     'EmployeeData' => $employeeData,           
                     'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
                     'messages' => $this->flashmessenger()->getMessages(),
-                   
+                    'applicantsDocumentNew' => $applicantsDocumentNew,
                 ]
             )
         );
@@ -731,7 +879,7 @@ class VacancyController extends HrisController
         $detail['EMPLOYEE_ID'] = $eid;
         $employeeData = $this->repository->empData($eid);
         $EducationData = $this->repository->empEdu($eid);
-        // var_dump($EducationData);
+        // var_dump($employeeData);die;
         $certificates = $this->repository->academicCertificates($detail['CODE']);
         $EducationData = Helper::extractDbData($EducationData);
         $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
@@ -791,7 +939,16 @@ class VacancyController extends HrisController
                 $applicantsDocument['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
             }
         }
-        // print_r($existingDocuments);die;
+
+        $applicantsDocumentNew = [];
+
+        if ($applicationStoredDocuments) {
+            foreach($applicationStoredDocuments as $applicationStoredDocument){
+                $applicantsDocumentNew[$applicationStoredDocument['DOC_FOLDER']] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }
+        }
+        // echo('<pre>');print_r($applicantsDocument);
+        // print_r($applicantsDocumentNew);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,
@@ -809,7 +966,7 @@ class VacancyController extends HrisController
                    'inclusionIds' => $inclusionIds,
                    'application_amount' => $applicationAmount,
                    'applicantsDocument' => $applicantsDocument,
-                  
+                   'applicantsDocumentNew' => $applicantsDocumentNew
                 ]
             )
         );
