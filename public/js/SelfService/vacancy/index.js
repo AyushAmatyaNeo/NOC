@@ -1,14 +1,17 @@
 (function ($, app) {
     'use strict';
     $(document).ready(function () {
+
         $("select").select2();
         // app.startEndDatePickerWithNepali('nepaliFromDate', 'fromDate', 'nepaliToDate', 'toDate', null, true);
         $("#reset").on("click", function () {
+
             if (typeof document.ids !== "undefined") {
                 $.each(document.ids, function (key, value) {
                     $("#" + key).val(value).change();
                 });
             }
+            
         });
         app.populateSelect($('#qualificationId'), document.qualificationList , 'ACADEMIC_DEGREE_ID', 'ACADEMIC_DEGREE_NAME', null,null);
         app.populateSelect($('#adnumber'), document.adnumberList , 'VACANCY_ID', 'AD_NO', null,null);

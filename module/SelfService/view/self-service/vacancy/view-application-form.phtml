@@ -24,6 +24,7 @@ $form->setAttribute('enctype', 'multipart/form-data');
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'Update');
 ?>
+
  <script>
         document.uploadUrl = '<?= $this->url('vacancies', ['action' => 'update']); ?>';
         document.ajaxurl = '<?= $this->basePath('selfservice/vacancies/inclusionamount') ?>';

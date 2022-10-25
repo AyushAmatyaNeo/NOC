@@ -21,21 +21,22 @@ $this->headScript()
     document.adnumberList = <?php echo json_encode($adnumber); ?>;
     document.DepartmentList = <?php echo json_encode($DepartmentId); ?>;
     document.positionList = <?php echo json_encode($positionId); ?>;
-    document.openingList = <?php echo json_encode($openingId); ?>;
-    
+    document.openingList = <?php echo json_encode($openingId); ?>;    
 </script>
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\vacancy')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
 </div>
+
 <?php
-if ($this->messages && (sizeof($this->messages) > 1)) {
-    print '<div class="alert alert-warning alert-dismissable">
-    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
-    <strong>Warning!</strong> ';
-    print $this->messages[1];
-    print '</div>';
-}
+    if ($this->messages && (sizeof($this->messages) > 1)) {
+        print '<div class="alert alert-warning alert-dismissable">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+            <strong>Warning!</strong> ';
+        print $this->messages[1];
+        print '</div>';
+    }
 ?>
+
 <?php if ($this->messages) { ?>
     <script>
         document.messages =<?php echo json_encode($this->messages); ?>
@@ -84,21 +85,21 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
             </div>
         </div>
     </div>
-            <div class="row margin-top-10">
-                <div class="col-sm-offset-8 col-sm-4">
-                    <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
-                        Reset
-                        <i class="fa fa-refresh"></i>
-                    </button>
-                    <button id="search" class="btn btn-default btn-sm pull-right">
-                        Search
-                        <i class="fa fa-search"></i>
-                    </button>
-            </div>
+    <div class="row margin-top-10">
+        <div class="col-sm-offset-8 col-sm-4">
+            <button id="reset" class="btn default btn-sm pull-right hris-reset-btn">
+                Reset
+                <i class="fa fa-refresh"></i>
+            </button>
+            <button id="search" class="btn btn-default btn-sm pull-right">
+                Search
+                <i class="fa fa-search"></i>
+            </button>
         </div>
-</div>
-    <div class="margin-top-20">
-    <div id="VacancyTable">
     </div>
 </div>
+    <div class="margin-top-20">
+        <div id="VacancyTable">
+        </div>
+    </div>
 </div>
