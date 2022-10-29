@@ -465,8 +465,8 @@ class VacancyController extends HrisController
                 move_uploaded_file( $profilePic['tmp_name'], $movingPathPp);
                 $this->repository->updateProfilePic($profilePic, $this->employeeId);
              }
-
-            // echo('<pre>');print_r($postData);die;
+             $incs = implode(',',$postData['inclusion']);
+            // echo('<pre>');print_r($incs);die;
 
             foreach ($storingDocumentDatas as $storingDocumentData) {
                 $documents = array(
@@ -491,7 +491,7 @@ class VacancyController extends HrisController
                 'PERSONAL_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_PERSONAL', 'PERSONAL_ID')) + 1,
                 'APPLICATION_ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_VACANCY_APPLICATION', 'APPLICATION_ID')) + 1,
                 'USER_ID' => $user_id[0]['USER_ID'],
-                'INCLUSION_ID' => 1,
+                'INCLUSION_ID' => $incs,
                 'CREATED_DATE' =>  date('Y-m-d'),
             );
             $this->repository->insertPersonal($data['hris_personal']);
@@ -501,7 +501,7 @@ class VacancyController extends HrisController
                     'AD_NO' =>  $vacancy_id,
                     'REGISTRATION_NO' => $detail['form_no'],
                     'STAGE_ID' => 2,
-                    'APPLICATION_AMOUNT' => 2000,
+                    'APPLICATION_AMOUNT' => $postData['inclusion_amount'],
                     'STATUS' => 'E',
                     'CREATED_DATE' =>  date('Y-m-d'),
                     'APPLICATION_TYPE' => 'Internal-performance'
@@ -790,7 +790,10 @@ class VacancyController extends HrisController
         $detail = $this->repository->InternalVacancyData($vacancy_id);
         $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
         $detail['form_no'] = $detail['AD_NO'].'-'.($regno['APP_ID']+1);
-
+        $Inclusions =  explode(',', $detail['INCLUSION_ID']);
+        foreach($Inclusions as $Inclusion){
+            $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
+        }
         $id = (int) $this->params()->fromRoute('id');
         if ($id === 0) {
             return $this->redirect()->toRoute("vacancy");
@@ -861,6 +864,9 @@ class VacancyController extends HrisController
                     'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
                     'messages' => $this->flashmessenger()->getMessages(),
                     'applicantsDocumentNew' => $applicantsDocumentNew,
+                    'inclusions' => $inclusions,
+                    'inclusionIds' => $inclusionIds,
+                    'application_amount' => $applicationAmount
                 ]
             )
         );

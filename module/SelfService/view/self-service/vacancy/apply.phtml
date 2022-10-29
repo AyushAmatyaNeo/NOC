@@ -491,7 +491,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             </div>
                                 <?php foreach($inclusions as $inclusion) {?>
                                 <div class="col-xs-6 col-sm-6 col-md-2 col-box">
-                                    <input class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                    <input required class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
                                     <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
                                 </div>
                                 <?php } ?>

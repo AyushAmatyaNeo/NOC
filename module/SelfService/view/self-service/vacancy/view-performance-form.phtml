@@ -243,6 +243,52 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                         </div>
                        
                     </div>
+                    <div class="row clearfix e-setup">
+                    <!-- Select inclusion -->
+                    <div>
+                       
+                    <div class="row clearfix e-setup">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box">
+                            <h5><strong>समावेशीकरण छान्नुहोस्</strong> </h5>
+
+                        </div>
+                    </div>
+
+                    <div class="row clearfix e-setup">
+                        <div class="col-xs-12 col-sm-3 col-md-8 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-box">
+                                </div>
+                            
+                                    <?php foreach($inclusions as $inclusion) {?>
+                                    <div class="col-xs-6 col-sm-6 col-md-2 col-box">
+                                    <?php if (in_array( $inclusion['INCLUSION_ID'], $inclusionIds)) {?>
+                                    <input disabled class="form-check-input inclusion" type="checkbox" name="inclusion[]" checked value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                        <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
+                                    <?php } else { ?>
+                                        <input disabled class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                        <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
+                                    <?php } ?>
+                                    
+                                    </div>
+                                    <?php } ?>
+                                </div>
+                                <div class="col-xs-12 col-sm-3 col-md-2 col-box">
+                                    <div class="row bottomgap">
+                                        <div class="form-group">
+                                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                                <label for="amount">रकम :</label>
+                                            </div>
+                                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                                <input type="text" class="form-control form-control-sm" name="inclusion_amount" id="inclusion_amount" value="<?php echo $application_amount ?>" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <h6> <strong> </strong></h6>
                     <div class="row clearfix e-setup">
                         <div class="col-xs-12 col-sm-4 col-md-4 col-box">
@@ -407,7 +453,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                 </div>
             </div>
             <?php
-            print $this->formSubmit($submit);
+            //print $this->formSubmit($submit);
             print $this->form()->closeTag();
             ?>
             <div class="border-bottom">
