@@ -60,7 +60,8 @@ class VacancyController extends HrisController
                 return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);
             }
         }
-        
+
+       
         return $this->stickFlashMessagesTo([
             // 'status' => $statusSE,
             // 'Gender' => $GenderSE,

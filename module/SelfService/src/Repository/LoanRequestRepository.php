@@ -233,7 +233,7 @@ class LoanRequestRepository extends HrisRepository implements RepositoryInterfac
     }
 
     public function fetchLoanDetailView($loanId){
-        $sql = "select * from hris_employee_emi_detail WHERE loan_request_id = {$loanId}";
+        $sql = "select * from hris_employee_emi_detail WHERE loan_request_id = {$loanId} order by sno asc";
         
         return $this->rawQuery($sql);
 

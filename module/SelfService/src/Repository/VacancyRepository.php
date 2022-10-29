@@ -14,7 +14,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Expression;
 use SelfService\Model\ApplicationDocuments;
 use Setup\Model\EmployeeFile;
-use Recruitment\Model\UserApplicationModel;
+use Recruitment\Model\UserApplicationModel; 
 
 class VacancyRepository extends HrisRepository{
     public function __construct(AdapterInterface $adapter) {
@@ -112,6 +112,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
 
     public function fetchById($id) {
+
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
@@ -137,6 +138,12 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
 
         $select->from(['REC' => RecruitmentVacancy::TABLE_NAME])
         ->join(['HI' => 'HRIS_REC_VACANCY_INCLUSION'],'HI.VACANCY_ID=REC.VACANCY_ID', 'VACANCY_INCLUSION_ID', 'left');
+
+        echo "<pre>";
+
+        print_r(RecruitmentVacancy::TABLE_NAME);
+
+        die;
         
 
         $select->where(["REC.VACANCY_ID='{$id}'"]); //change to this if not working. remove below 2 line.

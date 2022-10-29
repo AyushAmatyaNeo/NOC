@@ -75,7 +75,7 @@
                 fileUploadList: $('#loanFile').val()
              };
              app.serverRequest(document.loanData, searchData).then(function (success){
-                // window.location.href = document.urlTest;
+                window.location.href = document.urlTest;
              });
         });
 
@@ -131,6 +131,8 @@
                         var interestAmount= ((appliedLoan * interestRate)/1200).toFixed(2);
                         var principalRepaid = (monthlyInstallmentAmount - interestAmount).toFixed(2) ;
                         var principalRemaining = appliedLoan - principalRepaid;
+                        console.log(principalRemaining);
+                        console.log(principalRepaid);
                         var appendData = ` 
                         <tr>
                         <td>

@@ -16,25 +16,25 @@
             {field: "FULL_NAME", title: "Employee", width: 130, locked: true},
             {field: "INTEREST_RATE", title: "Rate (%)", width: 80, locked: true},
             {field: "LOAN_NAME", title: "Loan Name", width: 100, locked: true},
-            {field: "FROM_DATE", title: "From Date", width: 100, locked: true},
-            {field: "TO_DATE", title: "To Date", width: 100, locked: true},
+            {field: "MONTH_EDESC", title: "From MONTH", width: 100, locked: true},
+            {field: "FISCAL_YEAR_NAME", title: "FROM FY", width: 100, locked: true},
             {field: "AMOUNT", title: "Installment", width: 110, locked: true},
-            {field: "PRINCIPLE_AMOUNT", title: "Principle", width: 80},
-            {field: "INTEREST_AMOUNT", title: "Interest", width: 80},
+            {field: "LOAN_STATUS", title: "Status", width: 80, locked:true},
+            {field: "INTEREST_RATE", title: "Interest", width: 80, locked:true},
             {field: "PAID", title: "paid", width: 150}
         ]);
         
         var map = {
             'SNO': 'SNO',
             'FULL_NAME': 'FULL_NAME',
-            'INTEREST_RATE': 'INTEREST_RATE',
+            'INTEREST': 'Interest',
             'LOAN_NAME': 'LOAN_NAME',
-            'FROM_DATE': 'FROM_DATE',
-            'TO_DATE': 'TO_DATE',
+            'MONTH_EDESC': 'FROM_MONTH',
+            'FISCAL_YEAR_NAME': 'FROM_FY',
             'PAYMENT_ID': 'PAYMENT_ID',
             'AMOUNT': 'INSTALLMENT',
             'PAID': 'PAID',
-            'PRINCIPLE_AMOUNT': 'PRINCIPLE_AMOUNT',
+            'LOAN_STATUS': 'STATUS',
             'INTEREST_AMOUNT': 'INTEREST_AMOUNT'
         };
 
