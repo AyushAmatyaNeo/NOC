@@ -80,7 +80,7 @@ print $this->form()->openTag($form);
         </div>
         <div class="portlet-body">
             <div class="border-bottom">
-                <h2 class="d-inline bg-primary text-white text-center bold"> <img style="height:50px; padding-bottom: 4px" src="/hana-noc/neo-hris/public/img/noc-login1.png" alt="logo" class="logo-default"> Nepal Oil Corporation | Internal Vacancy</h2>
+                <h2 class="d-inline bg-primary text-white text-center bold"> <img style="height:50px; padding-bottom: 4px" src="/img/noc-login1.png" alt="logo" class="logo-default"> Nepal Oil Corporation | Internal Vacancy</h2>
                     <table class="table table-striped table-bordered">
                         <tbody>
                             <tr>
@@ -202,7 +202,7 @@ print $this->form()->openTag($form);
                             if ($curentJob['FUNCTIONAL_LEVEL_NO'] < 6 ) {
                                 if ($curentJob['INCLUSION'] == 'N') {
                                     // if ($curentJob['DURATION'] > 1) {
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         if ($a == 1) {?>
                                             <a style="display:none;" href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
                                         <i class="fa fa-arrow-right icon-black"></i> Edit</a>
@@ -218,7 +218,7 @@ print $this->form()->openTag($form);
                                 }
                                 else {
                                     // if ($curentJob['DURATION'] > 2) { 
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         if ($a == 1) { ?>
                                             <a style="display:none;" href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
                                         <i class="fa fa-arrow-right icon-black"></i> Edit</a>
@@ -237,7 +237,7 @@ print $this->form()->openTag($form);
                                 
                                 if ($curentJob['INCLUSION'] == 'N') {
                                     // if ($curentJob['DURATION'] > 3) { 
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                             if ($a == 1) { ?>
                                                 <a style="display:none;" href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
                                             <i class="fa fa-arrow-right icon-black"></i> Edit</a>
@@ -256,7 +256,7 @@ print $this->form()->openTag($form);
                                        ?> you can not apply to this vacany because your job duration is less than <?=$detail['EXPERIENCE']?> years<?php
                                     }
                                 }else {
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         // if ($curentJob['DURATION'] > 4) {
                                             if ($a == 1) { ?>
                                                 <a style="display:none;" href="<?php echo $this->basePath('selfservice/vacancies/update/') . $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
@@ -313,7 +313,7 @@ print $this->form()->openTag($form);
                             }
                             if ($curentJob['FUNCTIONAL_LEVEL_NO'] < 6 ) {
                                     if ($curentJob['INCLUSION'] == 'N') {
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         // if ($curentJob['DURATION'] > 1) {
                                             if ($b == 1) { ?>
                                                 <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
@@ -327,7 +327,7 @@ print $this->form()->openTag($form);
                                         }
                                     }
                                     else {
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         // if ($curentJob['DURATION'] > 2) { 
                                             if ($b == 1) { ?>
                                             <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
@@ -343,7 +343,7 @@ print $this->form()->openTag($form);
                                     }
                                 } elseif ($curentJob['FUNCTIONAL_LEVEL_NO'] > 5) {
                                     if ($curentJob['INCLUSION'] == 'N') {
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         // if ($curentJob['DURATION'] > 3) { 
                                                 if ($b == 1) { ?>
                                                 <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">
@@ -356,7 +356,7 @@ print $this->form()->openTag($form);
                                             ?> you can not apply to this vacany because your job duration is less than <?=$detail['EXPERIENCE']?> years <?php
                                         }
                                     }else {
-                                    if ($curentJob['DURATION'] > $detail['EXPERIENCE']) {
+                                    if ($curentJob['DURATION'] >= $detail['EXPERIENCE']) {
                                         // if ($curentJob['DURATION'] > 4) {
                                                 if ($b == 1) { ?>
                                                 <a href="<?php echo  $this->basePath('selfservice/vacancies/view-performance-form/'). $detail['VACANCY_ID'] ?>" class="btn default btn-sm green">

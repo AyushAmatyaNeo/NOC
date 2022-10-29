@@ -125,7 +125,7 @@ class VacancyController extends HrisController
             }
         }
         $date = date('Y-m-d');
-        $curentJob['DURATION'] =  $date - $curentJob['StartDate'];
+        $curentJob['DURATION'] =  $employeeFirstJoin['DURATION'];
         // print_r($curentJob); die;
         $applicantsDocumentInernalForm = [];
         $appliedDataInternalForm = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
