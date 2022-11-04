@@ -844,7 +844,7 @@ class VacancyController extends HrisController
                 $applicantsDocumentNew[$applicationStoredDocument['DOC_FOLDER']] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
             }
         }
-        // echo('<pre>');print_r($applicantsDocument);
+        // echo('<pre>');print_r($employeeData['EMPLOYEE_CODE']);die;
         // print_r($applicantsDocumentNew);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(

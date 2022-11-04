@@ -53,17 +53,17 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
             <?php print $this->form()->openTag($form);  ?>
             <h4 class="text-center"> <strong style="line-height: 25px;"> नेपाल आइल निगम लिमिटेड <br> कर्मचारी प्रशासन विनियमावली २०६३ को विनियम ६,४ बमोजिम  <br>जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि  <br> दरखास्त फारम </strong></h4>
             <div class="row" style="margin: 20px;">
-                <h5 class="bold">कर्मचारी संकेत न :</h5>
+                <h5 class="bold">कर्मचारी संकेत न: <?=$EmployeeData['EMPLOYEE_CODE']?></h5>
                 <div class="col-12" style="border:1px solid black ;">
                     <div class="row clearfix e-setup">                    
                         <div class="col-xs-12 col-sm-3 col-md-6 col-box">
                             <div class="row bottomgap">
                                 <div class="form-group" style="margin: 10px;">
                                     <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                        <label for="ad_no">सूचना न. / प्रकाशन भएको मिति:  </label>
+                                        <label for="ad_no">सूचना न.:  </label><?php // / प्रकाशन भएको मिति ?>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                        <?php echo $detail['AD_NO']. ' / 2021-1-1' ?></div>
+                                        <?php echo $detail['AD_NO'] ?></div> <?php //. ' / 2021-1-1' ?>
                                 </div>
                             </div>
                             <div class="row bottomgap">

@@ -92,7 +92,7 @@ class UserApplicationController extends HrisController
         $VacancyData[0]['SKILL_ID'] = $Vskill_names;
         $VacancyData[0]['INCLUSIONS'] = $VInclusion_names;
 
-        if ($VacancyData[0]['VACANCY_TYPE'] == 'INTERNAL') {
+        if ($VacancyData[0]['VACANCY_TYPE'] != 'OPEN') {
             $applicationData = iterator_to_array($this->repository->applicationDataByIdInternal($id), false);
             
         } else {

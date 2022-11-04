@@ -345,12 +345,15 @@ class UserApplicationRepository extends HrisRepository{
             new Expression(" UVA.REMARKS                AS STAGE_REMARKS "),
             new Expression(" UVA.APPLICATION_AMOUNT     AS APPLICATION_AMOUNT "),
             //Payment detail
-            new Expression(" PAY.PAYMENT_TYPE           AS PAYMENT_TYPE "),
+            new Expression(" RPG.GATEWAY_COMPANY           AS PAYMENT_TYPE "),
             new Expression(" PAY.PAYMENT_AMOUNT            AS PAYMENT_NPR "),
             // DOCUMENT
             new Expression(" DOC.DOC_PATH               AS PROFILE_IMG "),
 
-            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),            
+            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),   
+            new Expression("UVA.PAYMENT_PAID as PAYMENT_PAID"),            
+            new Expression("UVA.PAYMENT_VERIFIED as PAYMENT_VERIFIED"), 
+            new Expression("HRIS_REC_PAYMENT_STATUS(UVA.PAYMENT_PAID,UVA.PAYMENT_VERIFIED) as PAYMENT_STATUS"),
             ], true);
 
         $select->from(['REC' => 'HRIS_REC_APPLICATION_PERSONAL'])
@@ -360,7 +363,8 @@ class UserApplicationRepository extends HrisRepository{
                 ->join(['STG' => 'HRIS_REC_STAGES'],'STG.REC_STAGE_ID=UVA.STAGE_ID', 'STATUS', 'left')
                 ->join(['HRD' => 'HRIS_DISTRICTS'],'HRD.DISTRICT_ID=UR.CTZ_ISSUE_DISTRICT_ID', 'ZONE_ID', 'left')
                 ->join(['DOC' => 'HRIS_REC_APPLICATION_DOCUMENTS'],'DOC.APPLICATION_ID=REC.APPLICATION_ID', 'DOC_TYPE', 'left')
-                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.APPLICATION_ID=REC.APPLICATION_ID', 'PAYMENT_REFERENCE_ID', 'left')
+                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.PAYMENT_ID=UVA.PAYMENT_ID', 'PAYMENT_REFERENCE_ID', 'left')
+                ->join(['RPG' => 'hris_rec_payment_gateway'],'PAY.PAYMENT_GATEWAY_ID=RPG.ID', 'ID', 'left')
                 ->where(["REC.STATUS='E'"])
                 ->where(["DOC.DOC_FOLDER = 'photograph'"]);
 
