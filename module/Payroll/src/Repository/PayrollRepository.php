@@ -1018,7 +1018,22 @@ END AS DISABLED_FLAG FROM HRIS_EMPLOYEES WHERE  EMPLOYEE_ID=?";
             return $resultList[0]['INSTALLMENT'];
 
         }
-            }
+    }
+
+    public function getOvertimeFestiveDays($employeeId, $monthId){
+
+        $sql = "select APP_FESTIVE_OT_DAYS as APP_FESTIVE_OT_DAYS from hris_employee_overtime_claim_request where employee_id = {$employeeId} and month_id = {$monthId} and status = 'AP'";
+
+        // print_r($sql);die;
+        $resultList = $this->rawQuery($sql);
+
+        if (!(sizeof($resultList) == 1)) {
+            throw new Exception('No Report Found.');
+        }else{
+            return $resultList[0]['APP_FESTIVE_OT_DAYS'];
+
+        }
+    }
 
     
 }

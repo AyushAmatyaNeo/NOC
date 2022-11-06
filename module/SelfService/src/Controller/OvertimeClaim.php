@@ -55,6 +55,7 @@ class OvertimeClaim extends HrisController {
         $request = $this->getRequest();
         if ($request->isPost()) {
             $data = (array) $request->getPost();
+            // print_r($data['dataForOvertime'][0]);die;
             $otherDetails = $data['details'][0];
             $dataForLeave = $data['dataForLeave'];
             $dataForOvertime = $data['dataForOvertime'];
@@ -86,6 +87,10 @@ class OvertimeClaim extends HrisController {
             $overtimeClaimModel->appNightAllowance = $otherDetails['nightAllowance'];
             $overtimeClaimModel->appLockingAllowance = $otherDetails['lockingAllowance'];
             $overtimeClaimModel->appOtDays = $otherDetails['totalOtDays'];
+            $overtimeClaimModel->reqFestiveOtDays = $otherDetails['festiveOtDays'];
+            $overtimeClaimModel->grandTotalReqOtDays = $otherDetails['grandTotalOtDays'];
+            $overtimeClaimModel->appFestiveOtDays = $otherDetails['festiveOtDays'];
+            $overtimeClaimModel->grandTotalAppOtDays = $otherDetails['grandTotalOtDays'];
 
             foreach($dataForOvertime as $overtimeData){
                 $detailModel = new OvertimeClaimDetail();
@@ -257,12 +262,13 @@ class OvertimeClaim extends HrisController {
                     $bonuMulti = $otDetail['BONUS_MULTI'];
                     $lunchExpense = 0;
                     if($otHour>=6){
-                        $otDays = 1 * $bonuMulti;
+                        $otDays = 1;
                     }elseif($otHour>=4.5 && $otHour<6){
-                        $otDays = 0.5 * $bonuMulti;
+                        $otDays = 0.5;
                     }else{
-                        $otDays = 0 * $bonuMulti;
+                        $otDays = 0;
                     }
+                    $festiveOtDays = $otDays * $bonuMulti;
                     if($funcLvl>=6){
                         if($dayCode=="H"){
                             if($otHour>=6){
@@ -341,6 +347,7 @@ class OvertimeClaim extends HrisController {
                     $overtimeDetails[$k]['NIGHT_EXPENSE'] = $otDetail['NIGHT_ALLOWANCE'];
                     $overtimeDetails[$k]['LOCKING_EXPENSE'] = $otDetail['LOCKING_ALLOWANCE'];
                     $overtimeDetails[$k]['OT_DAYS'] = $otDays;
+                    $overtimeDetails[$k]['FESTIVE_OT_DAYS'] = $festiveOtDays;
                 }
 
                 return new JsonModel(['success' => true, 'data' => $overtimeDetails, 'error' => '']);

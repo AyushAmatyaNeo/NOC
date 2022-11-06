@@ -57,6 +57,8 @@ class OvertimeClaimRepository extends HrisRepository implements RepositoryInterf
         M.MONTH_EDESC || '-' || M.YEAR AS MONTH_DESC ,
         OCR.TOTAL_REQ_OT_HOURS,
         OCR.TOTAL_APP_OT_HOURS,
+        OCR.APP_FESTIVE_OT_DAYS,
+        OCR.GRAND_TOTAL_APP_OT_DAYS,
         OCR.TOTAL_REQ_SUBSTITUTE_LEAVE,
         OCR.created_dt as requested_dt_ad,
         OCR.TOTAL_APP_OT_DAYS,
@@ -1244,12 +1246,12 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
 			'GP',
 			'SAP',
 			'DH1',
-			'DH2')) then 2 
+			'DH2')) then 1 
 			when (HHM.holiday_code in ('BT',
 			'NAW',
 			'AST',
-			'DAS')) then 3
-		else 1
+			'DAS')) then 2
+		else 0
 		END as bonus_multi
        from hris_attendance_detail had 
        left join hris_employees E on (E.employee_id=had.employee_id) 
