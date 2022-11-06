@@ -57,7 +57,9 @@
                                                     'lockingAllowance': document.subDetails[i]['LOCKING_ALLOWANCE'],
                                                     'leaveReward': document.subDetails[i]['LEAVE_REWARD'],
                                                     'dashianTiharLeaveReward': document.subDetails[i]['DASHAIN_TIHAR_LEAVE_REWARD'],
-                                                    'otDays': document.subDetails[i]['OT_DAYS']
+                                                    'otDays': document.subDetails[i]['OT_DAYS'],
+                                                    'festiveOtDays': document.subDetails[i]['BONUS_MULTI'] * document.subDetails[i]['OT_DAYS'],
+                                                    'grandOtDays': ( document.subDetails[i]['BONUS_MULTI'] * document.subDetails[i]['OT_DAYS'] ) + document.subDetails[i]['OT_DAYS'] 
                                                 };
         }
 
@@ -134,6 +136,8 @@
             var nightAllowance = 0;
             var lockingAllowance = 0;
             var otDays = 0;
+            var festiveOtDays = 0;
+            var totalOtDays = 0;
             var dashianTiharLeaveReward = 0;
             for (var i in selectItems) {
                 if(!selectItems[i]['checked']){
@@ -144,6 +148,7 @@
                         claimedHour += parseFloat(selectItems[i]['otHour']);
                         lunchAllowance += parseFloat(selectItems[i]['lunchAllowance']);
                         otDays += parseFloat(selectItems[i]['otDays']);
+                        festiveOtDays += parseFloat(selectItems[i]['festiveOtDays']);
                         nightAllowance += parseFloat(selectItems[i]['nightAllowance']);
                         lockingAllowance += parseFloat(selectItems[i]['lockingAllowance']);
                     }
@@ -157,6 +162,8 @@
             $('#appOtDays').val(otDays);
             $('#appNightAllowance').val(nightAllowance);
             $('#appLockingAllowance').val(lockingAllowance);
+            $('#festiveOtDays').val(festiveOtDays);
+            $('#grandTotalOtDays').val(festiveOtDays + otDays);
         });
 
         $('.btnApproveReject').bind("click", function () {
@@ -174,6 +181,8 @@
             var appSattaBida = $('#totalLeave').val();
             var appTiharBida = $('#dashainTiharBida').val();
             var appTotalBida = $('#totalSattaBida').val();
+            var festiveOtDays = $('#festiveOtDays').val();
+            var grandTotalOtDays = $('#grandTotalOtDays').val();
             // App.blockUI({target: "#hris-page-content"});
             app.pullDataById(
                     document.approveRejectLink,
@@ -192,11 +201,13 @@
                         appNightAllowance: appNightAllowance,
                         appSattaBida: appSattaBida,
                         appTiharBida: appTiharBida,
-                        appTotalBida: appTotalBida
+                        appTotalBida: appTotalBida,
+                        festiveOtDays: festiveOtDays,
+                        grandTotalOtDays: grandTotalOtDays,
                     }
             ).then(function (success) {
                 App.unblockUI("#hris-page-content");
-                window.location.href = "../../../status";
+                // window.location.href = "../../../status";
             }, function (failure) {
                 App.unblockUI("#hris-page-content");
             });

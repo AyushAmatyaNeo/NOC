@@ -282,7 +282,7 @@ class OvertimeStatus extends HrisController {
                 throw new Exception('the request is not post');
             }
             $id = (int) $this->params()->fromRoute('id');
-            $role = $this->params()->fromRoute('role');
+            $role = 4;
             $data = $request->getPost();
             $overtimeClaimModel = new OvertimeClaimModel();
             $overtimeClaimModel->appOtHours = $data['totalOT'];
@@ -295,7 +295,11 @@ class OvertimeStatus extends HrisController {
             $overtimeClaimModel->appSubstituteLeaveNo = $data['appSattaBida'];
             $overtimeClaimModel->appDashainTiharLeave = $data['appTiharBida'];
             $overtimeClaimModel->appGrandTotalLeavel = $data['appTotalBida'];
+
+            $overtimeClaimModel->appFestiveOtDays = $data['festiveOtDays'];
+            $overtimeClaimModel->grandTotalAppOtDays = $data['grandTotalOtDays'];
             $messageSuccess = '';
+
             if($data['btnId']=='btnApprove'){
                 if($role == 2){
                     $overtimeClaimModel->status = 'RC';
@@ -319,6 +323,8 @@ class OvertimeStatus extends HrisController {
                     $overtimeClaimModel->recommendedRemarks = $data['raRemarks'];
                     $messageSuccess = 'Approved';
                 }
+            // echo('<pre>');print_r($overtimeClaimModel);die;
+
                 foreach($data['subDetail'] as $k => $subDetail){
                     $detailModel = new OvertimeClaimDetail();
                     $detailModel->status = $overtimeClaimModel->status;
@@ -353,6 +359,7 @@ class OvertimeStatus extends HrisController {
                 }
                 $overtimeClaimModel->modifiedBy= $this->employeeId;
                 $overtimeClaimModel->modifiedDt = Helper::getcurrentExpressionDate();
+                echo('<pre>');print_r($overtimeClaimModel);die;
                 $this->approveRepo->edit($overtimeClaimModel, $id);
                 $messageSuccess = 'Rejected';
                 $this->flashmessenger()->addMessage("Overtime Claim Successfully ".$messageSuccess." !!!");

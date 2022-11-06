@@ -57,7 +57,7 @@ class OvertimeApply extends AbstractActionController {
             $overtimeClaimModel->overtimeClaimId = ((int) Helper::getMaxId($this->adapter, OvertimeClaimModel::TABLE_NAME, OvertimeClaimModel::OVERTIME_CLAIM_ID)) + 1;
             $overtimeClaimModel->employeeId = $data['empId'];
             $overtimeClaimModel->monthId = $data['monthId'];
-            
+            // echo('<echo>');print_r($otherDetails);die;
             $holidayDetails = $this->repository->getHolidayDetails($data['monthId']);
             $holidayDetail = [];
             foreach ($holidayDetails as $hd){
@@ -81,6 +81,10 @@ class OvertimeApply extends AbstractActionController {
             $overtimeClaimModel->appNightAllowance = $otherDetails['nightAllowance'];
             $overtimeClaimModel->appLockingAllowance = $otherDetails['lockingAllowance'];
             $overtimeClaimModel->appOtDays = $otherDetails['totalOtDays'];
+            $overtimeClaimModel->reqFestiveOtDays = $otherDetails['festiveOtDays'];
+            $overtimeClaimModel->grandTotalReqOtDays = $otherDetails['grandTotalOtDays'];
+            $overtimeClaimModel->appFestiveOtDays = $otherDetails['festiveOtDays'];
+            $overtimeClaimModel->grandTotalAppOtDays = $otherDetails['grandTotalOtDays'];
 
             foreach($dataForOvertime as $overtimeData){
                 $detailModel = new OvertimeClaimDetail();
@@ -231,12 +235,13 @@ class OvertimeApply extends AbstractActionController {
                     $bonuMulti = $otDetail['BONUS_MULTI'];
                     $lunchExpense = 0;
                     if($otHour>=6){
-                        $otDays = 1 * $bonuMulti;
+                        $otDays = 1;
                     }elseif($otHour>=4.5 && $otHour<6){
-                        $otDays = 0.5 * $bonuMulti;
+                        $otDays = 0.5;
                     }else{
                         $otDays = 0;
                     }
+                    $festiveOtDays = $otDays * $bonuMulti;
                     if($funcLvl>=6){
                         if($dayCode=="H"){
                             if($otHour>=6){
@@ -315,6 +320,7 @@ class OvertimeApply extends AbstractActionController {
                     $overtimeDetails[$k]['NIGHT_EXPENSE'] = $otDetail['NIGHT_ALLOWANCE'];
                     $overtimeDetails[$k]['LOCKING_EXPENSE'] = $otDetail['LOCKING_ALLOWANCE'];
                     $overtimeDetails[$k]['OT_DAYS'] = $otDays;
+                    $overtimeDetails[$k]['FESTIVE_OT_DAYS'] = $festiveOtDays;
                 }
 
                 return new JsonModel(['success' => true, 'data' => $overtimeDetails, 'error' => '']);
