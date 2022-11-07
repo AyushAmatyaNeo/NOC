@@ -217,7 +217,7 @@ class UserApplicationRepository extends HrisRepository{
             // new Expression( "UR.PHONE_NO   AS  PHONE_NO "),      
             new Expression( "UR.GENDER_ID   AS  GENDER_ID "),        
             new Expression("UR.FIRST_NAME    AS FIRST_NAME "),
-            new Expression("UR.MIDDLE_NAME    AS MIDDLE_NAME "),
+            new Expression("ifnull(UR.MIDDLE_NAME,'')    AS MIDDLE_NAME "),
             new Expression("UR.LAST_NAME    AS LAST_NAME "),
             new Expression("UR.MOBILE_NO    AS MOBILE_NO "),
             // new Expression("UR.EMAIL_ID    AS EMAIL_ID "),
@@ -434,7 +434,14 @@ class UserApplicationRepository extends HrisRepository{
             // // DOCUMENT
             // new Expression(" DOC.DOC_PATH               AS PROFILE_IMG "),
 
-            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),            
+            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),  
+            new Expression("UVA.PAYMENT_PAID as PAYMENT_PAID"),  
+            new Expression("UVA.PAYMENT_VERIFIED as PAYMENT_VERIFIED"),  
+            new Expression("HRIS_REC_PAYMENT_STATUS(UVA.PAYMENT_PAID,
+            UVA.PAYMENT_VERIFIED) as PAYMENT_STATUS"),  
+            new Expression("RPG.GATEWAY_COMPANY AS PAYMENT_TYPE"),  
+            new Expression("RPG.ID AS ID"),  
+            new Expression("PAY.PAYMENT_REFERENCE_ID AS PAYMENT_REFERENCE_ID"),  
             ], true);
 
         $select->from(['REC' => 'HRIS_REC_APPLICATION_PERSONAL'])
@@ -454,6 +461,7 @@ class UserApplicationRepository extends HrisRepository{
                 ->join(['TEMPDIS' => 'HRIS_DISTRICTS'],'TEMPDIS.DISTRICT_ID=UR.ADDR_TEMP_DISTRICT_ID', 'STATUS', 'left')
                 ->join(['PERMCOU' => 'HRIS_COUNTRIES'],'PERMCOU.COUNTRY_ID=UR.ADDR_PERM_COUNTRY_ID', 'COUNTRY_CODE','left')
                 ->join(['TEMPCOU' => 'HRIS_COUNTRIES'],'TEMPCOU.COUNTRY_ID=UR.ADDR_TEMP_COUNTRY_ID', 'COUNTRY_CODE', 'left')
+                ->join(['RPG' => 'hris_rec_payment_gateway'],'PAY.PAYMENT_GATEWAY_ID=RPG.ID', 'ID', 'left')
 
                 ->where(["REC.STATUS='E'"]);
 

@@ -1716,8 +1716,8 @@ if ($this->messages) {
                                         <th scope="row">Payment</th>
                                         <td>Payment Amount: <?= $applicationData['APPLICATION_AMOUNT']; ?></td>
                                         <td><?php 
-                                                if(!empty($applicationData['PAYMENT_NPR']) && !empty($applicationData['PAYMENT_TYPE'])){
-                                                    echo '<span style="color: green">Paid via '. $applicationData['PAYMENT_TYPE'].'</span>';
+                                                if($applicationData['PAYMENT_PAID'] == 'Y'){
+                                                    echo '<span style="color: green">'. $applicationData['PAYMENT_STATUS'].' via '. $applicationData['PAYMENT_TYPE'].'</span>';
                                                 } else{
                                                     echo '<span style="color: red"> Not Paid </span>';
                                                 }
