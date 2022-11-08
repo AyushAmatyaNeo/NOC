@@ -100,7 +100,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UR.EMPLOYMENT_STATUS     AS EMPLOYMENT_STATUS"),
             new Expression("UR.EMPLOYMENT_INPUT      AS EMPLOYMENT_INPUT"),
             new Expression("UR.DISABILITY             AS DISABILITY"),
-            new Expression("UR.DISABILITY_INPUT       AS DISABILITY_INPUT"),
+            // new Expression("UR.DISABILITY_INPUT       AS DISABILITY_INPUT"),
             new Expression("REC.SKILL_ID               AS SKILL_ID"),
             new Expression( "UR.RELIGION   AS  RELIGION "),      
             new Expression( "UR.RELIGION_INPUT   AS  RELIGION_INPUT "),      
@@ -108,7 +108,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression( "UR.REGION_INPUT   AS  REGION_INPUT "),      
             new Expression( "UR.ETHNIC_NAME   AS  ETHNIC_NAME "),      
             new Expression( "UR.ETHNIC_INPUT   AS  ETHNIC_INPUT "),      
-            new Expression( "UR.MOTHER_TONGUE   AS  MOTHER_TONGUE "),      
+            // new Expression( "UR.MOTHER_TONGUE   AS  MOTHER_TONGUE "),      
             new Expression( "UR.CITIZENSHIP_NO   AS  CITIZENSHIP_NO "),      
             new Expression( "UR.CTZ_ISSUE_DATE   AS  CTZ_ISSUE_DATE "),      
             new Expression( "HRD.DISTRICT_NAME   AS  CTZ_ISSUE_DISTRICT_ID "),      
@@ -122,6 +122,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UN.FIRST_NAME    AS FIRST_NAME "),
             new Expression("UN.MIDDLE_NAME    AS MIDDLE_NAME "),
             new Expression("UN.LAST_NAME    AS LAST_NAME "),
+            new Expression("UN.FIRST_NAME || ' ' || ifnull(UN.MIDDLE_NAME,'') || ' ' || UN.LAST_NAME    AS FULL_NAME "),
             new Expression("UN.MOBILE_NO    AS MOBILE_NO "),
             new Expression("UN.EMAIL_ID    AS EMAIL_ID "),
             new Expression("UN.USERNAME    AS USERNAME "),
@@ -136,7 +137,21 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("VAC.VACANCY_TYPE          AS VACANCY_TYPE"),
             new Expression("(select doc_path from HRIS_REC_APPLICATION_DOCUMENTS where application_id = REC.APPLICATION_ID and DOC_FOLDER = 'photograph') as PROFILE_IMG"),
 
-            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),            
+            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),      
+            new Expression("HRIS_REC_PAYMENT_STATUS(UVA.PAYMENT_PAID,UVA.PAYMENT_VERIFIED) as PAYMENT_STATUS"),
+            new Expression("case 
+                when right(left(UVA.REGISTRATION_NO,2),1)='/'
+                then left(UVA.REGISTRATION_NO,1)
+                when right(left(UVA.REGISTRATION_NO,3),1)='/'
+                then left(UVA.REGISTRATION_NO,2)
+                when right(left(UVA.REGISTRATION_NO,4),1)='/'
+                then left(UVA.REGISTRATION_NO,3)
+                when right(left(UVA.REGISTRATION_NO,5),1)='/'
+                then left(UVA.REGISTRATION_NO,4)
+                else 9999
+            end as AD_NO_ORDER"),
+            new Expression("UVA.CREATED_DATE as APPLIED_DATE_AD"),
+            new Expression("BS_DATE(UVA.CREATED_DATE) as APPLIED_DATE_BS"),
             ], true);
 
             $select->from(['REC' => 'HRIS_REC_APPLICATION_PERSONAL'])
@@ -183,7 +198,17 @@ class UserApplicationRepository extends HrisRepository{
                     "VAC.VACANCY_TYPE" => $search['vacancy_type']
                 ]);
             }
-        $select->order("UVA.APPLICATION_ID ASC");
+            if (($search['paymentPaid'] != null)) {
+                $select->where([
+                    "UVA.PAYMENT_PAID" => $search['paymentPaid']
+                ]);
+            }
+            if (($search['paymentVerified'] != null)) {
+                $select->where([
+                    "UVA.PAYMENT_VERIFIED" => $search['paymentVerified']
+                ]);
+            }
+        $select->order("AD_NO_ORDER ASC");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
         // print_r($statement->getSql()); die();
@@ -219,6 +244,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UR.FIRST_NAME    AS FIRST_NAME "),
             new Expression("ifnull(UR.MIDDLE_NAME,'')    AS MIDDLE_NAME "),
             new Expression("UR.LAST_NAME    AS LAST_NAME "),
+            new Expression("UR.FULL_NAME    AS FULL_NAME "),
             new Expression("UR.MOBILE_NO    AS MOBILE_NO "),
             // new Expression("UR.EMAIL_ID    AS EMAIL_ID "),
             // new Expression("UR.USERNAME    AS USERNAME "),
@@ -234,8 +260,22 @@ class UserApplicationRepository extends HrisRepository{
             // DOCUMENT
             // new Expression(" DOC.DOC_PATH AS PROFILE_IMG "),
             new Expression("EF.FILE_PATH AS PROFILE_IMG"),
-
-            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),            
+            
+            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"), 
+            new Expression("HRIS_REC_PAYMENT_STATUS(REC.PAYMENT_PAID,REC.PAYMENT_VERIFIED) as PAYMENT_STATUS"),
+            new Expression("case 
+                when right(left(REC.REGISTRATION_NO,2),1)='/'
+                then left(REC.REGISTRATION_NO,1)
+                when right(left(REC.REGISTRATION_NO,3),1)='/'
+                then left(REC.REGISTRATION_NO,2)
+                when right(left(REC.REGISTRATION_NO,4),1)='/'
+                then left(REC.REGISTRATION_NO,3)
+                when right(left(REC.REGISTRATION_NO,5),1)='/'
+                then left(REC.REGISTRATION_NO,4)
+                else 9999
+            end as AD_NO_ORDER "),
+            new Expression("REC.CREATED_DATE as APPLIED_DATE_AD"),
+            new Expression("BS_DATE(REC.CREATED_DATE) as APPLIED_DATE_BS"),
             ], true);
 
         $select->from(['REC' => 'HRIS_REC_VACANCY_APPLICATION'])
@@ -285,8 +325,18 @@ class UserApplicationRepository extends HrisRepository{
                     "VAC.VACANCY_TYPE" => $search['vacancy_type']
                 ]);
             }
+            if (($search['paymentPaid'] != null)) {
+                $select->where([
+                    "REC.PAYMENT_PAID" => $search['paymentPaid']
+                ]);
+            }
+            if (($search['paymentVerified'] != null)) {
+                $select->where([
+                    "REC.PAYMENT_VERIFIED" => $search['paymentVerified']
+                ]);
+            }
 
-        // $select->order("REC.PERSONAL_ID ASC");
+        $select->order("AD_NO_ORDER ASC");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
         // echo('<pre>');print_r($statement->getSql()); die();

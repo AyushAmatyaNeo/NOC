@@ -41,27 +41,29 @@
                 headerTemplate: "<input type='checkbox' id='header-chb' class='k-checkbox header-checkbox'><label class='k-checkbox-label' for='header-chb'></label>",
                 template: "<input type='checkbox' id='#:APPLICATION_ID#'  class='k-checkbox row-checkbox'><label class='k-checkbox-label' for='#:APPLICATION_ID#'></label>",
                 width: 50,
-                lock: true
+                locked: true
             },
-            {field: "REGISTRATION_NO", title: "Reg.No",  width: 80, lock: true},
+            {field: "AD_NO", title: "Ad No",width: 80, locked: true},
+            {field: "REGISTRATION_NO", title: "Reg.No",  width: 100, locked: true},
             // {field: "PROFILE_IMG", title: "Photo",  width: 100},
-            {field: "PROFILE_IMG", title: "Photo",  width: 70, lock: true,
+            {field: "PROFILE_IMG", title: "Photo",  width: 70, locked: true,
                 template: "<div class = 'user-photo' " +
                     "style='background-image: url(#:PROFILE_IMG#);'></div>"
                     },
-            {field: "FULL_NAME",title:"Full Name", width: 120, lock: true,
-                template:"#= FIRST_NAME # #= MIDDLE_NAME # #= LAST_NAME #"
-            },
-            {field: "VACANCY_TYPE", title: "Vacancy Type",  width: 80,lock: true},
-            {field: "APPLICATION_AMOUNT", title: "Amount",  width: 50, lock: false},
-            {field: "AD_NO", title: "Ad No",width: 80, lock: false},
-            {field: "SERVICE_TYPE_ID", title: "Service Type",width: 80, lock: false},  
-            {field: "SERVICE_EVENTS_ID", title: "Service Event",width: 80, lock: false},
-            {field: "POSITION_ID", title: "Designation",width: 100, lock: false},
-            {field: "DEPARTMENT_ID", title: "Department",width: 120, lock: false},
-            {field: "STAGE_ID", title: "Stage",width: 80, lock: false},        
-            {field: "APPLICATION_ID", title: "Action", width: 60,  template: actiontemplateConfig, lock: false}
+            {field: "FULL_NAME",title:"Full Name", width: 140, locked: true},
+            {field: "VACANCY_TYPE", title: "Vacancy Type",  width: 130,locked: true},
+            {field: "APPLICATION_AMOUNT", title: "Amount",  width: 60, locked: true},
+            {field: "PAYMENT_STATUS", title: "Payment Status",  width: 100, locked: true},
+            {field: "APPLICATION_ID", title: "Action", width: 60,  template: actiontemplateConfig, locked: true},
+            {field: "APPLIED_DATE_AD", title: "Applied Date (AD)",width: 80, locked: false},  
+            {field: "APPLIED_DATE_BS", title: "Applied Date (BS)",width: 80, locked: false},  
+            {field: "SERVICE_TYPE_ID", title: "Service Type",width: 80, locked: false},  
+            {field: "SERVICE_EVENTS_ID", title: "Service Event",width: 100, locked: false},
+            {field: "POSITION_ID", title: "Designation",width: 100, locked: false},
+            {field: "DEPARTMENT_ID", title: "Department",width: 120, locked: false},
+            {field: "STAGE_ID", title: "Stage",width: 80, locked: false},        
         ], null, null, null, 'User List');
+        app.searchTable($table, ['AD_NO', 'REGISTRATION_NO', 'FULL_NAME', 'VACANCY_TYPE', 'APPLICATION_AMOUNT', 'PAYMENT_STATUS', 'SERVICE_TYPE_ID', 'SERVICE_EVENTS_ID', 'POSITION_ID', 'DEPARTMENT_ID', 'STAGE_ID','APPLIED_DATE_AD','APPLIED_DATE_BS'], false);
 
 
         $('#search').on('click', function () {
@@ -71,6 +73,8 @@
             var designation  = $('#designation').val();
             var stageId     = $('#stage').val();
             var vacancy_type = $('#vacancy_type').val();
+            var paymentPaid = $('#paymentPaid').val();
+            var paymentVerified = $('#paymentVerified').val();
             // console.log(stageId);
             app.pullDataById('', {
                 'OpeningNo' : OpeningNo,
@@ -78,7 +82,9 @@
                 'department' : department,
                 'designation' : designation,
                 'stageId'  : stageId,
-                'vacancy_type' : vacancy_type
+                'vacancy_type' : vacancy_type,
+                'paymentPaid' : paymentPaid,
+                'paymentVerified' : paymentVerified,
             }).then(function (response) {
                 if (response.success) {
                     console.log(response);
@@ -92,18 +98,27 @@
 
         });
 
-        app.searchTable($table ['OpeningNo']);
-        var exportMap = {                
-                'OpeningNo': 'OpeningNo',
-                'adnumberId': 'adnumberId',
-            
+        var exportMap = {   
+            'AD_NO': 'AD No.',
+            'REGISTRATION_NO': 'Registration No.',
+            'FULL_NAME': 'Full Name',
+            'VACANCY_TYPE': 'Vacancy Type',
+            'APPLICATION_AMOUNT': 'Application Amount',
+            'PAYMENT_STATUS': 'Payment Status',
+            'SERVICE_TYPE_ID': 'Service Type',
+            'SERVICE_EVENTS_ID': 'Service Event',
+            'POSITION_ID': 'Designation',
+            'DEPARTMENT_ID': 'Department',
+            'STAGE_ID': 'Stage',
+            'APPLIED_DATE_AD': 'Applied Date(AD)',
+            'APPLIED_DATE_BS': 'Applied Date(BS)',
         };
         $('#excelExport').on('click', function () {
-            app.excelExport($table, exportMap, 'Opening_List.xlsx');
+            app.excelExport($table, exportMap, 'User Application.xlsx');
         });
 
         $('#pdfExport').on('click', function () {
-            app.exportToPDF($table, exportMap, 'Opening_List.pdf');
+            app.exportToPDF($table, exportMap, 'User Application.pdf');
         });
         // Select Option Show 
         var selectItems = {};

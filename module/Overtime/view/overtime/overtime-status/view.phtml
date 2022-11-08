@@ -254,10 +254,12 @@ $this->headScript()->appendFile($this->basePath('js/overtime/status/view.js'));
                     
                     <div class = "col-sm-12" style="margin-top:-20px;margin-bottom:-20px;">
                         <div style = "display: flex;font-family:CALIBRI;">
-                            <h3 class ="col-sm-2" style="font-size:11px;width: 100%;">Total OT Days: <?php echo $detail['TOTAL_APP_OT_DAYS']; ?> </h3>
-                            <h3 class ="col-sm-2" style="margin-left: 50px;font-size:11px;font-family:CALIBRI;width: 100%;">Total Lunch Allowance: <?php echo $detail['TOTAL_APP_LUNCH_ALLOWANCE']; ?></h3>
-                            <h3 class ="col-sm-2" style="margin-left: 50px;font-size:11px;font-family:CALIBRI;width: 100%;">Total Night Allowance: <?php echo $detail['TOTAL_APP_NIGHT_ALLOWANCE']; ?> </h3>
-                            <h3 class ="col-sm-2" style="margin-left: 50px;font-size:11px;font-family:CALIBRI;width: 100%;">Total Locking Allowance:  <?php echo $detail['TOTAL_APP_LOCKING_ALLOWANCE'];?></h3>
+                            <h3 class ="col-sm-2" style="font-size:11px;width: 100%;">OT Days: <?php echo $detail['TOTAL_APP_OT_DAYS']; ?> </h3>
+                            <h3 class ="col-sm-2" style="font-size:11px;width: 100%;">Festive OT Days: <?php echo $detail['APP_FESTIVE_OT_DAYS']; ?> </h3>
+                            <h3 class ="col-sm-2" style="font-size:11px;width: 100%;">Total OT Days: <?php echo $detail['GRAND_TOTAL_APP_OT_DAYS']; ?> </h3>
+                            <h3 class ="col-sm-2" style="font-size:11px;font-family:CALIBRI;width: 100%;">Total Lunch Allowance: <?php echo $detail['TOTAL_APP_LUNCH_ALLOWANCE']; ?></h3>
+                            <h3 class ="col-sm-2" style="font-size:11px;font-family:CALIBRI;width: 100%;">Total Night Allowance: <?php echo $detail['TOTAL_APP_NIGHT_ALLOWANCE']; ?> </h3>
+                            <h3 class ="col-sm-2" style="font-size:11px;font-family:CALIBRI;width: 100%;">Total Locking Allowance:  <?php echo $detail['TOTAL_APP_LOCKING_ALLOWANCE'];?></h3>
                         </div>
                     </div>
                         <br>

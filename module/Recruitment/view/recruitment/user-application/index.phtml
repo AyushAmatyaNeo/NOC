@@ -117,16 +117,36 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                     </div>
                 </div>
                 <div class="col-sm-2">
-                <div class="form-group">
-                    <label>Vacancy Type</label>
-                    <select class="form-control" name="vacancy_type" id="vacancy_type">
-                        <option value="">----</option>
-                        <option value="OPEN">OPEN</option>
-                        <option value="INTERNAL_FORM">INTERNAL FORM</option>
-                        <option value="INTERNAL_APPRAISAL">INTERNAL APPRAISAL</option>
-                    </select>
+                    <div class="form-group">
+                        <label>Vacancy Type</label>
+                        <select class="form-control" name="vacancy_type" id="vacancy_type">
+                            <option value="">----</option>
+                            <option value="OPEN">OPEN</option>
+                            <option value="INTERNAL_FORM">INTERNAL FORM</option>
+                            <option value="INTERNAL_APPRAISAL">INTERNAL APPRAISAL</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Payment Paid</label>
+                        <select class="form-control" name="paymentPaid" id="paymentPaid">
+                            <option value="">----</option>
+                            <option value="Y">Paid</option>
+                            <option value="N">Unpaid</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                        <label>Payment Verified</label>
+                        <select class="form-control" name="paymentVerified" id="paymentVerified">
+                            <option value="">----</option>
+                            <option value="Y">Verified</option>
+                            <option value="N">Unverified</option>
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
