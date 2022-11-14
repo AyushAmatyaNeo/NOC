@@ -98,7 +98,7 @@ class UserApplicationRepository extends HrisRepository{
             // new Expression("REC.USER_ID                AS USER_ID"),
             new Expression("UR.MARITAL_STATUS         AS MARITAL_STATUS"),
             new Expression("UR.EMPLOYMENT_STATUS     AS EMPLOYMENT_STATUS"),
-            new Expression("UR.EMPLOYMENT_INPUT      AS EMPLOYMENT_INPUT"),
+            // new Expression("UR.EMPLOYMENT_INPUT      AS EMPLOYMENT_INPUT"),
             new Expression("UR.DISABILITY             AS DISABILITY"),
             // new Expression("UR.DISABILITY_INPUT       AS DISABILITY_INPUT"),
             new Expression("REC.SKILL_ID               AS SKILL_ID"),
@@ -109,7 +109,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression( "UR.ETHNIC_NAME   AS  ETHNIC_NAME "),      
             new Expression( "UR.ETHNIC_INPUT   AS  ETHNIC_INPUT "),      
             // new Expression( "UR.MOTHER_TONGUE   AS  MOTHER_TONGUE "),      
-            new Expression( "UR.CITIZENSHIP_NO   AS  CITIZENSHIP_NO "),      
+            // new Expression( "UR.CITIZENSHIP_NO   AS  CITIZENSHIP_NO "),      
             new Expression( "UR.CTZ_ISSUE_DATE   AS  CTZ_ISSUE_DATE "),      
             new Expression( "HRD.DISTRICT_NAME   AS  CTZ_ISSUE_DISTRICT_ID "),      
             new Expression( "UR.DOB   AS  DOB "),      
@@ -117,7 +117,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression( "UR.PHONE_NO   AS  PHONE_NO "),      
             new Expression( "UR.GENDER_ID   AS  GENDER_ID "),        
             new Expression( "UR.SPOUSE_NAME   AS  SPOUSE_NAME "),      
-            new Expression( "UR.SPOUSE_NATIONALITY   AS  SPOUSE_NATIONALITY "),      
+            // new Expression( "UR.SPOUSE_NATIONALITY   AS  SPOUSE_NATIONALITY "),      
             new Expression( "UR.PROFILE_STATUS   AS  PROFILE_STATUS "),
             new Expression("UN.FIRST_NAME    AS FIRST_NAME "),
             new Expression("UN.MIDDLE_NAME    AS MIDDLE_NAME "),
@@ -785,5 +785,26 @@ class UserApplicationRepository extends HrisRepository{
         $statement = $this->adapter->query($sql); 
         $result = Helper::extractDbData($statement->execute());
         return 'true';
+    }
+    public function applicationEduByIdInternal($id){
+        $sql="select 
+        HEQ.employee_id,
+        HAP.academic_program_name as faculty,
+        HAD.academic_degree_name as degree,
+        HAU.academic_university_name as university,
+        HAC.academic_course_name as course,
+        HEQ.rank_type,
+        HEQ.rank_value,
+        HEQ.passed_yr
+        from hris_employee_qualifications HEQ
+        left join hris_academic_programs HAP on (HAP.academic_program_id = HEQ.academic_program_id)
+        left join hris_academic_degrees HAD on (HAD.academic_degree_id = HEQ.academic_degree_id)
+        left join hris_academic_university HAU on (HAU.academic_university_id = HEQ.academic_university_id)
+        left join hris_academic_courses HAC on (HAC.academic_course_id = HEQ.academic_course_id)
+        where HEQ.status='E' and employee_id in (select employee_id from hris_users where user_id in (select user_id from HRIS_REC_vacancy_application where application_id = $id))";
+        $statement = $this->adapter->query($sql); 
+        $result = Helper::extractDbData($statement->execute());
+        // print_r($result);die;
+        return $result;
     }
 }

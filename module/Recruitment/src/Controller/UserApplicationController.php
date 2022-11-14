@@ -94,9 +94,10 @@ class UserApplicationController extends HrisController
 
         if ($VacancyData[0]['VACANCY_TYPE'] != 'OPEN') {
             $applicationData = iterator_to_array($this->repository->applicationDataByIdInternal($id), false);
-            
+            $eduDatas = $this->repository->applicationEduByIdInternal($id);
         } else {
            $applicationData = iterator_to_array($this->repository->applicationDataById($id), false);
+           $eduDatas = iterator_to_array($this->repository->applicationEduById($id), false);
         }
         // Application Skills  AND inclusion
         $skill_names = '';
@@ -110,7 +111,6 @@ class UserApplicationController extends HrisController
         $applicationData[0]['SKILL_ID'] = $skill_names;
         $applicationData[0]['INCLUSIONS'] = $inc_names;
         $addressData = iterator_to_array($this->repository->applicationaddressById($id), false);
-        $eduDatas = iterator_to_array($this->repository->applicationEduById($id), false);
         $expDatas = iterator_to_array($this->repository->applicationExpById($id), false);
         $TrDatas = iterator_to_array($this->repository->applicationTrById($id), false);
         $DocDatas = iterator_to_array($this->repository->applicationDocById($id), false);

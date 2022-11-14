@@ -1467,13 +1467,12 @@ if ($this->messages) {
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
                             <tr>
-                                <td><label>Educational Institute</label></td>
-                                <td><label>Level</label></td>
+                                <td><label>Degree Acquired</label></td>
+                                <td><label>University/Board</label></td>
                                 <td><label>Faculty</label></td>
+                                <td><label>Degree Name</label></td>
                                 <td><label>Rank Type</label></td>
                                 <td><label>Rank Value</label></td>
-                                <td><label>University / Board</label></td>
-                                <td><label>Major Subject</label></td>
                                 <td><label>Passed Year</label></td>
                             </tr>
                             <?php
@@ -1481,34 +1480,25 @@ if ($this->messages) {
                             ?>
                                 <tr>
                                     <td>
-                                        <?php print $eduData['EDUCATION_INSTITUTE']; ?>
+                                        <?php print $eduData['DEGREE']; ?>
                                     </td>
                                     <td>
-                                        <?php print $eduData['LEVEL_ID']; ?>
+                                        <?php print $eduData['UNIVERSITY']; ?>
                                     </td>
                                     <td>
-                                        <?php print $eduData['FACALTY']; ?>
+                                        <?php print $eduData['FACULTY']; ?>
                                     </td>
                                     <td>
-                                        <?php
-                                        if ($eduData['RANK_TYPE'] == 'GPA') {
-                                            print 'GPA';
-                                        } else if ($eduData['RANK_TYPE'] == 'Percentage') {
-                                            print 'Percentage';
-                                        }
-                                        ?>
+                                        <?php print $eduData['COURSE']; ?>
+                                    </td>
+                                    <td>
+                                        <?php print $eduData['RANK_TYPE']; ?>
                                     </td>
                                     <td>
                                         <?php print $eduData['RANK_VALUE']; ?>
                                     </td>
                                     <td>
-                                        <?php print $eduData['UNIVERSITY_BOARD']; ?>
-                                    </td>
-                                    <td>
-                                        <?php print $eduData['MAJOR_SUBJECT']; ?>
-                                    </td>
-                                    <td>
-                                        <?php print $eduData['PASSED_YEAR']; ?>
+                                        <?php print $eduData['PASSED_YR']; ?>
                                     </td>
 
                                 </tr>
