@@ -7,21 +7,22 @@ use Application\Repository\HrisRepository;
 use Zend\Db\Adapter\AdapterInterface;
 use Application\Model\Model;
 use Recruitment\Model\StageModel;
+use Recruitment\Model\EmployeeStagePermission;
 use Zend\Db\Sql\Sql;
 use Zend\Db\Sql\Expression;
+use Zend\Db\TableGateway\TableGateway;
 
 
 class StageRepository extends HrisRepository {
     public function __construct(AdapterInterface $adapter, $tablename = null)
     {
         parent::__construct($adapter, StageModel::TABLE_NAME);
+        $this->employeeStagePermissionGateway = new TableGateway(EmployeeStagePermission::TABLE_NAME, $adapter);
     }
     public function add(Model $options_data) 
     {
         $addData=$options_data->getArrayCopyForDB();
         $this->tableGateway->insert($addData);
-        
-
     }
     public function getFilteredRecords($search)
     {
@@ -91,4 +92,13 @@ class StageRepository extends HrisRepository {
         // echo '<pre>'; print_r($rawsql); die;
         return EntityHelper::rawQueryResult($this->adapter, $rawsql);
     }
+
+    public function addEmployeeStagePermission(Model $model) 
+    {
+        $rawsql = "Delete from HRIS_REC_EMPLOYEE_STAGE_PERMISSION where employee_id = {$model->employeeId}";
+        EntityHelper::rawQueryResult($this->adapter, $rawsql);
+        $addData=$model->getArrayCopyForDB();
+        $this->employeeStagePermissionGateway->insert($addData);
+    }
+
 }
