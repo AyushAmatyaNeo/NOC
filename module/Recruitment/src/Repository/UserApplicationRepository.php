@@ -74,6 +74,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("REC.VACANCY_TYPE            AS VACANCY_TYPE"),
             new Expression("OPN.START_DATE            AS START_DATE"),
             new Expression("REC.EXPERIENCE            AS EXPERIENCE"),
+            new Expression("APP.REGISTRATION_NO            AS REGISTRATION_NO"),
             ], true);
 
         $select->from(['REC' => 'HRIS_REC_VACANCY'])

@@ -65,10 +65,32 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Post:</label>
+                                <label for="firstName">Registration No:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $vacancyData['POSITION_ID'] . ' / Level:'.$vacancyData['LEVEL_ID']; ?></div>
+                                <?php echo $vacancyData['REGISTRATION_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Designation:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['POSITION_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Level:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['LEVEL_ID']; ?></div>
                         </div>
                     </div>
                 </div>
@@ -1055,6 +1077,103 @@ if ($this->messages) {
    
     <div id="quaConId">
     <div id="rootwizard" class="tabbable-custom">
+        <div class="vacancy-details">
+            <p><i class="fa fa-user ticon" aria-hidden="true"></i>
+                Vacancy Details</p>
+
+                <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Opening Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">AD NO:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['AD_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Registration No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['REGISTRATION_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Designation:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['POSITION_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Level:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['LEVEL_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Stare Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['START_DATE']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">End Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['END_DATE']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Extended Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['EXTENDED_DATE']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="personal-info">
             <p><i class="fa fa-user ticon" aria-hidden="true"></i>
                 Personal Information</p>
