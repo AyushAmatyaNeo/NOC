@@ -34,11 +34,22 @@ if ($this->messages) {
 <?php if($vacancyData['VACANCY_TYPE'] === 'OPEN') { ?>
 <div id="quaConId">
     <div id="rootwizard" class="tabbable-custom">
-    <div class="vacancy-details">
+        <div class="vacancy-details">
             <p><i class="fa fa-user ticon" aria-hidden="true"></i>
                 Vacancy Details</p>
 
                 <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Opening Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-xs-12 col-sm-6 col-md-4 col-box">
                     <div class="row bottomgap">
                         <div class="form-group">
@@ -50,15 +61,37 @@ if ($this->messages) {
                         </div>
                     </div>
                 </div>
-
                 <div class="col-xs-12 col-sm-6 col-md-4 col-box">
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Opening Id:</label>
+                                <label for="firstName">Post:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                                <?php echo $vacancyData['POSITION_ID'] . ' / Level:'.$vacancyData['LEVEL_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Stare Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['START_DATE']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">End Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['END_DATE']; ?></div>
                         </div>
                     </div>
                 </div>
@@ -67,10 +100,10 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">END DATE:</label>
+                                <label for="firstName">Extended Date:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $vacancyData['END_DATE']; ?></div>
+                                <?php echo $vacancyData['EXTENDED_DATE']; ?></div>
                         </div>
                     </div>
                 </div>
@@ -717,7 +750,10 @@ if ($this->messages) {
         <!-- Experiance Infromation -->
         <div class="status-info">
             <p><i class="fa fa-info-circle ticon ticon"></i>Experience Details</p>
-            <h6 style="font-weight:bold;">Total experience: <?=$totalExperienceYMD?></h6>
+            <h6 style="font-weight:bold;">
+            Required Experience: <?=$vacancyData['EXPERIENCE']?> years</h6>
+            <h6 style="font-weight:bold;">
+            Total Experience: <?=$totalExperienceYMD?></h6>
             <div class="row clearfix e-setup">
                 <input type="hidden" name="employeeId" id="employeeId" value="<?php echo (isset($empId)) ? $empId : ''; ?>">
                 <div class="col-sm-12">

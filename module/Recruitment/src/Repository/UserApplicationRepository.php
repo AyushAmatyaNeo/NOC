@@ -70,7 +70,10 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("REC.EXPERIENCE             AS EXPERIENCE"),
             new Expression("DEP.DEPARTMENT_NAME        AS DEPARTMENT_ID"),
             new Expression("STG.STAGE_EDESC            AS STAGE_ID"),
-            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),            
+            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),    
+            new Expression("REC.VACANCY_TYPE            AS VACANCY_TYPE"),
+            new Expression("OPN.START_DATE            AS START_DATE"),
+            new Expression("REC.EXPERIENCE            AS EXPERIENCE"),
             ], true);
 
         $select->from(['REC' => 'HRIS_REC_VACANCY'])
