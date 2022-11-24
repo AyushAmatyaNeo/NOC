@@ -385,6 +385,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UR.DISABILITY_INPUT        AS DISABILITY_INPUT"),
             new Expression("REC.SKILL_ID                AS SKILL_ID"),
             new Expression("REC.INCLUSION_ID            AS INCLUSION_ID"),
+            new Expression("REC.CANCELLED_INCLUSION_ID            AS CANCELLED_INCLUSION_ID"),
             new Expression("UR.RELIGION                 AS  RELIGION "),      
             new Expression("UR.RELIGION_INPUT           AS  RELIGION_INPUT "),      
             new Expression("UR.REGION                   AS  REGION "),      
@@ -467,6 +468,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UR.MARITAL_STATUS          AS MARITAL_STATUS"),
             new Expression("REC.SKILL_ID                   AS SKILL_ID"),
             new Expression("REC.INCLUSION_ID               AS INCLUSION_ID"),
+            new Expression("REC.CANCELLED_INCLUSION_ID               AS CANCELLED_INCLUSION_ID"),
             new Expression("UR.DISABLED_FLAG           AS DISABLED_FLAG"),
             new Expression("URREL.RELIGION_NAME        AS  RELIGION_NAME "),       
             new Expression("URETH.ETHNICITY             AS  ETHNICITY "),       
@@ -776,17 +778,27 @@ class UserApplicationRepository extends HrisRepository{
         $result = $statement->execute($boundedParameter);
         return $result;
     }
-    public function manualStageId($stageId,$remarks, $aid, $incid){
+    public function manualStageId($stageId,$remarks, $aid, $selectedInclusion = null, $unselectedInclusion = null){
         $sql = "UPDATE HRIS_REC_VACANCY_APPLICATION SET STAGE_ID = $stageId , REMARKS = '$remarks' where APPLICATION_ID = $aid";
         // echo $sql; die;
         $statement = $this->adapter->query($sql); 
         $result1 = Helper::extractDbData($statement->execute());
         // var_dump($result1);
-        $new = implode(', ',$incid);
-        $sql = "UPDATE HRIS_REC_APPLICATION_PERSONAL SET INCLUSION_ID = '$new' where APPLICATION_ID = $aid";
-        // var_dump($sql); 
-        $statement2 = $this->adapter->query($sql);
-        // $result = Helper::extractDbData($statement2->execute());
+        if($selectedInclusion){
+            $new = implode(', ',$selectedInclusion);
+            $sql = "UPDATE HRIS_REC_APPLICATION_PERSONAL SET INCLUSION_ID = '$new' where APPLICATION_ID = $aid";
+            // var_dump($sql); 
+            $statement2 = $this->adapter->query($sql);
+            $result = Helper::extractDbData($statement2->execute());
+        }
+        if($unselectedInclusion){
+            $new = implode(', ',$unselectedInclusion);
+            $sql = "UPDATE HRIS_REC_APPLICATION_PERSONAL SET cancelled_inclusion_id = ifnull(cancelled_inclusion_id||',$new','$new') where APPLICATION_ID = $aid";
+            // var_dump($sql); 
+            $statement2 = $this->adapter->query($sql);
+            $result = Helper::extractDbData($statement2->execute());
+        }
+        
         // var_dump($result); die;
         // return $result;
     }

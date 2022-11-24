@@ -113,15 +113,19 @@ class UserApplicationController extends HrisController
         if ($applicationData[0]['INCLUSION_ID'] != null) {
             $inc_names = $this->repository->applicationInclusionsbyId($applicationData[0]['INCLUSION_ID']);
         }
+        if ($applicationData[0]['CANCELLED_INCLUSION_ID'] != null) {
+            $cancelled_inc_names = $this->repository->applicationInclusionsbyId($applicationData[0]['CANCELLED_INCLUSION_ID']);
+        }
         $applicationData[0]['SKILL_ID'] = $skill_names;
         $applicationData[0]['INCLUSIONS'] = $inc_names;
+        $applicationData[0]['CANCELLED_INCLUSION_ID'] = $cancelled_inc_names;
         $addressData = iterator_to_array($this->repository->applicationaddressById($id), false);
         $expDatas = iterator_to_array($this->repository->applicationExpById($id), false);
         $totalExperienceDays = 0;
         if($expDatas){
             foreach($expDatas as $expData){
                 $totalExperienceDays += $expData['TOTAL_DAYS'];
-                $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['EXTENDED_DATE']);
+                $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['END_DATE']);
             }
         }
         // print_r($totalExperienceDays);die;
@@ -179,7 +183,7 @@ class UserApplicationController extends HrisController
         }else{
             $stageIdsCsv='0';
         }
-        // echo('<pre>');print_r($VacancyData[0]);die;
+        // echo('<pre>');print_r($applicationData[0]['INCLUSIONS']);die;
         return Helper::addFlashMessagesToArray($this, [
                     'vacancyData' => $VacancyData[0],
                     'applicationData' => $applicationData[0],
@@ -234,6 +238,7 @@ class UserApplicationController extends HrisController
         try {
             $request = $this->getRequest();
             $postedData = $request->getPost();
+            // print_r($postedData);die;
             $model = new HrisRecApplicationStage();
             $model->id = ((int) Helper::getMaxId($this->adapter, HrisRecApplicationStage::TABLE_NAME, HrisRecApplicationStage::ID)) + 1;
             $model->applicationId = $postedData['id'];
@@ -279,7 +284,7 @@ class UserApplicationController extends HrisController
                 // echo('<pre>');print_r('send');die;
             }
             $this->repository->addApplicationStageHistory($model);
-            $this->repository->manualStageId($postedData['StageId'],$postedData['remarks'],$postedData['id'],$postedData['inclusion']);
+            $this->repository->manualStageId($postedData['StageId'],$postedData['remarks'],$postedData['id'],$postedData['selectedInclusions'],$postedData['unSelectedInclusions']);
             // if ($postedData['StageId'] == 8) {
             //     $name = $this->repository->getEmpName($postedData['id']);
             // }
@@ -289,14 +294,5 @@ class UserApplicationController extends HrisController
         } catch (Exception $e) {
             return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);
         }
-    }
-    public static function mailHeader() {
-        $headerImg = "";
-        return $headerImg;
-    }
-
-    public static function mailFooter() {
-        $footer = "";
-        return $footer;
     }
 }
