@@ -73,6 +73,30 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             </select>
                         </div>  
                     </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="accessAs">Access As:</label>
+                            <div class="md-radio-inline">
+                                <div class="md-radio"> 
+                                    <input type="radio" value="V" name="accessAs" id="accessAsV" class="md-radiobtn radioButton">
+                                    <label for="accessAsV">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Verifier
+                                    </label> 
+                                </div>
+                                <div class="md-radio"> 
+                                    <input type="radio" value="A" name="accessAs" id="accessAsA" class="md-radiobtn radioButton">
+                                        <label for="accessAsA">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Approver
+                                    </label> 
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <input class="btn btn-success" type="submit"/>
             </form>

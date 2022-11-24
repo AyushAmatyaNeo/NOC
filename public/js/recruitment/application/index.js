@@ -36,13 +36,6 @@
         var actiontemplateConfig = `<a class="btn-edit" title="View" href="${document.viewLink}/#:APPLICATION_ID#" style="height:17px;">
                                     <i class="fa fa-search-plus"></i></a> `;
         app.initializeKendoGrid($table, [
-            {
-                title: 'Select All',                
-                headerTemplate: "<input type='checkbox' id='header-chb' class='k-checkbox header-checkbox'><label class='k-checkbox-label' for='header-chb'></label>",
-                template: "<input type='checkbox' id='#:APPLICATION_ID#'  class='k-checkbox row-checkbox'><label class='k-checkbox-label' for='#:APPLICATION_ID#'></label>",
-                width: 50,
-                locked: true
-            },
             {field: "AD_NO", title: "Ad No",width: 80, locked: true},
             {field: "REGISTRATION_NO", title: "Reg.No",  width: 100, locked: true},
             // {field: "PROFILE_IMG", title: "Photo",  width: 100},
@@ -55,6 +48,7 @@
             {field: "APPLICATION_AMOUNT", title: "Amount",  width: 60, locked: true},
             {field: "PAYMENT_STATUS", title: "Payment Status",  width: 100, locked: true},
             {field: "APPLICATION_ID", title: "Action", width: 60,  template: actiontemplateConfig, locked: true},
+            {field: "MOBILE_NO", title: "Mobile No",width: 80, locked: false},  
             {field: "APPLIED_DATE_AD", title: "Applied Date (AD)",width: 80, locked: false},  
             {field: "APPLIED_DATE_BS", title: "Applied Date (BS)",width: 80, locked: false},  
             {field: "SERVICE_TYPE_ID", title: "Service Type",width: 80, locked: false},  
@@ -102,6 +96,7 @@
             'AD_NO': 'AD No.',
             'REGISTRATION_NO': 'Registration No.',
             'FULL_NAME': 'Full Name',
+            'MOBILE_NO': 'Moblile Number',
             'VACANCY_TYPE': 'Vacancy Type',
             'APPLICATION_AMOUNT': 'Application Amount',
             'PAYMENT_STATUS': 'Payment Status',

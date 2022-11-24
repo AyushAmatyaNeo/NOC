@@ -168,7 +168,8 @@ L.location_edesc,
 			'GP',
 			'SAP',
 			'DH1',
-			'DH2')) then 
+			'DH2',
+      'TH1','TH2')) then 
 			1
 			when (HHM.holiday_code in ('BT',
 			'NAW',

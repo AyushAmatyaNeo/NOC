@@ -13,6 +13,7 @@ class EmployeeStagePermission extends Model{
     const CREATED_BY = "CREATED_BY";
     const STATUS = "STATUS";
     const VACANCY_IDS = "VACANCY_IDS";
+    const ACCESS_AS = "ACCESS_AS";
     
     public $id;
     public $employeeId;
@@ -21,6 +22,7 @@ class EmployeeStagePermission extends Model{
     public $createdBy;
     public $status;
     public $vacancyIds;
+    public $accessAs;
     
 
     public $mappings = [
@@ -30,6 +32,7 @@ class EmployeeStagePermission extends Model{
         'createdDt'          => self::CREATED_DT,
         'createdBy'          => self::CREATED_BY,
         'status'           => self::STATUS,
-        'vacancyIds' => self::VACANCY_IDS
+        'vacancyIds' => self::VACANCY_IDS,
+        'accessAs' => self::ACCESS_AS
     ];
 }

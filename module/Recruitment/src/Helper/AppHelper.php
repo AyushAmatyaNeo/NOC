@@ -38,4 +38,31 @@ class AppHelper{
 
         return $searchValues;
     }
+
+    public static function DateDiff($start_date, $end_date) {
+
+        $diff = abs(strtotime($end_date) - strtotime($start_date));
+
+        $years = floor($diff / (365*60*60*24));
+        $months = floor(($diff - $years * 365*60*60*24) / (30*60*60*24));
+        $days = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+
+        $result = sprintf("%d years, %d months, %d days\n", $years, $months, $days);
+
+        return $result;
+    }
+
+    public static function DateDiffWithDays($totalDays) {
+
+        // $diff = abs(strtotime($end_date) - strtotime($start_date));
+        $years = floor($totalDays / (365));
+        $months = floor(($totalDays - $years * 365) / (30));
+        $days = floor(($totalDays - $years * 365 - $months*30));
+
+        $result = sprintf("%d years, %d months, %d days\n", $years, $months, $days);
+
+        return $result;
+    }
+
+
 }

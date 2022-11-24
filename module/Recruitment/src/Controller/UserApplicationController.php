@@ -11,6 +11,7 @@ use Recruitment\Repository\UserApplicationRepository;
 use Setup\Model\Designation;
 use Setup\Model\Department;
 use Recruitment\Model\SkillModel;
+use Recruitment\Model\HrisRecApplicationStage;
 use Recruitment\Model\OptionsModel;
 use Recruitment\Model\OpeningVacancy;
 use Application\Helper\EntityHelper;
@@ -18,6 +19,10 @@ use Zend\View\Model\JsonModel;
 use Exception;
 use Recruitment\Helper\AppHelper;
 use Recruitment\Model\StageModel;
+use Recruitment\Helper\EmailHelper;
+use Zend\Mail\Message;
+use Zend\Mime\Message as MimeMessage;
+use Zend\Mime\Part as MimePart;
 
 class UserApplicationController extends HrisController
 {
@@ -36,9 +41,9 @@ class UserApplicationController extends HrisController
         if ($request->isPost()) {
             try {
                 $data = (array) $request->getPost();
-                $rawList = $this->repository->applicationData($data);
+                $rawList = $this->repository->applicationData($data, $this->employeeId);
                 
-                $rawListInternal = $this->repository->applicationDataInternal($data);                        
+                $rawListInternal = $this->repository->applicationDataInternal($data, $this->employeeId);                        
                 $listOpen = iterator_to_array($rawList, false);
                 $listInternals = iterator_to_array($rawListInternal, false);
                 // print_r($listInternals);die;
@@ -112,6 +117,17 @@ class UserApplicationController extends HrisController
         $applicationData[0]['INCLUSIONS'] = $inc_names;
         $addressData = iterator_to_array($this->repository->applicationaddressById($id), false);
         $expDatas = iterator_to_array($this->repository->applicationExpById($id), false);
+        $totalExperienceDays = 0;
+        if($expDatas){
+            foreach($expDatas as $expData){
+                $totalExperienceDays += $expData['TOTAL_DAYS'];
+                $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['EXTENDED_DATE']);
+            }
+        }
+        // print_r($totalExperienceDays);die;
+
+        $totalExperienceYMD = AppHelper::DateDiffWithDays($totalExperienceDays);
+        // print_r($totalExperienceYMD);die;
         $TrDatas = iterator_to_array($this->repository->applicationTrById($id), false);
         $DocDatas = iterator_to_array($this->repository->applicationDocById($id), false);
         $RegDatas = iterator_to_array($this->repository->registrationDocById($applicationData[0]['USER_ID']), false);
@@ -119,11 +135,51 @@ class UserApplicationController extends HrisController
         $applicationData[0]['FULL_NAME'] = $applicationData[0]['FIRST_NAME'].$applicationData[0]['MIDDLE_NAME'].$applicationData[0]['LAST_NAME'];
         // echo '<pre>'; print_r($VacancyData[0]);
         // echo '<pre>'; print_r($addressData[0]);
-        // echo '<pre>'; print_r( $eduDatas);
-        // echo '<pre>'; print_r($VacancyData[0]);
+        // echo '<pre>'; print_r( $expDatas);die;
+        
+        if ($applicationData[0]['APPLICATION_TYPE'] == 'OPEN') {
 
+            foreach ($applicationData as $app)
+            {
+                $folder = 'photograph';
+                if ($app['DOC_FOLDER'] == $folder) {
+
+                    $applicationData[0]['PROFILE_IMG'] = $app['PROFILE_IMG'];
+                    break;
+
+                }
+
+            }
+            
+            /**
+             * FOR AGE
+             */
+            $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['EXTENDED_DATE']);
+
+        } else {
+
+            $applicationData[0]['PROFILE_IMG'] = $this->getRequest()->getBasePath().'/uploads/'.$applicationData[0]['PROFILE_IMG'];
+
+            for ($i=0; $i < count($DocDatas) ; $i++) { 
+                
+                $DocDatas[$i]['DOC_PATH_NEW'] = $DocDatas[$i]['DOC_PATH'] . $DocDatas[$i]['DOC_NEW_NAME'] ;
+
+            }
+
+            $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB'], $VacancyData[0]['END_DATE']);
+
+        }
+
+        // echo '<pre>'; print_r( $DocDatas);die;
         // echo '<pre>'; print_r($DocDatas); die;
-
+        $stageIds = EntityHelper::rawQueryResult($this->adapter, "select stage_ids from HRIS_REC_EMPLOYEE_STAGE_PERMISSION where employee_id = {$this->employeeId}");
+        $stageIdsArr = iterator_to_array($stageIds);
+        if($stageIdsArr){
+            $stageIdsCsv=$stageIdsArr[1]['STAGE_IDS'];
+        }else{
+            $stageIdsCsv='0';
+        }
+        // echo('<pre>');print_r($VacancyData[0]);die;
         return Helper::addFlashMessagesToArray($this, [
                     'vacancyData' => $VacancyData[0],
                     'applicationData' => $applicationData[0],
@@ -132,7 +188,8 @@ class UserApplicationController extends HrisController
                     'expDatas' => $expDatas,
                     'trDatas'  => $TrDatas,
                     'docDatas'  => $DocDatas,
-                    'Stages' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_STAGES', ['REC_STAGE_ID','STAGE_EDESC'], ['STATUS' => 'E'],'','ORDER_NO'),
+                    'Stages' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_STAGES', ['REC_STAGE_ID','STAGE_EDESC'], ['STATUS' => 'E', 'rec_stage_id in ('.$stageIdsCsv.')'],'','ORDER_NO'),
+                    'totalExperienceYMD' => $totalExperienceYMD
         ]);
     }
     public function bulkStageIdWSAction() {
@@ -171,5 +228,75 @@ class UserApplicationController extends HrisController
         $Vskill_names = implode(', ',$Vskill_array);
         // $VacancyData[0]['SKILL_ID'] = $Vskill_names;
         return $Vskill_names;
+    }
+
+    public function updateStageAction() {
+        try {
+            $request = $this->getRequest();
+            $postedData = $request->getPost();
+            $model = new HrisRecApplicationStage();
+            $model->id = ((int) Helper::getMaxId($this->adapter, HrisRecApplicationStage::TABLE_NAME, HrisRecApplicationStage::ID)) + 1;
+            $model->applicationId = $postedData['id'];
+            $model->stageId = $postedData['StageId'];
+            $model->createdBy = $this->employeeId;
+            $model->createdDateTime = Helper::getcurrentExpressionDateTime();
+            // print_r(base64_decode('4KSG4KSv4KWB4KS3IOCkheCkruCkvuCkpOCljeCkryDgpLngpL7gpLngpL4g'));die;
+            // $model->remarksEn = $postedData['remarksEn'];
+            $model->remarksNp = base64_encode($postedData['remarksNp']);
+            // echo('<pre>');print_r($model); die;
+
+            $VacancyData = iterator_to_array($this->repository->VacancyDataById($postedData['id']), false);
+
+            if ($VacancyData[0]['VACANCY_TYPE'] != 'OPEN') {
+                $applicationData = iterator_to_array($this->repository->applicationDataByIdInternal($postedData['id']), false);
+            } else {
+                $applicationData = iterator_to_array($this->repository->applicationDataById($postedData['id']), false);
+            }
+
+            // echo('<pre>');print_r($applicationData[0]['EMAIL_ID']);die;
+
+            if ($postedData['StageId'] == 6 ){
+                // $htmlDescription = self::mailHeader();
+                $htmlDescription = "Dear ".$applicationData[0]['FIRST_NAME']." ".$applicationData[0]['MIDDLE_NAME']. " ". $applicationData[0]['LAST_NAME'].",<br>Applicant of application no: " . $VacancyData[0]['AD_NO']
+                ."<br><br>Your applied application needs to be corrected with remarks: ". $postedData['remarksNp']
+                ."<br>Please modify your application by ".  date("Y/m/d", strtotime(' + 5 days'))
+                ."<br><br>Regards, <br>Nepal Oil Corporation Limited.";
+                // $htmlDescription .= self::mailFooter();
+
+                $htmlPart = new MimePart($htmlDescription);
+                $htmlPart->type = "text/html";
+
+                $body = new MimeMessage();
+                $body->setParts(array($htmlPart));
+
+                // print_r($body);die;
+                $mail = new Message();
+                $mail->setSubject('Application Update');
+                $mail->setBody($body);
+                $mail->setFrom('nepaloil.noreply@gmail.com', 'NOC');
+                $mail->addTo($applicationData[0]['EMAIL_ID'], $applicationData[0]['FIRST_NAME']);
+                EmailHelper::sendEmail($mail);
+                // echo('<pre>');print_r('send');die;
+            }
+            $this->repository->addApplicationStageHistory($model);
+            $this->repository->manualStageId($postedData['StageId'],$postedData['remarks'],$postedData['id'],$postedData['inclusion']);
+            // if ($postedData['StageId'] == 8) {
+            //     $name = $this->repository->getEmpName($postedData['id']);
+            // }
+            
+        //    $this->repository->addRollNo($postedData['StageId'],$postedData['id']);
+            return new JsonModel(['success' => true, 'data' => [], 'error' => '']);
+        } catch (Exception $e) {
+            return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);
+        }
+    }
+    public static function mailHeader() {
+        $headerImg = "";
+        return $headerImg;
+    }
+
+    public static function mailFooter() {
+        $footer = "";
+        return $footer;
     }
 }

@@ -150,7 +150,7 @@ class StageController extends HrisController {
 
     public function assignEmployeeStagesAction(){
         $employees = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_EMPLOYEES", "EMPLOYEE_ID", ["EMPLOYEE_CODE","FULL_NAME"], ["STATUS" => 'E'], "FIRST_NAME", "ASC", " ", FALSE, TRUE);
-        $stages = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_REC_STAGES", "REC_STAGE_ID", ["STAGE_EDESC"], ["STATUS" => 'E'], "ORDER_NO", "ASC", " ", FALSE, TRUE);
+        $stages = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_REC_STAGES", "REC_STAGE_ID", ["STAGE_EDESC"], ["STATUS" => 'E',"VACANCY_APPLICATION" => 'A'], "ORDER_NO", "ASC", " ", FALSE, TRUE);
         $vacancyList = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_REC_VACANCY", "VACANCY_ID", ["AD_NO"], ["STATUS" => 'E'], "case 
         when right(left(AD_NO,2),1)='/'
         then left(AD_NO,1)
@@ -166,7 +166,6 @@ class StageController extends HrisController {
         if($request->isPost())
         {
             $postedData = $request->getpost();
-
             $model = new EmployeeStagePermission();
             $model->id = ((int) Helper::getMaxId($this->adapter, EmployeeStagePermission::TABLE_NAME, EmployeeStagePermission::ID)) + 1;
             $model->employeeId = $postedData['employeeId'];
@@ -175,6 +174,7 @@ class StageController extends HrisController {
             $model->createdDt = Helper::getcurrentExpressionDate();
             $model->status = 'E';
             $model->createdBy = $this->employeeId;
+            $model->accessAs = $postedData['accessAs'];
             // echo('<pre>');print_r($model);die;
             // print_r($postedData);die;
             $this->repository->addEmployeeStagePermission($model);
@@ -195,16 +195,21 @@ class StageController extends HrisController {
             if($data['employeeId']){
                 $stageList = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_REC_EMPLOYEE_STAGE_PERMISSION", "EMPLOYEE_ID", ["STAGE_IDS"], ["EMPLOYEE_ID" => $data['employeeId']], "ID", "ASC", " ", FALSE, TRUE);
                 $vacancyList = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_REC_EMPLOYEE_STAGE_PERMISSION", "EMPLOYEE_ID", ["VACANCY_IDS"], ["EMPLOYEE_ID" => $data['employeeId']], "ID", "ASC", " ", FALSE, TRUE);
+                $accessAsList = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_REC_EMPLOYEE_STAGE_PERMISSION", "EMPLOYEE_ID", ["ACCESS_AS"], ["EMPLOYEE_ID" => $data['employeeId']], "ID", "ASC", " ", FALSE, TRUE);
             }
             $stages = [];
             $vacancies = [];
+            $accessAs = '';
+            if($accessAsList[$data['employeeId']]){
+                $accessAs = $accessAsList[$data['employeeId']];
+            }
             if($stageList[$data['employeeId']]){
                 $stages = explode(',',$stageList[$data['employeeId']]);
             }
             if($vacancyList[$data['employeeId']]){
                 $vacancies = explode(',',$vacancyList[$data['employeeId']]);
             }
-            return new JsonModel(['success' => true, 'data' => '', 'stageIds' =>$stages, 'vacancyIds'=>$vacancies, 'message' => null]);
+            return new JsonModel(['success' => true, 'data' => '', 'stageIds' =>$stages, 'vacancyIds'=>$vacancies, 'accessAs' => $accessAs, 'message' => null]);
         }
     }
 }

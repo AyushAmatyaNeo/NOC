@@ -11,10 +11,14 @@
                 employeeId: employeeId,
                 stageId: stageId
             }).then(function (response) {
+                console.log(response.accessAs);
                 $('#stageId').val(response.stageIds);
                 $('#stageId').trigger('change');
                 $('#vacancyId').val(response.vacancyIds);
                 $('#vacancyId').trigger('change');
+                if(response.accessAs != ''){
+                    $('#accessAs'+response.accessAs).attr('checked','checked');
+                }
             }, function (error) {
                 console.log(error);
             });

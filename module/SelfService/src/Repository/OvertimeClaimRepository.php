@@ -1246,7 +1246,8 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
 			'GP',
 			'SAP',
 			'DH1',
-			'DH2')) then 1 
+			'DH2',
+            'TH1','TH2')) then 1 
 			when (HHM.holiday_code in ('BT',
 			'NAW',
 			'AST',
