@@ -30,9 +30,9 @@
             if(stage_id==0){
                 alert("Please select stage!!");
             }else{
-                if(selectedInclusions.length <1){
-                    alert("Atleast 1 inclusion should be selected!!");
-                }else{
+                // if(selectedInclusions.length < 1){
+                //     alert("Atleast 1 inclusion should be selected!!");
+                // }else{
                     var remarksNp = $("#remarksNp").val();
                     // var remarksEn = $("#remarksEn").val();
                     var url = window.location.href;
@@ -62,7 +62,7 @@
                     }, function (data, error) {
                         
                     }); 
-                }
+                // }
                 
             }
             

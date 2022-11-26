@@ -41,6 +41,7 @@ class UserApplicationController extends HrisController
         if ($request->isPost()) {
             try {
                 $data = (array) $request->getPost();
+                // print_r($data);die;
                 $rawList = $this->repository->applicationData($data, $this->employeeId);
                 
                 $rawListInternal = $this->repository->applicationDataInternal($data, $this->employeeId);                        

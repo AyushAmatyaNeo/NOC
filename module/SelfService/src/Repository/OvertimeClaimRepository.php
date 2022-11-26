@@ -1247,11 +1247,21 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
 			'SAP',
 			'DH1',
 			'DH2',
-            'TH1','TH2')) then 1 
+            'TH1','TH2')) then 
+            case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            2
+            else 
+            1
+            end 
 			when (HHM.holiday_code in ('BT',
 			'NAW',
 			'AST',
-			'DAS')) then 2
+			'DAS')) then 
+            case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            3
+            else 
+            2
+            end
 		else 0
 		END as bonus_multi
        from hris_attendance_detail had 

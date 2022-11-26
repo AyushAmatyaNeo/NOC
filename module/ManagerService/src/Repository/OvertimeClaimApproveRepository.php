@@ -170,12 +170,20 @@ L.location_edesc,
 			'DH1',
 			'DH2',
       'TH1','TH2')) then 
-			1
+			case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            2
+            else 
+            1
+            end
 			when (HHM.holiday_code in ('BT',
 			'NAW',
 			'AST',
 			'DAS')) then 
-			2
+			case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            3
+            else 
+            2
+            end
 			ELSE
 			0
 		END as BONUS_MULTI,

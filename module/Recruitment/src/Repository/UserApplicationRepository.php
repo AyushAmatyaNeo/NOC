@@ -209,7 +209,7 @@ class UserApplicationRepository extends HrisRepository{
             }
             if (($search['stageId'] != null)) {
                 $select->where([
-                    "UVA.STAGE_ID" => $search['stageId']
+                    "UVA.STAGE_ID = {$search['stageId']}"
                 ]);
             }
             if (($search['vacancy_type'] != null)) {
@@ -230,6 +230,7 @@ class UserApplicationRepository extends HrisRepository{
         $select->order("AD_NO_ORDER ASC");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
+        // echo('<pre>');print_r($statement);die;
         // print_r($statement->getSql()); die();
         $result = $statement->execute($boundedParameter);
         return $result;
@@ -686,12 +687,13 @@ class UserApplicationRepository extends HrisRepository{
         $select->Where("REC.APPLICATION_ID = $id");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
+        // echo('<pre>');print_r($statement);die; 
         $result = $statement->execute($boundedParameter);
-        // echo('<pre>');print_r($statement);die;
         return $result;
     }
     public function applicationExpById($id){
         $sql = new Sql($this->adapter);
+
         $select = $sql->select();
         $select->columns([
             new Expression("EXP.ORGANISATION_NAME       AS   ORGANISATION_NAME"),
@@ -702,7 +704,9 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("EXP.FROM_DATE               AS   FROM_DATE"),
             new Expression("EXP.TO_DATE                 AS   TO_DATE"),            
             new Expression("(CASE WHEN EXP.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),   
-            new Expression("days_between(ad_date(FROM_DATE),ad_date(TO_DATE)) as total_days"),   
+            new Expression("case when ( from_date is null or to_date is null ) then 0 else
+            (days_between(ad_date(EXP.FROM_DATE),
+           ad_date(EXP.TO_DATE))) end AS TOTAL_DAYS"),   
             ], true);
 
         $select->from(['EXP' => 'HRIS_REC_APPLICATION_EXPERIENCES'])    
@@ -710,6 +714,7 @@ class UserApplicationRepository extends HrisRepository{
         $select->Where("EXP.APPLICATION_ID = $id");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
+        // print_r($statement->getSql()); die();
         // echo('<pre>');print_r($statement);die;
         $result = $statement->execute($boundedParameter);
         return $result;
