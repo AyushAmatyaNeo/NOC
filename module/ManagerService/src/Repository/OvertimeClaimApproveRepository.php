@@ -193,7 +193,12 @@ L.location_edesc,
           THEN 0.5
           ELSE
           0
-          END AS OT_DAYS
+          END AS OT_DAYS,
+          case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            'Y'
+            else 
+            'N'
+            end as manual_zero
           
       FROM HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL OCD 
       LEFT JOIN HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST OCR ON (OCR.OVERTIME_CLAIM_ID = OCD.OVERTIME_CLAIM_ID)

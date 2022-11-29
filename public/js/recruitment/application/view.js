@@ -58,7 +58,8 @@
                         selectedInclusions: selectedInclusions,
                     });
                     app.bulkServerRequest(document.bulkStageIdWS, selectedValues, function () {
-                        window.location.reload(true);
+                        // window.location.reload(true);
+                        window.location.href = "../../userapplication";
                     }, function (data, error) {
                         
                     }); 

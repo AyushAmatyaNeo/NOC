@@ -156,32 +156,10 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">DOB:</label>
+                                <label for="firstName">Mobile No:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['DOB']; ?></div>
-                        </div>
-                    </div>
-                    <div class="row bottomgap">
-                        <div class="form-group">
-                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Age:</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['AGE'] .  '( TILL DATE  <strong>' . $vacancyData['END_DATE'].'</strong> )'; ?>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-xs-12 col-sm-3 col-md-3 col-box">
-                    <div class="row bottomgap">
-                        <div class="form-group">
-                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Middle Name:</label>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['MIDDLE_NAME']; ?></div>
+                                <?php echo $applicationData['MOBILE_NO']; ?></div>
                         </div>
                     </div>
                     <div class="row bottomgap">
@@ -197,12 +175,68 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Age:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                 <?php echo '<strong>'.$applicationData['AGE'].'</strong>' .  '( TILL DATE ' . $vacancyData['END_DATE'].' )'; ?>
+                             </div>
+                        </div>
+                    </div>
+
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Is NOC Staff:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                 <?php echo ($applicationData['IS_NOC_EMPLOYEE']=='Y')?'Yes':'No'; ?>
+                                 <?php if($applicationData['NOC_DOC_PATH']){?> <br>
+                                 <a target="_blank" href="<?= $applicationData['NOC_DOC_PATH']; ?>">View NOC ID</a>
+                                <?php } ?>
+                             </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Middle Name:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['MIDDLE_NAME']; ?></div>
+                        </div>
+                    </div>
+                    
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Email Id:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['EMAIL_ID']; ?></div>
+                        </div>
+                    </div>
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Issue Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['CTZ_ISSUE_DATE']; ?></div>
+                        </div>
+                    </div>
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
                                 <label for="firstName">Mother Tongue:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
                                 <?php echo $applicationData['MOTHER_TONGUE']; ?></div>
                         </div>
                     </div>
+
                 </div>
                 <div class="col-xs-12 col-sm-3 col-md-3 col-box">
                     <div class="row bottomgap">
@@ -217,12 +251,13 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Issue Date:</label>
+                                <label for="firstName">DOB:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['CTZ_ISSUE_DATE']; ?></div>
+                                <?php echo $applicationData['DOB']; ?></div>
                         </div>
                     </div>
+                    
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
@@ -1070,7 +1105,33 @@ if ($this->messages) {
                 </div>
                 <?php /* <button id="exportPdfData" class="btn btn-success" style="margin-top: 15px">Print</button> */ ?>
             </div>           
-        </div>        
+        </div> 
+        <br><br>
+        <?php if($applicationStageHistory){ ?>
+            <table class="table">
+            <tr>
+                <th>S.N</th>
+                <th>Stage Name</th>
+                <th>Done BY</th>
+                <th>Date & Time</th>
+                <th>Remarks</th>
+            </tr>
+            <?php
+            $c =1;
+            foreach($applicationStageHistory as $apH){
+                
+                ?>
+                <tr>
+                    <td><?=$c?></td>
+                    <td><?=$apH['STAGE_EDESC']?></td>
+                    <td><?=$apH['CREATED_BY']?></td>
+                    <td><?=$apH['DATE_TIME']?></td>
+                    <td><?=base64_decode($apH['REMARKS_NP'])?></td>
+                </tr>
+                <?php $c++;
+            }
+        ?> </table>  <?php } ?>
+              
     </div>
 </div>
 <?php }else { ?>
@@ -1199,10 +1260,20 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">DOB:</label>
+                                <label for="firstName">Mobile No:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['DOB']; ?></div>
+                                <?php echo $applicationData['MOBILE_NO']; ?></div>
+                        </div>
+                    </div>
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Citizenship No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['CITIZENSHIP_NO']; ?>
+                            </div>
                         </div>
                     </div>
                     <div class="row bottomgap">
@@ -1211,7 +1282,8 @@ if ($this->messages) {
                                 <label for="firstName">Age:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['AGE']; ?></div>
+                                 <?php echo '<strong>'.$applicationData['AGE'].'</strong>' .  '( TILL DATE ' . $vacancyData['END_DATE'].' )'; ?>
+                             </div>
                         </div>
                     </div>
 
@@ -1229,11 +1301,19 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Citizenship No:</label>
+                                <label for="firstName">Email Id:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['CITIZENSHIP_NO']; ?>
+                                <?php echo $applicationData['EMAIL_ID']; ?></div>
+                        </div>
+                    </div>
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Issue Date:</label>
                             </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['CTZ_ISSUE_DATE']; ?></div>
                         </div>
                     </div>
                     <div class="row bottomgap">
@@ -1259,12 +1339,13 @@ if ($this->messages) {
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                <label for="firstName">Issue Date:</label>
+                                <label for="firstName">DOB:</label>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                <?php echo $applicationData['CTZ_ISSUE_DATE']; ?></div>
+                                <?php echo $applicationData['DOB']; ?></div>
                         </div>
                     </div>
+                    
                     <div class="row bottomgap">
                         <div class="form-group">
                             <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
@@ -2012,9 +2093,35 @@ if ($this->messages) {
                 <div class="col-sm-2">
                     <button class="btn btn-primary" style="margin-top: 15px" id="dxtcfyvgubionm" type="button"  >Update Status</button>
                 </div>
-                <button id="exportPdfData" class="btn btn-success" style="margin-top: 15px">Print</button>
+                <?php /* <button id="exportPdfData" class="btn btn-success" style="margin-top: 15px">Print</button> */ ?>
             </div>           
-        </div>        
+        </div>  
+        <br><br>
+        <?php if($applicationStageHistory){ ?>
+            <table class="table">
+            <tr>
+                <th>S.N</th>
+                <th>Stage Name</th>
+                <th>Done BY</th>
+                <th>Date & Time</th>
+                <th>Remarks</th>
+            </tr>
+            <?php
+            $c =1;
+            foreach($applicationStageHistory as $apH){
+                
+                ?>
+                <tr>
+                    <td><?=$c?></td>
+                    <td><?=$apH['STAGE_EDESC']?></td>
+                    <td><?=$apH['CREATED_BY']?></td>
+                    <td><?=$apH['DATE_TIME']?></td>
+                    <td><?=base64_decode($apH['REMARKS_NP'])?></td>
+                </tr>
+                <?php $c++;
+            }
+        ?> </table>  <?php } ?>      
     </div>
 </div>
 <?php  } ?>
+

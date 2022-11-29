@@ -13,8 +13,30 @@
         });
         var $search = $('#search');
         // console.log(document.Stages);
+        app.populateSelect($('#adnumberId'), document.singleAdNo , 'VACANCY_ID', 'AD_NO', null,null);
+        $('#isAdRanged').on('change', function(){
+            if($('#isAdRanged').val() =='Y'){
+                $('#adNumberDiv').remove();
+                $('#adNumParentDiv').append(`<div id="adNumberDiv">
+                    <label>Ad Number</label>
+                    <select class="form-control" name="adnumber" id="adnumberId">
+                    </select>
+                </div>`);
+                app.populateSelect($('#adnumberId'), document.rangedAdNo , 'VACANCY_ID', 'AD_NO', null,null);
+                $("#adnumberId").select2();
+            }else{
+                $('#adNumberDiv').remove();
+                $('#adNumParentDiv').append(`<div id="adNumberDiv">
+                    <label>Ad Number</label>
+                    <select multiple class="form-control" name="adnumber" id="adnumberId">
+                    </select>
+                </div>`);
+                app.populateSelect($('#adnumberId'), document.singleAdNo , 'VACANCY_ID', 'AD_NO', null,null);
+                $("#adnumberId").select2()
+            }
+        });
+
         app.populateSelect($('#OpeningNo'), document.openings , 'OPENING_ID', 'OPENING_NO', null,null);
-        app.populateSelect($('#adnumberId'), document.adno , 'VACANCY_ID', 'AD_NO', null,null);
         app.populateSelect($('#skillsId'), document.Skills , 'SKILL_ID', 'SKILL_NAME', null,null);
         app.populateSelect($('#inclusionId'), document.InclusionList , 'OPTION_ID', 'OPTION_EDESC', null,null);
         app.populateSelect($('#department'), document.DepartmentList , 'DEPARTMENT_ID', 'DEPARTMENT_NAME', null,null);

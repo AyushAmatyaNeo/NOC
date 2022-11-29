@@ -57,8 +57,8 @@
                                                     'lockingAllowance': document.subDetails[i]['LOCKING_ALLOWANCE'],
                                                     'leaveReward': document.subDetails[i]['LEAVE_REWARD'],
                                                     'dashianTiharLeaveReward': document.subDetails[i]['DASHAIN_TIHAR_LEAVE_REWARD'],
-                                                    'otDays': document.subDetails[i]['OT_DAYS'],
-                                                    'festiveOtDays': document.subDetails[i]['BONUS_MULTI'] * document.subDetails[i]['OT_DAYS'],
+                                                    'otDays': ( document.subDetails[i]['MANUAL_ZERO'] =='Y' && document.subDetails[i]['BONUS_MULTI']>0)? 0: document.subDetails[i]['OT_DAYS'] ,
+                                                    'festiveOtDays': ( document.subDetails[i]['BONUS_MULTI'] * document.subDetails[i]['OT_DAYS'] ),
                                                     'grandOtDays': ( document.subDetails[i]['BONUS_MULTI'] * document.subDetails[i]['OT_DAYS'] ) + document.subDetails[i]['OT_DAYS'] 
                                                 };
         }
@@ -207,7 +207,7 @@
                     }
             ).then(function (success) {
                 App.unblockUI("#hris-page-content");
-                // window.location.href = "../../../status";
+                window.location.href = "../../../status";
             }, function (failure) {
                 App.unblockUI("#hris-page-content");
             });

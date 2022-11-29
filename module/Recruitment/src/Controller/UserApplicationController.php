@@ -67,6 +67,23 @@ class UserApplicationController extends HrisController
         }        
         $statusSE = $this->getRecStatusSelectElement(['name' => 'status', 'id' => 'status', 'class' => 'form-control reset-field', 'label' => 'Status']);
         $OpeningVacancyNo = EntityHelper::getTableList($this->adapter, 'HRIS_REC_OPENINGS', ['OPENING_ID','OPENING_NO'], ['STATUS' => 'E']);
+        $allAdNo = $this->repository->getAllAdNoDetail();  
+        $rangedAdNo = array_filter($allAdNo,function ($value){
+            if($value['IS_RANGED']=='Y'){
+                return $value;
+            }
+        });
+        $singleAdNo = array_filter($allAdNo,function ($value){
+            if($value['IS_RANGED']!='Y'){
+                return $value;
+            }
+        });
+
+        // echo('<pre>');print_r(EntityHelper::getTableList($this->adapter, 'HRIS_REC_VACANCY', ['VACANCY_ID','AD_NO'], ['STATUS' => 'E']));die;
+        // echo('<pre>');print_r($rangedAdNo);die;
+        // $listOpen = iterator_to_array($rawList, false);
+        // $listInternals = iterator_to_array($rawListInternal, false);
+        // $allAdNo = 
         return $this->stickFlashMessagesTo([
             'searchValues' => AppHelper::ApplicationData($this->adapter),
             'status' => $statusSE,
@@ -79,6 +96,8 @@ class UserApplicationController extends HrisController
             'Stages' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_STAGES', ['REC_STAGE_ID','STAGE_EDESC'], ['STATUS' => 'E'],'','ORDER_NO'),
             'acl' => $this->acl,
             'Adno' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_VACANCY', ['VACANCY_ID','AD_NO'], ['STATUS' => 'E']),
+            'rangedAdNo' => $rangedAdNo,
+            'singleAdNo' => $singleAdNo,
         ]);
     }
     public function viewAction(){
@@ -137,7 +156,7 @@ class UserApplicationController extends HrisController
         $DocDatas = iterator_to_array($this->repository->applicationDocById($id), false);
         $RegDatas = iterator_to_array($this->repository->registrationDocById($applicationData[0]['USER_ID']), false);
         $DocDatas = array_merge($DocDatas,$RegDatas);
-        $applicationData[0]['FULL_NAME'] = $applicationData[0]['FIRST_NAME'].$applicationData[0]['MIDDLE_NAME'].$applicationData[0]['LAST_NAME'];
+        $applicationData[0]['FULL_NAME'] = $applicationData[0]['FIRST_NAME'].' '.$applicationData[0]['MIDDLE_NAME'].' '.$applicationData[0]['LAST_NAME'];
         // echo '<pre>'; print_r($VacancyData[0]);
         // echo '<pre>'; print_r($addressData[0]);
         // echo '<pre>'; print_r( $expDatas);die;
@@ -184,8 +203,11 @@ class UserApplicationController extends HrisController
         }else{
             $stageIdsCsv='0';
         }
-        // echo('<pre>');print_r($applicationData[0]['INCLUSIONS']);die;
+        $applicationStageHistory = $this->repository->getApplicationStageHistory($id);
+
+        // echo('<pre>');print_r($applicationData[0]);die;
         return Helper::addFlashMessagesToArray($this, [
+            'applicationStageHistory'=>$applicationStageHistory,
                     'vacancyData' => $VacancyData[0],
                     'applicationData' => $applicationData[0],
                     'addressData' => $addressData[0],

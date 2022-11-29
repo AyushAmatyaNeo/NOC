@@ -1263,7 +1263,12 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
             2
             end
 		else 0
-		END as bonus_multi
+		END as bonus_multi,
+        case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            'Y'
+            else 
+            'N'
+            end as manual_zero
        from hris_attendance_detail had 
        left join hris_employees E on (E.employee_id=had.employee_id) 
        left join hris_designations hd on (hd.designation_id=E.designation_id) 

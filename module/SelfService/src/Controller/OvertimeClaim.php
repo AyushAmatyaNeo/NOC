@@ -269,6 +269,9 @@ class OvertimeClaim extends HrisController {
                         $otDays = 0;
                     }
                     $festiveOtDays = $otDays * $bonuMulti;
+                    if($festiveOtDays > 0 && $otDetail['MANUAL_ZERO']=='Y'){
+                        $otDays =0;
+                    }
                     if($funcLvl>=6){
                         if($dayCode=="H"){
                             if($otHour>=6){

@@ -437,6 +437,8 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UVA.PAYMENT_PAID as PAYMENT_PAID"),            
             new Expression("UVA.PAYMENT_VERIFIED as PAYMENT_VERIFIED"), 
             new Expression("HRIS_REC_PAYMENT_STATUS(UVA.PAYMENT_PAID,UVA.PAYMENT_VERIFIED) as PAYMENT_STATUS"),
+            new Expression("UR.IN_SERVICE as IS_NOC_EMPLOYEE"),
+            new Expression("NOCDOC.DOC_PATH as NOC_DOC_PATH"),
             ], true);
 
         $select->from(['REC' => 'HRIS_REC_APPLICATION_PERSONAL'])
@@ -448,6 +450,7 @@ class UserApplicationRepository extends HrisRepository{
                 ->join(['DOC' => 'HRIS_REC_APPLICATION_DOCUMENTS'],'DOC.APPLICATION_ID=REC.APPLICATION_ID', 'DOC_TYPE', 'left')
                 ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.PAYMENT_ID=UVA.PAYMENT_ID', 'PAYMENT_REFERENCE_ID', 'left')
                 ->join(['RPG' => 'hris_rec_payment_gateway'],'PAY.PAYMENT_GATEWAY_ID=RPG.ID', 'ID', 'left')
+                ->join(['NOCDOC' => 'HRIS_REC_APPLICATION_DOCUMENTS'],"NOCDOC.user_id = UN.user_id and NOCDOC.doc_folder='in_service'", 'DOC_TYPE', 'left')
                 ->where(["REC.STATUS='E'"]);
                 // ->where(["DOC.DOC_FOLDER = 'photograph'"]);
 
@@ -872,5 +875,28 @@ class UserApplicationRepository extends HrisRepository{
     {
         $addData=$model->getArrayCopyForDB();
         $this->recAppStageRepo->insert($addData);
+    }
+
+    public function getAllAdNoDetail(){
+        $sql = "select min(vacancy_id) as vacancy_id, GET_AD_NO(opening_id, vacancy_no) as ad_no , 
+        case when count(*) > 1 then 'Y' else 'N' end as is_ranged  from HRIS_REC_VACANCY 
+        group by GET_AD_NO(opening_id, vacancy_no);";
+        // echo $sql; die;
+        $result =  $this->rawQuery($sql);
+        return $result;
+    }
+
+    public function getApplicationStageHistory($applicationId){
+        $sql="select RAS.id, RAS.application_id, RS.stage_edesc, E.full_name as created_by, 
+        to_char(RAS.created_date_time,'YYYY-MM-DD HH:MI:SS AM') as date_time, 
+        RAS.remarks_np from hris_rec_application_stage RAS
+        left join hris_rec_stages RS on (RAS.stage_id = RS.rec_stage_id)
+        left join hris_employees E on (E.employee_id = RAS.created_by)
+        where RAS.application_id = $applicationId
+        ";
+        $statement = $this->adapter->query($sql); 
+        $result = Helper::extractDbData($statement->execute());
+        // print_r($result);die;
+        return $result;
     }
 }
