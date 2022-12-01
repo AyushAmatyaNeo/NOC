@@ -27,16 +27,17 @@
                 unSelectedInclusions.push($(this).val());
             });
             var stage_id = $('#StageId').val();
+
             if(stage_id==0){
                 alert("Please select stage!!");
             }else{
-                // if(selectedInclusions.length < 1){
-                //     alert("Atleast 1 inclusion should be selected!!");
-                // }else{
+                if(selectedInclusions.length <1){
+                    alert("Atleast 1 inclusion should be selected!!");
+                }else{
                     var remarksNp = $("#remarksNp").val();
                     // var remarksEn = $("#remarksEn").val();
                     var url = window.location.href;
-                    var id = parseInt(url.substring(url.lastIndexOf('/') + 1));
+                    var id  = parseInt(url.substring(url.lastIndexOf('/') + 1));
                     var selectedValues = [];
                     // var val = $('#InclusionId').val();
                     // selectedValues.push({
@@ -63,7 +64,7 @@
                     }, function (data, error) {
                         
                     }); 
-                // }
+                }
                 
             }
             

@@ -13,30 +13,9 @@
         });
         var $search = $('#search');
         // console.log(document.Stages);
-        app.populateSelect($('#adnumberId'), document.singleAdNo , 'VACANCY_ID', 'AD_NO', null,null);
-        $('#isAdRanged').on('change', function(){
-            if($('#isAdRanged').val() =='Y'){
-                $('#adNumberDiv').remove();
-                $('#adNumParentDiv').append(`<div id="adNumberDiv">
-                    <label>Ad Number</label>
-                    <select class="form-control" name="adnumber" id="adnumberId">
-                    </select>
-                </div>`);
-                app.populateSelect($('#adnumberId'), document.rangedAdNo , 'VACANCY_ID', 'AD_NO', null,null);
-                $("#adnumberId").select2();
-            }else{
-                $('#adNumberDiv').remove();
-                $('#adNumParentDiv').append(`<div id="adNumberDiv">
-                    <label>Ad Number</label>
-                    <select multiple class="form-control" name="adnumber" id="adnumberId">
-                    </select>
-                </div>`);
-                app.populateSelect($('#adnumberId'), document.singleAdNo , 'VACANCY_ID', 'AD_NO', null,null);
-                $("#adnumberId").select2()
-            }
-        });
-
         app.populateSelect($('#OpeningNo'), document.openings , 'OPENING_ID', 'OPENING_NO', null,null);
+        app.populateSelect($('#adnumberId'), document.adno , 'VACANCY_ID', 'AD_NO', null,null);
+        app.populateSelect($('#appliedadnumber'), document.adno , 'AD_NO', 'AD_NO', null,null);
         app.populateSelect($('#skillsId'), document.Skills , 'SKILL_ID', 'SKILL_NAME', null,null);
         app.populateSelect($('#inclusionId'), document.InclusionList , 'OPTION_ID', 'OPTION_EDESC', null,null);
         app.populateSelect($('#department'), document.DepartmentList , 'DEPARTMENT_ID', 'DEPARTMENT_NAME', null,null);
@@ -58,19 +37,24 @@
         var actiontemplateConfig = `<a class="btn-edit" title="View" href="${document.viewLink}/#:APPLICATION_ID#" style="height:17px;">
                                     <i class="fa fa-search-plus"></i></a> `;
         app.initializeKendoGrid($table, [
-            {field: "AD_NO", title: "Ad No",width: 80, locked: true},
-            {field: "REGISTRATION_NO", title: "Reg.No",  width: 100, locked: true},
+            {field: "VACANCY_AD_NO", title: "AD No",width: 80, locked: true},
+            {field: "MULTIPLE_AD_NO", title: "Applied AD No",width: 80, locked: true},
+            {field: "REGISTRATION_NO", title: "S.No",  width: 100, locked: true},
             // {field: "PROFILE_IMG", title: "Photo",  width: 100},
             {field: "PROFILE_IMG", title: "Photo",  width: 70, locked: true,
                 template: "<div class = 'user-photo' " +
                     "style='background-image: url(#:PROFILE_IMG#);'></div>"
                     },
             {field: "FULL_NAME",title:"Full Name", width: 140, locked: true},
+            {field: "NOC",title:"NOC Employeed ?", width: 50, locked: false},
             {field: "VACANCY_TYPE", title: "Vacancy Type",  width: 130,locked: true},
             {field: "APPLICATION_AMOUNT", title: "Amount",  width: 60, locked: true},
+            {field: "PAYMENT", title: "Payment",  width: 100, locked: true},
             {field: "PAYMENT_STATUS", title: "Payment Status",  width: 100, locked: true},
             {field: "APPLICATION_ID", title: "Action", width: 60,  template: actiontemplateConfig, locked: true},
-            {field: "MOBILE_NO", title: "Mobile No",width: 80, locked: false},  
+            {field: "EMPLOYEE_CODE", title: "Employee Code",  width: 100,lock: true},
+            {field: "DESIGNATION_TITLE", title: "Current Designation",  width: 100,lock: true},
+			{field: "MOBILE_NO", title: "Mobile No",width: 80, locked: false},  
             {field: "APPLIED_DATE_AD", title: "Applied Date (AD)",width: 80, locked: false},  
             {field: "APPLIED_DATE_BS", title: "Applied Date (BS)",width: 80, locked: false},  
             {field: "SERVICE_TYPE_ID", title: "Service Type",width: 80, locked: false},  
@@ -79,29 +63,35 @@
             {field: "DEPARTMENT_ID", title: "Department",width: 120, locked: false},
             {field: "STAGE_ID", title: "Stage",width: 80, locked: false},        
         ], null, null, null, 'User List');
-        app.searchTable($table, ['AD_NO', 'REGISTRATION_NO', 'FULL_NAME', 'VACANCY_TYPE', 'APPLICATION_AMOUNT', 'PAYMENT_STATUS', 'SERVICE_TYPE_ID', 'SERVICE_EVENTS_ID', 'POSITION_ID', 'DEPARTMENT_ID', 'STAGE_ID','APPLIED_DATE_AD','APPLIED_DATE_BS'], false);
+        app.searchTable($table, ['AD_NO', 'APPLICATION_ID', 'FULL_NAME', 'VACANCY_TYPE', 'APPLICATION_AMOUNT', 'PAYMENT_STATUS', 'SERVICE_TYPE_ID', 'SERVICE_EVENTS_ID', 'POSITION_ID', 'DEPARTMENT_ID', 'STAGE_ID','APPLIED_DATE_AD','APPLIED_DATE_BS'], false);
 
 
         $('#search').on('click', function () {
             var OpeningNo  = $('#OpeningNo').val();
             var adnumberId  = $('#adnumberId').val();
+            var appliedadnumber = $('#appliedadnumber').val();
             var department  = $('#department').val();
             var designation  = $('#designation').val();
+            var gender       = $('#gender').val();
             var stageId     = $('#stage').val();
             var vacancy_type = $('#vacancy_type').val();
             var paymentPaid = $('#paymentPaid').val();
             var paymentVerified = $('#paymentVerified').val();
             // console.log(stageId);
+            document.body.style.cursor='wait';
             app.pullDataById('', {
                 'OpeningNo' : OpeningNo,
                 'adnumberId' : adnumberId,
+                'appliedadnumber' : appliedadnumber,
                 'department' : department,
                 'designation' : designation,
+                'gender' : gender,
                 'stageId'  : stageId,
                 'vacancy_type' : vacancy_type,
                 'paymentPaid' : paymentPaid,
                 'paymentVerified' : paymentVerified,
             }).then(function (response) {
+                document.body.style.cursor='default';
                 if (response.success) {
                     console.log(response);
                     app.renderKendoGrid($table, response.data);
@@ -115,13 +105,21 @@
         });
 
         var exportMap = {   
-            'AD_NO': 'AD No.',
-            'REGISTRATION_NO': 'Registration No.',
+            'VACANCY_AD_NO': 'AD No.',
+            'MULTIPLE_AD_NO': 'Applied AD No.',
+            'REGISTRATION_NO': 'S No.',
             'FULL_NAME': 'Full Name',
-            'MOBILE_NO': 'Moblile Number',
+            'DOB': 'DOB',
+            'CITIZENSHIP_NO': 'Citizenship No',
+            'CTZ_ISSUE_DATE': 'Citizenship Issued Date',
+            'CTZ_ISSUE_DISTRICT_ID' : 'Citizenship Issued District',
             'VACANCY_TYPE': 'Vacancy Type',
+			'MOBILE_NO' : 'Mobile Number',
             'APPLICATION_AMOUNT': 'Application Amount',
+            'PAYMENT': 'Payment',
             'PAYMENT_STATUS': 'Payment Status',
+            'EMPLOYEE_CODE': 'Employee Code',
+            'DESIGNATION_TITLE': 'Current Designation',
             'SERVICE_TYPE_ID': 'Service Type',
             'SERVICE_EVENTS_ID': 'Service Event',
             'POSITION_ID': 'Designation',
@@ -129,6 +127,9 @@
             'STAGE_ID': 'Stage',
             'APPLIED_DATE_AD': 'Applied Date(AD)',
             'APPLIED_DATE_BS': 'Applied Date(BS)',
+            'FATHER_NAME': 'Father Name',
+            'GRANDFATHER_NAME': 'Grand Father Name',
+            'MOTHER_NAME': 'Mother Name',
         };
         $('#excelExport').on('click', function () {
             app.excelExport($table, exportMap, 'User Application.xlsx');

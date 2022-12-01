@@ -28,8 +28,6 @@ $this->headScript()
     document.bulkStageIdWS = '<?php echo $this->url('userapplication', ['action' => 'bulkStageIdWS']); ?>';
     document.ids = <?php echo json_encode(["OpeningNo" => "", "adnumber" => "", "Gender" => -1, "QualificationId" => "", "designation" => "", "department" => "",]) ?>;
     document.profileurl = '<?= $this->basePath('/'); ?>'; 
-    document.rangedAdNo = <?php echo json_encode($rangedAdNo); ?>;
-    document.singleAdNo = <?php echo json_encode($singleAdNo); ?>;
 </script>
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\userapplication')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
@@ -92,6 +90,16 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                         <select class="form-control reset-field" name="OpeningNo" id="OpeningNo"></select>
                     </div>
                 </div>
+                <div class="col-sm-2" style="display: none;">
+                    <label>Ad Number</label>
+                    <select multiple class="form-control" name="adnumber" id="adnumberId">
+                    </select>
+                </div>
+                <div class="col-sm-2" >
+                    <label>Applied AD Number</label>
+                    <select multiple class="form-control" name="appliedadnumber" id="appliedadnumber">
+                    </select>
+                </div>
                 <div class="col-sm-2">
                     <label>Department</label>
                     <select multiple class="form-control" name="department" id="department">
@@ -102,7 +110,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                     <select multiple class="form-control" name="designation" id="designation">
                     </select>
                 </div>
-                <?php /* <div class="col-sm-2">
+                <div class="col-sm-2">
                     <label>Gender</label>
                     <select multiple class="form-control" name="gender" id="gender">
                     </select>
@@ -112,7 +120,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                         <label for="stageId">Stages</label>
                         <select class="form-control" name="stage" id="stage"></select>
                     </div>
-                </div> */?>
+                </div>
                 <div class="col-sm-2">
                     <div class="form-group">
                         <label>Vacancy Type</label>
@@ -141,20 +149,6 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <option value="">----</option>
                             <option value="Y">Verified</option>
                             <option value="N">Unverified</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-sm-2">
-                    <label>Filter Ad number as:</label>
-                    <select class="form-control" name="isAdRanged" id="isAdRanged">
-                        <option value="N" selected>Single</option>
-                        <option value="Y">Ranged</option>
-                    </select>
-                </div>
-                <div class="col-sm-2" id = "adNumParentDiv">
-                    <div id="adNumberDiv">
-                        <label>Ad Number</label>
-                        <select multiple class="form-control" name="adnumber" id="adnumberId">
                         </select>
                     </div>
                 </div>
