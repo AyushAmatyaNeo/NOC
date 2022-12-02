@@ -33,6 +33,7 @@ use Setup\Controller\TrainingAccountMapController;
 use Setup\Controller\ShiftGroupController;
 use Setup\Controller\InsuranceController;
 use Setup\Controller\TravelController;
+use Setup\Controller\JobResponsibilityController;
 use Zend\Router\Http\Segment;
 
 return [
@@ -437,7 +438,6 @@ return [
                     ]
                 ]
             ],
-
         ]
     ],
     'navigation' => [
@@ -1212,7 +1212,8 @@ return [
             InsuranceController::class => ControllerFactory::class,
             TrainingExpenseController::class => ControllerFactory::class,
             TrainingAccountMapController::class => ControllerFactory::class,
-            FileSetupController::class => ControllerFactory::class
+            FileSetupController::class => ControllerFactory::class,
+            JobResponsibilityController::class => ControllerFactory::class
         ],
     ],
     'view_manager' => [

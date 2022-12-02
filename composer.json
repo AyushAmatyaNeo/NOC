@@ -85,7 +85,8 @@
             "SapApi\\":"module/SapApi/src/",
             "TransferSettlement\\": "module/TransferSettlement/src/",
             "Grade\\": "module/Grade/src/",
-            "Gratuity\\": "module/Gratuity/src/"
+            "Gratuity\\": "module/Gratuity/src/",
+            "JobResponsibilityManagement\\": "module/JobResponsibilityManagement/src/"
         }
     },
     "autoload-dev": {
