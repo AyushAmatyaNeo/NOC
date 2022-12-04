@@ -156,7 +156,7 @@ class LeaveRequest extends HrisController {
                     try {
                         HeadNotification::pushNotification(NotificationEvents::LEAVE_APPLIED, $leaveRequest, $this->adapter, $this);
                     } catch (Exception $e) {
-                        $this->flashmessenger()->addMessage($e->getMessage());
+                        $this->flashmessenger()->addMessage($e->getMessage()); 
                     }
                 }
                 return $this->redirect()->toRoute("leaverequest");

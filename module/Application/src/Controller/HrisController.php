@@ -68,6 +68,7 @@ class HrisController extends AbstractActionController {
     function __construct(AdapterInterface $adapter, StorageInterface $storage) {
         $this->adapter = $adapter;
         $this->storageData = $storage->read();
+        // echo "<pre>"; print_r($this->storageData); die;
         $this->acl = $this->storageData['acl'];
         $this->preference = $this->storageData['preference'];
         $this->employeeId = $this->storageData['employee_id'];

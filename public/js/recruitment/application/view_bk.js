@@ -27,21 +27,18 @@
                 unSelectedInclusions.push($(this).val());
             });
             var stage_id = $('#StageId').val();
-            
 
-            // if(stage_id==0){
-            //     alert("Please select stage!!");
-            // }else{
-            //     if(selectedInclusions.length <1){
-            //         alert("Atleast 1 inclusion should be selected!!");
-            //     }else{
-            //         var remarksNp = $("#remarksNp").val();
+            if(stage_id==0){
+                alert("Please select stage!!");
+            }else{
+                if(selectedInclusions.length <1){
+                    alert("Atleast 1 inclusion should be selected!!");
+                }else{
+                    var remarksNp = $("#remarksNp").val();
                     // var remarksEn = $("#remarksEn").val();
-
-                    // var url = window.location.href;
-                    // var id  = parseInt(url.substring(url.lastIndexOf('/') + 1));
-                    // var selectedValues = [];
-                    
+                    var url = window.location.href;
+                    var id  = parseInt(url.substring(url.lastIndexOf('/') + 1));
+                    var selectedValues = [];
                     // var val = $('#InclusionId').val();
                     // selectedValues.push({
                     //     StageId: stage_id,
@@ -54,22 +51,22 @@
                     // }, function (data, error) {
                         
                     // }); 
-                    // selectedValues.push({
-                    //     StageId: stage_id,
-                    //     remarksNp : remarksNp,
-                    //     id: id,
-                    //     unSelectedInclusions: unSelectedInclusions,
-                    //     selectedInclusions: selectedInclusions,
-                    // });
-                    // app.bulkServerRequest(document.bulkStageIdWS, selectedValues, function () {
+                    selectedValues.push({
+                        StageId: stage_id,
+                        remarksNp : remarksNp,
+                        id: id,
+                        unSelectedInclusions: unSelectedInclusions,
+                        selectedInclusions: selectedInclusions,
+                    });
+                    app.bulkServerRequest(document.bulkStageIdWS, selectedValues, function () {
                         // window.location.reload(true);
-                //         window.location.href = "../../userapplication";
-                //     }, function (data, error) {
+                        window.location.href = "../../userapplication";
+                    }, function (data, error) {
                         
-                //     }); 
-                // }
+                    }); 
+                }
                 
-            // }
+            }
             
         });
        

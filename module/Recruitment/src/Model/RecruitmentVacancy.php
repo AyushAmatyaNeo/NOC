@@ -55,7 +55,7 @@ class RecruitmentVacancy extends Model {
     public $DeletedBy;
     public $DeletedDt;
    
-
+ 
     public $mappings = [
         'VacancyId'             => self::VACANCY_ID,
         'Vacancy_no'             => self::VACANCY_NO,
@@ -71,7 +71,7 @@ class RecruitmentVacancy extends Model {
         'VacancyReservationNo'  => self::VACANCY_RESERVATION_NO,
         'SkillId'               => self::SKILL_ID,
         'InclusionId'           => self::INCLUSION_ID,
-        'AdNo'                  =>self::AD_NO,
+        'AdNo'                  => self::AD_NO,
         'Remark'                => self::REMARK,
         'Status'                => self::STATUS,
         'CreatedBy'             => self::CREATED_BY,

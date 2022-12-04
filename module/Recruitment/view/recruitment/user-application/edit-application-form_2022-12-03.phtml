@@ -1,0 +1,2517 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('css/custom.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('js/setup/employee/view.js'))
+    ->appendFile($this->basePath('js/recruitment/application/view.js'))
+    ->appendFile($this->basePath('js/recruitment/application/apply.js'))
+    ->appendFile($this->basePath('assets/global/plugins/jsPDF-master/dist/jspdf.debug.js'));
+?>
+
+<script type="text/javascript">
+    function addRows(){ 
+      var table = document.getElementById('emptbl');
+      var rowCount = table.rows.length;
+      var cellCount = table.rows[0].cells.length; 
+      var row = table.insertRow(rowCount);
+      console.log(cellCount);
+      for(var i =0; i <= cellCount; i++){
+        var cell = 'cell'+i;
+        cell = row.insertCell(i);
+        var copycel = document.getElementById('col'+i).innerHTML;
+      console.log(document.getElementById('col'+i));
+        cell.innerHTML=copycel;
+        
+      }
+    }
+    function deleteRows(){
+      var table = document.getElementById('emptbl');
+      var rowCount = table.rows.length;
+      if(rowCount > '2'){
+        var row = table.deleteRow(rowCount-1);
+        rowCount--;
+      }
+      else{
+        alert('There should be atleast one row');
+      }
+    }
+
+    function add1Rows(){ 
+      var table = document.getElementById('emptbl1');
+      var rowCount = table.rows.length;
+      var cellCount = table.rows[0].cells.length; 
+      var row = table.insertRow(rowCount);
+      for(var i =0; i <= cellCount; i++){
+        var cell = 'cell'+i;
+        cell = row.insertCell(i);
+        var copycel = document.getElementById('col'+i).innerHTML;
+      console.log(document.getElementById('col'+i));
+        cell.innerHTML=copycel;
+        
+      }
+    }
+    function delete1Rows(){
+      var table = document.getElementById('emptbl1');
+      var rowCount = table.rows.length;
+      if(rowCount > '2'){
+        var row = table.deleteRow(rowCount-1);
+        rowCount--;
+      }
+      else{
+        alert('There should be atleast one row');
+      }
+    }
+
+    function addTRows(){ 
+      var table = document.getElementById('training');
+      var rowCount = table.rows.length;
+      var cellCount = table.rows[0].cells.length; 
+      var row = table.insertRow(rowCount);
+      for(var i =0; i <= cellCount; i++){
+        var cell = 'cell'+i;
+        cell = row.insertCell(i);
+        var copycel = document.getElementById('sol'+i).innerHTML;
+        cell.innerHTML=copycel;
+        
+      }
+    }
+    function deleteTRows(){
+      var table = document.getElementById('training');
+      var rowCount = table.rows.length;
+      if(rowCount > '2'){
+        var row = table.deleteRow(rowCount-1);
+        rowCount--;
+      }
+      else{
+        alert('There should be atleast one row');
+      }
+    }
+</script>
+
+<?php
+$empId = isset($id) ? $id : -1;
+?>
+
+<?php
+if ($this->messages) {
+    print '<ul class="help-block bg-danger" style="background:#f3e250;">';
+    foreach ($this->messages as $message) {
+        print '<li>' . $message . '</li>';
+    }
+    print '</ul>';
+}
+?>
+<script>
+    document.eduDetail =<?= json_encode($eduDegrees); ?>;
+    document.eduFaculty = <?= json_encode($eduFaculty); ?>;
+    document.eduUniversity = <?= json_encode($eduUniversity); ?>;
+    document.eduCourses = <?= json_encode($eduCourses); ?> ;
+</script>
+<script>
+    // document.userData = <?php echo json_encode($applicationData); ?>;
+    // document.bulkStageIdWSWithInclusion = '<?php echo $this->url('userapplication', ['action' => 'bulkStageIdWS']); ?>';
+    // document.bulkStageIdWS = '<?php echo $this->url('userapplication', ['action' => 'updateStage']); ?>';
+</script>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Employee')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb'); ?>
+</div>
+
+
+<?php if($vacancyData['VACANCY_TYPE'] === 'OPEN') { ?>
+<div id="quaConId">
+    <div id="rootwizard" class="tabbable-custom">
+        <div class="vacancy-details">
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>
+                Vacancy Details</p>
+
+                <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Vacancy Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+               <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Advertisement NO:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo str_replace(',','<br>',$applicationData['VACANCY_AD_NO']); ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Applied Advertisement NO:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo str_replace(',','<br>',$applicationData['MULTIPLE_AD_NO']); ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Registration No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['REGISTRATION_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Designation:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['POSITION_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Level:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['LEVEL_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Vacancy Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$vacancyData['START_DATE'] .'</strong> ( '. $vacancyData['START_DATE_AD'] .' ) ';; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">End Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$vacancyData['END_DATE'] .'</strong> ( '. $vacancyData['END_DATE_AD'] .' ) ';; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if ($vacancyData['VACANCY_TYPE'] == 'OPEN') { ?>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Extended Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$vacancyData['EXTENDED_DATE'] .'</strong> ( '. $vacancyData['EXTENDED_DATE_AD'] .' ) ';; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Applied Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$applicationData['APPLIED_DATE'] .'</strong> ( '. $applicationData['APPLIED_DATE_AD'] .' ) ';; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Service Type:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['SERVICE_TYPE_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Service Event:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['SERVICE_EVENTS_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="personal-info">
+            <p><i class="fa fa-user ticon" aria-hidden="true"></i>
+                Personal Information</p>
+
+            <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalInfo/'.$id; ?>" method="POST">
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="profile-img-box">
+                            <img alt="profile image" class="profilepic" src="<?php echo $applicationData['PROFILE_IMG']; ?>" />
+                            <span class="profilepic-label"><?php echo $applicationData['FULL_NAME']; ?> </span>
+                        </div>
+                    </div>
+                    <!-- Data fields -->
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">First Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="first_name" value="<?php echo $applicationData['FIRST_NAME']; ?>"></div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mobile No:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="mobile_no" value="<?php echo $applicationData['MOBILE_NO']; ?>"></div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Citizenship No:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="citizenship_no" value="<?php echo $applicationData['CITIZENSHIP_NO']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Age:</label>
+                                </div>
+                               <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                     <?php echo '<strong>'.$applicationData['AGE'].'</strong>' .  '( TILL DATE ' . $vacancyData['END_DATE'].' )'; ?>
+                                 </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Is NOC Staff:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                     <?php echo ($applicationData['IS_NOC_EMPLOYEE']=='Y')?'Yes':'No'; ?>
+                                     <?php if($applicationData['NOC_DOC_PATH']){?> <br>
+                                     <a target="_blank" href="<?= $applicationData['NOC_DOC_PATH']; ?>">View NOC ID</a>
+                                    <?php } ?>
+                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Middle Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="middle_name" value="<?php echo $applicationData['MIDDLE_NAME']; ?>"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Email Id:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="email" name="email_id" value="<?php echo $applicationData['EMAIL_ID']; ?>"></div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Issue Date:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="date" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>" class="selectNepaliDate" disabled></div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mother Tongue:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="mother_tongue" value="<?php echo $applicationData['MOTHER_TONGUE']; ?>">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Last Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                     <input type="text" name="last_name" maxlength="15" value="<?php echo $applicationData['LAST_NAME']; ?>"></div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">DOB:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="date" name="dob" value="<?php echo $applicationData['DOB']; ?>" class="selectNepaliDate" disabled></div>
+                            </div>
+                        </div>
+                        
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Issue District:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <select name="ctz_issue_district" class="form-control">
+                                        <option>Select District</option>
+                                        <?php foreach ($districts as $district) { ?>
+                                            <option value="<?php echo $district['DISTRICT_ID']; ?>" <?php echo ($district['DISTRICT_ID'] == $applicationData['CTZ_ISSUE_DISTRICT_O_ID']) ? 'selected' : ''; ?>><?php echo $district['DISTRICT_NAME']; ?></option>
+                                        <?php } ?>
+                                    </select>
+                                    <!-- <input type="text" name="ctz_issue_district" value="<?php echo $applicationData['CTZ_ISSUE_DISTRICT_ID']; ?>"></div> -->
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Region:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <?php echo $applicationData['REGION'];
+                                    if ($applicationData['REGION'] == 'others') {
+                                        echo ' - ' . $applicationData['REGION_INPUT'];
+                                    } ?></div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <div class="clearfix"></div>
+                <input type="hidden" name="form_type" value="open">
+                <input type="hidden" name="user_id" value="<?php echo $applicationData['USER_ID']; ?>">
+                <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+                <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                <input type="hidden" name="registration_id" value="<?php echo $applicationData['REGISTRATION_ID']; ?>">
+                <input type="submit" name="submit" value="Update Personal Info" class="btn btn-success mt-1 text-light" style="color: #fff !important; margin-right: 13px; display: block;">
+            </form>
+        </div>
+        <!-- Permanent Address -->
+        <div class="permanent-info">
+
+        <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalAddressInfo/'.$id; ?>" method="POST">
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>Permanent Address</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Province:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <select name="province" class="form-control">
+                                    <option>Select Province</option>
+                                    <?php foreach ($provinces as $province) { ?>
+                                        <option value="<?php echo $province['PROVINCE_ID']; ?>" <?php echo ($province['PROVINCE_ID'] == $addressData['PER_PROVINCE']) ? 'selected' : ''; ?>>
+                                            <?php echo ucfirst($province['PROVINCE_NAME']); ?>
+                                        </option>
+                                    <?php } ?>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">District:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+
+                                <select name="district" class="form-control">
+                                    <option>Select Province</option>
+                                    <?php foreach ($districts as $district) { ?>
+                                        <option value="<?php echo $district['DISTRICT_ID']; ?>" <?php echo ($district['DISTRICT_ID'] == $addressData['PER_DISTRICT']) ? 'selected' : ''; ?>>
+                                            <?php echo ucfirst($district['DISTRICT_NAME']); ?>
+                                        </option>
+                                    <?php } ?>
+                                    
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Municipality:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <select name="municipality" class="form-control">
+                                    <?php foreach ($municipalities as $municipality) { ?>
+                                        <option value="<?php echo $municipality['VDC_MUNICIPALITY_ID']; ?>" <?php echo ($municipality['VDC_MUNICIPALITY_ID'] == $addressData['PER_VDC']) ? 'selected' : ''; ?>>
+                                            <?php echo ucfirst($municipality['VDC_MUNICIPALITY_NAME']); ?>
+                                        </option>
+                                    <?php } ?>
+
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ward No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <input type="text" name="ward" value="<?php echo $addressData['PER_WARD_NO']; ?>">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Tole:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <input type="text" name="tole" value="<?php echo $addressData['PER_TOLE']; ?>">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" name="address_id" value="<?php echo $addressData['ADDRESS_ID']; ?>">
+             <input type="hidden" name="form_type" value="open">
+            <input type="hidden" name="user_id" value="<?php echo $applicationData['USER_ID']; ?>">
+            <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+            <input type="submit" name="submit" value="Update Permanent Address" class="btn btn-success mt-1">
+        </form>
+
+        </div>
+        <!-- Mailling Address -->
+
+        <div class="Temporary-info">
+            <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalMailAddressInfo/'.$id; ?>" method="POST">
+                <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>Mailling Address</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Province:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <select name="province" class="form-control">
+                                        <option>Select Province</option>
+                                         <?php foreach ($provinces as $province) { ?>
+                                            <option value="<?php echo $province['PROVINCE_ID']; ?>" <?php echo ($province['PROVINCE_ID'] == $addressData['MAIL_PROVINCE']) ? 'selected' : ''; ?>>
+                                            <?php echo ucfirst($province['PROVINCE_NAME']); ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">District:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <select name="district" class="form-control">
+                                        <option>Select Province</option>
+                                        <?php foreach ($districts as $district) { ?>
+                                            <option value="<?php echo $district['DISTRICT_ID']; ?>" <?php echo ($district['DISTRICT_ID'] == $addressData['MAIL_DISTRICT']) ? 'selected' : ''; ?>>
+                                                <?php echo ucfirst($district['DISTRICT_NAME']); ?>
+                                            </option>
+                                        <?php } ?>
+                                        
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Municipality:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <?php echo $addressData['MAIL_VDC_ID']; ?>
+                                    <select name="municipality" class="form-control">
+                                        <?php foreach ($municipalities as $municipality) { ?>
+                                            <option value="<?php echo $municipality['VDC_MUNICIPALITY_ID']; ?>" <?php echo ($municipality['VDC_MUNICIPALITY_ID'] == $addressData['MAIL_VDC']) ? 'selected' : ''; ?>>
+                                                <?php echo ucfirst($municipality['VDC_MUNICIPALITY_NAME']); ?>
+                                            </option>
+                                        <?php } ?>
+
+                                    </select>
+                                        
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Ward No:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="ward" value="<?php echo $addressData['MAIL_WARD_NO']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Tole:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="tole" value="<?php echo $addressData['MAIL_TOLE']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="address_id" value="<?php echo $addressData['ADDRESS_ID']; ?>">
+                 <input type="hidden" name="form_type" value="open">
+                <input type="hidden" name="user_id" value="<?php echo $applicationData['USER_ID']; ?>">
+                <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+                <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                <input type="submit" name="submit" value="Update Mailing Address" class="btn btn-success mt-1">
+            </form>
+        </div>
+
+
+        <!-- Family Details  -->
+        <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalFamInfo/'.$id; ?>" method="POST">
+            <div class="family-info">
+                <p><i class="fa fa-users ticon" aria-hidden="true"></i>
+                    Family Information</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Father Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_father_name" value="<?php echo $applicationData['FATHER_NAME']; ?>" placeholder="enter father name: " class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Father Qualification:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_father_qualification" value="<?php echo $applicationData['FATHER_QUALIFICATION']; ?>" placeholder="enter father occupation" class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mother Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_mother_name" value="<?php echo $applicationData['MOTHER_NAME']; ?>" placeholder="enter mother name: " class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mother Qualification:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_mother_qualification" value="<?php echo $applicationData['MOTHER_QUALIFICATION']; ?>" placeholder="enter mother qualification: " class="form-control">
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Father / Mother Occupation:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fm_occupation" value="<?php echo $applicationData['FM_OCCUPATION']; ?>" placeholder="enter mother occupation" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Grandfather Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_grand_father_name" value="<?php echo $applicationData['GRANDFATHER_NAME']; ?>" placeholder="enter grand father name: " class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Grandfather Nationality:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_grand_father_nationality" value="<?php echo $applicationData['GRANDFATHER_NATIONALITY']; ?>" placeholder="enter grand father nationality: " class="form-control">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Spouse Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="spouse_name" value="<?php echo $applicationData['SPOUSE_NAME']; ?>" placeholder="enter spouse name" class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Spouse Nationality:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="spouse_nationality" value="<?php echo $applicationData['SPOUSE_NATIONALITY']; ?>" placeholder="enter spouse nationality" class="form-control"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="clear"></div>
+            <div class="clearfix"></div>
+            <input type="hidden" name="form_type" value="open">
+            <input type="hidden" name="user_id" value="<?php echo $applicationData['USER_ID']; ?>">
+            <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+            <input type="hidden" name="registration_id" value="<?php echo $applicationData['REGISTRATION_ID']; ?>">
+            <input type="submit" name="submit" value="Update Family Info" class="btn btn-success mt-1">
+        </form>
+
+        <!-- Vacancy Information -->
+        <?php /* <div class="permanent-info">
+
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>Vacancy Details</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Opening Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ad Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['AD_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Vacancy Type:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['VACANCY_TYPE']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Level Id:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['LEVEL_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Service Type:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['SERVICE_TYPE_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Service Event:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['SERVICE_EVENTS_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Experience:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['EXPERIENCE'] . ' Years'; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Department:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['DEPARTMENT_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Designation:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['POSITION_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> */?>
+        <!-- Application Information -->
+        <div class="status-info">
+            <p><i class="fa fa-info-circle ticon ticon"></i>Application Infomation</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Employment status:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['EMPLOYMENT_STATUS'];
+                                if ($applicationData['EMPLOYMENT_STATUS'] == 'others') {
+                                    echo ' - ' . $applicationData['EMPLOYMENT_INPUT'];
+                                } ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Religion:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['RELIGION']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Region -->
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Region:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['REGION'];
+                                if ($applicationData['REGION'] == 'others') {
+                                    echo ' - ' . $applicationData['REGION_INPUT'];
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ethnicity:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['ETHNIC_NAME'];
+                                if ($applicationData['ETHNIC_NAME'] == 'others') {
+                                    echo ' - ' . $applicationData['ETHNIC_INPUT'];
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Skills:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php if (!empty($applicationData['SKILL_ID'])) {
+                                    echo $applicationData['SKILL_ID'];
+                                }
+                                ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Mother Tongue -->
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Mother Tongue:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['MOTHER_TONGUE']; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Martial status:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['MARITAL_STATUS']; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Disability -->
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Disability:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['DISABILITY'];
+                                if ($applicationData['DISABILITY'] == 'Yes') {
+                                    echo ' - ' . $applicationData['DISABILITY_INPUT'];
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Qualification Information -->
+        <!-- Qualification Information -->
+        <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalEduInfo/'.$id; ?>" method="POST">
+            <div class="status-info">
+                <p><i class="fa fa-info-circle ticon ticon"></i>Qualification Details</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
+                                
+                                <thead>
+                                    <tr>
+                                        <td><label>Educational Institute</label></td>
+                                        <td><label>Degree Acquired</label></td>
+                                        <td><label>University/Board</label></td>
+                                        <td><label>Faculty</label></td>
+                                        <td><label>Major Subject</label></td>
+                                        <td><label>Rank Type</label></td>
+                                        <td><label>Rank Value</label></td>
+                                        <td><label>Passed Year</label></td>
+                                        <td><label>Action</label></td>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="educationalbody">
+                                    <?php $counter = 0; foreach ($eduDatas as $eduData) { ?>
+                                        <tr>
+                                            <td>
+                                                <input type="text" name="institute[]" value="<?php echo ucwords($eduData['EDUCATION_INSTITUTE']); ?>">
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm level_id" name="degree_id[]">
+                                                    <?php foreach($degrees as $degree) { ?>
+                                                        <option value="<?php echo $degree['ACADEMIC_DEGREE_ID'] ?>" 
+                                                            <?php echo ($degree['ACADEMIC_DEGREE_ID'] == $eduData['LEVEL_ID']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($degree['ACADEMIC_DEGREE_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm university" name="university_board[]">
+                                                    <?php foreach($universities as $university) { ?>
+                                                        <option value="<?php echo $university['ACADEMIC_UNIVERSITY_ID'] ?>" 
+                                                            <?php echo ($university['ACADEMIC_UNIVERSITY_ID'] == $eduData['UNIVERSITY_BOARD']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($university['ACADEMIC_UNIVERSITY_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm faculty" name="faculty[]">
+                                                    <?php foreach($programs as $program) { ?>
+                                                        <option value="<?php echo $program['ACADEMIC_PROGRAM_ID'] ?>" 
+                                                            <?php echo ($program['ACADEMIC_PROGRAM_ID'] == $eduData['FACALTY']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($program['ACADEMIC_PROGRAM_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="major_subject[]" value="<?php echo ucwords($eduData['MAJOR_SUBJECT']); ?>">
+                                            </td>
+                                            <td>
+                                                <select class="form-control" name="rank_type[]">
+                                                    <option value="Percentage" <?php echo ($eduData['RANK_TYPE'] == 'Percentage') ? 'selected' : ''; ?>>Percentage</option>
+                                                    <option value="GPA" <?php echo ($eduData['RANK_TYPE'] == 'GPA') ? 'selected' : ''; ?>>GPA</option>
+                                                    <option value="Division/grade" <?php echo ($eduData['RANK_TYPE'] == 'Division/grade') ? 'selected' : ''; ?>>Division/grade</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="rank_value[]" class="form-control" value="<?php echo $eduData['RANK_VALUE']; ?>">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="passed_year[]" class="form-control" value="<?php echo $eduData['PASSED_YEAR']; ?>">
+                                            </td>
+                                            <td>
+                                                <?php if ($counter == 0) { ?>
+                                                    <a class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i>
+                                                <?php } ?>
+                                            </td>
+                                            <input type="hidden" name="edu_id[]" value="<?php echo $eduData['EDUCATION_ID']; ?>">
+
+                                        </tr>
+                                    <?php $counter++; } ?>
+                                </tbody>
+
+
+                            </table>
+                            <input type="hidden" name="form_type" value="open">
+                            <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+                            <input type="hidden" name="user_id" value="<?php echo $applicationData['USER_ID']; ?>">
+                            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                            <input type="submit" name="submit" value="Update Education" class="btn btn-success mt-1" style="color:#fff !important;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <!-- Experiance Infromation -->
+        <div class="status-info">
+            <p><i class="fa fa-info-circle ticon ticon"></i>Experience Details</p>
+
+
+            <h6 style="font-weight:bold;">
+            Required Experience: <?=$vacancyData['EXPERIENCE']?> years</h6>
+            <h6 style="font-weight:bold;">
+            Total Experience: <?=$totalExperienceYMD?></h6>
+
+
+                <div class="row clearfix e-setup">
+                    <input type="hidden" name="employeeId" id="employeeId" value="<?php echo (isset($empId)) ? $empId : ''; ?>">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+
+                    <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalExpInfo/'.$id; ?>" method="POST">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="emptbl">
+                                <tr>
+                                    <th>Organisation Name</th>
+                                    <th>Post</th>
+                                    <th>Service / Group</th> 
+                                    <th>Level</th> 
+                                    <th>Employee Type</th> 
+                                    <th>Start From</th> 
+                                    <th>Till Date</th> 
+                                </tr> 
+                                <?php
+                                    if ($expDatas) {
+                                        foreach ($expDatas as $expData) {
+                                ?>
+                                    <tr>
+                                        <td id="col0">
+                                            <input type="text" name="org_name[]" value="<?php print $expData['ORGANISATION_NAME']; ?>" class="form-control"/>
+                                        </td> 
+                                            
+                                        <td id="col1">
+                                            <input type="text" name="post_name[]" value="<?php print $expData['POST_NAME']; ?>" class="form-control"/>
+                                        </td> 
+                                        <td id="col2"> 
+                                            <input type="text" name="service_name[]" value="<?php print $expData['SERVICE_NAME']; ?>" class="form-control"/>
+                                        </td> 
+
+                                        <td id="col3">
+                                            <input type="text" name="org_level[]" value=" <?php print $expData['LEVEL_ID']; ?>" class="form-control">
+                                        </td> 
+
+                                        <td id="col4">
+                                            <select name="employee_type[]" class="form-control"> 
+                                                <option>Select Employee Type</option> 
+                                                <option value="1" <?php echo ($expData['EMPLOYEE_TYPE_ID'] == 1) ? 'selected' : ''; ?>>Permanent</option>
+                                                <option value="2" <?php echo ($expData['EMPLOYEE_TYPE_ID'] == 2) ? 'selected' : ''; ?>>Temporarys</option>
+                                                <option value="3" <?php echo ($expData['EMPLOYEE_TYPE_ID'] == 3) ? 'selected' : ''; ?>>Contract</option>
+                                            </select>
+                                        </td>
+
+                                        <td id="col5">
+                                            <input type="date" name="from_date[]" value="<?php print $expData['FROM_DATE_AD']; ?>" class="form-control">
+                                        </td>
+                                        <td id="col6">
+                                            <input type="date"  name="to_date[]" value="<?php print $expData['TO_DATE_AD']; ?>" class="form-control">
+                                        </td>
+                                    </tr>
+                                    <input type="hidden" name="exp_id[]" value="<?php echo $expData['EXPERIENCE_ID']; ?>">
+                                <?php }  } else { ?>
+                                    <tr>
+                                        <td id="col0">
+                                            <input type="text" name="org_name[]" value="" class="form-control"/>
+                                        </td> 
+                                            
+                                        <td id="col1">
+                                            <input type="text" name="post_name[]" value="" class="form-control"/>
+                                        </td> 
+                                        <td id="col2"> 
+                                            <input type="text" name="service_name[]" value="" class="form-control"/>
+                                        </td> 
+
+                                        <td id="col3">
+                                            <input type="text" name="org_level[]" value="" class="form-control">
+                                        </td> 
+
+                                        <td id="col4">
+                                            <select name="employee_type[]" class="form-control"> 
+                                                <option>Select Employee Type</option> 
+                                                <option value="1">Permanent</option>
+                                                <option value="2">Temporarys</option>
+                                                <option value="3">Contract</option>
+                                            </select>
+                                        </td>
+
+                                        <td id="col5">
+                                            <input type="date" name="from_date[]" value="" class="form-control">
+                                        </td>
+                                        <td id="col6">
+                                            <input type="date"  name="to_date[]" value="" class="form-control">
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+
+                            </table> 
+                            <table> 
+                                <tr> 
+                                    <td><input type="button" value="Add" onclick="addRows()" /></td> 
+                                    <td><input type="button" value="Remove" onclick="deleteRows()" /></td> 
+                                </tr>  
+                            </table> 
+                            <input type="hidden" name="user_id" value="<?php echo $applicationData['USER_ID']; ?>">
+                            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                            <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+                            <input type="hidden" name="form_type" value="open">
+                            <input type="submit" name="submit" value="Update Experience" class="btn btn-success mt-1" style="color:#fff !important;">
+
+                    </form>
+
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
+        <!-- Training Information -->
+        <div class="status-info">
+            <p><i class="fa fa-info-circle ticon ticon"></i>Training Details</p>
+            <div class="row clearfix e-setup">
+                <input type="hidden" name="employeeId" id="employeeId" value="<?php echo (isset($empId)) ? $empId : ''; ?>">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+
+                    <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalTrainingInfo/'.$id; ?>" method="POST">
+
+                        <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="training">
+                            <tr>
+                                <th>Training Name</th>
+                                <th>Certificate</th>
+                                <th>From Date</th> 
+                                <th>To Date</th> 
+                                <th>Period</th> 
+                                <th>Description</th> 
+                            </tr> 
+                            <?php
+
+                                if ($trDatas) { 
+
+                                    foreach ($trDatas as $trData) {
+
+                            ?>
+                            <tr> 
+                                <td id="sol0">
+                                    <input type="text" name="training_name[]" value=" <?php print $trData['TRAINING_NAME']; ?>" class="form-control"/>
+                                </td> 
+                                <td id="sol1">
+                                    <input type="text" name="certificate[]" value="<?php print $trData['CERTIFICATE']; ?>" class="form-control"/>
+                                </td> 
+                                <td id="sol2"> 
+                                    <input type="date" name="from_date[]" value="<?php print $trData['FROM_DATE']; ?>" class="form-control"/>
+                                </td> 
+                                <td id="sol3">
+                                    <input type="date" name="to_date[]" value="<?php print $trData['TO_DATE']; ?>" class="form-control">
+                                </td>
+                                <td id="sol4">
+                                    <input type="date" name="period[]" value="<?php print $trData['TOTAL_DAYS']; ?>" readonly class="form-control">
+                                </td>
+                                <td id="sol5">
+                                    <input type="text" name="description[]" value="<?php print $trData['DESCRIPTION']; ?>" class="form-control">
+                                </td>
+                            </tr>
+                            <input type="hidden" name="training_id[]" value="<?php echo $trData['TRAINING_ID'] ?>">
+
+                            <?php } } else { ?>
+
+                            <tr> 
+                                <td id="sol0">
+                                    <input type="text" name="training_name[]" value="" class="form-control"/>
+                                </td> 
+                                <td id="sol1">
+                                    <input type="text" name="certificate[]" value="" class="form-control"/>
+                                </td> 
+                                <td id="sol2"> 
+                                    <input type="date" name="from_date[]" value="" class="form-control"/>
+                                </td> 
+                                <td id="sol3">
+                                    <input type="date" name="to_date[]" value="" class="form-control">
+                                </td>
+                                <td id="sol4">
+                                    <input type="date" name="period[]" value="" class="form-control" readonly>
+                                </td>
+                                <td id="sol5">
+                                    <input type="text" name="description[]" value="" class="form-control">
+                                </td>
+                            </tr>
+
+                            <?php } ?>
+                        </table> 
+                        <table> 
+                            <tr> 
+                                <td><input type="button" value="Add" onclick="addTRows()" /></td> 
+                                <td><input type="button" value="Remove" onclick="deleteTRows()" /></td> 
+                                <!-- <td><input type="submit" value="Submit" /></td>  -->
+                            </tr>  
+                        </table>  
+
+                        <input type="hidden" name="form_type" value="open">
+                        <input type="hidden" name="user_id" value="<?php echo $applicationData['user_id']; ?>">
+                        <input type="hidden" name="vacancy_id" value="<?php echo $applicationData['VACANCY_ID']; ?>">
+                        <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                        <input type="submit" name="submit" value="Update Experience" class="btn btn-success mt-1" style="color:#fff !important;">
+
+
+                    </form>                 
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Documents Information -->
+        <div class="col-sm-12">
+            <div class="status-info">
+                <p><i class="fa fa-info-circle ticon ticon"></i>Document Details</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
+                                <tr>
+                                    <td><label>Document Name</label></td>
+                                    <td><label>File</label></td>
+                                    <td><label>View</label></td>
+                                    <td><label>Action</label></td>
+                                </tr>
+                                <?php
+                                    foreach ($docDatas as $file) {
+                                ?>
+                                    <tr>
+                                        <td>
+                                            <?php print $file['DOC_FOLDER']; ?>
+                                        </td>
+                                        <td>
+                                            <?php if (strpos($file['DOC_OLD_NAME'],'pdf') == false ) { ?>
+                                                <img src="<?php print $file['DOC_PATH']; ?>" alt="<?php print $file['DOC_OLD_NAME']; ?>" title="<?php print $file['DOC_OLD_NAME']; ?>" style="width:40%">
+                                            <?php } else { ?>
+                                                <h5><?php print $file['DOC_OLD_NAME']; ?></h5>
+                                            <?php } ?>
+
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="<?= $file['DOC_PATH']; ?>">View</a>
+                                        </td>
+                                        <td width="10%">
+                                            <a class="btn-delete" href="<?= $file['DOC_PATH']; ?>" download="<?php echo $file['DOC_OLD_NAME']; ?>" style="height:27px;">
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Section</th>
+                                        <th scope="col">Vacancy Details</th>
+                                        <th scope="col">Application Details</th>
+                                        <!-- <th scope="col">Status</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php /*<tr>
+                                         <th scope="row">Skills</th>
+                                        <td><?php if (!empty($vacancyData['SKILL_ID'])) {
+                                                    $Vskills = explode(',',$vacancyData['SKILL_ID']);
+                                                    $C = 1;
+                                                    foreach($Vskills as $Vskill){
+                                                        echo $C.'. '. $Vskill. '</br>';
+                                                        $C++;
+                                                    }
+                                                }
+                                                ?></td>
+                                        <td><?php if (!empty($applicationData['SKILL_ID'])) {
+                                                    $skills = explode(',',$applicationData['SKILL_ID']);
+                                                    $S =1;
+                                                    foreach($skills as $skill){
+                                                        echo $S.'. '. $skill. '</br>';
+                                                    }
+                                                }
+                                                ?>
+                                        </td>
+                                        <!-- <td>@mdo</td> -->
+                                    </tr> */ ?>
+                                    <tr>
+                                        <th scope="row">Inclusions</th>
+                                        <td><?php if (!empty($vacancyData['INCLUSIONS'])) {
+                                                   $c = 1;
+                                                    foreach($vacancyData['INCLUSIONS'] as $inclusion){
+                                                        echo $c.'. '. $inclusion['INCLUSION_NAME']. '</br>';
+                                                        $c++;
+                                                    }
+                                                }
+                                                ?></td>
+                                        <td><?php if (!empty($applicationData['INCLUSIONS'])) {
+                                                   
+                                                    $S =1;
+                                                    ?> <table><?php
+                                                    foreach($applicationData['INCLUSIONS'] as $inc){
+                                                        echo "<tr><td style='width:200x;'>".$S.'. '. $inc['INCLUSION_NAME']. 
+                                                        '<input  style="
+                                                        float: right;
+                                                        margin-right: 30px;
+                                                        margin-top:-4px;
+                                                        "
+                                                        value='.$inc['INCLUSION_ID'].'
+                                                        checked
+                                                        type="checkbox" name="approvedInclusion"  class="approvedInclusion" id="approvedInclusion">
+                                                        </br> </td></tr>';
+                                                        $S++;
+                                                    } 
+                                                    foreach($applicationData['CANCELLED_INCLUSION_ID'] as $cancelledInc){
+                                                        echo "<tr><td style='width:200px;'>".$S.'. '. $cancelledInc['INCLUSION_NAME']. 
+                                                        '<i style="
+                                                        float: right;
+                                                        margin-right: 30px;
+                                                        margin-top:-4px;
+                                                        color:red;
+                                                        font-size: 15px;
+                                                        "
+                                                        class="fa fa-window-close" aria-hidden="true"></i>
+                                                        </br> </td></tr>';
+                                                        $S++;
+                                                    }?></table><?php
+                                                }?>
+                                        </td>
+                                        <!-- <td>@fat</td> -->
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Payment</th>
+                                        <td>Payment Amount: <?= $applicationData['APPLICATION_AMOUNT']; ?></td>
+                                        <td><?php 
+                                                if($applicationData['PAYMENT_PAID'] == 'Y'){
+                                                    echo '<span style="color: green">'. $applicationData['PAYMENT_STATUS'].' via '. $applicationData['PAYMENT_TYPE'].'</span>';
+                                                } else{
+                                                    echo '<span style="color: red"> Not Paid </span>';
+                                                }
+                                            ?>
+                                        </td>
+                                        <!-- <td>@twitter</td> -->
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><?= $vacancyData['STAGE_ID'] ?></td>
+                                        <td>
+                                            <?= $applicationData['STAGE_ID'];
+                                            if(!empty($applicationData['STAGE_REMARKS'])){
+                                                echo '</br><b> Remarks: </b>'. $applicationData['STAGE_REMARKS'];
+                                            }                                            
+                                            ?>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                 <a href="https://erecruitment.nepaloil.org.np/vacancy/update_stage/<?php echo $id.'-'.$employee_id;?>" target="_blank" class="btn btn-success">Update Images</a>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<?php } else { ?>
+   
+    <div id="quaConId">
+    <div id="rootwizard" class="tabbable-custom">
+        <div class="vacancy-details">
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>
+                Vacancy Details</p>
+
+                <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Vacancy Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Advertisement NO:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo str_replace(',','<br>',$applicationData['MULTIPLE_AD_NO']); ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Registration No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['REGISTRATION_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Designation:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['POSITION_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Level:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['LEVEL_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Vacancy Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$vacancyData['START_DATE']  .'</strong> ( '. $vacancyData['START_DATE_AD'] .' ) '; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">End Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$vacancyData['END_DATE'] .'</strong> ( '. $vacancyData['END_DATE_AD'] .' ) '; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <?php if ($vacancyData['VACANCY_TYPE'] == 'OPEN') { ?>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Extended Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$vacancyData['EXTENDED_DATE'] .'</strong> ( '. $vacancyData['EXTENDED_DATE_AD'] .' ) '; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <?php } ?>
+ 
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Applied Date:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo '<strong>'.$applicationData['APPLIED_DATE'] .'</strong> ( '. $applicationData['APPLIED_DATE_AD'] .' ) ';; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalInfo/'.$id; ?>" method="POST" enctype="multipart/form-data">
+            <div class="personal-info">
+                <p><i class="fa fa-user ticon" aria-hidden="true"></i>
+                    Personal Information</p>
+
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="profile-img-box">
+                            <img alt="profile image" class="profilepic" src="<?php echo $applicationData['PROFILE_IMG']; ?>" />
+                            <input type="file" name="profilepic" class="form-control" style="padding-bottom: 20px !important; margin-top: 6px;">
+                            <input type="hidden" name="profile_picture_id" value="<?php echo $applicationData['PROFILE_PICTURE_ID']; ?>">
+                        </div>
+                    </div>
+                    <!-- Data fields -->
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">First Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="first_name" value="<?php echo $applicationData['FIRST_NAME']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mobile No:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="mobile_no" value="<?php echo $applicationData['MOBILE_NO']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Citizenship No:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                     <input type="text" name="citizenship_no" value="<?php echo $applicationData['CITIZENSHIP_NO']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Age:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                     <?php echo '<strong>'.$applicationData['AGE'].'</strong>' .  '( TILL DATE ' . $vacancyData['END_DATE'].' )'; ?>
+                                 </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Middle Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="middle_name" value="<?php echo $applicationData['MIDDLE_NAME']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Email Id:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="email" name="email_id" value="<?php echo $applicationData['EMAIL_ID']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Issue Date:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="date" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-xs-12 col-sm-3 col-md-3 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Last Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="last_name" maxlength="15" value="<?php echo $applicationData['LAST_NAME']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">DOB:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="date" name="dob" value="<?php echo $applicationData['DOB']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Issue District:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="ctz_issue_district" value="<?php echo $applicationData['CTZ_ISSUE_DISTRICT_ID']; ?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" name="form_type" value="internal">
+                <input type="hidden" name="employee_id" value="<?php echo $applicationData['EMPLOYEE_ID']; ?>">
+                <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                <input type="submit" name="submit" value="Update Personal Info" class="btn btn-success mt-1">
+            </div>
+            
+        </form> 
+        <!-- Permanent Address -->
+        <div class="permanent-info">
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>Permanent Address</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Province:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['PERM_PROVINCE_NAME'] ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Zone:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['PERM_ZONE_NAME']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">District:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['PERM_DISTRICT_NAME']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ward No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['ADDR_PERM_WARD_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Tole:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['ADDR_PERM_STREET_ADDRESS']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Temp Address -->
+        <div class="Temporary-info">
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>Temporary Address</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Province:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['TEMP_PROVINCE_NAME']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Zone:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['TEMP_ZONE_NAME']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">District:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['TEMP_DISTRICT_NAME']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ward No:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['ADDR_TEMP_WARD_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Tole:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['ADDR_TEMP_STREET_ADDRESS']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Family Details  -->
+        <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalFamInfo/'.$id; ?>" method="POST">
+            <div class="family-info">
+                <p><i class="fa fa-users ticon" aria-hidden="true"></i>
+                    Family Information</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Father Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_father_name" value="<?php echo $applicationData['FAM_FATHER_NAME']; ?>" placeholder="enter father name: " class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Father Occupation:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_father_occupation" value="<?php echo $applicationData['FAM_FATHER_OCCUPATION']; ?>" placeholder="enter father occupation" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mother Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_mother_name" value="<?php echo $applicationData['FAM_MOTHER_NAME']; ?>" placeholder="enter mother name: " class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Mother Occupation:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_mother_occupation" value="<?php echo $applicationData['FAM_MOTHER_OCCUPATION']; ?>" placeholder="enter mother occupation" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Grandfather Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="fam_grand_father_name" value="<?php echo $applicationData['FAM_GRAND_FATHER_NAME']; ?>" placeholder="enter grand father name: " class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <?php if ($applicationData['MARITAL_STATUS'] == 'M') { ?>
+                        <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Spouse Name:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="spouse_name" value="<?php echo $applicationData['SPOUSE_NAME']; ?>" placeholder="enter spouse name" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-4 col-md-4">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                                <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                    <label for="firstName">Spouse Nationality:</label>
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <input type="text" name="spouse_nationality" value="<?php echo $applicationData['SPOUSE_NATIONALITY']; ?>" placeholder="enter spouse nationality" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               <?php } ?>
+            </div>
+            <input type="hidden" name="employee_id" value="<?php echo $applicationData['EMPLOYEE_ID']; ?>">
+            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+            <input type="submit" name="submit" value="Update Family Info" class="btn btn-success mt-1">
+        </form>
+        <!-- Vacancy Information -->
+        <div class="permanent-info">
+
+            <p><i class="fa fa-address-book ticon" aria-hidden="true"></i>Vacancy Details</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Opening Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['OPENING_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ad Number:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['AD_NO']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Vacancy Type:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['VACANCY_TYPE']; ?></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Level Id:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['LEVEL_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Service Type:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['SERVICE_TYPE_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Service Event:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['SERVICE_EVENTS_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Experience:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['EXPERIENCE'] . ' Years'; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Department:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['DEPARTMENT_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-6 col-md-4 col-box">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Designation:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $vacancyData['POSITION_ID']; ?></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Application Information -->
+        <div class="status-info">
+            <p><i class="fa fa-info-circle ticon ticon"></i>Application Infomation</p>
+            <div class="row clearfix e-setup">
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Employment status:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['EMPLOYEE_STATUS'];?>
+                               </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Religion:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['RELIGION_NAME']; ?></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Region -->
+             
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Ethnicity:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['ETHNIC_NAME'];
+                                if ($applicationData['ETHNIC_NAME'] == 'others') {
+                                    echo ' - ' . $applicationData['ETHNICITY'];
+                                } ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Martial status:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['MARITAL_STATUS']; ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Disability -->
+                <div class="col-xs-12 col-sm-4 col-md-4">
+                    <div class="row bottomgap">
+                        <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                <label for="firstName">Disability:</label>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                <?php echo $applicationData['DISABLED_FLAG']; ?>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Qualification Information -->
+        <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalEduInfo/'.$id; ?>" method="POST">
+            <div class="status-info">
+                <p><i class="fa fa-info-circle ticon ticon"></i>Qualification Details</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="education">
+                                <thead>
+                                    <tr>
+                                        <td><label>Degree Acquired</label></td>
+                                        <td><label>University/Board</label></td>
+                                        <td><label>Faculty</label></td>
+                                        <td><label>Degree Name</label></td>
+                                        <td><label>Rank Type</label></td>
+                                        <td><label>Rank Value</label></td>
+                                        <td><label>Passed Year</label></td>
+                                        <td><label>Action</label></td>
+                                    </tr>
+                                </thead>
+
+                                <tbody id="educationalbody">
+                                    <?php $counter = 0; foreach ($eduDatas as $eduData) { ?>
+                                        <tr>
+                                            <td>
+                                                <select class="form-control form-control-sm level_id" name="degree_id[]">
+                                                    <?php foreach($degrees as $degree) { ?>
+                                                        <option value="<?php echo $degree['ACADEMIC_DEGREE_ID'] ?>" 
+                                                            <?php echo ($degree['ACADEMIC_DEGREE_ID'] == $eduData['ACADEMIC_DEGREE_ID']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($degree['ACADEMIC_DEGREE_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm university" name="university_board[]">
+                                                    <?php foreach($universities as $university) { ?>
+                                                        <option value="<?php echo $university['ACADEMIC_UNIVERSITY_ID'] ?>" 
+                                                            <?php echo ($university['ACADEMIC_UNIVERSITY_ID'] == $eduData['ACADEMIC_UNIVERSITY_ID']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($university['ACADEMIC_UNIVERSITY_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm faculty" name="faculty[]">
+                                                    <?php foreach($programs as $program) { ?>
+                                                        <option value="<?php echo $program['ACADEMIC_PROGRAM_ID'] ?>" 
+                                                            <?php echo ($program['ACADEMIC_PROGRAM_ID'] == $eduData['ACADEMIC_PROGRAM_ID']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($program['ACADEMIC_PROGRAM_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control form-control-sm course" name="major_subject[]">
+                                                    <?php foreach($courses as $course) { ?>
+                                                        <option value="<?php echo $course['ACADEMIC_COURSE_ID'] ?>" 
+                                                            <?php echo ($course['ACADEMIC_COURSE_ID'] == $eduData['ACADEMIC_COURSE_ID']) ? 'selected' : ''; ?>>
+                                                            <?php echo ucwords($course['ACADEMIC_COURSE_NAME']); ?>
+                                                        </option>
+                                                    <?php } ?>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <select class="form-control" name="rank_type[]">
+                                                    <option value="Percentage" <?php echo ($eduData['RANK_TYPE'] == 'Percentage') ? 'selected' : ''; ?>>Percentage</option>
+                                                    <option value="GPA" <?php echo ($eduData['RANK_TYPE'] == 'GPA') ? 'selected' : ''; ?>>GPA</option>
+                                                    <option value="Division/grade" <?php echo ($eduData['RANK_TYPE'] == 'Division/grade') ? 'selected' : ''; ?>>Division/grade</option>
+                                                </select>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="rank_value[]" class="form-control" value="<?php echo $eduData['RANK_VALUE']; ?>">
+                                            </td>
+                                            <td>
+                                                <input type="text" name="passed_year[]" class="form-control" value="<?php echo $eduData['PASSED_YR']; ?>">
+                                            </td>
+                                            <td>
+                                                <?php if ($counter == 0) { ?>
+                                                    <a class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i>
+                                                <?php } ?>
+                                            </td>
+                                            <input type="hidden" name="edu_id[]" value="<?php echo $eduData['QUALIFICATION_ID']; ?>">
+                                            <input type="hidden" name="form_type" value="internal">
+
+                                        </tr>
+                                    <?php $counter++; } ?>
+                                </tbody>
+
+
+                            </table>
+                            <input type="hidden" name="form_type" value="internal">
+                            <input type="hidden" name="employee_id" value="<?php echo $applicationData['EMPLOYEE_ID']; ?>">
+                            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                            <input type="submit" name="submit" value="Update Education" class="btn btn-success mt-1" style="color:#fff !important;">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </form>
+        <!-- Experiance Infromation -->
+        <div class="status-info">
+            <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalEpxInfo/'.$id; ?>" method="POST">
+            <p><i class="fa fa-info-circle ticon ticon"></i>Experience Details</p>
+            <div class="row clearfix e-setup">
+                <input type="hidden" name="employeeId" id="employeeId" value="<?php echo (isset($empId)) ? $empId : ''; ?>">
+                <div class="col-sm-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="emptbl1">
+                            <tr>
+                                <th>Organisation Name</th>
+                                <th>Post</th>
+                                <th>Service / Group</th> 
+                                <th>Level</th> 
+                                <th>Employee Type</th> 
+                                <th>Start From</th> 
+                                <th>Till Date</th> 
+                            </tr> 
+                            <tr> 
+                                <td id="col0">
+                                    <input type="text" name="org_name[]" value="" class="form-control"/>
+                                </td> 
+                                <td id="col1">
+                                    <input type="text" name="post_name[]" value="" class="form-control"/>
+                                </td> 
+                                <td id="col2"> 
+                                    <input type="text" name="service_name[]" value="" class="form-control"/>
+                                </td> 
+                                <td id="col3">
+                                    <input type="text" name="org_level[]" class="form-control">
+                                </td>
+                                <td id="col4">
+                                    <select name="employee_type[]" class="form-control"> 
+                                        <option>Select Employee Type</option> 
+                                        <option value="1">Permanent</option>
+                                        <option value="2">Temporarys</option>
+                                        <option value="3">Contract</option>
+                                    </select>
+                                </td>
+                                <td id="col5">
+                                    <input type="date" name="from_date[]" class="form-control">
+                                </td>
+                                <td id="col6">
+                                    <input type="date" name="to_date[]" class="form-control">
+                                </td>
+                            </tr>  
+                        </table> 
+                        <table> 
+                            <tr> 
+                                <td style="padding-left: 10px;"><input type="button" value="Add" onclick="add1Rows()" /></td> 
+                                <td><input type="button" value="Remove" onclick="delete1Rows()" /></td> 
+                                <!-- <td><input type="submit" value="Submit" /></td>  -->
+                            </tr>  
+                        </table>
+
+                        <input type="hidden" name="form_type" value="internal">
+                        <input type="hidden" name="employee_id" value="<?php echo $applicationData['EMPLOYEE_ID']; ?>">
+                        <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                        <input type="submit" name="submit" value="Update Experience" class="btn btn-success mt-1" style="color:#fff !important;">
+
+                    </div>
+                </div>
+            </div>
+        </form>
+        </div>
+
+        <!-- Training Information -->
+        <div class="status-info">
+            <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalInternalTrainingInfo/'.$id; ?>" method="POST">
+                <p><i class="fa fa-info-circle ticon ticon"></i>Training Details</p>
+                <div class="row clearfix e-setup">
+                    <input type="hidden" name="employeeId" id="employeeId" value="<?php echo (isset($empId)) ? $empId : ''; ?>">
+                    <div class="col-sm-12">
+                        <div class="table-responsive">
+                            
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="training">
+                                <tr>
+                                    <th>Training Name</th>
+                                    <th>Certificate</th>
+                                    <th>From Date</th> 
+                                    <th>To Date</th> 
+                                    <th>Period</th> 
+                                    <th>Description</th> 
+                                </tr> 
+                                <tr> 
+                                    <td id="sol0">
+                                        <input type="text" name="training_name[]" value="" class="form-control"/>
+                                    </td> 
+                                    <td id="sol1">
+                                        <input type="text" name="certificate[]" value="" class="form-control"/>
+                                    </td> 
+                                    <td id="sol2"> 
+                                        <input type="date" name="from_date[]" value="" class="form-control"/>
+                                    </td> 
+                                    <td id="sol3">
+                                        <input type="date" name="to_date[]" class="form-control">
+                                    </td>
+                                    <td id="sol4">
+                                        <input type="text" name="period[]" class="form-control">
+                                    </td>
+                                    <td id="sol5">
+                                        <input type="text" name="description[]" class="form-control">
+                                    </td>
+                                </tr>  
+                            </table> 
+                            <table> 
+                                <tr> 
+                                    <td style="padding-left: 10px;"><input type="button" value="Add" onclick="addTRows()" /></td> 
+                                    <td><input type="button" value="Remove" onclick="deleteTRows()" /></td> 
+                                    <!-- <td><input type="submit" value="Submit" /></td>  -->
+                                </tr>  
+                            </table>
+
+                            <input type="hidden" name="form_type" value="internal">
+                            <input type="hidden" name="employee_id" value="<?php echo $applicationData['EMPLOYEE_ID']; ?>">
+                            <input type="hidden" name="application_id" value="<?php echo $id; ?>">
+                            <input type="submit" name="submit" value="Update Experience" class="btn btn-success mt-1" style="color:#fff !important;">
+
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Documents Information -->
+        <div class="col-sm-12">
+            <div class="status-info">
+                <p><i class="fa fa-info-circle ticon ticon"></i>Document Details</p>
+                <div class="row clearfix e-setup">
+                    <div class="col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
+                                <tr>
+                                    <td><label>Document Name</label></td>
+                                    <td><label>File</label></td>
+                                    <td><label>View</label></td>
+                                    <td><label>Action</label></td>
+                                </tr>
+                                <?php
+                                foreach ($docDatas as $file) {
+                                ?>
+                                <form action="<?php echo $this->basePath().'/recruitment/userapplication/editPersonalDocInfo/'.$id; ?>" method="POST" enctype="multipart/form-data">
+                                    <tr>
+                                        <td>
+                                            <?php print $file['DOC_FOLDER']; ?>
+                                        </td>
+                                        <td>
+                                            <?php if (strpos($file['DOC_OLD_NAME'],'pdf') == false ) { ?>
+                                                <img src="<?php print $this->basePath() . "/".$file['DOC_PATH_NEW']; ?>" alt="<?php print $file['DOC_OLD_NAME']; ?>" title="<?php print $file['DOC_OLD_NAME']; ?>" style="width:40%">
+                                            <?php } else { ?>
+                                                <h5><?php print $file['DOC_OLD_NAME']; ?></h5>
+                                            <?php } ?>
+
+                                            <div style="padding: 20px 20px 0 0;">
+                                                <input type="file" name="<?php print $file['DOC_FOLDER']; ?>" class="form-control" style=" height: calc(1.8em + .75rem + 2px);">
+                                            </div>
+
+                                            <input type="hidden" name="form_type" value="internal">
+                                            <input type="hidden" name="rec_doc_id" value="<?php print $file['REC_DOC_ID']; ?>">
+                                            <input type="hidden" name="doc_folder" value="<?php print $file['DOC_FOLDER']; ?>">
+                                            <button type="submit" class="btn btn-success">Update File</button>
+                                            
+                                        </td>
+                                        <td>
+                                            <a target="_blank" href="<?=$this->basePath() . "/". $file['DOC_PATH']."/".$file['DOC_NEW_NAME']; ?>">View</a>
+                                        </td>
+                                        <td width="10%">
+                                            <a class="btn-delete" href="<?=$this->basePath() . "/". $file['DOC_PATH']."/".$file['DOC_NEW_NAME']; ?>" style="height:27px;">
+                                                <i class="fa fa-download"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                    
+
+                                </form>
+                                <?php } ?>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-bordered table-hover no-footer customtbl profile-table-header" id="qualificationTbl">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Section</th>
+                                        <th scope="col">Vacancy Details</th>
+                                        <th scope="col">Application Details</th>
+                                        <!-- <th scope="col">Status</th> -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php /* <tr>
+                                        <th scope="row">Skills</th>
+                                        <td><?php if (!empty($vacancyData['SKILL_ID'])) {
+                                                    $Vskills = explode(',',$vacancyData['SKILL_ID']);
+                                                    $C = 1;
+                                                    foreach($Vskills as $Vskill){
+                                                        echo $C.'. '. $Vskill. '</br>';
+                                                        $C++;
+                                                    }
+                                                }
+                                                ?></td>
+                                        <td><?php if (!empty($applicationData['SKILL_ID'])) {
+                                                    $skills = explode(',',$applicationData['SKILL_ID']);
+                                                    $S =1;
+                                                    foreach($skills as $skill){
+                                                        echo $S.'. '. $skill. '</br>';
+                                                    }
+                                                }
+                                                ?>
+                                        </td>
+                                        <!-- <td>@mdo</td> -->
+                                    </tr> */ ?>
+                                    <tr>
+                                        <th scope="row">Inclusions</th>
+                                        <td><?php if (!empty($vacancyData['INCLUSIONS'])) {
+                                                    $C = 1;
+                                                    foreach($vacancyData['INCLUSIONS'] as $value){
+                                                        echo $C.'. '. $value['INCLUSION_NAME']. '</br>';
+                                                        $C++;
+                                                    }
+                                                }
+                                                ?></td>
+                                        <td><?php if (!empty($applicationData['INCLUSIONS'])) {
+                                                    $S =1;
+                                                    ?> <table><?php
+                                                    foreach($applicationData['INCLUSIONS'] as $inc){
+                                                        echo "<tr><td style='width:200x;'>".$S.'. '. $inc['INCLUSION_NAME']. 
+                                                        '<input  disabled style="
+                                                        float: right;
+                                                        margin-right: 30px;
+                                                        margin-top:-4px;
+                                                        "
+                                                        value='.$inc['INCLUSION_ID'].'
+                                                        checked
+                                                        type="checkbox" name="approvedInclusion"  class="approvedInclusion" id="approvedInclusion">
+                                                        </br> </td></tr>';
+                                                        $S++;
+                                                    } 
+                                                    foreach($applicationData['CANCELLED_INCLUSION_ID'] as $cancelledInc){
+                                                        echo "<tr><td style='width:200px;'>".$S.'. '. $cancelledInc['INCLUSION_NAME']. 
+                                                        '<i style="
+                                                        float: right;
+                                                        margin-right: 30px;
+                                                        margin-top:-4px;
+                                                        color:red;
+                                                        font-size: 15px;
+                                                        "
+                                                        class="fa fa-window-close" aria-hidden="true"></i>
+                                                        </br> </td></tr>';
+                                                        $S++;
+                                                    }?></table><?php
+                                                }?>
+                                        </td>
+                                        <!-- <td>@fat</td> -->
+                                    </tr>
+                                    <tr>
+                                        <th scope="row">Payment</th>
+                                        <td>Payment Amount: <?= $applicationData['APPLICATION_AMOUNT']; ?></td>
+                                        <td><?php 
+                                                if($applicationData['PAYMENT_PAID'] == 'Y'){
+                                                    echo '<span style="color: green">'. $applicationData['PAYMENT_STATUS'].' via '. $applicationData['PAYMENT_TYPE'].'</span>';
+                                                } else{
+                                                    echo '<span style="color: red"> Not Paid </span>';
+                                                }
+                                            ?>
+                                        </td>
+                                        <!-- <td>@twitter</td> -->
+                                    </tr>
+                                    <tr>
+                                        <th>Status</th>
+                                        <td><?= $vacancyData['STAGE_ID'] ?></td>
+                                        <td>
+                                            <?= $applicationData['STAGE_ID'];
+                                            if(!empty($applicationData['STAGE_REMARKS'])){
+                                                echo '</br><b> Remarks: </b>'. $applicationData['STAGE_REMARKS'];
+                                            }                                            
+                                            ?>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</div>
+<?php  } ?>
+
+
