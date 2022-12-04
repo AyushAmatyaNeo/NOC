@@ -139,6 +139,13 @@ class HrEmployees extends Model {
     public $recruitment;
     public $servicesId;
     public $serviceSubgroupId;
+    public $isInclusuionUsed;
+    public $isInclusuionUsedDate;
+    public $inclusionId;
+    public $inclusionFileId;
+
+    
+
 
 
 
@@ -277,6 +284,11 @@ class HrEmployees extends Model {
 
     const SERVICE_ID = "SERVICE_ID";
     const SERVICE_SUBGROUP_ID = "SERVICE_SUBGROUP_ID";
+
+    const IS_INCLUSION_USED = "IS_INCLUSION_USED";
+    const IS_INCLUSION_USED_DATE = "IS_INCLUSION_USED_DATE";
+    const INCLUSION_ID = "INCLUSION_ID";
+    const INCLUSION_FILE_ID = "INCLUSION_FILE_ID";
     
     public $mappings = [
         'employeeId' => self::EMPLOYEE_ID,
@@ -413,6 +425,11 @@ class HrEmployees extends Model {
 
         'servicesId' => self::SERVICE_ID,
         'serviceSubgroupId' => self:: SERVICE_SUBGROUP_ID,
+
+        'isInclusuionUsed' => self:: IS_INCLUSION_USED,
+        'isInclusuionUsedDate' => self:: IS_INCLUSION_USED_DATE,
+        'inclusionId' => self:: INCLUSION_ID,
+        'inclusionFileId' => self:: INCLUSION_FILE_ID,
     ];
 
 }

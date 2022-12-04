@@ -78,6 +78,7 @@
             var paymentPaid = $('#paymentPaid').val();
             var paymentVerified = $('#paymentVerified').val();
             document.body.style.cursor='wait';
+            // console.log(stageId);
             app.pullDataById('', {
                 'OpeningNo' : OpeningNo,
                 'adnumberId' : adnumberId,
@@ -90,7 +91,6 @@
                 'paymentPaid' : paymentPaid,
                 'paymentVerified' : paymentVerified,
             }).then(function (response) {
-                document.body.style.cursor='default';
                 if (response.success) {
                     document.body.style.cursor='default';
                     console.log(response);
@@ -114,7 +114,7 @@
             'CTZ_ISSUE_DATE': 'Citizenship Issued Date',
             'CTZ_ISSUE_DISTRICT_ID' : 'Citizenship Issued District',
             'VACANCY_TYPE': 'Vacancy Type',
-			'MOBILE_NO' : 'Mobile Number',
+            'MOBILE_NO' : 'Mobile Number',
             'APPLICATION_AMOUNT': 'Application Amount',
             'PAYMENT': 'Payment',
             'PAYMENT_STATUS': 'Payment Status',

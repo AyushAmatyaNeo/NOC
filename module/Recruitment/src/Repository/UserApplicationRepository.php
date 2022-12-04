@@ -207,7 +207,7 @@ class UserApplicationRepository extends HrisRepository{
             if (($search['appliedadnumber'] != null)) {
                 $appliedAdNoCondition = '( 1 = 2';
                 foreach($search['appliedadnumber'] as $appliedAdNO){
-                    $appliedAdNoCondition .= " OR HRIS_REC_MULTIPLE_AD_NO(UVA.APPLICATION_ID) like '%'||'{$appliedAdNO}'||'%'";
+                    $appliedAdNoCondition .= " OR (HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) = '{$appliedAdNO}' OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '% , '||'{$appliedAdNO}'||'%'  OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '{$appliedAdNO}'||' , %' OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '% , ' || '{$appliedAdNO}'||' , %')";
                 }
                 $appliedAdNoCondition .= ' )';
                 $select->where([
@@ -360,7 +360,7 @@ class UserApplicationRepository extends HrisRepository{
             if (($search['appliedadnumber'] != null)) {
                 $appliedAdNoCondition = '( 1 = 2';
                 foreach($search['appliedadnumber'] as $appliedAdNO){
-                    $appliedAdNoCondition .= " OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '%'||'{$appliedAdNO}'||'%'";
+                    $appliedAdNoCondition .= " OR (HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) = '{$appliedAdNO}' OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '% , '||'{$appliedAdNO}'||'%'  OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '{$appliedAdNO}'||' , %' OR HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) like '% , ' || '{$appliedAdNO}'||' , %')";
                 }
                 $appliedAdNoCondition .= ' )';
                 $select->where([
@@ -435,7 +435,8 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UR.MOTHER_TONGUE            AS  MOTHER_TONGUE "),      
             new Expression("UR.CITIZENSHIP_NO           AS  CITIZENSHIP_NO "),      
             new Expression("UR.CTZ_ISSUE_DATE           AS  CTZ_ISSUE_DATE "),      
-            new Expression("HRD.DISTRICT_NAME           AS  CTZ_ISSUE_DISTRICT_ID "),      
+            new Expression("HRD.DISTRICT_NAME           AS  CTZ_ISSUE_DISTRICT_ID "),
+            new Expression("HRD.DISTRICT_ID             AS  CTZ_ISSUE_DISTRICT_O_ID"),     
             new Expression("UR.DOB                      AS  DOB "),
             new Expression("UR.DOB_AD                   AS  DOB_AD "),  
             new Expression("UR.AGE                      AS  AGE "),      
@@ -452,18 +453,23 @@ class UserApplicationRepository extends HrisRepository{
             new Expression("UR.SPOUSE_NAME              AS  SPOUSE_NAME "),      
             new Expression("UR.SPOUSE_NATIONALITY       AS  SPOUSE_NATIONALITY "),      
             new Expression("UR.PROFILE_STATUS           AS  PROFILE_STATUS "),
+            new Expression("UR.REGISTRATION_ID          AS  REGISTRATION_ID"),
+
             new Expression("UN.FIRST_NAME               AS FIRST_NAME "),
             new Expression("UN.MIDDLE_NAME              AS MIDDLE_NAME "),
             new Expression("UN.LAST_NAME                AS LAST_NAME "),
             new Expression("UN.MOBILE_NO                AS MOBILE_NO "),
             new Expression("UN.EMAIL_ID                 AS EMAIL_ID "),
             new Expression("UN.USERNAME                 AS USERNAME "),
+            new Expression("UN.USER_ID                  AS USER_ID"),
             new Expression(" UVA.AD_NO                  AS AD_NO "),
             new Expression(" UVA.REGISTRATION_NO        AS REGISTRATION_NO "),
             new Expression(" STG.STAGE_EDESC            AS STAGE_ID "),
+            new Expression(" STG.REC_STAGE_ID            AS REC_STAGE_ID "),
             new Expression(" UVA.REMARKS                AS STAGE_REMARKS "),
             new Expression(" UVA.APPLICATION_AMOUNT     AS APPLICATION_AMOUNT "),
             new Expression(" UVA.APPLICATION_TYPE       AS APPLICATION_TYPE "),
+            new Expression(" UVA.AD_NO                  AS VACANCY_ID"),
             //Payment detail
             new Expression(" RPG.GATEWAY_COMPANY           AS PAYMENT_TYPE "),
             new Expression(" PAY.PAYMENT_AMOUNT            AS PAYMENT_NPR "),
@@ -557,6 +563,7 @@ class UserApplicationRepository extends HrisRepository{
             new Expression(" UVA.AD_NO                  AS AD_NO "),
             new Expression(" UVA.REGISTRATION_NO        AS REGISTRATION_NO "),
             new Expression(" STG.STAGE_EDESC            AS STAGE_ID "),
+            new Expression(" STG.REC_STAGE_ID            AS REC_STAGE_ID"),
             new Expression(" UVA.REMARKS                AS STAGE_REMARKS "),
             new Expression(" UVA.APPLICATION_AMOUNT     AS APPLICATION_AMOUNT "),
             new Expression("bs_date(UVA.CREATED_DATE)  AS APPLIED_DATE"),
@@ -657,14 +664,21 @@ class UserApplicationRepository extends HrisRepository{
         $select->columns([
             // new Expression("REC.USER_ID                AS    USER_ID"),     
             // new Expression("REC.APPLICATION_ID         AS    APPLICATION_ID"),
+            new Expression("REC.USERS_ADDRESS_ID        AS    ADDRESS_ID"),
+            new Expression("PR.PROVINCE_ID              AS    PER_PROVINCE"),
             new Expression("PR.PROVINCE_NAME            AS    PER_PROVINCE_ID"),
+            new Expression("PD.DISTRICT_ID              AS    PER_DISTRICT"),
             new Expression("PD.DISTRICT_NAME            AS    PER_DISTRICT_ID"),
-            new Expression("PVDC.VDC_MUNICIPALITY_NAME             AS    PER_VDC_ID"),
+            new Expression("PVDC.VDC_MUNICIPALITY_ID    AS    PER_VDC"),
+            new Expression("PVDC.VDC_MUNICIPALITY_NAME  AS    PER_VDC_ID"),
             new Expression("REC.PER_WARD_NO             AS    PER_WARD_NO"),
             new Expression("REC.PER_TOLE                AS    PER_TOLE"),
+            new Expression("MR.PROVINCE_ID              AS    MAIL_PROVINCE"),
             new Expression("MR.PROVINCE_NAME            AS    MAIL_PROVINCE_ID"),
+            new Expression("MD.DISTRICT_ID              AS    MAIL_DISTRICT "),      
             new Expression("MD.DISTRICT_NAME            AS    MAIL_DISTRICT_ID "),      
-            new Expression("MVDC.VDC_MUNICIPALITY_NAME            AS    MAIL_VDC_ID "),
+            new Expression("MVDC.VDC_MUNICIPALITY_ID    AS    MAIL_VDC "),
+            new Expression("MVDC.VDC_MUNICIPALITY_NAME  AS    MAIL_VDC_ID "),
             new Expression("REC.MAIL_WARD_NO            AS    MAIL_WARD_NO "),      
             new Expression("REC.MAIL_TOLE               AS    MAIL_TOLE "),
             new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),            
@@ -722,6 +736,7 @@ class UserApplicationRepository extends HrisRepository{
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
+            new Expression("REC.EDUCATION_ID            AS    EDUCATION_ID"),
             new Expression("REC.EDUCATION_INSTITUTE     AS    EDUCATION_INSTITUTE"),
             new Expression("REC.LEVEL_ID                AS    LEVEL_ID"),
             new Expression("REC.FACALTY                 AS    FACALTY"),
@@ -752,13 +767,16 @@ class UserApplicationRepository extends HrisRepository{
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
+            new Expression("EXP.EXPERIENCE_ID       AS   EXPERIENCE_ID"),
             new Expression("EXP.ORGANISATION_NAME       AS   ORGANISATION_NAME"),
             new Expression("EXP.POST_NAME               AS   POST_NAME"),      
             new Expression("EXP.SERVICE_NAME            AS   SERVICE_NAME"),
             new Expression("EXP.LEVEL_ID                AS   LEVEL_ID"),
             new Expression("EXP.EMPLOYEE_TYPE_ID        AS   EMPLOYEE_TYPE_ID"),
             new Expression("EXP.FROM_DATE               AS   FROM_DATE"),
+            // new Expression("ad_date(EXP.FROM_DATE)      AS   FROM_DATE_AD"),
             new Expression("EXP.TO_DATE                 AS   TO_DATE"),            
+            // new Expression("ad_date(EXP.TO_DATE)         AS   TO_DATE_AD"),             
             new Expression("(CASE WHEN EXP.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),
             new Expression("case when ( from_date is null or to_date is null ) then 0 else
             (days_between(ad_date(EXP.FROM_DATE),
@@ -777,6 +795,7 @@ class UserApplicationRepository extends HrisRepository{
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
+            new Expression("TR.TRAINING_ID         AS   TRAINING_ID"),
             new Expression("TR.TRAINING_NAME       AS   TRAINING_NAME"),
             new Expression("TR.CERTIFICATE         AS   CERTIFICATE"),      
             new Expression("TR.FROM_DATE           AS   FROM_DATE"),
@@ -794,10 +813,12 @@ class UserApplicationRepository extends HrisRepository{
         $result = $statement->execute($boundedParameter);
         return $result;
     }
+
     public function applicationDocById($id){
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
+            new Expression("DOC.REC_DOC_ID           AS   REC_DOC_ID"),
             new Expression("DOC.USER_ID              AS   USER_ID"),
             new Expression("DOC.DOC_OLD_NAME         AS   DOC_OLD_NAME"),      
             new Expression("DOC.DOC_NEW_NAME         AS   DOC_NEW_NAME"),
@@ -861,6 +882,25 @@ class UserApplicationRepository extends HrisRepository{
         
         // var_dump($result); die;
         // return $result;
+    }
+
+    public function updateSelectedUnselectedInclusion($aid, $selectedInclusion = null, $unselectedInclusion = null){
+
+        // var_dump($result1);
+        if($selectedInclusion){
+            $sql = "UPDATE HRIS_REC_APPLICATION_PERSONAL SET INCLUSION_ID = {$selectedInclusion} where APPLICATION_ID = $aid";
+            $statement2 = $this->adapter->query($sql);
+            $result = Helper::extractDbData($statement2->execute());
+        }
+        if($unselectedInclusion){
+            $sql = "UPDATE HRIS_REC_APPLICATION_PERSONAL SET cancelled_inclusion_id = {$unselectedInclusion} where APPLICATION_ID = $aid";
+            var_dump($sql); 
+            $statement2 = $this->adapter->query($sql);
+            $result = Helper::extractDbData($statement2->execute());
+        }
+
+        // var_dump($result); die;
+        return true;
     }
     // public function addRollNo($id)
     // {
@@ -929,12 +969,20 @@ class UserApplicationRepository extends HrisRepository{
     }
 
     public function getApplicationStageHistory($applicationId){
-        $sql="select RAS.id, RAS.application_id, RS.stage_edesc, E.full_name as created_by, 
-        to_char(RAS.created_date_time,'YYYY-MM-DD HH:MI:SS AM') as date_time, 
-        RAS.remarks_np from hris_rec_application_stage RAS
-        left join hris_rec_stages RS on (RAS.stage_id = RS.rec_stage_id)
-        left join hris_employees E on (E.employee_id = RAS.created_by)
-        where RAS.application_id = $applicationId
+        $sql="select 
+                RAS.id, RAS.application_id, 
+                RS.stage_edesc, 
+
+                E.full_name as created_by,  
+
+                to_char(RAS.created_date_time,'YYYY-MM-DD HH:MI:SS AM') as date_time,
+
+                RAS.remarks_np from hris_rec_application_stage RAS
+                
+                left join hris_rec_stages RS on (RAS.stage_id = RS.rec_stage_id)
+                left join hris_employees  E  on (E.employee_id = RAS.created_by)
+                
+                where RAS.application_id = $applicationId
         ";
         $statement = $this->adapter->query($sql); 
         $result = Helper::extractDbData($statement->execute());
@@ -954,6 +1002,15 @@ class UserApplicationRepository extends HrisRepository{
         return true;
     }
 
+    public function getAllRow($table)
+    {
+        $sql = "SELECT * FROM {$table}";
+
+        $result = $this->rawQuery($sql);
+        return $result;
+
+    }
+
     public function getRowById($table, $where, $where_value) {
 
         if ($where_value) {
@@ -968,5 +1025,181 @@ class UserApplicationRepository extends HrisRepository{
         }
         return false;
         
+    }
+
+    public function insertData($table, $data) {
+        $key   = implode(',', array_keys($data));
+        $value = implode("','", array_values($data));
+
+        $sql   = "INSERT INTO {$table} ($key) VALUES ('$value')";
+
+        $result = $this->rawQuery($sql);
+
+        return true;
+    } 
+
+    public function applicationDataByIdInternalEdit($id)
+    {
+        $sql = new Sql($this->adapter);
+        $select = $sql->select();
+        $select->columns([            
+            new Expression("REC.USER_ID                AS USER_ID"),
+            new Expression("REC.APPLICATION_ID         AS APPLICATION_ID"),
+            new Expression("UR.MARITAL_STATUS          AS MARITAL_STATUS"),
+            new Expression("REC.SKILL_ID                   AS SKILL_ID"),
+            new Expression("REC.INCLUSION_ID               AS INCLUSION_ID"),
+            new Expression("REC.CANCELLED_INCLUSION_ID               AS CANCELLED_INCLUSION_ID"),
+            new Expression("UR.DISABLED_FLAG           AS DISABLED_FLAG"),
+            new Expression("URREL.RELIGION_NAME        AS  RELIGION_NAME "),       
+            new Expression("URETH.ETHNICITY             AS  ETHNICITY "),       
+            new Expression("UR.ID_CITIZENSHIP_NO       AS  CITIZENSHIP_NO "),
+            new Expression("UR.EMPLOYEE_ID       AS  EMPLOYEE_ID "),
+            new Expression("UR.EMPLOYEE_STATUS       AS  EMPLOYEE_STATUS"),   
+            new Expression("UR.ID_CITIZENSHIP_ISSUE_DATE AS  CTZ_ISSUE_DATE "),  
+            new Expression("UR.ID_CITIZENSHIP_ISSUE_PLACE    AS  CTZ_ISSUE_DISTRICT_ID "),  
+            new Expression("UR.DISABLED_FLAG    AS  DISABLED_FLAG "),  
+            new Expression("UR.BIRTH_DATE               AS  DOB "),
+            new Expression("UR.PROFILE_PICTURE_ID              AS  PROFILE_PICTURE_ID "),
+            new Expression("UR.MOBILE_NO                 AS  MOBILE_NO "),      
+            new Expression("UR.GENDER_ID                AS  GENDER_ID "),      
+            new Expression("UR.FAM_FATHER_NAME              AS  FAM_FATHER_NAME "),      
+            new Expression("UR.FAM_FATHER_OCCUPATION     AS  FAM_FATHER_OCCUPATION "),      
+            new Expression("UR.FAM_MOTHER_NAME              AS  FAM_MOTHER_NAME "),      
+            new Expression("UR.FAM_MOTHER_OCCUPATION     AS  FAM_MOTHER_OCCUPATION "),      
+            new Expression("UR.FAM_GRAND_FATHER_NAME         AS  FAM_GRAND_FATHER_NAME "),      
+            new Expression("UR.FAM_SPOUSE_NAME              AS  FAM_SPOUSE_NAME "),     
+            new Expression("UR.FIRST_NAME               AS FIRST_NAME "),
+            new Expression("UR.MIDDLE_NAME              AS MIDDLE_NAME "),
+            new Expression("UR.LAST_NAME                AS LAST_NAME "),
+            new Expression("UR.TELEPHONE_NO             AS TELEPHONE_NO "),
+            new Expression("UR.EMAIL_PERSONAL            AS EMAIL_PERSONAL"),
+            new Expression("UR.EMAIL_OFFICIAL            AS EMAIL_OFFICIAL"),
+            new Expression("UR.ADDR_PERM_PROVINCE_ID            AS ADDR_PERM_PROVINCE_ID"),
+            new Expression("UR.ADDR_TEMP_PROVINCE_ID            AS ADDR_TEMP_PROVINCE_ID"),
+            new Expression("UR.ADDR_PERM_DISTRICT_ID            AS ADDR_PERM_DISTRICT_ID"),
+            new Expression("UR.ADDR_TEMP_DISTRICT_ID            AS ADDR_TEMP_DISTRICT_ID"),
+            new Expression("UR.ADDR_PERM_ZONE_ID            AS ADDR_PERM_ZONE_ID"),
+            new Expression("UR.ADDR_TEMP_ZONE_ID            AS ADDR_TEMP_ZONE_ID"),
+
+
+
+
+            new Expression("case when UR.EMAIL_OFFICIAL is null then  UR.EMAIL_PERSONAL else  UR.EMAIL_OFFICIAL end  AS EMAIL_ID"),
+            new Expression("UR.ADDR_PERM_WARD_NO            AS ADDR_PERM_WARD_NO"),
+            new Expression("UR.ADDR_TEMP_WARD_NO            AS ADDR_TEMP_WARD_NO"),
+            new Expression("UR.ADDR_PERM_STREET_ADDRESS            AS ADDR_PERM_STREET_ADDRESS"),
+            new Expression("UR.ADDR_TEMP_STREET_ADDRESS            AS ADDR_TEMP_STREET_ADDRESS"),
+            new Expression("EMUSER.USER_NAME             AS USER_NAME"),
+            new Expression("PERMPROV.PROVINCE_NAME       AS PERM_PROVINCE_NAME"),
+            new Expression("TEMPPROV.PROVINCE_NAME       AS TEMP_PROVINCE_NAME"),
+            new Expression("PERMZO.ZONE_NAME       AS PERM_ZONE_NAME"),
+            new Expression("TEMPZO.ZONE_NAME       AS TEMP_ZONE_NAME"),
+            new Expression("PERMDIS.DISTRICT_NAME       AS PERM_DISTRICT_NAME"),
+            new Expression("TEMPDIS.DISTRICT_NAME       AS TEMP_DISTRICT_NAME"),
+            new Expression("PERMCOU.COUNTRY_NAME       AS TEMP_COUNTRY_NAME"),
+            new Expression("TEMPCOU.COUNTRY_NAME       AS TEMP_COUNTRY_NAME"),
+            new Expression(" UVA.AD_NO                  AS AD_NO "),
+            new Expression(" UVA.REGISTRATION_NO        AS REGISTRATION_NO "),
+            new Expression(" STG.STAGE_EDESC            AS STAGE_ID "),
+            new Expression(" UVA.REMARKS                AS STAGE_REMARKS "),
+            new Expression(" UVA.APPLICATION_AMOUNT     AS APPLICATION_AMOUNT "),
+            new Expression("bs_date(UVA.CREATED_DATE)  AS APPLIED_DATE"),
+            new Expression("UVA.CREATED_DATE  AS APPLIED_DATE_AD"),
+            new Expression("UD.DESIGNATION_TITLE AS DESIGNATION_TITLE"),
+
+            //Payment detail
+            new Expression(" PAY.PAYMENT_TYPE           AS PAYMENT_TYPE "),
+            new Expression(" PAY.PAYMENT_AMOUNT            AS PAYMENT_NPR "),
+            // // DOCUMENT
+            // new Expression(" DOC.DOC_PATH               AS PROFILE_IMG "),
+
+            new Expression("(CASE WHEN REC.STATUS= 'E' THEN 'ENABLE' ELSE 'DISABLE' END) AS STATUS"),  
+            new Expression("UVA.PAYMENT_PAID as PAYMENT_PAID"),  
+            new Expression("UVA.PAYMENT_VERIFIED as PAYMENT_VERIFIED"),  
+            new Expression("HRIS_REC_PAYMENT_STATUS(UVA.PAYMENT_PAID,
+            UVA.PAYMENT_VERIFIED) as PAYMENT_STATUS"),  
+            new Expression("RPG.GATEWAY_COMPANY AS PAYMENT_TYPE"),  
+            new Expression("RPG.ID AS ID"),  
+            new Expression("PAY.PAYMENT_REFERENCE_ID AS PAYMENT_REFERENCE_ID"),
+            new Expression("POC.FILE_PATH AS PROFILE_IMG"),
+            new Expression("HRIS_REC_MULTIPLE_AD_NO(REC.APPLICATION_ID) as MULTIPLE_AD_NO"),
+            new Expression("GET_AD_NO(VAC.OPENING_ID,VAC.VACANCY_NO) as VACANCY_AD_NO"),
+            ], true);
+
+        $select->from(['REC' => 'HRIS_REC_APPLICATION_PERSONAL'])
+                ->join(['EMUSER' => 'HRIS_USERS'],'EMUSER.USER_ID=REC.USER_ID', 'STATUS', 'left')
+                ->join(['UR' => 'HRIS_EMPLOYEES'],'UR.EMPLOYEE_ID=EMUSER.EMPLOYEE_ID', 'STATUS', 'left')
+                ->join(['UD' => 'HRIS_DESIGNATIONS'],'UD.DESIGNATION_ID=UR.DESIGNATION_ID', 'STATUS', 'left')
+                ->join(['URREL' => 'HRIS_RELIGIONS'],'URREL.RELIGION_ID=UR.RELIGION_ID', 'STATUS', 'left')
+                ->join(['URETH' => 'HRIS_ETHNICITIES'],'URETH.ETHNICITY_ID=UR.ETHNICITY_ID', 'STATUS', 'left')
+                ->join(['UVA' => 'HRIS_REC_VACANCY_APPLICATION'],'UVA.APPLICATION_ID=REC.APPLICATION_ID', 'APPLICATION_ID', 'left')
+                ->join(['STG' => 'HRIS_REC_STAGES'],'STG.REC_STAGE_ID=UVA.STAGE_ID', 'STATUS', 'left')
+                ->join(['PAY' => 'HRIS_REC_APPLICATION_PAYMENT'],'PAY.APPLICATION_ID=REC.APPLICATION_ID', 'PAYMENT_REFERENCE_ID', 'left')
+                ->join(['DOC' => 'HRIS_EMPLOYEE_FILE'],'DOC.EMPLOYEE_ID=UR.EMPLOYEE_ID', 'STATUS', 'left')
+                ->join(['POC' => 'HRIS_EMPLOYEE_FILE'],'POC.FILE_CODE = UR.PROFILE_PICTURE_ID', 'STATUS', 'left')
+                ->join(['PERMPROV' => 'HRIS_PROVINCES'],'PERMPROV.PROVINCE_ID=UR.ADDR_PERM_PROVINCE_ID', 'STATUS', 'left')
+                ->join(['TEMPPROV' => 'HRIS_PROVINCES'],'TEMPPROV.PROVINCE_ID=UR.ADDR_TEMP_PROVINCE_ID', 'STATUS', 'left')
+                ->join(['PERMZO' => 'HRIS_ZONES'],'PERMZO.ZONE_ID=UR.ADDR_PERM_ZONE_ID', 'STATUS', 'left')
+                ->join(['TEMPZO' => 'HRIS_ZONES'],'TEMPZO.ZONE_ID=UR.ADDR_TEMP_ZONE_ID', 'STATUS', 'left')
+                ->join(['PERMDIS' => 'HRIS_DISTRICTS'],'PERMDIS.DISTRICT_ID=UR.ADDR_PERM_DISTRICT_ID', 'STATUS', 'left')
+                ->join(['TEMPDIS' => 'HRIS_DISTRICTS'],'TEMPDIS.DISTRICT_ID=UR.ADDR_TEMP_DISTRICT_ID', 'STATUS', 'left')
+                ->join(['PERMCOU' => 'HRIS_COUNTRIES'],'PERMCOU.COUNTRY_ID=UR.ADDR_PERM_COUNTRY_ID', 'COUNTRY_CODE','left')
+                ->join(['TEMPCOU' => 'HRIS_COUNTRIES'],'TEMPCOU.COUNTRY_ID=UR.ADDR_TEMP_COUNTRY_ID', 'COUNTRY_CODE', 'left')
+                ->join(['RPG' => 'hris_rec_payment_gateway'],'PAY.PAYMENT_GATEWAY_ID=RPG.ID', 'ID', 'left')
+                ->join(['VAC' => 'HRIS_REC_VACANCY'],"VAC.vacancy_id = UVA.ad_no", 'STATUS', 'left')
+                ->where(["REC.STATUS='E'"]);
+
+        $select->Where("REC.APPLICATION_ID = $id");
+        $select->order("REC.PERSONAL_ID ASC");
+        $boundedParameter = [];
+        $statement = $sql->prepareStatementForSqlObject($select);
+        // print_r($statement->getSql()); die();
+        $result = $statement->execute($boundedParameter);
+        // print_r($statement->getSql()); die();
+        return $result;
+    }
+
+    public function applicationEduByIdInternalEdit($id){
+        $sql="select 
+        HEQ.employee_id, HEQ.id as qualification_id,
+        HAP.academic_program_name as faculty, HAP.academic_program_id,
+        HAD.academic_degree_name as degree, HAD.academic_degree_id,
+        HAU.academic_university_name as university, HAU.academic_university_id,
+        HAC.academic_course_name as course, HAC.academic_course_id,
+        HEQ.rank_type,
+        HEQ.rank_value,
+        HEQ.passed_yr
+        from hris_employee_qualifications HEQ
+        left join hris_academic_programs HAP on (HAP.academic_program_id = HEQ.academic_program_id)
+        left join hris_academic_degrees HAD on (HAD.academic_degree_id = HEQ.academic_degree_id)
+        left join hris_academic_university HAU on (HAU.academic_university_id = HEQ.academic_university_id)
+        left join hris_academic_courses HAC on (HAC.academic_course_id = HEQ.academic_course_id)
+        where HEQ.status='E' and employee_id in (select employee_id from hris_users where user_id in (select user_id from HRIS_REC_vacancy_application where application_id = $id))";
+        $statement = $this->adapter->query($sql); 
+        $result = Helper::extractDbData($statement->execute());
+        // print_r($result);die;
+        return $result;
+    }
+
+    public function applicationExpByIdInternalEdit($id){
+        $sql="select 
+        *
+        from hris_employee_experiences HEQ
+        where HEQ.status='E' and employee_id in (select employee_id from hris_users where user_id in (select user_id from HRIS_REC_vacancy_application where application_id = $id))";
+        $statement = $this->adapter->query($sql); 
+        $result = Helper::extractDbData($statement->execute());
+        // print_r($result);die;
+        return $result;
+    }
+
+    public function applicationTrEmpById($id){
+        $sql="select 
+        *
+        from hris_employee_trainings HEQ
+        where HEQ.status='E' and employee_id in (select employee_id from hris_users where user_id in (select user_id from HRIS_REC_vacancy_application where application_id = $id))";
+        $statement = $this->adapter->query($sql); 
+        $result = Helper::extractDbData($statement->execute());
+        // print_r($result);die;
+        return $result;
     }
 }

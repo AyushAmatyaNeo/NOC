@@ -246,6 +246,7 @@ class Helper {
     }
 
     public static function getcurrentExpressionDateTime() {
+        date_default_timezone_set('Asia/Kathmandu');
         $currentDate = date(self::PHP_DATE_FORMAT . " " . self::PHP_TIME_FORMAT);
         return self::getExpressionDateTime($currentDate);
     }

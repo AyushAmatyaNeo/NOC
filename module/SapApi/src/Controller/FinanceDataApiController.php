@@ -26,7 +26,7 @@ class FinanceDataApiController extends HrisController {
     }
 
     public function getHrisFinancialDataAction(){
-        $request = $this->getRequest();
+        $request     = $this->getRequest();
         $requestType = $request->getMethod();
         try{
             switch ($requestType) {

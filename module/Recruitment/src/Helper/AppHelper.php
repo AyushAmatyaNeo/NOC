@@ -64,5 +64,137 @@ class AppHelper{
         return $result;
     }
 
+    public static function DateDiffByNepaliDate($start_date, $end_date) {
 
-}
+        $date1 = date_create($start_date);
+        $date2 = date_create($end_date);
+
+        /***
+        * GET DIFFERENCE IN NEPALI
+        */
+        $intval = date_diff($date2, $date1);
+
+        // TOTAL DAYS
+        $days =  $intval->format("%a");
+
+
+        /**
+        * FINDING AGE BY ADDING ABOVE DAYS WITH TILL CERTAIN DATE
+        */
+        // $days = 151;
+
+        $start_date = new \DateTime($end_date);
+        $end_date = (new \DateTime($end_date))->add(new \DateInterval("P{$days}D") );
+        $dd = date_diff($start_date,$end_date);
+        $age = $dd->y." years ".$dd->m." months ".$dd->d." days";
+
+        return $age;
+
+    }
+
+    public static function GetRankValue($rank_value, $rank_type) {
+
+        $result = '';
+
+        if ($rank_type == 'Percentage') {
+            
+            $result = $rank_value;
+
+        }
+
+        if ($rank_type == 'Division/grade') {
+
+            if ($rank_value > 100) {
+
+                $result = $rank_value;
+
+            }
+
+            if ($rank_value < 100 AND $rank_value > 3) {
+
+                $result = $rank_value . '%';
+
+            }
+
+            if ($rank_value <= 3) {
+
+                $result = $rank_value . 'Division';
+
+            }
+            
+
+        }
+
+        if ($rank_type == 'GPA') {
+            
+            $result = number_format($rank_value, 2);
+
+            if  (is_float($rank_value)) {
+
+                $result = $rank_value;
+
+            }
+
+        }
+
+        return $result;
+
+    }
+
+
+    public static function StageSelectorModifier($stage_id) {
+
+        /**
+         * UPDATING STAGE MUST CHANGE [ALLOW_EDIT | IS_VERIFIED | IS_APPROVED]
+                6 => ALLOW EDIT
+                7 => VERIFIED
+                9 => REJECT
+                8 => APPROVED
+                2 => POST
+                1 => OPEN
+                3 => CLOSED
+         */
+
+        $updateStageData = [
+            'ALLOW_EDIT'  => '',
+            'IS_VERIFIED' => '',
+            'IS_APPROVED' => '',
+            'STAGE_ID' =>  $stage_id,
+        ];
+
+        if ($stage_id == 2) {
+
+            $updateStageData['ALLOW_EDIT']  = 'N';
+            $updateStageData['IS_VERIFIED'] = 'N';
+            $updateStageData['IS_APPROVED'] = 'N';
+
+        } elseif ($stage_id == 6) {
+           
+            $updateStageData['ALLOW_EDIT']  = 'Y';
+            $updateStageData['IS_VERIFIED'] = 'N';
+            $updateStageData['IS_APPROVED'] = 'N';
+
+        } elseif ($stage_id == 7) {
+           
+            $updateStageData['ALLOW_EDIT']  = 'N';
+            $updateStageData['IS_VERIFIED'] = 'Y';
+            $updateStageData['IS_APPROVED'] = 'N';
+
+        } elseif ($stage_id == 8) {
+           
+            $updateStageData['ALLOW_EDIT']  = 'N';
+            $updateStageData['IS_VERIFIED'] = 'N';
+            $updateStageData['IS_APPROVED'] = 'Y';
+
+        } elseif ($stage_id == 9) {
+           
+            $updateStageData['ALLOW_EDIT']  = 'N';
+            $updateStageData['IS_VERIFIED'] = 'N';
+            $updateStageData['IS_APPROVED'] = 'N';
+
+        }
+
+        return $updateStageData;
+
+    }
+ }

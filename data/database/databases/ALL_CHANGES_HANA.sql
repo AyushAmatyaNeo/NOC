@@ -923,7 +923,7 @@ INSERT INTO HRIS_SERVICE_SUBGROUP VALUES ((select max(service_subgroup_id) + 1 f
 
 INSERT INTO HRIS_SERVICE_SUBGROUP VALUES ((select max(service_subgroup_id) + 1 from hris_service_subgroup),'Industrial','','E',current_date,current_date,456,456,1,null);
 
-INSERT INTO HRIS_SERVICE_SUBGROUP VALUES ((select max(service_subgroup_id) + 1 from hris_service_subgroup),'CA','','E',current_date,current_date,456,456,null);
+INSERT INTO HRIS_SERVICE_SUBGROUP VALUES ((select max(service_subgroup_id) + 1 from hris_service_subgroup),'CA','','E',current_date,current_date,456,456,1,null);
 
 INSERT INTO HRIS_SERVICE_SUBGROUP VALUES ((select max(service_subgroup_id) + 1 from hris_service_subgroup),'Mechanical','','E',current_date,current_date,456,456,1,null);
 
