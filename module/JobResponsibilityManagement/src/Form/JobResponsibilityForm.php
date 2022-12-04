@@ -1,5 +1,5 @@
 <?php
-namespace Setup\Form;
+namespace JobResponsibilityManagement\Form;
 
 use Zend\Form\Annotation;
 

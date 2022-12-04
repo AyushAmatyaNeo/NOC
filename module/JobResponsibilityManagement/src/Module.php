@@ -1,6 +1,6 @@
 <?php
 
-namespace LeaveManagement;
+namespace JobResponsibilityManagement;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 

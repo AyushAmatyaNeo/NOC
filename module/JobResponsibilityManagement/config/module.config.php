@@ -18,6 +18,16 @@ return [
                     ]
                 ]
             ],
+            'jobResponsibilityAssign' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/job-responsibility-assign[/:action[/:eid[/:id]]]',
+                    'defaults' => [
+                        'controller' => Controller\JobResponsibilityAssign::class,
+                        'action' => 'index'
+                    ]
+                ]
+            ],
         ]
     ],
     'navigation' => [
@@ -52,6 +62,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\JobResponsibilitySetup::class => ControllerFactory::class,
+            Controller\JobResponsibilityAssign::class => ControllerFactory::class,
         ],
     ],
     'view_manager' => [

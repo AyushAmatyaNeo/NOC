@@ -4,14 +4,13 @@ namespace JobResponsibilityManagement\Model;
 
 use Application\Model\Model;
 
-class JobResponsibility extends Model {
+class JobResponsibilityAssign extends Model {
 
-    const TABLE_NAME = "HRIS_JOB_RESPONSIBILITY";
+    const TABLE_NAME = "HRIS_EMPLOYEE_JOB_RESPONSIBILITY_ASSIGN";
     const ID = "ID";
-    const JOB_RES_ENG_NAME = "JOB_RES_ENG_NAME";
-    const JOB_RES_NEP_NAME = "JOB_RES_NEP_NAME";
-    const JOB_RES_ENG_DESCRIPTION = "JOB_RES_ENG_DESCRIPTION";
-    const JOB_RES_NEP_DESCRIPTION = "JOB_RES_NEP_DESCRIPTION";
+    const EMPLOYEE_ID = "EMPLOYEE_ID";
+    const JOB_RESPONSIBILITY_ID = "JOB_RESPONSIBILITY_ID";
+    const REMARKS = "REMARKS";
     const STATUS = "STATUS";
     const CREATED_BY = "CREATED_BY";
     const CREATED_DT = "CREATED_DT";
@@ -21,10 +20,9 @@ class JobResponsibility extends Model {
     const DELETED_DT = "DELETED_DT";
 
     public $id;           
-    public $jobResEngName;
-    public $jobResNepName;
-    public $jobResEngDescription;
-    public $jobResNepDescription;
+    public $employeeId;
+    public $jobResponsibilityId;
+    public $remarks;
     public $status;
     public $createdBy;
     public $createdDt;
@@ -34,10 +32,9 @@ class JobResponsibility extends Model {
     public $deletedDt;
     public $mappings = [
         'id' => self::ID,
-        'jobResEngName' => self::JOB_RES_ENG_NAME,
-        'jobResNepName' => self::JOB_RES_NEP_NAME,
-        'jobResEngDescription' => self::JOB_RES_ENG_DESCRIPTION,
-        'jobResNepDescription' => self::JOB_RES_NEP_DESCRIPTION,
+        'employeeId' => self::EMPLOYEE_ID,
+        'jobResponsibilityId' => self::JOB_RESPONSIBILITY_ID,
+        'remarks' => self::REMARKS,
         'status' => self::STATUS,
         'createdBy' => self::CREATED_BY,
         'createdDt' => self::CREATED_DT,

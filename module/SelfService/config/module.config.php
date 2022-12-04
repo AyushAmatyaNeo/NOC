@@ -33,6 +33,7 @@ use Zend\Router\Http\Segment;
 use SelfService\Controller\LeaveEncashment;
 use SelfService\Controller\VacancyController;
 use SelfService\Controller\OvertimeClaim;
+use SelfService\Controller\JobResponsibility;
 
 return [
     'router' => [
@@ -437,6 +438,20 @@ return [
                     ],
                     'defaults' => [
                         'controller' => VacancyController::class, 
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'jobResponsibilitySelf' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/selfservice/jobResponsibility[/:action[/:id]]',
+                    'constants' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => JobResponsibility::class,
                         'action' => 'index',
                     ]
                 ],
@@ -1158,6 +1173,7 @@ return [
             TransferSettlement::class => ControllerFactory::class,
             VacancyController::class => ControllerFactory::class,
             OvertimeClaim::class => ControllerFactory::class,
+            JobResponsibility::class => ControllerFactory::class,
         ],
     ],
     'view_manager' => [
