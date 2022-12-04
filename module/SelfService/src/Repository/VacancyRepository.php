@@ -139,12 +139,6 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
         $select->from(['REC' => RecruitmentVacancy::TABLE_NAME])
         ->join(['HI' => 'HRIS_REC_VACANCY_INCLUSION'],'HI.VACANCY_ID=REC.VACANCY_ID', 'VACANCY_INCLUSION_ID', 'left');
 
-        // echo "<pre>";
-
-        // print_r(RecruitmentVacancy::TABLE_NAME);
-
-        // die;
-        
 
         $select->where(["REC.VACANCY_ID='{$id}'"]); //change to this if not working. remove below 2 line.
         // $select->where(["REC.VACANCY_ID" => $id]);
