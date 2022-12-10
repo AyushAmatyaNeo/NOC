@@ -7,10 +7,13 @@
         var viewAction = '<a class="btn btn-icon-only green" title="View" href="' + document.viewLink + '/#:ID#" style="height:17px;"><i class="fa fa-search"></i></a>';
         var action = viewAction;
         app.initializeKendoGrid($table, [
-            {field: "EMPLOYEE_CODE", title: "Employee Code", width: 200},
-            {field: "FULL_NAME", title: "Employee Name", width: 200},
+            {field: "EMPLOYEE_CODE", title: "Employee Code", width: 80},
+            {field: "FULL_NAME", title: "Employee Name", width: 150},
             {field: "JOB_RES_ENG_NAME", title: "Job Responsibility Name (English)", width: 200},
             {field: "JOB_RES_NEP_NAME", title: "Job Responsibility Name (Nepali)", width: 120},
+            {field: "ASSIGNED_BY", title: "Assigned By", width: 150},
+            {field: "START_DATE", title: "Start Date", width: 80},
+            {field: "END_DATE", title: "End Date", width: 80},
             {field: "ID", title: "Action", width: 120, template: action}
         ], null, null, null, 'Job Responsibility Assign List');
 
@@ -22,6 +25,9 @@
                 'FULL_NAME': 'Employee Name',
                 'JOB_RES_ENG_NAME': 'Job Responsibility Name (English)',
                 'JOB_RES_NEP_NAME': 'Job Responsibility Name (Nepali)',
+                'ASSIGNED_BY':'Assigned By',
+                'START_DATE':'Start Date',
+                'END_DATE':'End Date',
             }, 'Job Responsibility Assign List');
         });
         $('#pdfExport').on('click', function () {

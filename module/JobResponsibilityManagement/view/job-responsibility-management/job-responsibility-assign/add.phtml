@@ -4,6 +4,8 @@ $this->headLink()
 
 $this->headScript()->appendFile($this->basePath('assets/pages/scripts/ui-modals.min.js'));
 $this->headScript()->appendFile($this->basePath('js/angular.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
     ->appendFile($this->basePath('js/search.js'));
 $this->headScript()->appendFile($this->basePath('js/job-responsibility-management/job-responsibility-assign/add.js'));
 
@@ -151,11 +153,34 @@ $this->headScript()->appendFile($this->basePath('js/job-responsibility-managemen
         </div>
 
         <div class="row">
-            <div class="col-sm-offset-6 col-sm-2">
+            <div class="col-sm-5">
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-3">
+                <div class="form-group" ng-show="daysForAllFlag">
+                    <label for="employeeId">Assigned By</label>
+                    <select name="assignedBy" id="assignedBy" class="form-control">                          
+                            <?php foreach ($assignedByList as $key => $value) { 
+                                $selected = (in_array($key, $employeeList)) ? "selected" : ""; ?>
+                                <option <?=$selected?>  value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                            <?php } ?>
+                    </select>
+                </div>
             </div>
-            <div class="col-sm-2">
+            <div class="col-sm-2" ng-show="daysForAllFlag">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label for="employeeId">Start Date</label>
+                            <label for="startDate">&nbsp;</label>
+                            <div class="input-group">
+                                <input type="text" name="startDate" id="startDate"
+                                        class="form-control" value="" placeholder="Date in English">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2" style="margin-top: 20px;">
                 <button ng-show="daysForAllFlag" class="btn btn-sm green pull-right" ng-click="assign()">
                     Assign
                     <i class="fa fa-edit"></i>

@@ -23,7 +23,7 @@ $form->prepare();
         <div class="portlet box custom-box">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-user"></i>Update
+                    <i class="fa fa-user"></i>View
                 </div>
                 <div class="actions">
                     <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
@@ -33,7 +33,26 @@ $form->prepare();
                 <?php print $this->form()->openTag($form); ?>
 
                 <div class=" row">
-
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label for="assignedBy">Assigned By</label>
+                            <input type="text" class="form-control" disabled value="<?=$details['ASSIGNED_BY']?>">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label for="startDate">Start Date</label>
+                            <input type="text" class="form-control" disabled value="<?=$details['START_DATE']?>">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <label for="endDate">End Date</label>
+                            <input type="text" class="form-control" disabled value="<?=$details['END_DATE']?>">
+                        </div>
+                    </div>
+                </div>
+                <div class=" row">
                     <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
                         <div class="form-group">
                             <?= $this->formLabel($jobResEngName) ?>

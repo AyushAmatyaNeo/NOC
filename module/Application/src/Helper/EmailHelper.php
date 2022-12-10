@@ -35,7 +35,8 @@ class EmailHelper {
             'port' => 465,
             'connection_class' => 'login',
             'connection_config' => [
-                'username' => 'noreply@nepaloil.org.np',
+                // 'username' => 'noreply@nepaloil.org.np',
+                'username' => 'asdasd#j@sdf',
                 'password' => 'Erpnocnepal@1',
                 'ssl' => 'ssl',
             ],

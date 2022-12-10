@@ -27,7 +27,7 @@ class Leave extends HrisController {
                 if (isset($postData['fiscalYearMonthNo'])) {
                     $leaveList = $this->repository->monthlyLeaveStatus($this->employeeId, $postData['fiscalYearMonthNo']);
                 } else {
-                    $leaveList = $this->repository->selectAll($this->employeeId);
+                    $leaveList = $this->repository->selectAll($this->employeeId, $postData);
                 }
                 $leaves = iterator_to_array($leaveList, false);
                 return new JsonModel(['success' => true, 'data' => $leaves, 'error' => '']);

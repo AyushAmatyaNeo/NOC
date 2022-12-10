@@ -240,7 +240,7 @@ class LeaveStatusRepository extends HrisRepository {
         $toDate = $data['toDate'];
         $leaveYear = $data['leaveYear'];
 
-        $searchCondition = EntityHelper::getSearchConditonHana($companyId, $branchId, $departmentId, $positionId, $designationId, $serviceTypeId, $serviceEventTypeId, $employeeTypeId, $employeeId,null,null,$functionalTypeId);
+        $searchCondition = EntityHelper::getSearchConditonBounded($companyId, $branchId, $departmentId, $positionId, $designationId, $serviceTypeId, $serviceEventTypeId, $employeeTypeId, $employeeId,null,null,$functionalTypeId);
         $boundedParameter = [];
         $boundedParameter=array_merge($boundedParameter, $searchCondition['parameter']);
         $statusCondition = '';
