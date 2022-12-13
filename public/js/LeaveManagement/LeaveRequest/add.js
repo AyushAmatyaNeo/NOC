@@ -60,7 +60,6 @@
             if (startDateStr === null || startDateStr == '' || endDateStr === null || endDateStr == '' || employeeId === null || employeeId == '' || leaveId === null || leaveId == '') {
                 return;
             }
-            console.log('aaa');
             app.serverRequest(document.wsFetchAvailableDays, {
                 startDate: startDateStr,
                 endDate: endDateStr,
@@ -204,7 +203,6 @@
             if ($this.val() === null || $this.val() === '' || $this.val() === '-1') {
                 return;
             }
-            console.log('bbb');
             calculateAvailableDays($startDate.val(), $endDate.val(), $halfDay.val(), $employee.val(), $leave.val());
             App.blockUI({target: "#hris-page-content", message: "Calculating Leave Days"});
             var startDateValue = $startDate.val();
@@ -230,9 +228,19 @@
                 availableDays = (typeof leaveDetail.BALANCE == 'undefined') ? 0 : parseFloat(leaveDetail.BALANCE);
                 if ($subRefId.val() == ' ' || subLeaveReference != 'Y') {
                     $availableDays.val(availableDays);
+                    if(availableDays <=0){
+                        $('#specialConditionDiv').show();
+                    }else{
+                        $('#specialConditionDiv').hide();
+                    }
                 }
                 if ($subRefId.val() == ' ' && success.data.IS_SUBSTITUTE == 'Y' && subLeaveReference == 'Y') {
                     $availableDays.val(0);
+                    if(0 <=0){
+                        $('#specialConditionDiv').show();
+                    }else{
+                        $('#specialConditionDiv').hide();
+                    }
                 }
 
                 var noOfDays = parseFloat($noOfDays.val());
@@ -407,6 +415,11 @@
                 $.each(substituteDetails, function (index, value) {
                     if (selectedSubRefId == value.ID) {
                         $availableDays.val(value.AVAILABLE_DAYS);
+                        if(value.AVAILABLE_DAYS <=0){
+                            $('#specialConditionDiv').show();
+                        }else{
+                            $('#specialConditionDiv').hide();
+                        }
                     }
                 });
             }
@@ -430,6 +443,17 @@
             }
 
         }
+
+        $('#specialCondition').on('change', function(){
+            console.log($('#availableDays').val());
+            if(this.checked){
+                $request.prop("disabled", false);
+            }else{
+                $request.prop("disabled", true);
+            }
+        });
+
+        $('#specialConditionDiv').hide();
 
     });
 

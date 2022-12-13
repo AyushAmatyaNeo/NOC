@@ -1260,3 +1260,8 @@ alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_REQ_OT_DAYS DE
 alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (APP_FESTIVE_OT_DAYS DECIMAL(7,2));
 alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_APP_OT_DAYS DECIMAL(7,2));
 -----------------------------------
+
+
+alter table hris_Employee_leave_request add (special_condition char(1) default 'N');
+
+----------------------------------------

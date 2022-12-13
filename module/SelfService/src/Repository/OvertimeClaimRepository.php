@@ -1248,7 +1248,7 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
 			'DH1',
 			'DH2',
             'TH1','TH2')) then 
-            case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            case when E.employee_id in (select employee_id from hris_employees where location_id in (17,18)) then
             2
             else 
             1
@@ -1257,14 +1257,14 @@ and flat_value = 1) then 'Y' else 'N' END as ELIGIBLE_LOCKING,
 			'NAW',
 			'AST',
 			'DAS')) then 
-            case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            case when E.employee_id in (select employee_id from hris_employees where location_id in (17,18)) then
             3
             else 
             2
             end
 		else 0
 		END as bonus_multi,
-        case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+        case when E.employee_id in (select employee_id from hris_employees where location_id in (17,18)) then
             'Y'
             else 
             'N'

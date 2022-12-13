@@ -116,7 +116,7 @@ class LeaveRequest extends HrisController {
         $request = $this->getRequest();
         if ($request->isPost()) { 
             $postData = $request->getPost(); 
-            $this->form->setData($postData);module/SelfService/src/Repository/LeaveRepository.php
+            $this->form->setData($postData);
             $leaveSubstitute = $postData->leaveSubstitute;
             if ($this->form->isValid()) {
                 $leaveRequest = new LeaveApply();
@@ -129,6 +129,9 @@ class LeaveRequest extends HrisController {
                 // $leaveRequest->endDate = Helper::getExpressionDate($leaveRequest->endDate);
                 $leaveRequest->requestedDt = Helper::getcurrentExpressionDate();
                 $leaveRequest->status = "RQ";
+                if($postData['specialCondition']){
+                    $leaveRequest->specialCondition = 'Y';
+                }
                 if (isset($postData['subRefId'])  && $postData['subRefId']!=' ') {
                     $leaveRequest->subRefId = $postData['subRefId'];
                 }

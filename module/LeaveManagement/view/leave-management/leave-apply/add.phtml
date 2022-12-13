@@ -227,6 +227,10 @@ print $this->form()->openTag($form);
                     </div>
 
                 <?php print $this->formSubmit($submit); ?>
+                <span id='specialConditionDiv'>
+                <input type='checkbox' id='specialCondition' style="margin-left: 30px;" name="specialCondition">
+                <label class='specialCondition' for='specialCondition'><b>Special Condition Leave</b> <span style="color: darkblue;"><i>Note: If your balance is 0 but need leave for special condition then leave check this box.</i></span>  </label>
+                </span>
 
             </div>
         </div>
