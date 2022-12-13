@@ -22,6 +22,7 @@ class Employee extends AbstractActionController {
     }
 
     public function substituteAction() {
+
         try {
             $request = $this->getRequest();
             $this->employeeId = $request->getHeader('Employee-Id')->getFieldValue();

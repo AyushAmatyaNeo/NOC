@@ -25,6 +25,7 @@ class StageController extends HrisController {
 
     public function indexAction()
     {
+
         $request = $this->getRequest();
         if ($request->isPost()) {
             try {
@@ -37,6 +38,7 @@ class StageController extends HrisController {
             }
         }
         $statusSE = $this->getRecStatusSelectElement(['name' => 'status', 'id' => 'status', 'class' => 'form-control reset-field', 'label' => 'Status']);
+        
         // $GenderSE = $this->getRecGenderSelectElement(['name' => 'Gender', 'id' => 'Gender', 'class' => 'form-control reset-field', 'label' => 'Gender']);
         
         return $this->stickFlashMessagesTo([

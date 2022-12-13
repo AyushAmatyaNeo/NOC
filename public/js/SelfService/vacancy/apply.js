@@ -153,6 +153,47 @@
             }
         //   });
         });
+
+
+        $('.inclusion_uploaded').on('click', function() {
+
+            inclusion_id = $(this).attr('id');
+        
+            inclusion_attr = $('#'+inclusion_id).attr('uploadFlag');
+
+
+            if (inclusion_attr == 'Y') {
+
+                $(".inclusion_upload_file").show();
+                $(".has_inclusion_file").attr("required", true);
+
+
+            } else {
+
+
+                $(".inclusion_upload_file").hide();
+                $(".has_inclusion_file").removeAttr('required');
+
+            }
+
+        });
+
+        $('.remove_img').on('click', function() {
+
+            id = $(this).attr('removeid');
+
+            app.serverRequest(document.ajaxurl, {
+
+                'rec_doc_id': id
+            
+            }).then(function (success) {
+            
+                alert('Document Removed Successfully');
+                location.reload(true);
+            
+            });
+
+        });
         
     });   
     

@@ -14,7 +14,7 @@ use Zend\Db\TableGateway\TableGateway;
 use Zend\Db\Sql\Expression;
 use SelfService\Model\ApplicationDocuments;
 use Setup\Model\EmployeeFile;
-use Recruitment\Model\UserApplicationModel; 
+use Recruitment\Model\UserApplicationModel;  
 
 class VacancyRepository extends HrisRepository{
     public function __construct(AdapterInterface $adapter) {
@@ -22,6 +22,7 @@ class VacancyRepository extends HrisRepository{
         $this->tableGateway = new TableGateway('HRIS_REC_APPLICATION_EDUCATION',$adapter);
         $this->tableEmpEdu = new TableGateway('HRIS_EMPLOYEE_QUALIFICATIONS',$adapter);
         $this->projectTable = new TableGateway('HRIS_REC_VACANCY_APPLICATION',$adapter);
+        $this->paymentTable = new TableGateway('HRIS_REC_APPLICATION_PAYMENT',$adapter);
         $this->PersonalTable = new TableGateway('HRIS_REC_APPLICATION_PERSONAL',$adapter);
         $this->documentTable = new TableGateway('HRIS_REC_APPLICATION_DOCUMENTS',$adapter);
         $this->documentEmployeeTable = new TableGateway('HRIS_EMPLOYEE_FILE', $adapter);
@@ -120,6 +121,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
             new Expression("REC.VACANCY_NO AS VACANCY_NO"),
             new Expression("REC.OPENING_ID AS OPENING_ID"),
             new Expression("REC.VACANCY_TYPE AS VACANCY_TYPE"),
+            // new Expression("REC.VACANCY_TYPE AS VACANCY_TYPE"),/
             new Expression("REC.LEVEL_ID AS LEVEL_ID"),
             new Expression("REC.SKILL_ID AS SKILL_ID"),
             new Expression("REC.INCLUSION_ID AS INCLUSION_ID"),
@@ -139,12 +141,6 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
         $select->from(['REC' => RecruitmentVacancy::TABLE_NAME])
         ->join(['HI' => 'HRIS_REC_VACANCY_INCLUSION'],'HI.VACANCY_ID=REC.VACANCY_ID', 'VACANCY_INCLUSION_ID', 'left');
 
-        // echo "<pre>";
-
-        // print_r(RecruitmentVacancy::TABLE_NAME);
-
-        // die;
-        
 
         $select->where(["REC.VACANCY_ID='{$id}'"]); //change to this if not working. remove below 2 line.
         // $select->where(["REC.VACANCY_ID" => $id]);
@@ -259,6 +255,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
             new Expression("DES.DESIGNATION_TITLE AS DESIGNATION_TITLE"),
             new Expression("REC.DESIGNATION_ID AS DESIGNATION_ID"),
             new Expression("EF.FILE_PATH AS PROFILE_PATH"),
+            new Expression("EF.FILE_CODE AS FILE_ID"),
             ], true);
 
         $select->from(['REC'  => 'HRIS_EMPLOYEES'])
@@ -288,7 +285,8 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
             new Expression("REC.PASSED_YR AS PASSED_YEAR"),
             new Expression("UNI.ACADEMIC_UNIVERSITY_NAME AS ACADEMIC_UNIVERSITY_ID"),
             new Expression("REC.RANK_TYPE AS RANK_TYPE"),
-            new Expression("REC.RANK_VALUE AS RANK_VALUE")
+            new Expression("REC.RANK_VALUE AS RANK_VALUE"),
+            new Expression("REC.ID AS ID"),
             ], true);
 
         $select->from(['REC'  => 'HRIS_EMPLOYEE_QUALIFICATIONS'])
@@ -348,7 +346,10 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
     public function eduDocuments($eid)
     {
-        $sql = ("SELECT HRIS_EMPLOYEE_FILE.FILE_PATH, HRIS_EMPLOYEE_FILE_SETUP.FILE_NAME  FROM HRIS_EMPLOYEE_FILE LEFT JOIN HRIS_EMPLOYEE_FILE_SETUP ON HRIS_EMPLOYEE_FILE.FILE_ID = HRIS_EMPLOYEE_FILE_SETUP.FILE_ID where HRIS_EMPLOYEE_FILE.EMPLOYEE_ID = {$eid} and HRIS_EMPLOYEE_FILE.status = 'E'");
+        $sql = ("SELECT HRIS_EMPLOYEE_FILE.FILE_PATH, 
+                HRIS_EMPLOYEE_FILE_SETUP.FILE_NAME  
+                FROM HRIS_EMPLOYEE_FILE LEFT JOIN HRIS_EMPLOYEE_FILE_SETUP ON HRIS_EMPLOYEE_FILE.FILE_ID = HRIS_EMPLOYEE_FILE_SETUP.FILE_ID where HRIS_EMPLOYEE_FILE.EMPLOYEE_ID = {$eid} and HRIS_EMPLOYEE_FILE.status = 'E'");
+
         $result = $this->rawQuery($sql);
         return $result;
 
@@ -395,12 +396,55 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
        }else{
         return;
        }
-       
         
     }
-    public function casLeaveEarlier($eid)
+
+    public function getInclusionsAll($application_type = 'open')
     {
-        $sql = ("SELECT COUNT (HRIS_ATTENDANCE_DETAIL.ATTENDANCE_DT) as TOTALLEAVE from HRIS_ATTENDANCE_DETAIL WHERE OVERALL_STATUS = 'LV' AND EMPLOYEE_ID = {$eid} AND ATTENDANCE_DT < '2021-11-19' and leave_id in 
+
+        $sql = ("SELECT * FROM HRIS_REC_OPTIONS WHERE STATUS = 'E'");
+
+        if (strtolower($application_type) !== 'open') {
+
+            $application_type = "('Internal Competition','Internal-Appraisal','Open')";
+
+            $sql = ("SELECT * FROM HRIS_REC_OPTIONS WHERE OPTION_EDESC NOT IN $application_type and status='E'");
+        
+        }
+        
+        $result = $this->rawQuery($sql);
+
+        return $result;
+    }
+
+    public function getEmployeeInclusion($employeeId, $type)
+    {
+
+        // $sql = ("SELECT * FROM HRIS_REC_OPTIONS WHERE STATUS = 'E' AND EMPLOYEE_ID = {$empId}");
+
+        if ($type == 'form')
+        {
+            $sql = ("SELECT * FROM HRIS_EMPLOYEES AS E 
+                    LEFT JOIN HRIS_EMPLOYEE_FILE AS F ON E.INCLUSION_FORM_FILE_ID = F.FILE_CODE 
+                    WHERE E.STATUS = 'E' AND E.EMPLOYEE_ID = {$employeeId}");
+        } else {
+
+            $sql = ("SELECT * FROM HRIS_EMPLOYEES AS E 
+                    LEFT JOIN HRIS_EMPLOYEE_FILE AS F ON E.INCLUSION_APPRAISAL_FILE_ID = F.FILE_CODE 
+                    WHERE E.STATUS = 'E' AND E.EMPLOYEE_ID = {$employeeId}");
+
+        }
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+
+        return $result->current();
+
+    }
+
+     public function casLeaveEarlier($eid)
+    {
+        $sql = ("SELECT COUNT (HRIS_ATTENDANCE_DETAIL.ATTENDANCE_DT) as TOTALLEAVE from HRIS_ATTENDANCE_DETAIL WHERE OVERALL_STATUS = 'LV' AND EMPLOYEE_ID = {$eid} AND ATTENDANCE_DT < '2021-11-19'  and leave_id in 
         (select leave_id from hris_leave_master_setup where leave_code = 'EXTRLEV')");
         $result = $this->rawQuery($sql);
         // var_dump($sql); die;
@@ -408,7 +452,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
     public function casLeaveLater($eid)
     {
-        $sql = ("SELECT COUNT (HRIS_ATTENDANCE_DETAIL.ATTENDANCE_DT) as TOTALLEAVE from HRIS_ATTENDANCE_DETAIL WHERE OVERALL_STATUS = 'LV' AND EMPLOYEE_ID = {$eid} AND ATTENDANCE_DT > '2021-11-19' and leave_id in 
+        $sql = ("SELECT COUNT (HRIS_ATTENDANCE_DETAIL.ATTENDANCE_DT) as TOTALLEAVE from HRIS_ATTENDANCE_DETAIL WHERE OVERALL_STATUS = 'LV' AND EMPLOYEE_ID = {$eid} AND ATTENDANCE_DT > '2021-11-19'  and leave_id in 
         (select leave_id from hris_leave_master_setup where leave_code = 'EXTRLEV')");
         $result = $this->rawQuery($sql);
         // var_dump($result); die;
@@ -432,11 +476,11 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
     public function checkVacancyStatus($v_id, $e_id)
     {
-        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID,
-        CASE WHEN
-	 stage_id in (
-select rec_stage_id from hris_rec_stages where order_no >= (select order_no from hris_rec_stages where rec_stage_id = 8))
-then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} and status='E'";
+        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_ID,HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID, HRIS_REC_VACANCY_APPLICATION.APPLICATION_ID, 
+                CASE WHEN
+	                stage_id in (
+                        SELECT rec_stage_id from hris_rec_stages where order_no >= (select order_no from hris_rec_stages where rec_stage_id = 8))
+                    then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION  WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} and status='E'";
         $result = $this->rawQuery($sql);
         // var_dump($sql); die;
         return $result;
@@ -447,14 +491,201 @@ then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION
         return $result[0];
     }
     public function fetchInclusionById($id){
-        $sql = "SELECT OPTION_ID AS INCLUSION_ID,OPTION_EDESC FROM HRIS_REC_OPTIONS where OPTION_ID = $id";
-        $result = $this->rawQuery($sql);
-        return $result[0];
+        if ($id > 0) {
+            $sql = "SELECT OPTION_ID AS INCLUSION_ID, OPTION_EDESC, UPLOAD_FLAG FROM HRIS_REC_OPTIONS where OPTION_ID = $id";
+            $result = $this->rawQuery($sql);
+        }      
+        return ($result[0]) ? $result[0] : false;
     }
     public function insertPersonal($data){
         // var_dump($data); die;
         $this->PersonalTable->insert($data); 
     }
+
+    public function getMaxIds($id_name,$table)
+    {
+        $sql = "SELECT MAX($id_name) AS MAXID FROM {$table}";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+
+        return $result->current();
+
+        // $query = $this->db->query("SELECT MAX($id_name) AS MAXID FROM $table");
+        // $result = $query->row_array();
+        // return $result;
+    }
+
+    public function getRowId($table, $where, $where_value) {
+        
+        $result = '';
+        if ($where_value) {
+
+            $sql = "SELECT * FROM {$table} WHERE {$where} = {$where_value}";
+
+            $statement = $this->adapter->query($sql);
+            $result    = $statement->execute();
+
+        }
+        
+
+        return ($result) ? $result->current() : false;
+    }
+
+    public function deleteRowId($table, $where, $where_value) {
+        $sql = "DELETE FROM {$table} WHERE {$where} = {$where_value}";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+
+        return true;
+    }
+
+    public function getUpdateById($table, $data, $where, $where_value) {
+
+        $column = implode(',', array_keys($data));
+        $value  = implode("','", array_values($data));
+
+        $sql = "UPDATE {$table} SET ($column) = ('$value') WHERE {$where} = {$where_value}";
+
+        $result = $this->rawQuery($sql);
+
+        return true;
+    }
+
+    public function checkVacancyApplicationApplied($v_id, $e_id, $a_id = NULL)
+    {
+        if ($a_id !== NULL) {
+            $sql = "SELECT * FROM HRIS_REC_VACANCY_APPLICATION
+                    WHERE APPLICATION_ID = {$a_id} AND USER_ID = {$e_id} AND AD_NO = {$v_id} AND STATUS='E'";
+            $statement = $this->adapter->query($sql);
+            $result    = $statement->execute();
+            
+            return $result->current();
+        } 
+        return false;
+    }
+
+    public function checkApplicationStages($stage_id) {
+        /**
+         * A : APPLICATION   V: VACANCY
+         * */
+
+        $sql = "SELECT * FROM HRIS_REC_STAGES WHERE REC_STAGE_ID = {$stage_id} AND VACANCY_APPLICATION = 'A'";
+
+        $statement = $this->adapter->query($sql);
+        $result = $statement->execute();
+
+        return $result->current();
+
+    }
+
+
+    public function checkVacancyApplicationByAidVid($a_id, $v_id)
+    {
+        $sql = "SELECT *  FROM HRIS_REC_VACANCY_APPLICATION
+                WHERE APPLICATION_ID = {$a_id} AND AD_NO = {$v_id}";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+        return $result->current();
+    }
+
+    public function checkVacancyApplicationByColumn($data) 
+    {
+        $key   = implode(',', array_keys($data));
+        $value = implode("','", array_values($data));
+
+        $sql = "SELECT *  FROM HRIS_REC_VACANCY_APPLICATION WHERE {$key} = '$value' ";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+        return $result->current();
+    }
+
+    public function checkVacancyApplicationPaymentByColumn($data) 
+    {
+        $key   = implode(',', array_keys($data));
+        $value = implode("','", array_values($data));
+
+        $sql = "SELECT *  FROM HRIS_REC_APPLICATION_PAYMENT WHERE {$key} = '$value' ";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+        return $result->current();
+    }
+
+    public function getPaymentGateway()
+    {
+        $sql    = "SELECT * FROM HRIS_REC_PAYMENT_GATEWAY WHERE STATUS = 1";
+        $result = $this->rawQuery($sql);
+        return $result;
+    }
+
+    public function getPaymentGatewayByWhere($data) 
+    {
+        $key   = implode(',', array_keys($data));
+        $value = implode("','", array_values($data));
+
+        $sql = "SELECT *  FROM HRIS_REC_PAYMENT_GATEWAY WHERE {$key} = '$value' ";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+        return $result->current();
+    }
+
+    public function insertApplicationPayment($data){
+        // echo '<pre>'; print_r($data); die;       
+        $this->paymentTable->insert($data); 
+        return true;
+    }
+
+    public function updateApplicationPayment($column, $update, $where) {
+
+        $key   = implode(',', array_keys($where));
+        $value = implode("','", array_values($where));
+
+        $sql   = "UPDATE HRIS_REC_APPLICATION_PAYMENT SET ($column) = ('$update') WHERE {$key} = '$value'";
+        $result= $this->rawQuery($sql);
+
+        return true;
+    }
+
+    public function updateApplicationPaymentArray($update,  $where) {
+
+        $column   = implode(',', array_keys($update));
+        $data     = implode("','", array_values($update));
+
+        $key   = implode(',', array_keys($where));
+        $value = implode("','", array_values($where));
+
+        $sql   = "UPDATE HRIS_REC_APPLICATION_PAYMENT SET ($column) = ('$data') WHERE {$key} = '$value'";
+        
+        $result= $this->rawQuery($sql);
+
+        return true;
+    }
+
+
+    public function updateVacancyApplication($column, $update, $a_id, $v_id)
+    {
+        $sql   = "UPDATE HRIS_REC_VACANCY_APPLICATION SET ($column) = ('$update') WHERE APPLICATION_ID = {$a_id} AND AD_NO = {$v_id}";
+        $result = $this->rawQuery($sql);
+
+        return true;
+    }
+
+    public function updateVacancyApplicationArray($update, $a_id, $v_id)
+    {
+        $key   = implode(',', array_keys($update));
+        $value = implode("','", array_values($update));
+
+        $sql   = "UPDATE HRIS_REC_VACANCY_APPLICATION SET ($key) = ('$value') WHERE APPLICATION_ID = {$a_id} AND AD_NO = {$v_id}";
+        $result = $this->rawQuery($sql);
+
+        return true;
+    }
+
     public function updatePersonal($data, $adNo, $uid)
     {
         $sql =  "SELECT * FROM HRIS_REC_VACANCY_APPLICATION WHERE AD_NO = {$adNo} AND USER_ID = {$uid} AND APPLICATION_TYPE = 'Internal-form'";
@@ -473,6 +704,8 @@ then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION
         // echo '<pre>'; print_r($data); die;       
         $this->projectTable->insert($data); 
     }
+
+
     public function insertEdu($data){
         $this->tableGateway->insert($data); 
     }
@@ -525,12 +758,14 @@ then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION
         // var_dump($data); die;
         $this->tableEmpEdu->insert($data);  
     }
+
     public function inclusionAppliedCheck($id)
     {
         $sql = ("SELECT HRIS_EMPLOYEES.INCLUSION, HRIS_EMPLOYEES.JOIN_DATE,HRIS_FUNCTIONAL_LEVELS.FUNCTIONAL_LEVEL_NO, YEARS_BETWEEN(HRIS_EMPLOYEES.JOIN_DATE, current_date) as duration  FROM HRIS_EMPLOYEES LEFT JOIN HRIS_FUNCTIONAL_LEVELS ON HRIS_EMPLOYEES.FUNCTIONAL_LEVEL_ID = HRIS_FUNCTIONAL_LEVELS.FUNCTIONAL_LEVEL_ID WHERE HRIS_EMPLOYEES.EMPLOYEE_ID = {$id}");
         $result = $this->rawQuery($sql);
         return $result[0];
     }
+
     public function inclusionPromoCheck($id)
     {
         $q = ("SELECT HRIS_JOB_HISTORY.START_DATE,HRIS_FUNCTIONAL_LEVELS.FUNCTIONAL_LEVEL_NO FROM HRIS_JOB_HISTORY LEFT JOIN HRIS_FUNCTIONAL_LEVELS ON HRIS_JOB_HISTORY.TO_FUNCTIONAL_LEVEL = HRIS_FUNCTIONAL_LEVELS.FUNCTIONAL_LEVEL_ID WHERE EMPLOYEE_ID = {$id}");
@@ -547,5 +782,51 @@ then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION
         $result = $this->rawQuery($updateSql);
 
         return;
+    }
+
+    public function updateEmployeeInclusion($update, $empId){
+        $key   = implode(',', array_keys($update));
+        $value = implode("','", array_values($update));
+
+        $sql   = "UPDATE HRIS_EMPLOYEES  SET ($key) = ('$value') WHERE EMPLOYEE_ID = {$empId}";
+
+        
+        $result = $this->rawQuery($sql);
+
+        return true;
+    }
+
+    public function getOpening($openingId)
+    {
+        $sql = "SELECT *  FROM HRIS_REC_OPENINGS WHERE OPENING_ID = '$openingId' ";
+
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+        return $result->current();
+    }
+
+    public function removeEmployeeInclusion($empId, $fileId, $type, $inclusion_process)
+    {
+
+        if ($type == 'appraisal') {
+
+            $sql = "BEGIN
+                    UPDATE HRIS_EMPLOYEES SET (INCLUSION_APPRAISAL_USED, INCLUSION_APPRAISAL_USED_DATE, INCLUSION_ID_APPRAISAL, INCLUSION_APPRAISAL_FILE_ID, INCLUSION_APPRAISAL_FOR_YEAR, INCLUSION_USED_PROCESS) = ('N','NULL','NULL','NULL','NULL','".$inclusion_process."') WHERE EMPLOYEE_ID={$empId};
+                    DELETE FROM HRIS_EMPLOYEE_FILE WHERE FILE_CODE = {$fileId};
+                    END;";
+
+
+        } else {
+
+            $sql = "BEGIN
+                    UPDATE HRIS_EMPLOYEES SET (INCLUSION_FORM_USED, INCLUSION_FORM_USED_DATE, INCLUSION_ID_FORM, INCLUSION_FORM_FILE_ID, INCLUSION_FORM_FOR_YEAR, INCLUSION_USED_PROCESS) = ('N','NULL','NULL','NULL','NULL','".$inclusion_process."') WHERE EMPLOYEE_ID={$empId};
+                    DELETE FROM HRIS_EMPLOYEE_FILE WHERE FILE_CODE = {$fileId};
+                    END;";
+        }
+        
+        $result = $this->rawQuery($sql);
+
+        return true;
+
     }
 }   

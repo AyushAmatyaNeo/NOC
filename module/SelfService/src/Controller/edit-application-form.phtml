@@ -539,11 +539,11 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 			</table>
 
 
-            <?php
-
+            <?php 
                 if ($employeeInclusionUsed['INCLUSION_USED_PROCESS'] !== 'AP') {
 
-                    if ($employeeInclusionUsed['INCLUSION_FORM_USED'] == 'Y') {
+
+                //     if ($employeeInclusionUsed['IS_INCLUSION_USED'] == 'y')
 
             ?>
                 <hr>
@@ -559,8 +559,8 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                     <td>Inclusion Applied</td>
                                     <?php if ($employeeInclusionUsed['FILE_PATH']) { ?>
                                     <td>Document Name</td>
-                                    <td>View</td>
                                     <?php } ?>
+                                    <td>Upload</td>
                                     <!-- <td>Add</td> -->
                                 </tr>
                             </thead>                            
@@ -575,16 +575,16 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                             <img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $baseurl.'/uploads/documents/Inclusion/'.$employeeInclusionUsed['FILE_PATH']; ?>" alt="Inclusion" />
                                         </div>
                                     </td>
+                                    <?php } ?>
                                     <td colspan="7">
                                         <a href="<?php echo $this->basePath('uploads/documents/Inclusion/'.$employeeInclusionUsed['FILE_PATH']); ?>" target="_blank" class="btn btn-primary">View</a>
                                     </td>
-                                    <?php } ?>
                                 </tr>                       
                             </tbody>
                         </table>
                     </div>
                 </div>
-            <?php } } ?>
+            <?php } ?>
 
 
             <div class="border-bottom">

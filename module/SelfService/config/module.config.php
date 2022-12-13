@@ -1137,6 +1137,22 @@ return [
                         'route' => 'vacancies',
                         'action' => 'choose',
                     ],
+                    [
+                        'label' => 'Payments',
+                        'route' => 'vacancies',
+                        'action'=> 'payments', 
+                    ],
+                    [
+                        'label' => 'Payment Success',
+                        'route' => 'vacancies',
+                        'action'=> 'success',
+                    ],
+                    [
+                        'label' => 'Save Temporary Payment',
+                        'route' => 'vacancies',
+                        'action'=> 'saveTempData',
+                    ],
+
                 ],
             ],
         ],

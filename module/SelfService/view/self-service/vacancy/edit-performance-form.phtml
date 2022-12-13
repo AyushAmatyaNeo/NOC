@@ -1,0 +1,732 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+$this->headLink()->appendStylesheet($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.css'));
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/nepalidate/nepali.datepicker.v2.1.min.js'))
+    ->appendFile($this->basePath('js/nepali-datepicker-ext.js'))
+    ->appendFile($this->basePath('js/selfservice/vacancy/apply.js'));
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'perfomanceApplication-form');
+$form->setAttribute('enctype', 'multipart/form-data');
+
+// $fromDate = $form->get('fromDate');
+// $toDate = $form->get('toDate');
+// $duration = $form->get('duration');
+// $remarks = $form->get('remarks');
+
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'Update');
+// $submit->setAttribute('', '');
+?>
+<script>
+    document.ajaxurl = '<?= $this->url('vacancies', ['action' => 'removedocument']); ?>';
+    document.eduDetail =<?= json_encode($eduDegrees); ?>;
+    document.eduFaculty = <?= json_encode($eduFaculty); ?>;
+    document.eduUniversity = <?= json_encode($eduUniversity); ?>;
+    document.eduCourses = <?= json_encode($eduCourses); ?> ;
+</script>
+
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\vacancies')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+
+<?php #echo "<pre>"; print_r($appliedData); ?>
+<div class="col-sm-12">
+    <div class="portlet box custom-box">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="fa fa-user"></i>Vacancy Apply
+            </div>
+            <div class="actions">
+                <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+            </div>
+        </div>
+        <div class="portlet-body">
+            <div class="form-group">
+                <input type="hidden" id="employeeId" value="<?php echo $employeeId; ?>" />
+            </div>
+            
+            <?php print $this->form()->openTag($form); ?>
+
+            <h4 class="text-center"> 
+                <strong style="line-height: 25px;"> 
+                    नेपाल आयल निगम लिमिटेड <br> 
+                    कर्मचारी प्रशासन विनियमावली २०६३ को विनियम ६,४ बमोजिम  <br>
+                    जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि  <br> 
+                    दरखास्त फारम 
+                </strong>
+            </h4>
+
+            <div class="row" style="margin: 20px;">
+                <h5 class="bold">कर्मचारी संकेत न :</h5>
+
+                <div class="col-12" style="border:1px solid black ;">
+                    <div class="row clearfix e-setup">        
+
+                        <div class="col-xs-12 col-sm-3 col-md-6 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group" style="margin: 10px;">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="ad_no">सूचना न. / प्रकाशन भएको मिति:  </label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $detail['AD_NO']. ' / 2021-1-1'; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">बढुवा हुने पद / तह :</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $detail['POSITION_NAME'].' / '. $detail['FUNCTIONAL_LEVEL_NO']; ?></div>
+                                </div>
+                            </div>                            
+                        </div>
+
+                        <div class="col-xs-12 col-sm-3 col-md-6 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group" style="margin: 10px;">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="ad_no">सेवा / समुह:  </label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                    <?php echo $detail['SERVICE_EVENT_NAME'].'/ '. $detail['SERVICE_TYPE_NAME']; ?></div>
+                                </div>
+                            </div>
+
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">बि. न. :</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $detail['AD_NO']; ?></div>
+                                </div>
+                            </div>                            
+                        </div>
+
+                    </div>
+                </div>
+                
+                <div class="col-12" style="border:1px solid black; margin-top: 10px">
+                    <div class="row clearfix e-setup">
+
+                        <div class="col-xs-12 col-sm-3 col-md-6 col-box">
+                            <div class="row bottomgap">
+                                <div class="form-group" style="margin: 10px;">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="ad_no">उमेद्वारको नाम / थर:  </label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['FIRST_NAME'] .' '.$EmployeeData['MIDDLE_NAME'].' ' .$EmployeeData['LAST_NAME']; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">बहाल रहेको कार्यालय:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['DEPARTMENT_ID']; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">पद / तह:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['DESIGNATION_TITLE'].' / '. $EmployeeData['POSITION_ID']; ?>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row bottomgap">
+                                <div class="form-group">
+                                    <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                        <label for="firstName">सेवा / समुह:</label>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                        <?php echo $EmployeeData['SERVICE_TYPE_NAME'].' / '. $EmployeeData['SERVICE_EVENT_NAME']; ?>
+                                    </div>
+                                </div>
+                            </div> 
+
+                        </div>
+                    </div>
+                </div>
+
+                <h5 class="bold">१. सेवा सम्बन्धी बिवरण ( शुरू नियुक्तिदेखि हालको पदसम्म )</h5>
+                <div class="row">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <td class="text-center"  style="width: 10%;">पद</td>
+                                <td class="text-center"  style="width: 20%;">पदको नाम / तह / सेवा / समुह </td>
+                                <td class="text-center"  style="width: 20%;">कार्यालय को नाम / रहेको स्थान </td>
+                                <td class="text-center"  style="width: 10%;">नियुक्ति वा बढुवाको मिति </td>
+                                <td class="text-center"  style="width: 10%;">बहाल रहेको मिति </td>
+                                <td class="text-center"  style="width: 10%;">असाधारण बिदा बसेको अबिधि </td>
+                                <td class="text-center"  style="width: 10%;">कसरी आएको </td>
+                                <td class="text-center"  style="width: 10%;">कैफियत </td>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>शुरू नियुक्ति </td>
+                                <td class="text-center">
+                                    <?php echo $JobStart['DESIGNATION_TITLE'] .' / '. $JobStart['FUNCTIONAL_LEVEL_EDESC'] .' / '. $JobStart['SERVICE_TYPE_NAME'] .' / '. $JobStart['DEPARTMENT_NAME']; ?>
+                                </td>
+                                <td class="text-center"> 
+                                    <?php echo $JobStart['BRANCH_NAME'] .' / '. $JobStart['LOCATION_EDESC']; ?>
+                                </td>
+                                <td class="text-center"> 
+                                    <?php echo $JobStart['START_DATE']; ?>
+                                </td>
+                                <td class="text-center"> 
+                                    <?php echo $JobStart['SERVICE_TYPE_NAME']; ?>
+                                </td>
+                                <td class="text-center"> 
+                                    <?php echo $casLeaveEarlier; ?>
+                                </td>
+                                <td class="text-center"> 
+                                    <?php echo $JobStart['SERVICE_TYPE_NAME']; ?>
+                                </td>
+                                <td class="text-center"> 
+                                    <?php echo $JobStart['REMARKS']; ?>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>हालको पद / तह </td>
+                                <td class="text-center"> <?php echo $JobEnd['DESIGNATION_TITLE'] .' / '. $JobEnd['FUNCTIONAL_LEVEL_EDESC'] .' / '. $JobEnd['SERVICE_TYPE_NAME'] .' / '. $JobEnd['DEPARTMENT_NAME']; ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['BRANCH_NAME']; ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['START_DATE']; ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['SERVICE_TYPE_NAME']; ?></td>
+                                <td class="text-center"> <?php echo $casLeaveLater; ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['SERVICE_TYPE_NAME']; ?></td>
+                                <td class="text-center"> <?php echo $JobEnd['REMARKS']; ?></td>
+                            </tr>
+                        </tbody>
+
+                    </table>
+
+                    <h5 class="bold">द्रष्टब्य : </h5>
+                    <p> १ . सेवा , समुह परिवर्तन के हो स्पष्ट उलेख गर्ने। <br>  
+                        २. बढुवाको उमेद्वार हुन असर पर्ने कुनै कुरा छैन भनि कैफियत महलमा उलेख गरि दस्तखत समेत गर्ने। <br>
+                        ३. गयल कट्टी लगायत सेवा अवधि गणना नहुने कुनै बिवरण भए कैफियत महलमा खुलाउनु पर्नेछ। <br>
+                        ४. माथि कार्यालयमा रहेको स्थानमा हालको पदको बिवरण खुलाउदा  विनियम ६।११ (२) बमोजिम वर्ग उलेख गर्नु पर्ने। 
+                    </p>
+                </div>
+                
+                <h5 class="bold">२. शैक्षित योग्यता ( विनियम ६। १२ ( १ ) अनुसारको मात्र )</h5>
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <h5> 
+                            <strong> <?php echo $detail['REMARK']; ?> </strong>
+                        </h5>
+
+                        <div id="quaConId">
+                            <!-- Add Education Table -->
+                            <h5 class="bold"> Add new or missing qualification using  
+                                <i class="fa fa-plus-circle" aria-hidden="true" style="color: green; cursor: pointer"></i>  sign
+                            </h5>
+                                
+                            <table class="table table-responsive-md table-striped table-bordered table-sm" id="education">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2" width="25%">Degree Acquired</th>
+                                        <th rowspan="2">University / Board</th>
+                                        <th rowspan="2">Faculty</th>
+                                        <th rowspan="2">Course Name</th>
+                                        <th colspan="2">Division</th>
+                                        <th rowspan="2" width="10%">Passed Year (AD)</th>
+                                        <th rowspan="2">
+                                            <i class="fa fa-plus-circle btn-add-edu" aria-hidden="true" style="color: green; cursor: pointer"></i>
+                                        </th>
+                                    </tr>
+                                    <tr>
+                                        <th>Rank Type</th>
+                                        <th width="10%">Rank Value</th>
+                                    </tr>
+                                </thead>
+                                   
+                                <tbody id="educationalbody">
+                                    <?php foreach ($educationData as $eduData) { ?>
+                                        <tr>
+                                            <td>
+                                                <div for="level_id" class="form-group">
+                                                <select name="level_id[]" class="form-control form-control-sm level_id" required>
+                                                <option value="">-- Select -- </option>
+                                                <?php foreach($eduDegrees as $degree) { ?>
+                                                    <option value="<?php echo $degree['ACADEMIC_DEGREE_ID'] ?>" 
+                                                        <?php echo ($eduData['ACADEMIC_DEGREE_ID'] == $degree['ACADEMIC_DEGREE_NAME']) ? 'selected' : ''; ?>>
+                                                        <?php echo ucwords($degree['ACADEMIC_DEGREE_NAME']) ?>
+                                                        
+                                                    </option>
+                                                <?php } ?>
+                                                </select>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div for="univerity_board" class="form-group" id="rank_value_error">
+                                                <select name="univerity_board[]" class="form-control form-control-sm university" required>
+                                                    <option value=""> Select University</option>
+                                                    <?php foreach ($eduUniversity as $university) { ?>
+                                                        <option value="<?php echo $university['ACADEMIC_UNIVERSITY_ID']; ?>" <?php echo ($eduData['ACADEMIC_UNIVERSITY_ID'] == $university['ACADEMIC_UNIVERSITY_NAME']) ? 'selected' : '' ?>><?php echo ucwords($university['ACADEMIC_UNIVERSITY_NAME']); ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div for="faculty" class="form-group">
+                                                <select name="faculty[]" id="faculty" class="form-control form-control-sm faculty" required>
+                                                    <?php foreach($eduFaculty as $faculty) { ?>
+                                                        <option value="<?php echo $faculty['ACADEMIC_PROGRAM_ID'] ?>" <?php echo ($eduData['ACADEMIC_PROGRAM_ID'] == $faculty['ACADEMIC_PROGRAM_NAME']) ? 'selected' : '' ?>><?php echo $faculty['ACADEMIC_PROGRAM_NAME'] ?></option>
+                                                    <?php } ?>
+                                                </select>
+                                                
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div for="major_subject" class="form-group">
+                                                <select name="major_subject[]" class="form-control form-control-sm course" required>
+                                                    <option value=""> Select Course</option>
+                                                    <?php foreach($eduCourses as $course) { ?>
+                                                        <option value="<?php echo $course['ACADEMIC_COURSE_ID'] ?>" <?php echo ($eduData['ACADEMIC_COURSE_ID'] == $course['ACADEMIC_COURSE_NAME']) ? 'selected' : '' ?>><?php echo $course['ACADEMIC_COURSE_NAME'] ?></option>
+
+                                                    <?php } ?>
+                                                </select>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div class="form-group">
+                                                    <select class="form-control form-control-sm" id="" name="rank_type[]" required>
+                                                        <option value="">Select Level</option>
+                                                        <option value="GPA" <?php echo ($eduData['RANK_TYPE'] == 'GPA') ? 'selected' : '';  ?>>GPA</option>
+                                                        <option value="Percentage" <?php echo ($eduData['RANK_TYPE'] == 'Percentage') ? 'selected' : '';  ?>>Percentage</option>
+                                                    </select>
+                                                </div>
+                                            </td>
+
+                                            <td>
+                                                <div for="rank_value" class="form-group">
+                                                    <input type="text" name="rank_value[]" value="<?php print $eduData['RANK_VALUE']; ?>" class="form-control form-control-sm" required>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div for="passed_year" class="form-group">
+                                                    <input type="number" name="passed_year[]" value="<?php print $eduData['PASSED_YEAR']; ?>" class="form-control form-control-sm" required>
+                                                </div>
+                                            </td>
+
+                                            <input type="hidden" name="edu_id[]" value="<?php echo $eduData['ID']; ?>">
+                                            <input type="hidden" name="employee_id" value="<?php echo $employeeId; ?>">
+                                            <input type="hidden" name="application_id" value="<?php echo $appliedData['application'][0]['APPLICATION_ID'] ?>">
+                                            <input type="hidden" name="user_id" value="<?php echo $appliedData['application'][0]['USER_ID'] ?>">
+                                            <input type="hidden" name="vacancy_id" value="<?php echo $appliedData['application'][0]['AD_NO'] ?>">
+
+                                        </tr>
+                                    <?php } ?>                                  
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <h6> <strong> </strong></h6>
+                    <div class="row clearfix e-setup">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box">
+                            <h5><strong> कागजात र प्रमाणपत्र (JPG | PNG मात्र)</strong> </h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="container">
+                        <div class="row" >
+                            <div >							
+                                <h4>Note: 1. This vacancy require up to <strong> <?php echo $detail['QUALIFICATION'];  ?> </strong> degree documents, please upload it all else your application will not get approved.</h4>
+                                <h4>  2. Please upload all respective document in single a file.</h4>
+                            </div>
+                            <table class="table table-responsive-lg table-striped table-bordered table-sm">
+                                <thead>
+                                    <tr class="UploadDoc">
+                                        <td>S.No</td>
+                                        <td>Document Name</td>
+                                        <td>Upload</td>
+                                    </tr>
+                                </thead>							
+                                <tbody>
+                                    <tr class="qualification">
+                                        <td>1</td>
+                                        <td>Qualification</td>
+
+                                        <td class='certInput' id="td1">
+                                            <div class="row">
+                                                <div class="col-md-10">
+                                                    <label for="trascript">
+                                                        Transcript/Grade Sheet/Marksheet <span style="color: red;">*</span>
+                                                    </label>
+                                                    
+                                                    <div id="imagePreviewTranscipt" class="mb-3" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                                        <img style="width: 100%; height: 100%" id="transcipt" src="<?php echo $this->basePath($applicantsDocumentNew['qualification_trascript']);?>" alt="transcipt" />
+                                                    </div>
+
+                                                    <input type="file" class="form-control-file " id="qualification_trascript" name="qualification_trascript" onchange="return certificateValidation($id = 'qualification_trascript')" accept=".png,.pdf,.jpg,.jpeg" style="margin-top:10px;" />
+
+                                                    <input type="hidden" name="qualification_trascript_id" value="<?php echo $applicantsDocumentId['QUALIFICATION_TRASCRIPT']['REC_DOC_ID']; ?>">
+
+                                                    <?php if ($applicantsDocumentId['QUALIFICATION_TRASCRIPT']['REC_DOC_ID']) { ?>
+                                                        <!-- <span class="btn btn-danger remove_img" id="qualification_trascript" removeid="<?php echo $applicantsDocumentId['QUALIFICATION_TRASCRIPT']['REC_DOC_ID']; ?>">Remove</span> -->
+                                                    <?php } ?>
+
+                                                    <hr>
+                                                    
+                                                    <label style="margin-top:20px;" for="character">Character Certificate <span style="color: red;">*</span></label>
+
+                                                    <div id="imagePreviewQualification_character" class="mb-3" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                                        <img style="width: 100%; height: 100%" id="transcipt" src="<?php echo $this->basePath($applicantsDocumentNew['qualification_character']);?>" alt="transcipt" />
+
+                                                    </div>
+
+                                                    <input type="file" class="form-control-file" id="qualification_character" name="qualification_character" onchange="return certificateValidation($id = 'qualification_character')" accept=".png,.pdf,.jpg,.jpeg" style="margin-top:10px;" />
+
+                                                    <input type="hidden" name="qualification_character_id" value="<?php echo $applicantsDocumentId['QUALIFICATION_CHARACTER']['REC_DOC_ID']; ?>">
+
+                                                    <?php if ($applicantsDocumentId['QUALIFICATION_CHARACTER']['REC_DOC_ID']) { ?>
+                                                        <!-- <span class="btn btn-danger remove_img" id="qualification_character_remove" removeid="<?php echo $applicantsDocumentId['QUALIFICATION_CHARACTER']['REC_DOC_ID']; ?>">Remove</span> -->
+                                                    <?php } ?>
+                                                    
+
+                                                    <hr>
+                                                    
+                                                    <label style="margin-top:20px;" for="equivalent">Equivalent Certificate <span>(optional)</span></label>
+
+                                                    <?php if ($applicantsDocumentNew['qualification_equivalent'] ) { ?>
+                                                        <div id="imagePreviewQualification_equivalent" class="mb-3" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                                            <img style="width: 100%; height: 100%" id="transcipt" src="<?php echo $this->basePath($applicantsDocumentNew['qualification_equivalent']);?>" alt="transcipt" />
+                                                        </div>
+                                                    <?php } ?>
+                                                    <input type="file" class="form-control-file" id="qualification_equivalent" name="qualification_equivalent" onchange="return certificateValidation($id = 'qualification_equivalent')" accept=".png,.pdf,.jpg,.jpeg" style="margin-top:10px;" />
+                                                    <input type="hidden" name="qualification_equivalent_id" value="<?php echo $applicantsDocumentId['QUALIFICATION_EQUIVALENT']['REC_DOC_ID']; ?>">
+
+                                                    <?php if ($applicantsDocumentId['QUALIFICATION_EQUIVALENT']['REC_DOC_ID']) { ?>
+                                                        <!-- <span class="btn btn-danger remove_img" id="qualification_equivalent_remove" removeid="<?php echo $applicantsDocumentId['QUALIFICATION_EQUIVALENT']['REC_DOC_ID']; ?>">Remove</span> -->
+                                                    <?php } ?>
+                                                    
+
+                                                    <hr>
+                                                    
+                                                    <label style="margin-top:20px;" for="council">Council Certificate <span>(optional)</span></label>
+
+                                                    <?php if ($applicantsDocumentNew['qualification_council'] ) { ?>
+                                                        <div id="imagePreviewQualification_equivalent" class="mb-3" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                                            <img style="width: 100%; height: 100%" id="transcipt" src="<?php echo $this->basePath($applicantsDocumentNew['qualification_council']);?>" alt="transcipt" />
+                                                        </div>
+                                                    <?php } ?>
+                                                    <input type="file" class="form-control-file" id="qualification_council" name="qualification_council" onchange="return certificateValidation($id = 'qualification_council')" accept=".png,.pdf,.jpg,.jpeg" style="margin-top:10px;" />
+
+                                                    <input type="hidden" name="qualification_council_id" value="<?php echo $applicantsDocumentId['QUALIFICATION_COUNCIL']['REC_DOC_ID']; ?>">
+
+                                                    <?php if ($applicantsDocumentId['QUALIFICATION_COUNCIL']['REC_DOC_ID']) { ?>
+                                                        <!-- <span class="btn btn-danger remove_img" id="qualification_council_remove" removeid="<?php echo $applicantsDocumentId['QUALIFICATION_COUNCIL']['REC_DOC_ID']; ?>">Remove</span> -->
+                                                    <?php } ?>
+
+                                                    <hr>
+                                                    
+                                                    <label style="margin-top:20px;" for="council">Driving License <span>(optional)</span></label>
+
+                                                    <?php if ($applicantsDocumentNew['qualification_license']) { ?>
+                                                        <div id="imagePreviewQualification_equivalent" class="mb-3" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                                            <img style="width: 100%; height: 100%" id="transcipt" src="<?php echo $this->basePath($applicantsDocumentNew['qualification_license']);?>" alt="transcipt" />
+                                                        </div>
+                                                    <?php } ?>
+
+                                                    <input type="file" class="form-control-file" id="qualification_license" name="qualification_license" onchange="return certificateValidation($id = 'qualification_license')" accept=".png,.pdf,.jpg,.jpeg" style="margin-top:10px;" />
+                                                    <input type="hidden" name="qualification_license_id" value="<?php echo $applicantsDocumentId['QUALIFICATION_LICENSE']['REC_DOC_ID']; ?>">
+
+                                                    <?php if ($applicantsDocumentId['QUALIFICATION_LICENSE']['REC_DOC_ID']) { ?>
+                                                        <!-- <span class="btn btn-danger remove_img" id="qualification_license_remove" removeid="<?php echo $applicantsDocumentId['QUALIFICATION_LICENSE']['REC_DOC_ID']; ?>">Remove</span> -->
+                                                    <?php } ?>
+                                                </div>
+                                            </div>
+                                        </td>                                       
+                                    </tr>			
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="row clearfix e-setup">
+                        <div class="col-xs-12 col-sm-4 col-md-4 col-box">
+                            <h5><strong>उम्मेदवारको ल्याप्चे सही छाप (अधिकतम 1 एमबी - JPG | PNG मात्र) :</strong> </h5>
+                        </div>
+                    </div>
+                    <table class="table table-responsive-lg table-sm form-cstm-table">
+                        <tr>
+                            <td>
+                                <label>Right Finger Print</label>
+                                <div id="imagePreviewright_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img  style="width: 100%; height: 100%" id="right_finger" src="<?php echo $this->basePath($applicantsDocumentNew['FingerPrintR']) ?>" />
+                                </div>
+                            </td>
+                            <td>
+                                <label>Left Finger Print</label>
+                                <div id="imagePreviewleft_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $this->basePath($applicantsDocumentNew['FingerPrintL']) ?>" alt="Left Finger" />
+                                </div>
+                            </td>
+                            <td>
+                                <label>Signature</label>
+                                <div id="imagePreviewsignature" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath($applicantsDocumentNew['Signature'])?>" alt="Recent Signature" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="right_finger_scan" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="right_finger_scan" id="right_finger_scan" onchange="return fileValidation($id = 'right_finger_scan')">
+                                    <p class="size"></p>
+                                    <?php if (isset($upload_error_photo)) {
+                                        echo $upload_error_photo;
+                                    } ?>
+
+                                    <input type="hidden" name="right_finger_scan_id" value="<?php echo $applicantsDocumentId['FINGERPRINTR']['REC_DOC_ID']; ?>">
+                                </div>
+                            </td>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="left_finger_scan" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="left_finger_scan" id="left_finger_scan" onchange="return fileValidation($id = 'left_finger_scan')">
+                                    <p class="size"></p>
+
+                                    <input type="hidden" name="left_finger_scan_id" value="<?php echo $applicantsDocumentId['FINGERPRINTL']['REC_DOC_ID']; ?>">
+                                </div>
+                            </td>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="signature" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="signature" id="signature" onchange="return fileValidation($id = 'signature')">
+                                    <p class="size"></p>
+
+                                    <input type="hidden" name="signature_id" value="<?php echo $applicantsDocumentId['SIGNATURE']['REC_DOC_ID']; ?>">
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <label>Front Citizenship</label>
+                                <div id="imagePreviewfront_citizen" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath($applicantsDocumentNew['CitizenshipF']) ?>" alt="Recent Signature" />
+                                </div>
+                            </td>
+                            <td>
+                                <label>Back Citizenship</label>
+                                <div id="imagePreviewback_citizen" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                    <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $this->basePath($applicantsDocumentNew['CitizenshipB']) ?>" alt="Recent Signature" />
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="front_citizen" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="front_citizen" id="front_citizen" onchange="return fileValidation($id = 'front_citizen')">
+                                    <p class="size"></p>
+
+                                    <input type="hidden" name="front_citizen_id" value="<?php echo $applicantsDocumentId['CITIZENSHIPF']['REC_DOC_ID']; ?>">
+                                </div>
+                            </td>
+                            <td style="border-top:0;">
+                                <div class="form-group">
+                                    <input type="hidden" name="image_ids[]" value="back_citizen" />
+                                    <input type="file" style="width:200px;" class="form-control-file" name="back_citizen" id="back_citizen" onchange="return fileValidation($id = 'back_citizen')">
+                                    <p class="size"></p>
+
+                                    <input type="hidden" name="back_citizen_id" value="<?php echo $applicantsDocumentId['CITIZENSHIPB']['REC_DOC_ID']; ?>">
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+
+
+                    <hr>
+                    <div class="container">
+                        <div class="row" >
+                            <div>                          
+                                <h4>Inclusion File</h4>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Use Inclusion</label>
+                            </div>
+
+                            <div class="inclusion-content">
+
+                                <div class="inclusion-list">
+                                    <?php foreach ($inclusionLists as $inclusion) { ?>
+
+                                        <div class="form-check radio-inline">
+                                            <input 
+                                                class="form-check-input inclusion_uploaded" 
+                                                id="inclusion<?php echo $inclusion['OPTION_ID'];?>" 
+                                                type="radio" 
+                                                value="<?php echo $inclusion['OPTION_ID']; ?>" 
+                                                name="inclusion_id" 
+                                                uploadFlag="<?php echo $inclusion['UPLOAD_FLAG'];?>" 
+                                                <?php 
+                                                    /**
+                                                     * FOR SHOW SELECTED INCLUSION
+                                                     * 
+                                                     * */
+
+                                                        echo ($employeeInclusionUsed['INCLUSION_ID_APPRAISAL'] == $inclusion['OPTION_ID']) ? 'checked' : ''; 
+
+                                                    
+                                                ?>
+
+                                               >
+
+                                            <label class="form-check-label" for="inlineCheckbox1">
+                                                <?php echo ucwords($inclusion['OPTION_EDESC']); ?>
+                                            </label>
+                                        </div>
+
+
+                                    <?php } ?>
+                                </div>
+                                <input type="hidden" name="prev_inclusion_appraisal_used" value="<?php echo $employeeInclusionUsed['INCLUSION_APPRAISAL_USED'];  ?>">
+                                <input type="hidden" name="prev_inclusion_id" value="<?php echo $employeeInclusionUsed['INCLUSION_ID_APPRAISAL'];  ?>">
+                                <input type="hidden" name="prev_file_code" value="<?php echo $employeeInclusionUsed['INCLUSION_APPRAISAL_FILE_ID']; ?>">
+                                <input type="hidden" name="vacancy_opening_date" value="<?php echo $openingAdInfso['START_DATE']; ?>">
+
+
+                               <!--  <input type="hidden" name="has_vacancy_id" value="<?php echo $detail['VACANCY_ID'];?>">
+                                <input type="hidden" name="has_employee_id" value="<?php echo $employeeDetail['EMPLOYEE_ID'];?>">
+                                <input type="hidden" name="form_type" value="<?php echo $detail['VACANCY_TYPE']; ?>">
+                                 -->
+
+                                
+
+                                <div class="form-group">
+                                    <div class="inclusion_file_display">
+                                        <?php if ($employeeInclusionUsed['INCLUSION_APPRAISAL_FILE_ID']) { ?>
+
+                                        <div id="imagePreviewInclusion" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                            <img style="width: 100%; height: 100%" id="recent_sign" src="<?php echo $baseurl;?>/uploads/documents/Inclusion/<?php echo $employeeInclusionUsed['FILE_PATH'];?>" alt="Recent Inclusion" />
+                                        </div>
+                                        
+                                        <?php } ?>
+                                    </div>
+                                </div>
+
+                                <div class="form-group inclusion_upload_file" <?php echo (($employeeInclusionUsed['INCLUSION_ID_FORM'] == 4) || ($employeeInclusionUsed['INCLUSION_ID_FORM'] == '')) ? 'style="display:none"' : ''; ?>>
+                                    <label>Upload Inclusion</label>
+                                    <input type="file" name="has_inclusion_file" class="form-control has_inclusion_file" id="inclusion_image">
+                                </div>
+
+                                <p id="error1" style="display:none; color:#FF0000;">
+                                    Invalid Image Format! Image Format Must Be JPG, JPEG, PNG or GIF.
+                                </p>
+                                <p id="error2" style="display:none; color:#FF0000;">
+                                    Maximum File Size Limit is 1MB.
+                                </p>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                    <h5 class="bold">द्रष्टब्य : </h5>
+                    <p> १. माथि उल्लेखित सबै उपाधिहरुको प्रमाणित प्रतिलिपि पेश गर्नु पर्नेछ। <br>  
+                        २. बढुवा हुने पदको लागि तोकिएको न्यूनतम शैक्षिक योग्यताको सम्बधमा तोकिएको शैक्षिक योग्यताको प्रमाणपत्र वा समकक्षता र सम्बंद्वाता निर्धारण भएकोमा सोको कागजात समेत पेश गर्नु पर्नेछ।  <br>
+                       <br> <br>
+                       माथि उल्लेखित बिवरण कुनै कुरा झुठा लेकिएको वा जानी जानी साचो कुरा दवाउने उद्हेश्ले लेखिएको ठहरे कानुन बमोजिम सजाय स्वीकार गर्ने छु भनि सहिछाप गर्ने। 
+                    </p>
+                </div>
+            </div>
+            <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+            ?>
+            <div class="border-bottom">
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function certificateValidation(params) {
+        var fileInput = document.getElementById($id);
+            var filePath = fileInput.value;
+        // Allowing file type
+        var allowedExtensions =
+            /(\.jpg|\.jpeg|\.png|\.pdf)$/i;
+        if (!allowedExtensions.exec(filePath)) {
+            alert('Invalid file type, please select - JPG | PNG | JPEG | PDF');
+            fileInput.value = '';
+            return false;
+        }
+        if (fileInput.files.length > 0) {
+            console.log(fileInput.files.length);
+            let i = 0;
+            for (i = 0; i <= fileInput.files.length - 1; i++) {
+                let fsize = fileInput.files.item(i).size;
+                let file = Math.round((fsize / 1024));
+                console.log(fsize);
+                console.log(file);
+
+                // The size of the file.
+                if (file >= 1024) {
+                    alert(
+                        "File too Big, please select a file less than 1mb");
+                    fileInput.value = '';
+                    return false;
+                } else {
+                    document.getElementsByClassName('size').innerHTML = '<b>' +
+                        file + '</b> KB';
+                }
+            }
+        }
+    }
+
+    // function removeDocument(params) {
+    //     alert(params);
+
+    //     id = document.getElementById(params);
+    //     el = id.getAttribute("removeid");
+
+    //     alert(id);
+    // }
+</script>

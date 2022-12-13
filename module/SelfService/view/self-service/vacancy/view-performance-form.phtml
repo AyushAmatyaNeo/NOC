@@ -20,9 +20,27 @@ $form->setAttribute('id', 'perfomanceApplication-form');
 // $duration = $form->get('duration');
 // $remarks = $form->get('remarks');
 
+
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'Apply');
+// $submit->setAttribute('', '');
 ?>
+
+
+<?php 
+    /**
+     * CHECKING FOR END DATE
+     * */
+
+    if (strtotime($openingAdInfo['END_DATE']) >= strtotime(date('Y-m-d'))) {
+                            
+ ?>
+<style type="text/css">
+    input[type=submit] {
+        display: none;
+    }
+</style>
+<?php } ?>
 
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\vacancies')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
@@ -51,7 +69,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                 <input type="hidden" id="employeeId" value="<?php echo $employeeId; ?>" />
             </div>
             <?php print $this->form()->openTag($form);  ?>
-            <h4 class="text-center"> <strong style="line-height: 25px;"> नेपाल आइल निगम लिमिटेड <br> कर्मचारी प्रशासन विनियमावली २०६३ को विनियम ६,४ बमोजिम  <br>जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि  <br> दरखास्त फारम </strong></h4>
+            <h4 class="text-center"> <strong style="line-height: 25px;"> नेपाल आयल निगम लिमिटेड <br> कर्मचारी प्रशासन विनियमावली २०६३ को विनियम ६,४ बमोजिम  <br>जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि  <br> दरखास्त फारम </strong></h4>
             <div class="row" style="margin: 20px;">
                 <h5 class="bold">कर्मचारी संकेत न: <?=$EmployeeData['EMPLOYEE_CODE']?></h5>
                 <div class="col-12" style="border:1px solid black ;">
@@ -132,10 +150,12 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             <div class="row bottomgap">
                                 <div class="form-group">
                                     <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                        <label for="firstName">सेवा / समुह:</label>
+                                        <label for="firstName">सेवा:</label><?php // / समुह: ?>
                                     </div>
                                     <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                        <?php echo $EmployeeData['SERVICE_TYPE_NAME'].' / '. $EmployeeData['SERVICE_EVENT_NAME'] ?></div>
+                                        <?php #echo $EmployeeData['SERVICE_TYPE_NAME'].' / '. $EmployeeData['SERVICE_EVENT_NAME'] ?>
+                                        <?php echo $EmployeeData['SERVICE_TYPE_NAME'] ?></div> <?php //.' / '. $EmployeeData['SERVICE_EVENT_NAME'] ?>
+                                    </div>
                                 </div>
                             </div>                            
                         </div>
@@ -444,6 +464,56 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             </td>
                         </tr>
                     </table>
+
+                    <?php
+
+                        if ($employeeInclusionUsed['INCLUSION_USED_PROCESS'] !== 'AP') {
+                         if ($employeeInclusionUsed['INCLUSION_APPRAISAL_USED'] !== 'N') {
+
+
+                        //     if ($employeeInclusionUsed['IS_INCLUSION_USED'] == 'y')
+
+                    ?>
+                        <hr>
+                        <div class="container">
+                            <div class="row" >
+                                <div >                          
+                                    <h4>Inclusion File Used for Applications.</h4>
+                                </div>
+                                <table class="table table-responsive-lg table-striped table-bordered table-sm">
+                                    <thead>
+                                        <tr class="UploadDoc">
+                                            <td>Inclusion</td>
+                                            <td>Inclusion Applied</td>
+                                            <?php if ($employeeInclusionUsed['FILE_PATH']) { ?>
+                                            <td>Document Name</td>
+                                            <?php } ?>
+                                            <td>Upload</td>
+                                            <!-- <td>Add</td> -->
+                                        </tr>
+                                    </thead>                            
+                                    <tbody>
+                                        <tr class="certificate">
+                                            <td><?php echo ucwords($getInclusion['OPTION_EDESC']) ?></td>
+                                            <td><?php echo $employeeInclusionUsed['INCLUSION_APPRAISAL_USED_DATE']; ?></td>
+
+                                            <?php if ($employeeInclusionUsed['FILE_PATH']) { ?>
+                                            <td>                                            
+                                                <div id="imagePreviewleft_finger_scan" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                                                    <img style="width: 100%; height: 100%" id="left_finger" src="<?php echo $baseurl.'/uploads/documents/Inclusion/'.$employeeInclusionUsed['FILE_PATH']; ?>" alt="Inclusion" />
+                                                </div>
+                                            </td>
+                                            <?php } ?>
+                                            <td colspan="7">
+                                                <a href="<?php echo $this->basePath('uploads/documents/Inclusion/'.$employeeInclusionUsed['FILE_PATH']); ?>" target="_blank" class="btn btn-primary">View</a>
+                                            </td>
+                                        </tr>                       
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    <?php } } ?>
+
                     <h5 class="bold">द्रष्टब्य : </h5>
                     <p> १. माथि उल्लेखित सबै उपाधिहरुको प्रमाणित प्रतिलिपि पेश गर्नु पर्नेछ। <br>  
                         २. बढुवा हुने पदको लागि तोकिएको न्यूनतम शैक्षिक योग्यताको सम्बधमा तोकिएको शैक्षिक योग्यताको प्रमाणपत्र वा समकक्षता र सम्बंद्वाता निर्धारण भएकोमा सोको कागजात समेत पेश गर्नु पर्नेछ।  <br>
@@ -453,8 +523,8 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                 </div>
             </div>
             <?php
-            //print $this->formSubmit($submit);
-            print $this->form()->closeTag();
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
             ?>
             <div class="border-bottom">
             </div>
