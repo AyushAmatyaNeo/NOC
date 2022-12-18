@@ -53,6 +53,10 @@
             {
                 "CODE": "OTHER COUNTRIES",
                 "NAME": "Other Countries"
+            },
+            {
+                "CODE": "33% COUNTRIES",
+                "NAME": "33% COUNTRIES"
             }
         ]
         transportTypes = [

@@ -337,7 +337,8 @@ class TravelApply extends HrisController {
             $reqModel->purpose = $detail['PURPOSE'];
             $reqModel->travelCode = $detail['TRAVEL_CODE'];
             $reqModel->requestedType = 'ep';
-            $reqModel->requestedAmount = $this->travelRequesteRepository->getTotalExpenseAmount($travelNewId);
+            // $reqModel->requestedAmount = $this->travelRequesteRepository->getTotalExpenseAmount($travelNewId);
+            $reqModel->requestedAmount = $this->travelRequesteRepository->getTotalExpenseAmount($travelNewId, $travelId, $reqModel->isTeamLead);
             $reqModel->referenceTravelId = $travelId;
             $reqModel->departureDate = Helper::getExpressionDate($departureDate);
             $reqModel->returnedDate = Helper::getExpressionDate($returnedDate);
@@ -347,6 +348,7 @@ class TravelApply extends HrisController {
             $reqModel->returnedDate = $reqModel->toDate;
             $reqModel->recommenderId = $postData['recommenderId'];
             $reqModel->approverId = $postData['approverId'];
+            $reqModel->accomplishment = base64_encode($postData['accomplishment']);
             // $this->repository->addAlternaterRecommenderApprover($this->employeeId, $postData['recommenderId'],$postData['approverId']);
 
             $this->travelRequesteRepository->add($reqModel);
@@ -526,7 +528,8 @@ class TravelApply extends HrisController {
                 $travelRequest->approvedDate = Helper::getExpressionDate($travelRequest->approvedDate);
 
                 $travelRequest->employeeId = $employeeIdForExpense;  
-                $travelRequest->requestedAmount = $this->travelRequesteRepository->getTotalExpenseAmount($id);
+                // $travelRequest->requestedAmount = $this->travelRequesteRepository->getTotalExpenseAmount($id);
+                $travelRequest->requestedAmount = $this->travelRequesteRepository->getTotalExpenseAmount($id, $linkedId, $travelRequest->isTeamLead);
                 $this->travelRequesteRepository->deletePreviouseLinkFiles($id);
                 $this->travelRequesteRepository->linkTravelWithFiles($id);
                 $this->travelRequesteRepository->edit($travelRequest, $id);

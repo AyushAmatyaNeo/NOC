@@ -53,7 +53,8 @@ class LeaveMaster extends Model {
     const MIN_DAYS_FOR_ENCASH = "MIN_DAYS_FOR_ENCASH";
     const IMPACT_GRADE = "IMPACT_GRADE";
     const COUNT_AS_SERVICE_PERIOD = "COUNT_AS_SERVICE_PERIOD";
-
+    const BACK_DATE_LIMIT = "BACK_DATE_LIMIT";
+    const FUTURE_DATE_LIMIT = "FUTURE_DATE_LIMIT";
 
     public $leaveId;
     public $leaveCode;
@@ -101,6 +102,9 @@ class LeaveMaster extends Model {
     public $minDaysForEncash;
     public $impactGrade;
     public $countAsServicePeriod;
+    public $backDateLimit;
+    public $futureDateLimit;
+
     public $mappings = [
         'leaveId' => self::LEAVE_ID,
         'leaveCode' => self::LEAVE_CODE,
@@ -148,6 +152,8 @@ class LeaveMaster extends Model {
         'minDaysForEncash' => self::MIN_DAYS_FOR_ENCASH,
         'impactGrade' => self::IMPACT_GRADE,
         'countAsServicePeriod' => self::COUNT_AS_SERVICE_PERIOD,
+        'backDateLimit' => self::BACK_DATE_LIMIT,
+        'futureDateLimit' => self::FUTURE_DATE_LIMIT,
     ];
 
 }

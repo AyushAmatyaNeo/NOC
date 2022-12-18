@@ -56,6 +56,7 @@ class JobResponsibility extends HrisController {
         // echo('<pre>');print_r($model);die;
         return [
             'form' => $this->form,
+            'details' => $fetchData[0],
             'id' => $id,
             'customRender' => Helper::renderCustomView(),
         ];

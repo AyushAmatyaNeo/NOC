@@ -230,9 +230,6 @@ class TravelRequest extends HrisController {
             $departureDate = $postData['departureDate'];
             $returnedDate = $postData['returnedDate'];
             
-            // print_r($postData['approverId']);die;
-
-
             if ($postData['depDate'][0] != null){
                 
                 for ($i = 0; $i < count($postData['depDate']); $i++){
@@ -362,7 +359,7 @@ class TravelRequest extends HrisController {
             $reqModel->returnedDate = $reqModel->toDate;
             $reqModel->recommenderId = $postData['recommenderId'];
             $reqModel->approverId = $postData['approverId'];
-            // print_r($reqModel->requestedAmount);die;
+            $reqModel->accomplishment = base64_encode($postData['accomplishment']);
             // $this->repository->addAlternaterRecommenderApprover($this->employeeId, $postData['recommenderId'],$postData['approverId']);
 
             $this->repository->add($reqModel);
@@ -695,7 +692,7 @@ class TravelRequest extends HrisController {
         }
 
         $detail = $this->repository->fetchById($id);
-
+        $detail['ACCOMPLISHMENT'] = base64_decode($detail['ACCOMPLISHMENT']);
         // print_r($detail);die;
 
         $model = new TravelRequestModel();

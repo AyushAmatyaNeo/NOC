@@ -160,6 +160,7 @@ class TravelRequestRepository extends HrisRepository implements RepositoryInterf
             new Expression("INITCAP(BS_DATE(TR.REQUESTED_DATE)) AS REQUESTED_DATE_BS"),
             new Expression("TR.REMARKS AS REMARKS"),
             new Expression("TR.STATUS AS STATUS"),
+            new Expression("TR.ACCOMPLISHMENT AS ACCOMPLISHMENT"),
             // new Expression("(CASE WHEN TR.STATUS = 'RC' THEN 'Travel Approved'  
             // when TR.STATUS = 'AP' then 'Travel Advance Approved' else LEAVE_STATUS_DESC(TR.STATUS) END) AS STATUS_DETAIL"),
             

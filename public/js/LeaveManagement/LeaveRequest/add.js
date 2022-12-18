@@ -28,10 +28,14 @@
         var leaveName = "";
         
         var applyLimit;
+        var backDate;
+        var futureDate;
+        var backDateLimit;
+        var fututeDateLimit;
 
-        $startDate.on('change', function () {
-            $leave.trigger( "change" );
-        });
+        // $startDate.on('change', function () {
+        //     $leave.trigger( "change" );
+        // });
 
         var substituteEmp = {
             list: [],
@@ -60,7 +64,6 @@
             if (startDateStr === null || startDateStr == '' || endDateStr === null || endDateStr == '' || employeeId === null || employeeId == '' || leaveId === null || leaveId == '') {
                 return;
             }
-            console.log('aaa');
             app.serverRequest(document.wsFetchAvailableDays, {
                 startDate: startDateStr,
                 endDate: endDateStr,
@@ -85,7 +88,10 @@
                 } else if (balanceDiff === 0) {
                     $errorMsg.html("* Applied days can't be 0 day.");
                     $request.prop("disabled", true);
-                } else if (applyLimit!=null  && applyLimit < balanceDiff) {
+                }  else if (balanceDiff < 0) {
+                    $errorMsg.html("* Applied days can't be less than 0 day.");
+                    $request.prop("disabled", true);
+                }else if (applyLimit!=null  && applyLimit < balanceDiff) {
                     $errorMsg.html("* Cant be Applied More than ".applyLimit);
                     $request.prop("disabled", true);
                     app.showMessage(" Cant be Applied More than "+applyLimit+" days" , "warning");
@@ -116,6 +122,11 @@
                 app.showMessage(error, 'error');
             });
         };
+        var errorMessage = function (message, title) {
+            if (message) {
+                window.toastr.error(message, title);
+            }
+        }
         app.startEndDatePickerWithNepali('nepaliStartDate1', 'startDate', 'nepaliEndDate1', 'endDate', function (startDate, endDate, startDateStr, endDateStr) {
             var employeeId = $employee.val();
             var leaveId = $leave.val();
@@ -204,7 +215,6 @@
             if ($this.val() === null || $this.val() === '' || $this.val() === '-1') {
                 return;
             }
-            console.log('bbb');
             calculateAvailableDays($startDate.val(), $endDate.val(), $halfDay.val(), $employee.val(), $leave.val());
             App.blockUI({target: "#hris-page-content", message: "Calculating Leave Days"});
             var startDateValue = $startDate.val();
@@ -216,6 +226,55 @@
                 App.unblockUI("#hris-page-content");
                 var leaveDetail = success.data;
                 applyLimit = leaveDetail.APPLY_LIMIT;
+                backDateLimit = leaveDetail.BACK_DATE_LIMIT;
+                fututeDateLimit = leaveDetail.FUTURE_DATE_LIMIT;
+
+                var months = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+                if (backDateLimit!=null) {
+                    var dt = new Date();
+                    dt.setDate( dt.getDate() - backDateLimit );
+                    var date = dt.getDate();
+                    var month = dt.getMonth(); //Be careful! January is 0 not 1
+                    var year = dt.getFullYear();
+                    backDate = (date + "-" +(months[month]) + "-" + year);
+                    console.log(backDate);
+                    $('#startDate').datepicker('setStartDate', app.getSystemDate(backDate));
+                    $('#endDate').datepicker('setStartDate', app.getSystemDate(backDate));
+                }else{
+                    var dt = new Date();
+                    dt.setDate( dt.getDate() - 1000 );
+                    var date = dt.getDate();
+                    var month = dt.getMonth(); //Be careful! January is 0 not 1
+                    var year = dt.getFullYear();
+                    backDate = (date + "-" +(months[month]) + "-" + year);
+                    console.log(backDate);
+                    $('#startDate').datepicker('setStartDate', app.getSystemDate(backDate));
+                    $('#endDate').datepicker('setStartDate', app.getSystemDate(backDate));
+                }
+
+                if (fututeDateLimit!=null) {
+                    var dt2 = new Date();
+                    dt2.setDate( dt2.getDate() - (-fututeDateLimit) );
+                    console.log(dt2);
+                    var date2 = dt2.getDate();
+                    var month2 = dt2.getMonth(); //Be careful! January is 0 not 1
+                    var year2 = dt2.getFullYear();
+                    futureDate = (date2 + "-" +(months[month2]) + "-" + year2);
+                    console.log(futureDate);
+                    $('#startDate').datepicker('setEndDate', app.getSystemDate(futureDate));
+                    $('#endDate').datepicker('setEndDate', app.getSystemDate(futureDate));
+                }else{
+                    var dt2 = new Date();
+                    dt2.setDate( dt2.getDate() - (-1000) );
+                    console.log(dt2);
+                    var date2 = dt2.getDate();
+                    var month2 = dt2.getMonth(); //Be careful! January is 0 not 1
+                    var year2 = dt2.getFullYear();
+                    futureDate = (date2 + "-" +(months[month2]) + "-" + year2);
+                    console.log(futureDate);
+                    $('#startDate').datepicker('setEndDate', app.getSystemDate(futureDate));
+                    $('#endDate').datepicker('setEndDate', app.getSystemDate(futureDate));
+                }
                 substituteDetails = success.subtituteDetails;
 //                app.populateSelect($leave, substituteDetails, 'id', 'name', 'Select a Leave', null, null, false);
                 app.populateSelect($subRefId, substituteDetails, 'ID', 'SUB_NAME', 'Select Substitute Date ', ' ', $subRefId.val(), false);
@@ -230,9 +289,21 @@
                 availableDays = (typeof leaveDetail.BALANCE == 'undefined') ? 0 : parseFloat(leaveDetail.BALANCE);
                 if ($subRefId.val() == ' ' || subLeaveReference != 'Y') {
                     $availableDays.val(availableDays);
+                    $availableDays.trigger('change');
+                    // if(availableDays <=0){
+                    //     $('#specialConditionDiv').show();
+                    // }else{
+                    //     $('#specialConditionDiv').hide();
+                    // }
                 }
                 if ($subRefId.val() == ' ' && success.data.IS_SUBSTITUTE == 'Y' && subLeaveReference == 'Y') {
                     $availableDays.val(0);
+                    $availableDays.trigger('change');
+                    // if(0 <=0){
+                    //     $('#specialConditionDiv').show();
+                    // }else{
+                    //     $('#specialConditionDiv').hide();
+                    // }
                 }
 
                 var noOfDays = parseFloat($noOfDays.val());
@@ -407,6 +478,12 @@
                 $.each(substituteDetails, function (index, value) {
                     if (selectedSubRefId == value.ID) {
                         $availableDays.val(value.AVAILABLE_DAYS);
+                        $availableDays.trigger('change');
+                        // if(value.AVAILABLE_DAYS <=0){
+                        //     $('#specialConditionDiv').show();
+                        // }else{
+                        //     $('#specialConditionDiv').hide();
+                        // }
                     }
                 });
             }
@@ -430,6 +507,88 @@
             }
 
         }
+
+        $('#specialCondition').on('change', function(){
+            console.log($('#availableDays').val());
+            if(this.checked){
+                $request.prop("disabled", false);
+            }else{
+                $request.prop("disabled", true);
+            }
+        });
+
+        $('#specialConditionDiv').hide();
+
+        $availableDays.on('change', function(){
+            console.log('asdf');
+            if($('#availableDays').val() <=0){
+                $('#specialConditionDiv').show();
+            }else{
+                $('#specialConditionDiv').hide();
+            }
+        });
+
+        $('#startDate').on('change', function(){
+            if (backDate!=null) {
+                var selectedDate = $(this).val();
+                selectedDate = Date.parse(selectedDate);
+                var date = Date.parse(backDate);
+                var diff = date - selectedDate;
+                if(diff>0){
+                    try{
+                        $('#startDate').val('');
+                        throw {message: 'The Selected Date cannot be less than ' + backDate};
+                    } catch (e) {
+                        errorMessage(e.message);
+                    }
+                }
+            }
+            if (futureDate!=null) {
+                var selectedDate = $(this).val();
+                selectedDate = Date.parse(selectedDate);
+                var date = Date.parse(futureDate);
+                var diff = date - selectedDate;
+                if(diff<0){
+                    try{
+                        $('#startDate').val('');
+                        throw {message: 'The Selected Date cannot be more than ' + futureDate};
+                    } catch (e) {
+                        errorMessage(e.message);
+                    }
+                }
+            }
+        });
+
+        $('#endDate').on('change', function(){
+            if (backDate!=null) {
+                var selectedDate = $(this).val();
+                selectedDate = Date.parse(selectedDate);
+                var date = Date.parse(backDate);
+                var diff = date - selectedDate;
+                if(diff>0){
+                    try{
+                        $('#endDate').val('');
+                        throw {message: 'The Selected Date cannot be less than ' + backDate};
+                    } catch (e) {
+                        errorMessage(e.message);
+                    }
+                }
+            }
+            if (futureDate!=null) {
+                var selectedDate = $(this).val();
+                selectedDate = Date.parse(selectedDate);
+                var date = Date.parse(futureDate);
+                var diff = date - selectedDate;
+                if(diff<0){
+                    try{
+                        $('#endDate').val('');
+                        throw {message: 'The Selected Date cannot be more than ' + futureDate};
+                    } catch (e) {
+                        errorMessage(e.message);
+                    }
+                }
+            }
+        });
 
     });
 

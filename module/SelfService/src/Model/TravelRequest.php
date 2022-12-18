@@ -38,6 +38,7 @@ class TravelRequest extends Model{
     const ADJUSTMENT_AMOUNT = "ADJUSTMENT_AMOUNT";
     const ADJUSTMENT_FLAG = "ADJUSTMENT_FLAG";
     const ADVANCE_AMOUNT = "ADVANCE_AMOUNT";
+    const ACCOMPLISHMENT = "ACCOMPLISHMENT";
     
     public $advanceAmount;
     public $travelId;
@@ -72,6 +73,7 @@ class TravelRequest extends Model{
     public $expenseAmount;
     public $adjustmentAmount;
     public $adjustmentFlag;
+    public $accomplishment;
 
     public $mappings= [
         'travelId'=>self::TRAVEL_ID,
@@ -107,5 +109,6 @@ class TravelRequest extends Model{
         'adjustmentAmount' => self::ADJUSTMENT_AMOUNT,
         'adjustmentFlag' => self::ADJUSTMENT_FLAG,
         'advanceAmount' => self::ADVANCE_AMOUNT,
+        'accomplishment' => self::ACCOMPLISHMENT
     ];   
 }
