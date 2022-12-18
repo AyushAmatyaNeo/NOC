@@ -97,6 +97,7 @@ class TravelApproveRepository extends HrisRepository implements RepositoryInterf
             new Expression("TR.APPROVED_REMARKS AS APPROVED_REMARKS"),
             new Expression("TR.REFERENCE_TRAVEL_ID AS REFERENCE_TRAVEL_ID"),
             new Expression("TR.ITNARY_ID AS ITNARY_ID"),
+            new Expression("TR.ACCOMPLISHMENT AS ACCOMPLISHMENT"),
             ], true);
 
         $select->from(['TR' => TravelRequest::TABLE_NAME])

@@ -37,7 +37,7 @@ class EmailHelper {
             'connection_config' => [
                 // 'username' => 'noreply@nepaloil.org.np',
                 'username' => 'asdasd#j@sdf',
-                'password' => 'Erpnocnepal@1',
+                'password' => 'asdf@1',
                 'ssl' => 'ssl',
             ],
         ]);

@@ -38,6 +38,9 @@ $minDaysForEncash = $form->get('minDaysForEncash');
 $impactGrade = $form->get('impactGrade');
 $countAsServicePeriod = $form->get('countAsServicePeriod');
 
+$backDateLimit = $form->get('backDateLimit');
+$futureDateLimit = $form->get('futureDateLimit');
+
 $submit = $form->get('submit');
 $submit->setAttribute('value', 'SUBMIT');
 
@@ -123,6 +126,22 @@ print $this->form()->openTag($form);
                             <?php print $this->formElement($applyLimit); ?>
                         </div>
                         <?php print $this->formElementErrors()->render($applyLimit, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($backDateLimit->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($backDateLimit); ?>
+                            <?php print $this->formElement($backDateLimit); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($backDateLimit, ['class' => 'help-block error']); ?>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group <?= empty($futureDateLimit->getMessages()) ? "" : "error" ?>">
+                            <?php print $this->formLabel($futureDateLimit); ?>
+                            <?php print $this->formElement($futureDateLimit); ?>
+                        </div>
+                        <?php print $this->formElementErrors()->render($futureDateLimit, ['class' => 'help-block error']); ?>
                     </div>
 
                 </div>

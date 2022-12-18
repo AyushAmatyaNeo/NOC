@@ -193,11 +193,29 @@ class LeaveMasterForm {
     /**
      * @Annotation\Type("Zend\Form\Element\Number")
      * @Annotation\Filter({"name":"StringTrim","name":"StripTags"})
-     * @Annotation\Options({"label":"Apply Limit"})
+     * @Annotation\Options({"label":"Maximum No of Days to Request at Once"})
      * @Annotation\Required(false)
      * @Annotation\Attributes({ "id":"applyLimit","min":"0", "class":"form-control"})
      */
     public $applyLimit;
+
+    /**
+     * @Annotation\Type("Zend\Form\Element\Number")
+     * @Annotation\Filter({"name":"StringTrim","name":"StripTags"})
+     * @Annotation\Options({"label":"Maximum No of Days for Back Date (in days)"})
+     * @Annotation\Required(false)
+     * @Annotation\Attributes({ "id":"backDateLimit","min":"0", "class":"form-control"})
+     */
+    public $backDateLimit;
+
+    /**
+     * @Annotation\Type("Zend\Form\Element\Number")
+     * @Annotation\Filter({"name":"StringTrim","name":"StripTags"})
+     * @Annotation\Options({"label":"Maximum No of Days for Future Date (in days)"})
+     * @Annotation\Required(false)
+     * @Annotation\Attributes({ "id":"futureDateLimit","min":"0", "class":"form-control"})
+     */
+    public $futureDateLimit;
 
     /**
      * @Annotation\Type("Zend\Form\Element\Radio")

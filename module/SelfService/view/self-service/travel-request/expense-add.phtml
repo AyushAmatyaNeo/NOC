@@ -136,40 +136,47 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             </table>
                         </div>
                         <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="control-label">Recommender</label>
-                        <div>
-                            <select id="recommenderId" class="form-control" name = "recommenderId" required>
-                            <option value=''>-------------------</option>
-                            <?php  foreach($recommenderApproverList as $list) {  ?>
-                            <option value='<?=$list['EMPLOYEE_ID']?>'><?=$list['EMPLOYEE_CODE'] . '-' . $list['FULL_NAME']?></option>
-                            <?php } ?> 
-                            </select>
+                            <div class="form-group">
+                                <label class="control-label">Recommender</label>
+                                <div>
+                                    <select id="recommenderId" class="form-control" name = "recommenderId" required>
+                                    <option value=''>-------------------</option>
+                                    <?php  foreach($recommenderApproverList as $list) {  ?>
+                                    <option value='<?=$list['EMPLOYEE_ID']?>'><?=$list['EMPLOYEE_CODE'] . '-' . $list['FULL_NAME']?></option>
+                                    <?php } ?> 
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
-                <div class="col-sm-4">
-                    <div class="form-group">
-                        <label class="control-label">Approver</label>
-                        <div>
-                            <select id="approverId" class="form-control" name = "approverId" required>
-                            <option value=''>-------------------</option>
-                            <?php  foreach($recommenderApproverList as $list) {  ?>
-                            <option value='<?=$list['EMPLOYEE_ID']?>'><?=$list['EMPLOYEE_CODE'] . '-' . $list['FULL_NAME']?></option>
-                            <?php } ?> 
-                            </select>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label class="control-label">Approver</label>
+                                <div>
+                                    <select id="approverId" class="form-control" name = "approverId" required>
+                                    <option value=''>-------------------</option>
+                                    <?php  foreach($recommenderApproverList as $list) {  ?>
+                                    <option value='<?=$list['EMPLOYEE_ID']?>'><?=$list['EMPLOYEE_CODE'] . '-' . $list['FULL_NAME']?></option>
+                                    <?php } ?> 
+                                    </select>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
 
                         <div class="col-xs-12 col-sm-4 col-md-4 col-box bottomgap">
                             <br>
-                        <input type="checkbox" id="teamLead" name="teamLead">
-                        <label for="teamLead">Team Leader</label>
+                            <input type="checkbox" id="teamLead" name="teamLead">
+                            <label for="teamLead">Team Leader</label>
                         </div>
-
-
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="control-label">Accomplishments</label>
+                                <textarea id="accomplishment" class="form-control" name="accomplishment" rows="4" cols="50"
+                                style="min-height: 150px; resize: none !important;"></textarea>
+                            </div>
+                        </div>
                     </div>
                     <button style="margin-left:10px; margin-top:10px;" class="btn btn-sm btn-primary" id="addDomesticBtn"  type="button">
                         Add Domestic Travel

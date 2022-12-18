@@ -1263,5 +1263,8 @@ alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_APP_OT_DAYS DE
 
 
 alter table hris_Employee_leave_request add (special_condition char(1) default 'N');
-
+alter table hris_employee_travel_request add (accomplishment varchar(2500)); 
+alter table hris_leave_master_setup add 
+(BACK_DATE_LIMIT decimal(7),
+FUTURE_DATE_LIMIT decimal(7));
 ----------------------------------------

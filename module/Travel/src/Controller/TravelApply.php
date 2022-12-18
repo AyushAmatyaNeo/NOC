@@ -348,6 +348,7 @@ class TravelApply extends HrisController {
             $reqModel->returnedDate = $reqModel->toDate;
             $reqModel->recommenderId = $postData['recommenderId'];
             $reqModel->approverId = $postData['approverId'];
+            $reqModel->accomplishment = base64_encode($postData['accomplishment']);
             // $this->repository->addAlternaterRecommenderApprover($this->employeeId, $postData['recommenderId'],$postData['approverId']);
 
             $this->travelRequesteRepository->add($reqModel);
