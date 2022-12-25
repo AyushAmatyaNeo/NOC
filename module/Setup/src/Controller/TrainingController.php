@@ -31,6 +31,12 @@ class TrainingController extends AbstractActionController {
         'CC' => 'Company Contribution'
     ];
 
+    const TRAINING_CATEGORIES = [
+        'TR' => 'Training',
+        'WS' => 'Work Shop',
+        'SE' => 'Seminar'
+    ];
+
     public function __construct(AdapterInterface $adapter, StorageInterface $storage) {
         $this->adapter = $adapter;
         $this->repository = new TrainingRepository($adapter);
@@ -88,6 +94,7 @@ class TrainingController extends AbstractActionController {
                     'instituteNameList' => EntityHelper::getTableKVListWithSortOption($this->adapter, Institute::TABLE_NAME, Institute::INSTITUTE_ID, [Institute::INSTITUTE_NAME], [Institute::STATUS => 'E'], Institute::INSTITUTE_NAME, "ASC", null, [null => '---'], true),
                     'companies' => EntityHelper::getTableKVListWithSortOption($this->adapter, Company::TABLE_NAME, Company::COMPANY_ID, [Company::COMPANY_NAME], ["STATUS" => "E"], Company::COMPANY_NAME, "ASC", null, [null => '---'], true),
                     'trainingTypeList' => self::TRAINING_TYPES,
+                    'trainingCategoryList' => self::TRAINING_CATEGORIES,
                     'customRenderer' => Helper::renderCustomView()
         ]);
     }
@@ -125,6 +132,7 @@ class TrainingController extends AbstractActionController {
                     'instituteNameList' => EntityHelper::getTableKVListWithSortOption($this->adapter, Institute::TABLE_NAME, Institute::INSTITUTE_ID, [Institute::INSTITUTE_NAME], [Institute::STATUS => 'E'], Institute::INSTITUTE_NAME, "ASC", null, [null => '---'], true),
                     'companies' => EntityHelper::getTableKVListWithSortOption($this->adapter, Company::TABLE_NAME, Company::COMPANY_ID, [Company::COMPANY_NAME], ["STATUS" => "E"], Company::COMPANY_NAME, "ASC", null, [null => '---'], true),
                     'trainingTypeList' => self::TRAINING_TYPES,
+                    'trainingCategoryList' => self::TRAINING_CATEGORIES,
                     'customRenderer' => Helper::renderCustomView()
                         ]
         );

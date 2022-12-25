@@ -45,7 +45,9 @@ class TrainingRepository implements RepositoryInterface {
         $customCols = ["BS_DATE((T.START_DATE)) AS START_DATE_BS",
             "BS_DATE((T.END_DATE)) AS END_DATE_BS",
             "TO_CHAR(T.START_DATE, 'DD-MON-YYYY') AS START_DATE_AD",
-            "TO_CHAR(T.END_DATE, 'DD-MON-YYYY') AS END_DATE_AD"];
+            "TO_CHAR(T.END_DATE, 'DD-MON-YYYY') AS END_DATE_AD",
+            "TRAINING_CATEGORY_DESC(T.TRAINING_CATEGORY) as CATEGORY_DESC"    
+        ];
         $select->columns(EntityHelper::getColumnNameArrayWithOracleFns(
                         Training::class, [
                     Training::TRAINING_NAME

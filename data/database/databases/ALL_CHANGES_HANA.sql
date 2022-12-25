@@ -1268,3 +1268,23 @@ alter table hris_leave_master_setup add
 (BACK_DATE_LIMIT decimal(7),
 FUTURE_DATE_LIMIT decimal(7));
 ----------------------------------------
+alter table hris_training_master_setup add (
+training_category char(2) DEFAULT 'TR');
+
+alter table hris_training_master_setup add constraint
+    check_training_category CHECK ( training_category in ('TR','WS','SE'));
+
+-----------------------------
+create or replace function TRAINING_CATEGORY_DESC ( p_training_category CHAR(2) ) 
+RETURNS v_category_desc   VARCHAR(50) AS
+    
+BEGIN
+    v_category_desc := ( CASE p_training_category
+        WHEN 'TR' THEN 'Training'
+        WHEN 'WS' THEN 'Work Shop'
+        WHEN 'SE' THEN ' Seminar'
+    END );
+
+    
+END;
+------------------------------------

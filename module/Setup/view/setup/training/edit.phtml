@@ -24,6 +24,9 @@ $companyId = $form->get('companyId');
 $companyId->setValueOptions($companies);
 $isWithinCompany = $form->get('isWithinCompany');
 
+$trainingCategory = $form->get('trainingCategory');
+$trainingCategory->setValueOptions($trainingCategoryList);
+
 $submit = $form->get('submit');
 
 $form->setAttribute('action', $this->url('training', ['action' => 'edit', 'id' => $id]));
@@ -70,12 +73,21 @@ $form->prepare();
                     </div>
 
                     <div class="col-sm-4">
+                        <div class="form-group" >
+                            <?php print $this->formLabel($trainingCategory); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($trainingCategory); ?>
+                            <?php print $this->formElementErrors()->render($trainingCategory, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <?php /* <div class="col-sm-4">
                         <div class="form-group">
                             <?php print $this->formLabel($companyId); ?>
                             <?php print $this->formElement($companyId); ?>
                             <?php print $this->formElementErrors()->render($companyId, ['class' => 'help-block error']); ?>
                         </div>
-                    </div>
+                    </div> */ ?>
                 </div>
 
                 <div class="row">

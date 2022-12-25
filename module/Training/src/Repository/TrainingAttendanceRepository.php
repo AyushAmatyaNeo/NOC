@@ -44,7 +44,9 @@ class TrainingAttendanceRepository extends HrisRepository implements RepositoryI
         $customCols = ["BS_DATE((T.START_DATE)) AS START_DATE_BS",
             "BS_DATE((T.END_DATE)) AS END_DATE_BS",
             "TO_CHAR(T.START_DATE, 'DD-MON-YYYY') AS START_DATE_AD",
-            "TO_CHAR(T.END_DATE, 'DD-MON-YYYY') AS END_DATE_AD"];
+            "TO_CHAR(T.END_DATE, 'DD-MON-YYYY') AS END_DATE_AD",
+            "TRAINING_CATEGORY_DESC(T.TRAINING_CATEGORY) as CATEGORY_DESC"    
+        ];
         $select->columns(EntityHelper::getColumnNameArrayWithOracleFns(
                         Training::class, [
                     Training::TRAINING_NAME
@@ -100,7 +102,7 @@ class TrainingAttendanceRepository extends HrisRepository implements RepositoryI
                 FROM HRIS_EMPLOYEE_TRAINING_ASSIGN ET
                 JOIN HRIS_EMPLOYEES E
                 ON (ET.EMPLOYEE_ID   = E.EMPLOYEE_ID)
-                WHERE ET.TRAINING_ID =? AND ET.STATUS='E'";
+                WHERE ET.TRAINING_ID =? AND ET.STATUS='E' and ET.ACCEPT_FLAG='Y'";
 
         
         return $this->rawQuery($sql, $boundedParameter);
@@ -115,11 +117,10 @@ class TrainingAttendanceRepository extends HrisRepository implements RepositoryI
                 $insert = "INSERT INTO HRIS_EMP_TRAINING_ATTENDANCE (TRAINING_ID,EMPLOYEE_ID,TRAINING_DT,ATTENDANCE_STATUS) VALUES";
                 $dStatus = ($status == 'true') ? 'P' : 'A';
                 $insert = $insert . "({$trainingId},{$employeeId},TO_DATE('{$date}'),'{$dStatus}');\n";
-                $insertList = $insertList .  $insert;
+                $insertList = $insertList .  $insert . "CALL HRIS_REATTENDANCE('{$date}',{$employeeId},'{$date}');\n";
             }
 
         }
-
         $sql = "
                 DO
                 BEGIN
@@ -142,26 +143,45 @@ class TrainingAttendanceRepository extends HrisRepository implements RepositoryI
     }
 
     public function fetchTrainingDates($id) {
-        $boundedParameter = [];
-        $boundedParameter['id1'] = $id;
-        $boundedParameter['id2'] = $id;
-        $sql = "
-        select add_days(TR.START_DATE, ROW_NUMBER() OVER (ORDER BY tr.training_id) ) as dates,
-        ROW_NUMBER() OVER (ORDER BY tr.training_id) as rownum,
-        (CASE WHEN add_days(TR.START_DATE, ROW_NUMBER() OVER (ORDER BY tr.training_id)) <= CURRENT_DATE
-        THEN 1 ELSE 0 END) AS STATUS,
-        current_date from HIERARCHY (
-        SOURCE (SELECT T.*,t.training_id as node_id,t.training_id as parent_id,
-        DAYS_BETWEEN(T.END_DATE,START_DATE) AS DIFF
-        FROM HRIS_TRAINING_MASTER_SETUP T
-        WHERE T.TRAINING_ID=?) start where TRAINING_ID = ?
-        ORPHAN IGNORE
-        CACHE FORCE ) TR
-        ORDER BY node_id
-        ";
+        // $boundedParameter = [];
+        // $boundedParameter['id1'] = $id;
+        // $boundedParameter['id2'] = $id;
+        // $sql = "
+        // select add_days(TR.START_DATE, ROW_NUMBER() OVER (ORDER BY tr.training_id) ) as dates,
+        // ROW_NUMBER() OVER (ORDER BY tr.training_id) as rownum,
+        // (CASE WHEN add_days(TR.START_DATE, ROW_NUMBER() OVER (ORDER BY tr.training_id)) <= CURRENT_DATE
+        // THEN 1 ELSE 0 END) AS STATUS,
+        // current_date from HIERARCHY (
+        // SOURCE (SELECT T.*,t.training_id as node_id,t.training_id as parent_id,
+        // DAYS_BETWEEN(T.END_DATE,START_DATE) AS DIFF
+        // FROM HRIS_TRAINING_MASTER_SETUP T
+        // WHERE T.TRAINING_ID=?) start where TRAINING_ID = ?
+        // ORPHAN IGNORE
+        // CACHE FORCE ) TR
+        // ORDER BY node_id
+        // ";
 
-        // echo"<pre>";print_r($sql);die;
-        return $this->rawQuery($sql, $boundedParameter);
+        $sql= "do
+        begin
+        DECLARE v_start_date date;
+        DECLARE v_index1 INT = 1;
+        DECLARE v_end_date date;
+        DECLARE v_sql varchar(10000);
+        select start_date, end_date 
+        into v_start_date, v_end_date
+        from HRIS_TRAINING_MASTER_SETUP where training_id = {$id};
+        v_sql = 'select  '''||:v_start_date|| ''' as dates,'||:v_index1 ||' as rownum, case when days_between('''||:v_start_date||''',current_date) > 0 then 1 else 0 end as status, current_date from dummy';
+        WHILE :v_start_date <= :v_end_date DO
+        v_sql = :v_sql || ' union select  '''||:v_start_date|| ''' as dates,'||:v_index1||' as rownum,  case when days_between('''||:v_start_date||''',current_date) > 0 then 1 else 0 end as status, current_date from dummy';
+        v_start_date = add_days(:v_start_date,1);
+        v_index1 = :v_index1 + 1;
+            END WHILE;
+            EXECUTE IMMEDIATE v_sql;
+        end";
+
+        // echo"<pre>";print_r($boundedParameter);die;
+        // return $this->rawQuery($sql, $boundedParameter);
+        return $this->rawQuery($sql);
 
         // $result = EntityHelper::rawQueryResult($this->adapter, $sql);
         // return Helper::extractDbData($result);
