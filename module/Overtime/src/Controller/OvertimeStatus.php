@@ -359,7 +359,7 @@ class OvertimeStatus extends HrisController {
                 }
                 $overtimeClaimModel->modifiedBy= $this->employeeId;
                 $overtimeClaimModel->modifiedDt = Helper::getcurrentExpressionDate();
-                echo('<pre>');print_r($overtimeClaimModel);die;
+                // echo('<pre>');print_r($overtimeClaimModel);die;
                 $this->approveRepo->edit($overtimeClaimModel, $id);
                 $messageSuccess = 'Rejected';
                 $this->flashmessenger()->addMessage("Overtime Claim Successfully ".$messageSuccess." !!!");

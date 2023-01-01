@@ -182,6 +182,7 @@ class LeaveApproveRepository extends HrisRepository  implements RepositoryInterf
                             END;
                           END IF;
                           HRIS_RECALCULATE_LEAVE(V_EMPLOYEE_ID,null);
+                          HRIS_RECALC_MONTHLY_LEAVES(V_EMPLOYEE_ID,null);
                          END;
                     END;
                     ");

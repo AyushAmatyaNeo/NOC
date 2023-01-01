@@ -170,7 +170,7 @@ L.location_edesc,
 			'DH1',
 			'DH2',
       'TH1','TH2')) then 
-			case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+			case when E.employee_id in (select employee_id from hris_employees where location_id  in (17,18)) then
             2
             else 
             1
@@ -179,7 +179,7 @@ L.location_edesc,
 			'NAW',
 			'AST',
 			'DAS')) then 
-			case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+			case when E.employee_id in (select employee_id from hris_employees where location_id  in (17,18)) then
             3
             else 
             2
@@ -194,7 +194,7 @@ L.location_edesc,
           ELSE
           0
           END AS OT_DAYS,
-          case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+          case when E.employee_id in (select employee_id from hris_employees where location_id  in (17,18)) then
             'Y'
             else 
             'N'

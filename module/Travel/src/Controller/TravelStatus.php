@@ -252,6 +252,7 @@ class TravelStatus extends HrisController {
             return $this->redirect()->toRoute("travelApprove");
         }
         $detail = $this->travelApproveRepository->fetchById($id);
+        $detail['ACCOMPLISHMENT'] = base64_decode($detail['ACCOMPLISHMENT']);
 
         $authRecommender = $detail['NAME_RECOMMENDER'] == null ? ($detail['RECOMMENDED_BY_NAME'] == null ? $detail['RECOMMENDER_NAME'] : $detail['RECOMMENDED_BY_NAME']) : $detail['NAME_RECOMMENDER'];
         $authApprover = $detail['NAME_APPROVER'] == null ? ($detail['APPROVED_BY_NAME'] == null ? $detail['APPROVER_NAME'] : $detail['APPROVED_BY_NAME']) : $detail['NAME_APPROVER'];

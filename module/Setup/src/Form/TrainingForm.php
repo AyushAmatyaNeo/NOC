@@ -119,6 +119,14 @@ class TrainingForm {
      */
     public $showAsTraining;
 
+    /**
+     * @Annotation\Type("Zend\Form\Element\Select")
+     * @Annotation\Required(true)
+     * @Annotation\Options({"disable_inarray_validator":"true","label":"Training Category"})
+     * @Annotation\Attributes({ "id":"trainingCategory","class":"form-control"})
+     */
+    public $trainingCategory;
+
     // /**
     //  * @Annotation\Type("Zend\Form\Element\Number")
     //  * @Annotation\Required(true)

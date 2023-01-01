@@ -18,6 +18,9 @@ class JobResponsibilityAssign extends Model {
     const MODIFIED_DT = "MODIFIED_DT";
     const DELETED_BY = "DELETED_BY";
     const DELETED_DT = "DELETED_DT";
+    const ASSIGNED_BY = "ASSIGNED_BY";
+    const START_DATE = "START_DATE";
+    const END_DATE = "END_DATE";
 
     public $id;           
     public $employeeId;
@@ -30,6 +33,9 @@ class JobResponsibilityAssign extends Model {
     public $modifiedDt;
     public $deletedBy;
     public $deletedDt;
+    public $assignedBy;
+    public $startDate;
+    public $endDate;
     public $mappings = [
         'id' => self::ID,
         'employeeId' => self::EMPLOYEE_ID,
@@ -41,7 +47,10 @@ class JobResponsibilityAssign extends Model {
         'modifiedBy' => self::MODIFIED_BY,
         'modifiedDt' => self::MODIFIED_DT,
         'deletedBy' => self::DELETED_BY,
-        'deletedDt' => self::DELETED_DT
+        'deletedDt' => self::DELETED_DT,
+        'assignedBy' => self::ASSIGNED_BY,
+        'startDate' => self::START_DATE,
+        'endDate' => self::END_DATE
     ];
 
 }

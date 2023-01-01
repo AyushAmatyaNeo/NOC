@@ -7,7 +7,7 @@
         var action = editAction + deleteAction;
         app.initializeKendoGrid($table, [
             {field: "TRAINING_NAME", title: "Training"},
-            {field: "COMPANY_NAME", title: "Company"},
+            {field: "CATEGORY_DESC", title: "Category"},
             {title: "Start Date",
                 columns: [
                     {field: "START_DATE_AD",
@@ -34,7 +34,7 @@
         $('#excelExport').on('click', function () {
             app.excelExport($table, {
                 'TRAINING_NAME': 'Training',
-                'COMPANY_NAME': 'Company',
+                'CATEGORY_DESC': 'Category',
                 'START_DATE_AD': 'Start Date(AD)',
                 'START_DATE_BS': 'Start Date(BS)',
                 'END_DATE_AD': 'End Date(AD)',

@@ -8,7 +8,7 @@
         var action = viewAction;
         app.initializeKendoGrid($table, [
             {field: "TRAINING_NAME", title: "Training"},
-            {field: "COMPANY_NAME", title: "Company"},
+            {field: "CATEGORY_DESC", title: "Category"},
             {title: "Start Date",
                 columns: [
                     {field: "START_DATE_AD",
@@ -33,7 +33,7 @@
         app.searchTable($table, ['TRAINING_NAME', 'COMPANY_NAME', 'START_DATE_AD', 'END_DATE_AD', 'START_DATE_BS', 'END_DATE_BS', 'DURATION', 'INSTITUTE_NAME']);
         var map = {
             'TRAINING_NAME': 'Training',
-            'COMPANY_NAME': 'Company',
+            'CATEGORY_DESC': 'Category',
             'START_DATE_AD': 'Start Date(AD)',
             'START_DATE_BS': 'Start Date(BS)',
             'END_DATE_AD': 'End Date(AD)',

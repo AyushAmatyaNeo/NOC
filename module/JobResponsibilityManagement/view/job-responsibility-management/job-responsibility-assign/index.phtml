@@ -17,6 +17,7 @@ $this->headScript()
 <script>
     document.editLink = '<?= $this->url("jobResponsibilityAssign", ["action" => "edit"]) ?>';
     document.deleteLink = '<?= $this->url("jobResponsibilityAssign", ["action" => "delete"]) ?>';
+    document.terminateLink = '<?= $this->url("jobResponsibilityAssign", ["action" => "terminate"]) ?>';
     document.acl =<?php echo json_encode($acl); ?>;
 </script>
 

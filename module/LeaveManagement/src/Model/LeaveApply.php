@@ -31,6 +31,7 @@ class LeaveApply extends Model {
     const CANCEL_APP_DT = "CANCEL_APP_DT";
     const SUB_REF_ID = "SUB_REF_ID";
     const HARDCOPY_SIGNED_FLAG = "HARDCOPY_SIGNED_FLAG";
+    const SPECIAL_CONDITION = "SPECIAL_CONDITION";
 
     public $id;
     public $employeeId;
@@ -56,6 +57,7 @@ class LeaveApply extends Model {
     public $cancelAppDt;
     public $subRefId;
     public $hardcopySignedFlag;
+    public $specialCondition;
     public $mappings = [
         'id' => self::ID,
         'employeeId' => self::EMPLOYEE_ID,
@@ -80,7 +82,8 @@ class LeaveApply extends Model {
         'cancelRecDt' => self::CANCEL_REC_DT,
         'cancelAppDt' => self::CANCEL_APP_DT,
         'subRefId' => self::SUB_REF_ID,
-        'hardcopySignedFlag' => self::HARDCOPY_SIGNED_FLAG
+        'hardcopySignedFlag' => self::HARDCOPY_SIGNED_FLAG,
+        'specialCondition' => self::SPECIAL_CONDITION
     ];
 
 }

@@ -14,6 +14,7 @@ use JobResponsibilityManagement\Model\JobResponsibility;
 use JobResponsibilityManagement\Form\JobResponsibilityForm;
 use JobResponsibilityManagement\Model\JobResponsibilityAssign as JRAModel;
 use LeaveManagement\Model\LeaveMaster;
+use Application\Helper\EntityHelper;
 
 class JobResponsibilityAssign extends HrisController {
 
@@ -90,13 +91,17 @@ class JobResponsibilityAssign extends HrisController {
             'label' => 'Leave Year'
         ];
          $leaveYearSE = $this->getSelectElement($leaveYearConfig, $leaveYearData);
+
+         $assignedByList = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_EMPLOYEES", "EMPLOYEE_ID", ["EMPLOYEE_CODE", "FULL_NAME"], ["STATUS" => 'E'], "FULL_NAME", "ASC", " ", FALSE, TRUE);
+// print_r($assignedByList);die;
         return [
             'leaveFormElement' => $leaveSE,
             'jobResponsibilityFormElement' => $jobResponsbilitySE,
             'leaveYearFormElement' => $leaveYearSE,
             'acl' => $this->acl,
-            'employeeDetail' => $this->storageData['employee_detail']
-                ];
+            'employeeDetail' => $this->storageData['employee_detail'],
+            'assignedByList' => $assignedByList
+            ];
     }
 
     public function editAction() {
@@ -138,7 +143,17 @@ class JobResponsibilityAssign extends HrisController {
             return $this->redirect()->toRoute('jobResponsibilityAssign');
         }
         $this->repository->deleteJRA($id);
-        $this->flashmessenger()->addMessage("Job Responsibility Assign Successfully Deleted!!!");
+        $this->flashmessenger()->addMessage("Job Responsibility Successfully Deleted!!!");
+        return $this->redirect()->toRoute('jobResponsibilityAssign');
+    }
+
+    public function terminateAction() {
+        $id = (int) $this->params()->fromRoute("eid");
+        if (!$id) {
+            return $this->redirect()->toRoute('jobResponsibilityAssign');
+        }
+        $this->repository->terminateJRA($id);
+        $this->flashmessenger()->addMessage("Job Responsibility Successfully Trminated!!!");
         return $this->redirect()->toRoute('jobResponsibilityAssign');
     }
 
@@ -172,6 +187,8 @@ class JobResponsibilityAssign extends HrisController {
             $model->status='E';
             $model->createdDt = Helper::getcurrentExpressionDate();
             $model->createdBy = $this->employeeId;
+            $model->assignedBy = $data['assignedBy'];
+            $model->startDate = Helper::getExpressionDate($data['startDate']);
             $result = $this->repository->addJRAssign($model);
 
             return new JsonModel(["success" => "true", "data" => null,]);

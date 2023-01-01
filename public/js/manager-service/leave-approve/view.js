@@ -20,17 +20,17 @@
                 if (typeof document.isHalfDay !== 'undefined') {
                     noOfDays = noOfDays / (document.isHalfDay ? 2 : 1);
                 }
-                if (noOfDays > availableBalance && typeof document.leaveCancel=="undefined") {
-                    var errorMsgSpan = $('<span />', {
-                        "class": 'errorMsgNoLeft',
-                        text: "There is not enough available days...!!!"
-                    });
-                    parentId.append(errorMsgSpan);
-                    $("#availableDaysText").css("font-weight", "bold");
-                    this.disabled = true;
-                } else {
+                // if (noOfDays > availableBalance && typeof document.leaveCancel=="undefined") {
+                //     var errorMsgSpan = $('<span />', {
+                //         "class": 'errorMsgNoLeft',
+                //         text: "There is not enough available days...!!!"
+                //     });
+                //     parentId.append(errorMsgSpan);
+                //     $("#availableDaysText").css("font-weight", "bold");
+                //     this.disabled = true;
+                // } else {
                     this.disabled = false;
-                }
+                // }
             } catch (e) {
                 console.log("onApproveBtnClick", e.message);
             }

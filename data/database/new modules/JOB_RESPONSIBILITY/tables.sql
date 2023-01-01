@@ -28,3 +28,6 @@ CREATE TABLE HRIS_EMPLOYEE_JOB_RESPONSIBILITY_ASSIGN (
     DELETED_BY DECIMAL(7),
     DELETED_DT DATE
 );
+
+alter table HRIS_EMPLOYEE_JOB_RESPONSIBILITY_ASSIGN
+add (assigned_by decimal(7), start_date date, end_date date);

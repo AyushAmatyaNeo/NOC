@@ -1,6 +1,8 @@
 angular.module('hris', [])
         .controller('assignController', function ($scope) {
             $('select').select2();
+
+            app.datePickerWithNepali('startDate', 'nepaliStartDate');
             $scope.jobResponsibilityList = [];
             $scope.all = false;
             $scope.daysForAll = 0;
@@ -45,21 +47,30 @@ angular.module('hris', [])
                 }
             };
             $scope.assign = function () {
-                var promises = [];
-                for (var index in $scope.jobResponsibilityList) {
-                    if ($scope.jobResponsibilityList[index].checked) {
-                        promises.push(window.app.serverRequest(document.pushEmployeeLinkJobRes, {
-                            jobResId: $scope.jobResponsibilityList[index].JOB_RES_ID,
-                            employeeId: $scope.jobResponsibilityList[index].EMPLOYEE_ID
-                        }));
+                assignedBy = $('#assignedBy').val();
+                startDate = $('#startDate').val();
+                if(startDate == '' || startDate==undefined || startDate == null){
+                    window.toastr.error("Please select Start Date", "Alert");
+                }else{
+                    var promises = [];
+                    for (var index in $scope.jobResponsibilityList) {
+                        if ($scope.jobResponsibilityList[index].checked) {
+                            promises.push(window.app.serverRequest(document.pushEmployeeLinkJobRes, {
+                                jobResId: $scope.jobResponsibilityList[index].JOB_RES_ID,
+                                employeeId: $scope.jobResponsibilityList[index].EMPLOYEE_ID,
+                                assignedBy: assignedBy,
+                                startDate: startDate
+                            }));
+                        }
                     }
-                }
-                Promise.all(promises).then(function (success) {
-                    $scope.$apply(function () {
-                        $scope.view();
+                    Promise.all(promises).then(function (success) {
+                        $scope.$apply(function () {
+                            $scope.view();
+                        });
+                        window.toastr.success("Job Responsibility assigned successfully", "Notifications");
                     });
-                    window.toastr.success("Job Responsibility assigned successfully", "Notifications");
-                });
+                }
+                
             };
 
             $scope.view = function () {

@@ -44,6 +44,8 @@
         console.log(document.currentMonth);
 
         app.populateSelect($('#leaveMonth'), document.monthList, 'LEAVE_YEAR_MONTH_NO', 'MONTH_EDESC', null, null, document.currentMonth)
+        app.populateSelect($('#leaveMonthCode'), document.monthList, 'LEAVE_YEAR_MONTH_NO', 'MONTH_EDESC', null, null, document.currentMonth)
+        var $monthCode = $('#leaveMonthCode');
         var $month = $('#leaveMonth');
         var $monthlyLeaveTable = $('#monthlyLeaveTable');
 
@@ -69,13 +71,31 @@
             });
         };
 
+        var populateMonthlyLeaveAA = function () {
+            var value = $monthCode.val();
+            if (value == null) {
+                return;
+            }
+            app.serverRequest("", {fiscalYearMonthCode: value}).then(function (response) {
+                app.renderKendoGrid($table, response.data);
+            }, function (error) {
+
+            });
+        };
+
         populateMonthlyLeave();
+        populateMonthlyLeaveAA();
 
 
         $month.on('change', function () {
             populateMonthlyLeave();
         });
 
+        $monthCode.on('change', function () {
+            populateMonthlyLeaveAA();
+        });
+
+        $('#leaveMonthCode').select2();
 
 
     });

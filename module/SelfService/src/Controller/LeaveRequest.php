@@ -126,9 +126,12 @@ class LeaveRequest extends HrisController {
                 $leaveRequest->employeeId = $this->employeeId;
                 $leaveRequest->startDate = Helper::getExpressionDate($leaveRequest->startDate);
                 $leaveRequest->endDate = Helper::getExpressionDate($leaveRequest->endDate);
-                $leaveRequest->endDate = Helper::getExpressionDate($leaveRequest->endDate);
+                // $leaveRequest->endDate = Helper::getExpressionDate($leaveRequest->endDate);
                 $leaveRequest->requestedDt = Helper::getcurrentExpressionDate();
                 $leaveRequest->status = "RQ";
+                if($postData['specialCondition']){
+                    $leaveRequest->specialCondition = 'Y';
+                }
                 if (isset($postData['subRefId'])  && $postData['subRefId']!=' ') {
                     $leaveRequest->subRefId = $postData['subRefId'];
                 }

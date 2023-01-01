@@ -264,23 +264,17 @@ ORDER BY TO_CHAR(emp.birth_date,'MMDD')";
                     THEN 'On Travel ('
                       ||ETR.DESTINATION
                       ||')'
-                    WHEN ATN.OVERALL_STATUS ='TN'
+                      WHEN ATN.OVERALL_STATUS ='TN'
                     THEN (CASE 
-                    WHEN TMS.SHOW_AS_TRAINING = 'Y' 
-                        THEN 'On Training ('
-                        || (CASE
-                          WHEN ATN.TRAINING_TYPE = 'A'
-                          THEN TMS.TRAINING_NAME
-                          ELSE ETN.TITLE
-                            END)
-                        ||')'
-                    ELSE
-                       (CASE
-                          WHEN ATN.TRAINING_TYPE = 'A'
-                          THEN TMS.TRAINING_NAME
-                          ELSE ETN.TITLE
+                   		 WHEN TMS.TRAINING_CATEGORY = 'WS' 
+                        THEN 'On Workshop ('
+                        WHEN TMS.TRAINING_CATEGORY = 'SE' 
+                        THEN 'On Seminar ('
+                        ELSE 'Om Training ('
                         END)
-                      END)  
+                        || TMS.TRAINING_NAME
+                        ||')'
+                        
                     WHEN ATN.OVERALL_STATUS ='WD'
                     THEN 'Work On Dayoff'
                     WHEN ATN.OVERALL_STATUS ='WH'
@@ -322,9 +316,9 @@ ORDER BY TO_CHAR(emp.birth_date,'MMDD')";
                 LEFT JOIN HRIS_HOLIDAY_MASTER_SETUP HMS
                 ON HMS.HOLIDAY_ID = ATN.HOLIDAY_ID
                 LEFT JOIN HRIS_TRAINING_MASTER_SETUP TMS
-                ON (TMS.TRAINING_ID = ATN.TRAINING_ID AND ATN.TRAINING_TYPE='A')
-                LEFT JOIN HRIS_EMPLOYEE_TRAINING_REQUEST ETN
-                ON (ETN.REQUEST_ID=ATN.TRAINING_ID AND ATN.TRAINING_TYPE ='R')
+                ON (TMS.TRAINING_ID = ATN.TRAINING_ID)
+                --LEFT JOIN HRIS_EMPLOYEE_TRAINING_REQUEST ETN
+                --ON (ETN.REQUEST_ID=ATN.TRAINING_ID AND ATN.TRAINING_TYPE ='R')
                 LEFT JOIN HRIS_EMPLOYEE_TRAVEL_REQUEST ETR
                 ON ETR.TRAVEL_ID = ATN.TRAVEL_ID
                 WHERE 1          = 1
@@ -332,7 +326,7 @@ ORDER BY TO_CHAR(emp.birth_date,'MMDD')";
                 AND ATN.EMPLOYEE_ID = {$employeeId}
                 ORDER BY ATN.ATTENDANCE_DT ASC";
         $statement = $this->adapter->query($sql);
-         //print_r($sql);die;
+         //echo('<pre>');print_r($sql);die;
         $result = $statement->execute();
 
         return Helper::extractDbData($result);

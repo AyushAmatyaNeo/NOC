@@ -1260,3 +1260,31 @@ alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_REQ_OT_DAYS DE
 alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (APP_FESTIVE_OT_DAYS DECIMAL(7,2));
 alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_APP_OT_DAYS DECIMAL(7,2));
 -----------------------------------
+
+
+alter table hris_Employee_leave_request add (special_condition char(1) default 'N');
+alter table hris_employee_travel_request add (accomplishment varchar(2500)); 
+alter table hris_leave_master_setup add 
+(BACK_DATE_LIMIT decimal(7),
+FUTURE_DATE_LIMIT decimal(7));
+----------------------------------------
+alter table hris_training_master_setup add (
+training_category char(2) DEFAULT 'TR');
+
+alter table hris_training_master_setup add constraint
+    check_training_category CHECK ( training_category in ('TR','WS','SE'));
+
+-----------------------------
+create or replace function TRAINING_CATEGORY_DESC ( p_training_category CHAR(2) ) 
+RETURNS v_category_desc   VARCHAR(50) AS
+    
+BEGIN
+    v_category_desc := ( CASE p_training_category
+        WHEN 'TR' THEN 'Training'
+        WHEN 'WS' THEN 'Work Shop'
+        WHEN 'SE' THEN ' Seminar'
+    END );
+
+    
+END;
+------------------------------------
