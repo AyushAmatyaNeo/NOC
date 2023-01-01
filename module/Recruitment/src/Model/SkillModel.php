@@ -39,7 +39,7 @@ class SkillModel extends Model {
         'SkillId'          => self::SKILL_ID,
         'SkillName'        => self::SKILL_NAME,
         'SkillCode'        => self::SKILL_CODE,
-        'RequiredFlag'     => self::REQUIRED_FLAG,
+        'RequiredFlag'     => self::REQUIRED_FLAG, 
         'UploadFlag'       => self::UPLOAD_FLAG,
         'Status'           => self::STATUS,
         'CreatedBy'        => self::CREATED_BY,

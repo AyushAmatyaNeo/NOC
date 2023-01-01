@@ -318,6 +318,7 @@
             breakCount=$("#printBreakUp").val();
             printFont=$("#printFontSize").val();
             printPixel=$("#printPixel").val();
+            
             var q = document.searchManager.getSearchValues();
             q['fiscalId'] = $fiscalYear.val();
             q['monthId'] = $month.val();
@@ -332,6 +333,7 @@
 
             app.serverRequest(document.pullGroupSheetLink, q).then(function (response) {
                 if (response.success) {
+                    // console.log(response);
                     salaryData=response.data;
                     selectedMonthDetails=response.monthDetails;
                     if(q['reportType']=='GS'){

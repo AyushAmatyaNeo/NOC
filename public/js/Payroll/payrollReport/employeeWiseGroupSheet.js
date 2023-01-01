@@ -19,6 +19,8 @@
         var selectedSalarySheetList = [];
 
 
+
+
         var initKendoGrid = function (defaultColumns, data) {
             let dataSchemaCols = {};
             let aggredCols = [];
@@ -26,6 +28,7 @@
             map = {
                 'EMPLOYEE_ID': 'ID',
                 'FULL_NAME': 'Employee',
+                'LOCATION_EDESC': 'Location', 
                 'EMPLOYEE_CODE': 'EID',
                 'POSITION_NAME': 'Position',
                 'SERVICE_TYPE_NAME': 'Service',
@@ -36,6 +39,7 @@
             var columns = [
                 {field: "EMPLOYEE_CODE", title: "Code", width: 80, locked: true},
                 {field: "FULL_NAME", title: "Employee", width: 120, locked: true},
+                {field: "LOCATION_EDESC", title: "Location", width: 120, locked: true},
                 {field: "POSITION_NAME", title: "Position", width: 100, locked: true},
                 {field: "SERVICE_TYPE_NAME", title: "Service", width: 100, locked: true},
                 {field: "MONTH_EDESC", title: "Month", width: 80, locked: true},

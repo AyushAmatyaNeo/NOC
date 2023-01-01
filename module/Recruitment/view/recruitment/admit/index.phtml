@@ -1,0 +1,99 @@
+<?php
+
+$this->headLink()
+        ->appendStylesheet($this->basePath('assets/global/plugins/bootstrap-summernote/summernote.css'));
+
+$this->headScript()
+        ->appendFile($this->basePath('assets/global/plugins/bootstrap-summernote/summernote.min.js'))
+        ->appendFile($this->basePath('js/recruitment/admit/index.js'));
+
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'admitform');
+$AdmitSetupId = $form->get('AdmitSetupId');
+$DeclarationText = $form ->get('DeclarationText');
+$Terms = $form->get('Terms');
+$File = $form->get('File');
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'UPDATE');
+
+$form->setAttribute('action', $this->url('admit', ['action' => 'update']));
+
+$form->prepare();
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\admit')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Admit Card Setup
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <?php print $this->formLabel($DeclarationText); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($DeclarationText); ?>
+                            <?php print $this->formElementErrors()->render($DeclarationText, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <?php print $this->formLabel($Terms); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($Terms); ?>
+                            <?php print $this->formElementErrors()->render($Terms, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div id="imagePreview" style="border: 1px solid; width: 160px; height: 140px;background-color:#f2f2f2;">
+                            <?php if (!empty($prevFile)) { ?>
+                                <img style="width: 100%; height: 100%" id="preview" src="<?php print $this->basePath().'/uploads/admit/'.$prevFile; ?>" alt="image" />
+                            <?php } else { ?>
+                                <img style="width: 100%; height: 100%" id="preview" src="<?php print $this->basePath().'/img/noimage.png' ?>" alt="default" />
+                            <?php } ?>
+                        </div>
+                        <div class="form-group">
+                            <?php print $this->formLabel($File); ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?php print $this->formElement($File); ?>
+                            <?php print $this->formElementErrors()->render($File, ['class' => 'help-block error']); ?>
+                        </div>
+                    </div>
+                </div>
+                <?php print $this->formElement($AdmitSetupId); ?>
+                <input type="hidden" name="prev_image" value="<?php echo $prevFile; ?>">
+                <input type="hidden" name="base_path" value="<?php echo $this->basePath(); ?>">
+
+
+                <?php print $this->formSubmit($submit); ?>
+                <?php
+                print $this->form()->closeTag();
+                ?>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script type="text/javascript">
+    function showPreview(event) {
+      if (event.target.files.length > 0) {
+        var srcs = URL.createObjectURL(event.target.files[0]);
+        var preview = document.getElementById("preview");
+        preview.src = srcs;
+      }
+    }
+</script>

@@ -1,0 +1,45 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+$this->headScript()
+    // ->appendFile($this->basePath('js/recruitment/application/search.js'))
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('js/recruitment/venue/venue-setup.js'));
+// ->appendFile($this->basePath('js/recruitment/application/view.js'));
+?>
+
+<script>
+    document.editLink = '<?= $this->url("venue", ["action" => "venueSetupEdit"]) ?>';
+</script>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="portlet light bg-inverse">
+    <div class="row margin-top-10">
+
+        <a href="<?= $this->url('venue', ['action' => 'venueSetupAdd']) ?>" class="btn default btn-sm">
+            <i class="fa fa-plus-square icon-black"></i> Add New Venue 
+        </a>
+
+        <div class="col-sm-offset-8 col-sm-4">
+
+            <button id="search" class="btn btn-default btn-sm pull-right">
+                Search
+                <i class="fa fa-search"></i>
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<div class="margin-top-50">
+    <div id="venueTable">
+    </div>
+</div>

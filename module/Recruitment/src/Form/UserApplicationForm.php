@@ -21,6 +21,6 @@ class UserApplicationForm {
      * @Annotation\Type("Zend\Form\Element\Submit")
      * @Annotation\Attributes({"value":"Submit","class":"btn btn-success"})
      */
-    public $submit;
+    public $submit; 
 
 }

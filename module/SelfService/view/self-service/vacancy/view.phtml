@@ -456,6 +456,9 @@ $form->prepare();
                         ?>
 
                         <td class="text-center">
+                            <?php if ($applicationApplied['IS_ADMIT_GENERATED'] == 'Y') { ?>
+                            <a class="btn btn-success" id="downloadAdminCard1" href="<?php echo $this->basePath().'/selfservice/vacancies/admitcard/'.$applicationApplied['APPLICATION_ID']; ?>" target="_blank">Admit Card</a>
+                            <?php } ?>
                             <?php
                                 $a = 0; $b = 0;
                                 
@@ -740,6 +743,7 @@ $form->prepare();
                         ?>
 
                         <td class="text-center">
+
                             <?php
 
                                 $a=0; $b=0;

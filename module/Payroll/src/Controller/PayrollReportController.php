@@ -30,10 +30,22 @@ class PayrollReportController extends HrisController {
     }
 
     public function varianceAction() {
+        /**
+         * FISCAL YEARS
+         * 
+         * HRIS_FISCAL_YEARS
+         * */
         $fiscalYears = EntityHelper::getTableList($this->adapter, FiscalYear::TABLE_NAME, [FiscalYear::FISCAL_YEAR_ID, FiscalYear::FISCAL_YEAR_NAME]);
+        
+        /**
+         * MONTH CODE
+         * 
+         * HRIS_MONTH_CODE
+         * */
         $months = EntityHelper::getTableList($this->adapter, Months::TABLE_NAME, [Months::MONTH_ID, Months::MONTH_EDESC, Months::FISCAL_YEAR_ID]);
 
         $columnsList = $this->repository->getVarianceColumns();
+
         return Helper::addFlashMessagesToArray($this, [
                     'searchValues' => EntityHelper::getSearchData($this->adapter),
                     'fiscalYears' => $fiscalYears,
@@ -46,7 +58,8 @@ class PayrollReportController extends HrisController {
     public function pullVarianceListAction() {
         try {
             $request = $this->getRequest();
-            $data = $request->getPost();
+            $data    = $request->getPost();
+
 
             $results = $this->repository->getVarianceReprot($data);
 
@@ -142,14 +155,39 @@ class PayrollReportController extends HrisController {
 
     // menu for this action not inserted
     public function groupSheetAction() {
+
+        /**
+         * VARIANCE NAME
+         * 
+         * AS [Annual Social Security Tax, Income Tax 10%, Income Tax 20%]
+         * */
         $nonDefaultList = $this->repository->getSalaryGroupColumns('S', 'N');
+
+        /**
+         * VARIANCE NAME AS
+         * 
+         * Total Deduction, Monthly Payable, Technical Grade
+         * */
         $groupVariables = $this->repository->getSalaryGroupColumns('S');
 
+        
+
         $salarySheetRepo = new SalarySheetRepo($this->adapter);
+
+        /**
+         * SALARY TYPE
+         * --NORMAL--BONUS--LEAVE ENCASHMENT--TRANSPORTATION ALLOWANCE -- OVERTIME
+         * DB - HRIS_SALARY_TYPE
+         * */
         $salaryType = iterator_to_array($salarySheetRepo->fetchAllSalaryType(), false);
 
+        /**
+         * FETCHING ALL DATA FROM
+         * DB -- HRIS_SALARY_SHEET
+         * */
         $data['salarySheetList'] = iterator_to_array($salarySheetRepo->fetchAll(), false);
         $links['getGroupListLink'] = $this->url()->fromRoute('payrollReport', ['action' => 'getGroupList']);
+       
         $data['links'] = $links;
 
         return Helper::addFlashMessagesToArray($this, [
@@ -170,6 +208,7 @@ class PayrollReportController extends HrisController {
             $reportType = $data['reportType'];
             $groupVariable = $data['groupVariable'];
 
+
             if ($reportType == "GS") {
                 $defaultColumnsList = $this->repository->getDefaultColumns('S');
                 $resultData = $this->repository->getGroupReport('S', $data);
@@ -177,6 +216,7 @@ class PayrollReportController extends HrisController {
                 $defaultColumnsList = $this->repository->getVarianceDetailColumns($groupVariable);
                 $resultData = $this->repository->getGroupDetailReport($data);
             }
+            return new CustomViewModel($resultData);
             
             $monthDetails=EntityHelper::rawQueryResult($this->adapter, "SELECT MONTH_EDESC,YEAR FROM HRIS_MONTH_CODE WHERE MONTH_ID=?",['monthId'=>$data['monthId']])->current();
            
@@ -224,6 +264,10 @@ class PayrollReportController extends HrisController {
 
             $defaultColumnsList = $this->repository->getDefaultColumns('S');
             $resultData = $this->repository->getEmployeeWiseGroupReport('S', $data);
+            
+
+            // return new CustomViewModel($resultData);
+
 
             $result = [];
             $result['success'] = true;
@@ -559,6 +603,11 @@ class PayrollReportController extends HrisController {
     }
 
     public function tdsReportAction(){
+        $nonDefaultList = $this->repository->getSalaryGroupColumns('N', 'N');
+        $groupVariables = $this->repository->getSalaryGroupColumns('N');
+        $salarySheetRepo = new SalarySheetRepo($this->adapter);
+        $salaryType = iterator_to_array($salarySheetRepo->fetchAllSalaryType(), false);
+
         $payHeads = EntityHelper::getTableKVListWithSortOption($this->adapter, "HRIS_PAY_SETUP", "PAY_ID", ["PAY_EDESC"], ["PAY_CODE in ('11211', '11112')"], "PAY_ID", "ASC", "-");
         return Helper::addFlashMessagesToArray($this, [
                     'searchValues' => EntityHelper::getSearchData($this->adapter),

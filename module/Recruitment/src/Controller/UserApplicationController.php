@@ -109,6 +109,11 @@ class UserApplicationController extends HrisController
         {
             return $this->redirect()->toRoute("userapplication");
         }
+
+
+
+
+
         $VacancyData = iterator_to_array($this->repository->VacancyDataById($id), false);
 
 
@@ -129,6 +134,7 @@ class UserApplicationController extends HrisController
            $applicationData = iterator_to_array($this->repository->applicationDataById($id), false);
            $eduDatas = iterator_to_array($this->repository->applicationEduById($id), false);
         }
+        
         // Application Skills  AND inclusion
         $skill_names = '';
         $inc_names = '';
@@ -146,8 +152,7 @@ class UserApplicationController extends HrisController
         $applicationData[0]['CANCELLED_INCLUSION_ID'] = $cancelled_inc_names;
         $addressData = iterator_to_array($this->repository->applicationaddressById($id), false);
         $expDatas = iterator_to_array($this->repository->applicationExpById($id), false);
-        // echo "<pre>";
-        // print_r($expDatas); die;
+        
         $totalExperienceDays = 0;
         if($expDatas){
             foreach($expDatas as $expData){
@@ -155,7 +160,6 @@ class UserApplicationController extends HrisController
                 $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['EXTENDED_DATE_AD']);
             }
         }
-        // print_r($totalExperienceDays);die;
 
         $totalExperienceYMD = AppHelper::DateDiffWithDays($totalExperienceDays);
         $TrDatas = iterator_to_array($this->repository->applicationTrById($id), false);
@@ -410,8 +414,12 @@ class UserApplicationController extends HrisController
 
             $unselectedInclusion  = implode(',',array_diff($getInclusionSpecific, $postedData['approvedInclusion']));
 
+            // echo "<pre>";
+            // print_r($_POST);
+            // die;
 
-            $this->repository->updateSelectedUnselectedInclusion($id,$selectedInclusion,$unselectedInclusion);
+
+            // $this->repository->updateSelectedUnselectedInclusion($id,$selectedInclusion,$unselectedInclusion);
 
             $model = new HrisRecApplicationStage();
             $model->id = ((int) Helper::getMaxId($this->adapter, HrisRecApplicationStage::TABLE_NAME, HrisRecApplicationStage::ID)) + 1;
@@ -467,11 +475,11 @@ class UserApplicationController extends HrisController
 
 
 
-            $this->repository->addApplicationStageHistory($model);
-            $this->repository->manuallyStageId($postedData['StageId'], $postedData['id']);
+            // $this->repository->addApplicationStageHistory($model);
+            // $this->repository->manuallyStageId($postedData['StageId'], $postedData['id']);
             // $this->repository->updateSelectedUnselectedInclusion()
             $staging = AppHelper::StageSelectorModifier($postedData['StageId']);
-            $this->repository->getUpdateById('HRIS_REC_VACANCY_APPLICATION', $staging, 'APPLICATION_ID', $postedData['id']);
+            // $this->repository->getUpdateById('HRIS_REC_VACANCY_APPLICATION', $staging, 'APPLICATION_ID', $postedData['id']);
 
 
             if (($postedData['StageId'] == 6) || ($postedData['StageId'] == 8) || ($postedData['StageId'] == 9)) {
@@ -488,9 +496,14 @@ class UserApplicationController extends HrisController
                 $mail->setSubject('Application Update');
                 $mail->setBody($body);
                 $mail->setFrom('nepaloil.noreply@gmail.com', 'NOC');
+                // $mail->setFrom('nepaloilcorp.noreply@gmail.com', 'NOC');
                 $mail->addTo($applicationData[0]['EMAIL_ID'], $applicationData[0]['FIRST_NAME']);
+
+                // echo "<pre>";
+                // print_r($mail);
+                // die;
                 // Commented for testing purpose
-                // EmailHelper::sendEmail($mail);
+                EmailHelper::sendEmail($mail);
             }
                 // echo('<pre>');print_r('send');die;
             /* UPDATING VACANCY EDIT VERIFIED APPROVED COLUMN */
@@ -543,7 +556,6 @@ class UserApplicationController extends HrisController
             $eduDatas = iterator_to_array($this->repository->applicationEduById($id), false);
             $expDatas = iterator_to_array($this->repository->applicationExpById($id), false);
 
-
             $chanageDate = new NepaliCalendarHelper();
             $i = 0;
             foreach ($expDatas as $exp) {
@@ -568,7 +580,6 @@ class UserApplicationController extends HrisController
                     $expDatas[$i]['TO_DATE_AD'] = $exp['to_date']['year'].'-'.$exp['to_date']['month'].'-'.$exp['to_date']['date'];
                     
                 }
-        
                 
 
                 $i++;
@@ -615,7 +626,7 @@ class UserApplicationController extends HrisController
         $addressData = iterator_to_array($this->repository->applicationaddressById($id), false);
        
         // echo "<pre>";
-        // print_r($expDatas); die;
+        // print_r($addressData); die;
         $totalExperienceDays = 0;
         if($expDatas){
             foreach($expDatas as $expData){
@@ -631,7 +642,7 @@ class UserApplicationController extends HrisController
         $RegDatas = iterator_to_array($this->repository->registrationDocById($applicationData[0]['USER_ID']), false);
         $DocDatas = array_merge($DocDatas,$RegDatas);
         $applicationData[0]['FULL_NAME'] = $applicationData[0]['FIRST_NAME'].' '.$applicationData[0]['MIDDLE_NAME'].' '.$applicationData[0]['LAST_NAME'];
-        // echo '<pre>'; print_r($DocDatas);die;
+        // echo '<pre>'; print_r($TrDatas);die;
         // echo '<pre>'; print_r($addressData[0]);
         // echo '<pre>'; print_r( $eduDatas);
         // echo '<pre>'; print_r($VacancyData[0]);
@@ -723,6 +734,7 @@ class UserApplicationController extends HrisController
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
+
              
             /* UPDATING PROFILE IMAGE */
 
@@ -816,12 +828,13 @@ class UserApplicationController extends HrisController
                 $this->repository->getUpdateById('HRIS_REC_VACANCY_USERS', $updateData1, 'USER_ID', $postData['user_id']);
 
 
-                $updateData2 = [
-                    'CITIZENSHIP_NO'         => $postData['citizenship_no'],
-                    'ID_CITIZENSHIP_ISSUE_DATE' => $postData['ctz_issue_date']
+                 $updateData2 = [
+                    'CITIZENSHIP_NO'            => $postData['citizenship_no'],
+                    'CTZ_ISSUE_DATE' => $postData['ctz_issue_date'],
+                    'MOTHER_TONGUE' => $postData['mother_tongue']
                 ];
 
-                $this->repository->getUpdateById('HRIS_REC_USERS_REGISTRATION', $updateData2, 'REGISTRATIONS_ID', $postData['registration_id']);
+                $this->repository->getUpdateById('HRIS_REC_USERS_REGISTRATION', $updateData2, 'REGISTRATION_ID', $postData['registration_id']);
 
 
 
@@ -884,11 +897,15 @@ class UserApplicationController extends HrisController
             return $this->redirect()->toRoute("userapplication");
         }
 
+
         $request = $this->getRequest();
         if ($request->isPost()) {
 
             $postData = $request->getPost()->toArray();
 
+        // echo "<pre>";
+        // print_r($postData);
+        // die;
             if ($postData['form_type'] == 'internal') {
 
                 $updateData = [
@@ -907,7 +924,7 @@ class UserApplicationController extends HrisController
                     'PER_PROVINCE_ID'=> $postData['province'],
                     'PER_DISTRICT_ID'=> $postData['district'],
                     'PER_VDC_ID'     => $postData['municipality'],
-                    'PER_WARD_ID'    => $postData['ward'],
+                    'PER_WARD_NO'    => $postData['ward'],
                     'PER_TOLE'       => $postData['tole'],
                 ];
 
@@ -953,11 +970,12 @@ class UserApplicationController extends HrisController
                     'MAIL_PROVINCE_ID'=> $postData['province'],
                     'MAIL_DISTRICT_ID'=> $postData['district'],
                     'MAIL_VDC_ID'     => $postData['municipality'],
-                    'MAIL_WARD_ID'    => $postData['ward'],
+                    'MAIL_WARD_NO'    => $postData['ward'],
                     'MAIL_TOLE'       => $postData['tole'],
                 ];
 
                 $this->repository->getUpdateById('HRIS_REC_USERS_ADDRESS', $updateData, 'USERS_ADDRESS_ID', $postData['address_id']);
+
 
             }
 
@@ -979,16 +997,21 @@ class UserApplicationController extends HrisController
 
             $postData = $request->getPost()->toArray();
 
+           
             if ($postData['form_type'] == 'internal') {
+
+            //      echo "<pre>";
+            // print_r($postData);
+            // die;
 
                 /**
                  * FOR EDUCATION DATA
                  * */
-                for ($i=0; $i < count($postData['level_id']) ; $i++) {
+                for ($i=0; $i < count($postData['degree_id']) ; $i++) {
 
                     $updateData = [
                         'ACADEMIC_PROGRAM_ID'    => $postData['faculty'][$i],
-                        'ACADEMIC_DEGREE_ID'     => $postData['level_id'][$i],
+                        'ACADEMIC_DEGREE_ID'     => $postData['degree_id'][$i],
                         'ACADEMIC_COURSE_ID'     => $postData['major_subject'][$i],
                         'PASSED_YR'              => $postData['passed_year'][$i],
                         'ACADEMIC_UNIVERSITY_ID' => $postData['university_board'][$i],
@@ -1007,7 +1030,7 @@ class UserApplicationController extends HrisController
 
                         $updateData['EMPLOYEE_ID'] = $postData['employee_id'];
                         $updateData['ACADEMIC_PROGRAM_ID']    = $postData['faculty'][$i];
-                        $updateData['ACADEMIC_DEGREE_ID']     = $postData['level_id'][$i];
+                        $updateData['ACADEMIC_DEGREE_ID']     = $postData['degree_id'][$i];
                         $updateData['ACADEMIC_COURSE_ID']     = $postData['major_subject'][$i];
                         $updateData['PASSED_YR']              = $postData['passed_year'][$i];
                         $updateData['ACADEMIC_UNIVERSITY_ID'] = $postData['university_board'][$i];
@@ -1025,6 +1048,47 @@ class UserApplicationController extends HrisController
                 }
 
 
+            } elseif ($postData['form_type'] == 'open') {
+
+            //          echo "<pre>";
+            // print_r($postData);
+            // die;
+ 
+                for ($i=0; $i < count($postData['degree_id']) ; $i++) {
+
+                    $updateData = [
+                        'EDUCATION_INSTITUTE'    => str_replace("'","''",$postData['institute'][$i]),
+                        'FACALTY'    => $postData['faculty'][$i],
+                        'LEVEL_ID'     => $postData['degree_id'][$i],
+                        'MAJOR_SUBJECT'     => $postData['major_subject'][$i],
+                        'PASSED_YEAR'              => $postData['passed_year'][$i],
+                        'UNIVERSITY_BOARD' => $postData['university_board'][$i],
+                        'RANK_TYPE'              => $postData['rank_type'][$i],
+                        'RANK_VALUE'             => str_replace("'","''",$postData['rank_value'][$i]),
+                        'MODIFIED_DATE'            => date('Y-m-d')
+                    ];
+
+                    $check_presence = $this->repository->getRowById('HRIS_REC_APPLICATION_EDUCATION', 'EDUCATION_ID', $postData['edu_id'][$i]);
+
+                    if ($check_presence) {
+
+                        $this->repository->getUpdateById('HRIS_REC_APPLICATION_EDUCATION', $updateData, 'EDUCATION_ID', $postData['edu_id'][$i]);
+
+                    } else {
+
+                        $updateData['APPLICATION_ID'] = $postData['application_id'];
+                        $updateData['USER_ID'] = $postData['user_id'];
+                        $updateData['AD_NO'] = $postData['vacancy_id'];
+                        $updateData['STATUS'] = 'E';
+                        $updateData['CREATED_DATE'] = date('Y-m-d');
+                        $updateData['MODIFIED_DATE'] = '';
+                        $updateData['EDUCATION_ID'] = ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_EDUCATION', 'EDUCATION_ID')) + 1;
+
+                        $this->repository->insertData('HRIS_REC_APPLICATION_EDUCATION',$updateData);
+
+                    }
+
+                }
             }
 
             return $this->redirect()->toRoute('userapplication', 
@@ -1041,9 +1105,9 @@ class UserApplicationController extends HrisController
 
             if ($postData['form_type'] == 'internal') {
 
-                echo "<pre>";
-                print_r($postData);
-                die;
+                // echo "<pre>";
+                // print_r($postData);
+                // die;
 
                 $org_name     = $postData['org_name'];
                 $post_name    = $postData['post_name'];
@@ -1115,10 +1179,9 @@ class UserApplicationController extends HrisController
                     for ($i=0; $i < count($postData['org_name']) ; $i++) {
 
                         $updateData = [
-                                'ORGANIZATION_NAME' => $postData['org_name'][$i],
+                                'ORGANISATION_NAME' => $postData['org_name'][$i],
                                 'POST_NAME'         => $postData['post_name'][$i],
                                 'SERVICE_NAME'      => $postData['service_name'][$i],
-                                'ORGANIZATION_TYPE' => $postData['service_name'][$i],
                                 'LEVEL_ID'          => $postData['org_level'][$i],
                                 'EMPLOYEE_TYPE_ID'  => $postData['employee_type'][$i],
                                 'FROM_DATE'         => $postData['from_date'][$i],
@@ -1135,14 +1198,13 @@ class UserApplicationController extends HrisController
                         } else {
 
                             $updateData = [
-                                'EXPERIENCE_ID' =>((int) Helper::getMaxId($this->adapter, 'HRIS_EMPLOYEE_EXPERIENCES', 'EXPERIENCE_ID')) + 1,
+                                'EXPERIENCE_ID' =>((int) Helper::getMaxId($this->adapter, 'HRIS_REC_APPLICATION_EXPERIENCES', 'EXPERIENCE_ID')) + 1,
                                 'APPLICATION_ID' =>  $postData['application_id'],
                                 'USER_ID' =>  $postData['user_id'],
                                 'STATUS' =>  'E',
-                                'ORGANIZATION_NAME' => $postData['org_name'][$i],
+                                'ORGANISATION_NAME' => $postData['org_name'][$i],
                                 'POST_NAME'         => $postData['post_name'][$i],
                                 'SERVICE_NAME'      => $postData['service_name'][$i],
-                                'ORGANIZATION_TYPE' => $postData['service_name'][$i],
                                 'LEVEL_ID'          => $postData['org_level'][$i],
                                 'EMPLOYEE_TYPE_ID'  => $postData['employee_type'][$i],
                                 'FROM_DATE'         => $postData['from_date'][$i],
@@ -1151,7 +1213,7 @@ class UserApplicationController extends HrisController
                             ];
                            
 
-                            $this->repository->insertData('HRIS_EMPLOYEE_EXPERIENCES',$updateData);
+                            $this->repository->insertData('HRIS_REC_APPLICATION_EXPERIENCES',$updateData);
                         }
 
                     }
@@ -1407,6 +1469,60 @@ class UserApplicationController extends HrisController
                         'id' => $postData['application_id']]);
         }
     }
+
+
+    /**
+     * IMPORTING EXCEL METHOD
+     * */
+    public function excelAction()
+    {
+        // return Helper::addFlashMessagesToArray($this, [
+        //             'id'=>$id
+        // ]);
+    }
+
+    public function excelUploadAction()
+    {
+        $excelData = $_POST['data'];
+
+        // return new JsonModel(['success' => true, 'data' => $excelData]);
+
+        $count = count($excelData);
+
+        for ($i=1; $i < $count ; $i++) { 
+
+
+            // if(($data['A'] == null || $data['A'] == '') || ($data['B'] == null || $data['B'] == '')){ continue; }
+
+
+            $insert = [
+                'ID' => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_IMPORT_TEST', 'ID')) + 1,
+                'NAME' => base64_encode($excelData[$i]['A']),
+                'ROLL_NO' => base64_encode($excelData[$i]['B']),
+                'FATHER_NAME' => base64_encode($excelData[$i]['C'])
+            ];
+
+            
+
+            $result = $this->repository->insertData('HRIS_REC_IMPORT_TEST', $insert);
+
+             // return new JsonModel(['success' => true, 'data' => $result]);
+
+        }
+
+        return new JsonModel(['success' => true, 'data' => 'here']);
+    }
+
+     public function excelshowAction() {
+
+        $result = $this->repository->getAllRowTest('HRIS_REC_IMPORT_TEST');
+
+        echo "<pre>";
+        print_r($result);
+        die;
+
+
+     }
 
 
 

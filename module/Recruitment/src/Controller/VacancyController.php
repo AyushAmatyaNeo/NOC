@@ -46,7 +46,7 @@ class VacancyController extends HrisController
     {
 
         $request = $this->getRequest();
-        if ($request->isPost()) {
+        if ($request->isPost()) { 
             try {
                 $data = (array) $request->getPost();
                 $rawList = $this->repository->getFilteredRecords($data);
@@ -188,6 +188,8 @@ class VacancyController extends HrisController
     {
         $request = $this->getRequest();
 
+        // echo Designation::TABLE_NAME; die;
+
         $id = (int) $this->params()->fromRoute('id');
         if ($id === 0) {
             return $this->redirect()->toRoute("vacancy");
@@ -211,7 +213,7 @@ class VacancyController extends HrisController
                 return $this->redirect()->toRoute("vacancy");
             }
         }
-        $detail = $this->repository->fetchById($id);
+        $detail = $this->repository->fetchById($id); 
         $inclusion = Helper::extractDbData($this->VacancyInclusionRepository->fetchById($id));
         $inc =  explode(',', $detail['INCLUSION_ID']);   
         $skill = explode(',', $detail['SKILL_ID']);

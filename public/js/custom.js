@@ -1822,6 +1822,7 @@ window.app = (function ($, toastr, App) {
             App.blockUI({target: "#hris-page-content"});
             pullDataById(link, data).then(function (response) {
                 App.unblockUI("#hris-page-content");
+                console.log(response);
                 resolve(response);
             }, function (error) {
                 App.unblockUI("#hris-page-content");

@@ -1,0 +1,169 @@
+<?php
+
+$form->setAttribute('role', 'form');
+$form->setAttribute('id', 'venueAssignForm');
+
+$venueSetupId = $form->get('venueSetupId');
+$venueSetupId->setValueOptions($venueList);
+
+$startIndex = $form->get('startIndex');
+$endIndex = $form->get('endIndex');
+
+$assignType = $form->get('assignType');
+$assignType->setValueOptions([
+    'ROLL_NO' => 'ROLL NO',
+    'APPLICATION_ID' => 'Application Id',
+]);
+
+$startTime = $form->get('startTime');
+$endTime = $form->get('endTime');
+
+$venueAssignId = $form->get('venueAssignId');
+
+$examType = $form->get('examType');
+$examType->setValueOptions([
+    'FIRST_PAPER' => 'First Paper',
+    'SECOND_PAPER' => 'Second Paper',
+    'INTERVIEW' => 'Interview',
+]);
+
+$status = $form->get('status');
+$status->setValueOptions([
+    'E' => 'Enabled',
+    'D' => 'Disabled',
+]);
+
+$examDate = $form->get('examDate');
+
+$submit = $form->get('submit');
+$submit->setAttribute('value', 'SUBMIT');
+
+$form->setAttribute('action', $this->url('venue', ['action' => 'venueAssignEdit', 'id'=>$id]));
+$form->prepare();
+?>
+
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\venue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>New Entry
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                    <?php
+                    print $this->form()->openTag($form);
+                    ?>
+                    <div class="row">   
+
+                        <?php print $this->formElement($venueAssignId); ?>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($venueSetupId); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($venueSetupId); ?>
+                                <?php print $this->formElementErrors()->render($venueSetupId, ['class' => 'help-block']); ?>
+                            </div>   
+                        </div>    
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($assignType); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($assignType); ?>
+                                <?php print $this->formElementErrors()->render($assignType, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+                                 
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($startIndex); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($startIndex); ?>
+                                <?php print $this->formElementErrors()->render($startIndex, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($endIndex); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($endIndex); ?>
+                                <?php print $this->formElementErrors()->render($endIndex, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($examType); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($examType); ?>
+                                <?php print $this->formElementErrors()->render($examType, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($status); ?>
+                                <span class="required" aria-required="true">*</span>
+                                <?php print $this->formElement($status); ?>
+                                <?php print $this->formElementErrors()->render($status, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($examDate); ?>
+                                <?php print $this->formElement($examDate); ?>
+                                <?php print $this->formElementErrors()->render($examDate, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($startTime); ?>
+                                <?php print $this->formElement($startTime); ?>
+                                <?php print $this->formElementErrors()->render($startTime, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>  
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <?php print $this->formLabel($endTime); ?>
+                                <?php print $this->formElement($endTime); ?>
+                                <?php print $this->formElementErrors()->render($endTime, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                    </div>          
+                    <button id="reset" type="reset" class="btn default btn-sm hris-reset-btn">Reset<i class="fa fa-refresh"></i></button>
+                    <?php
+                    print $this->formSubmit($submit);
+                    print $this->form()->closeTag();
+                    ?>
+            </div>
+        </div>
+    </div>
+</div>

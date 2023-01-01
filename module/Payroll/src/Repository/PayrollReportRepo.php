@@ -77,25 +77,23 @@ class PayrollReportRepo extends HrisRepository implements RepositoryInterface
     public function varianceColumnsAddi()
     {
         $sql = "SELECT
-variance_id
-,
-    'V'
-     || variance_id
-     || '_P' AS PREV,
-      'V'
-     || variance_id
-     || '_C' AS CURR
-FROM
-    hris_variance
-WHERE
-        status = 'E'
-    AND
-        show_default = 'Y'
-    AND
-        is_sum = 'Y'
-    AND
-        variable_type = 'V'";
+                    variance_id,
+                    'V' || variance_id || '_P' AS PREV,
+                    'V' || variance_id || '_C' AS CURR
+                
+                FROM HRIS_VARIANCE
+                
+                WHERE
+                        status = 'E'
+                    AND
+                        show_default = 'Y'
+                    AND
+                        is_sum = 'Y'
+                    AND
+                        variable_type = 'V'";
+        
         $data = EntityHelper::rawQueryResult($this->adapter, $sql);
+        
         return Helper::extractDbData($data);
     }
 
@@ -103,17 +101,17 @@ WHERE
     {
         $varianceVariable = $this->fetchVarianceVariable();
 
-        $companyId = isset($data['companyId']) ? $data['companyId'] : -1;
-        $branchId = isset($data['branchId']) ? $data['branchId'] : -1;
-        $departmentId = isset($data['departmentId']) ? $data['departmentId'] : -1;
-        $designationId = isset($data['designationId']) ? $data['designationId'] : -1;
-        $positionId = isset($data['positionId']) ? $data['positionId'] : -1;
-        $serviceTypeId = isset($data['serviceTypeId']) ? $data['serviceTypeId'] : -1;
+        $companyId          = isset($data['companyId']) ? $data['companyId'] : -1;
+        $branchId           = isset($data['branchId']) ? $data['branchId'] : -1;
+        $departmentId       = isset($data['departmentId']) ? $data['departmentId'] : -1;
+        $designationId      = isset($data['designationId']) ? $data['designationId'] : -1;
+        $positionId         = isset($data['positionId']) ? $data['positionId'] : -1;
+        $serviceTypeId      = isset($data['serviceTypeId']) ? $data['serviceTypeId'] : -1;
         $serviceEventTypeId = isset($data['serviceEventTypeId']) ? $data['serviceEventTypeId'] : -1;
-        $employeeTypeId = isset($data['employeeTypeId']) ? $data['employeeTypeId'] : -1;
-        $genderId = isset($data['genderId']) ? $data['genderId'] : -1;
-        $functionalTypeId = isset($data['functionalTypeId']) ? $data['functionalTypeId'] : -1;
-        $employeeId = isset($data['employeeId']) ? $data['employeeId'] : -1;
+        $employeeTypeId     = isset($data['employeeTypeId']) ? $data['employeeTypeId'] : -1;
+        $genderId           = isset($data['genderId']) ? $data['genderId'] : -1;
+        $functionalTypeId   = isset($data['functionalTypeId']) ? $data['functionalTypeId'] : -1;
+        $employeeId         = isset($data['employeeId']) ? $data['employeeId'] : -1;
 
         $monthId = $data['monthId'];
 
@@ -123,94 +121,144 @@ WHERE
         $searchCondition = EntityHelper::getSearchConditonBounded($companyId, $branchId, $departmentId, $positionId, $designationId, $serviceTypeId, $serviceEventTypeId, $employeeTypeId, $employeeId, $genderId, null, $functionalTypeId);
         $boundedParameter = array_merge($boundedParameter, $searchCondition['parameter']);
 
-
         $sql = "SELECT 
-            E.FULL_NAME,
-            E.EMPLOYEE_CODE
-            ,D.DEPARTMENT_NAME
-            ,FUNT.FUNCTIONAL_TYPE_EDESC
-            ,AD.CUR_ADDRESS
-            ,AD.CUR_ACCOUNT
-            ,AD.PRE_ADDRESS
-            ,AD.PRE_ACCOUNT
-            ,AD.ADDRESS_REMARKS
-            ,AD.ACCOUNT_REMARKS
-            ,VARY.*
-            FROM (SELECT 
-            *
-            FROM 
-            (SELECT 
-            C.EMPLOYEE_ID
-            ,C.VARIANCE_ID
-            ,C.TOTAL AS C_TOTAL
-            ,P.TOTAL AS P_TOTAL
-            ,P.Total-C.TOTAL AS DIFFERENCE
-            FROM (SELECT 
-            SD.EMPLOYEE_ID
-            ,Vp.Variance_Id
-            ,SS.Month_ID
-            ,V.Show_Difference
-            ,SUM(VAL) AS TOTAL
-            FROM HRIS_VARIANCE V
-            LEFT JOIN HRIS_VARIANCE_PAYHEAD VP ON (V.VARIANCE_ID=VP.VARIANCE_ID)
-            LEFT JOIN (select * from HRIS_SALARY_SHEET where month_id=:monthId) SS ON (1=1)
-            LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD ON (SS.SHEET_NO=SD.SHEET_NO AND SD.Pay_Id=VP.Pay_Id)
-            WHERE V.SHOW_DEFAULT='Y' AND V.STATUS='E' AND V.VARIABLE_TYPE='V' 
-            GROUP BY  SD.EMPLOYEE_ID,V.VARIANCE_NAME,Vp.Variance_Id,SS.Month_ID,V.Show_Difference) C
-            LEFT JOIN 
-            (
-            SELECT 
-            SD.EMPLOYEE_ID
-            ,Vp.Variance_Id
-            ,SS.Month_ID
-            ,V.Show_Difference
-            ,SUM(VAL) AS TOTAL
-            FROM HRIS_VARIANCE V
-            LEFT JOIN HRIS_VARIANCE_PAYHEAD VP ON (V.VARIANCE_ID=VP.VARIANCE_ID)
-            LEFT JOIN (select * from HRIS_SALARY_SHEET where 
-            month_id=(SELECT MONTH_ID FROM  HRIS_MONTH_CODE WHERE TO_DATE=(SELECT FROM_DATE-1 FROM HRIS_MONTH_CODE WHERE MONTH_ID=:monthId))
-            ) SS ON (1=1)
-            LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD ON (SS.SHEET_NO=SD.SHEET_NO AND SD.Pay_Id=VP.Pay_Id)
-            WHERE V.SHOW_DEFAULT='Y' AND V.STATUS='E' AND V.VARIABLE_TYPE='V' 
-            GROUP BY  SD.EMPLOYEE_ID,V.VARIANCE_NAME,Vp.Variance_Id,SS.Month_ID,V.Show_Difference) P ON
-            (C.EMPLOYEE_ID=P.EMPLOYEE_ID AND C.VARIANCE_ID=P.VARIANCE_ID ))
-            PIVOT ( MAX( C_TOTAL ) AS C ,MAX( P_TOTAL ) AS P ,MAX( DIFFERENCE ) AS D
-                FOR Variance_Id 
-                IN ({$varianceVariable})
-                )
-                ) 
-                VARY
+                    E.FULL_NAME, E.EMPLOYEE_CODE,
+                    D.DEPARTMENT_NAME,
+                    FUNT.FUNCTIONAL_TYPE_EDESC,
+                    AD.CUR_ADDRESS, AD.CUR_ACCOUNT, AD.PRE_ADDRESS, AD.PRE_ACCOUNT, AD.ADDRESS_REMARKS, AD.ACCOUNT_REMARKS,
+
+                    VARY.* 
+
+                FROM 
+
+                    -- RETURN COLUMN
+                    -- EMPLOYEE_ID  |  VARIANCE_ID  |   C_TOTAL   |   P_TOTAL   |    DIFFERENCE
+                    (SELECT 
+                        * 
+                    FROM 
+                        (SELECT 
+                            C.EMPLOYEE_ID, C.VARIANCE_ID, C.TOTAL AS C_TOTAL,
+                            P.TOTAL AS P_TOTAL,
+                            (P.Total - C.TOTAL) AS DIFFERENCE 
+                        FROM 
+
+                            -- RETURN EMPLOYEE_ID | VARIANCE_ID | MONTH_ID | SHOW_DIFFERENCE  |  TOTAL
+                            (SELECT 
+                                SD.EMPLOYEE_ID,
+                                VP.Variance_Id,
+                                SS.Month_ID,
+                                V.Show_Difference,
+                                SUM(VAL) AS TOTAL
+
+                            FROM HRIS_VARIANCE V
+                            
+                            LEFT JOIN HRIS_VARIANCE_PAYHEAD VP ON (V.VARIANCE_ID = VP.VARIANCE_ID)
+                            LEFT JOIN (SELECT * FROM HRIS_SALARY_SHEET WHERE month_id=:monthId) SS ON (1=1)
+                            LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD ON (SS.SHEET_NO = SD.SHEET_NO AND SD.Pay_Id = VP.Pay_Id)
+                            
+                            WHERE V.SHOW_DEFAULT='Y' AND V.STATUS='E' AND V.VARIABLE_TYPE='V' 
+                            
+                            GROUP BY 
+                                SD.EMPLOYEE_ID, 
+                                V.VARIANCE_NAME, 
+                                VP.Variance_Id, 
+                                SS.Month_ID,
+                                V.Show_Difference
+                            ) C
+                                    
+                            -- RETURN ROW OF COLUMN
+                            -- EMPLOYEE_ID  |  VARIANCE_ID  |  MONTH_ID  |  SHOW_DIFFERENCE  |  TOTAL
+                        LEFT JOIN (SELECT 
+                                        SD.EMPLOYEE_ID,
+                                        VP.Variance_Id,
+                                        SS.Month_ID,
+                                        V.Show_Difference,
+                                        SUM(VAL) AS TOTAL 
+
+                                    FROM HRIS_VARIANCE V
+
+                                    LEFT JOIN HRIS_VARIANCE_PAYHEAD VP ON (V.VARIANCE_ID=VP.VARIANCE_ID)
+                                    LEFT JOIN  (SELECT 
+                                                    * 
+                                                FROM HRIS_SALARY_SHEET 
+                                                WHERE month_id = (SELECT 
+                                                                    MONTH_ID 
+                                                                  FROM HRIS_MONTH_CODE 
+                                                                  WHERE TO_DATE = (SELECT 
+                                                                                        --FROM_DATE-1
+                                                                                        FROM_DATE
+                                                                                    FROM HRIS_MONTH_CODE 
+                                                                                    WHERE MONTH_ID=:monthId)
+                                                                  )
+                                               ) SS ON (1=1)
+                                    
+                                    LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD ON (SS.SHEET_NO=SD.SHEET_NO AND SD.Pay_Id = VP.Pay_Id)
+                                    
+                                    WHERE V.SHOW_DEFAULT = 'Y' AND V.STATUS='E' AND V.VARIABLE_TYPE= 'V' 
+                                    
+                                    GROUP BY 
+                                        SD.EMPLOYEE_ID,
+                                        V.VARIANCE_NAME,
+                                        VP.Variance_Id,
+                                        SS.Month_ID,
+                                        V.Show_Difference
+                                    ) P ON (C.EMPLOYEE_ID=P.EMPLOYEE_ID AND C.VARIANCE_ID=P.VARIANCE_ID )
+                        )
+            
+                    --PIVOT ( 
+                            --MAX(C_TOTAL) AS C, MAX(P_TOTAL) AS P, MAX(DIFFERENCE) AS D
+                            --FOR Variance_Id 
+                               -- IN ({$varianceVariable})
+                    --)
+                    ) VARY
+                
                 LEFT JOIN (SELECT
-            CUR.EMPLOYEE_ID
-            ,CUR.PERMANENT_ADDRESS AS CUR_ADDRESS
-            ,CUR.ACCOUNT_NO AS CUR_ACCOUNT
-            ,PREV.PERMANENT_ADDRESS AS PRE_ADDRESS
-            ,PREV.ACCOUNT_NO AS PRE_ACCOUNT
-            ,CASE WHEN CUR.PERMANENT_ADDRESS!=PREV.PERMANENT_ADDRESS
-            THEN
-            'Changed'
-            ELSE
-            'Not Changed'
-            END as ADDRESS_REMARKS
-            ,CASE WHEN CUR.ACCOUNT_NO!=PREV.ACCOUNT_NO
-            THEN
-            'Changed'
-            ELSE
-            'Not Changed'
-            END as ACCOUNT_REMARKS
-            FROM 
-            (select * from HRIS_SALARY_SHEET SSC
-            left join HRIS_SALARY_SHEET_EMP_DETAIL SEDC ON (SEDC.SHEET_NO=SSC.SHEET_NO)
-            where SSC.month_id=:monthId) CUR
-            LEFT JOIN (select * from HRIS_SALARY_SHEET SSP
-            left join HRIS_SALARY_SHEET_EMP_DETAIL SEDP ON (SEDP.SHEET_NO=SSP.SHEET_NO)
-            where SSP.month_id=(SELECT MONTH_ID FROM  HRIS_MONTH_CODE WHERE TO_DATE=(SELECT FROM_DATE-1 FROM HRIS_MONTH_CODE WHERE MONTH_ID={$monthId})))
-            PREV ON (CUR.EMPLOYEE_ID=PREV.EMPLOYEE_ID))  AD ON (AD.EMPLOYEE_ID=VARY.EMPLOYEE_ID)
-                LEFT JOIN HRIS_EMPLOYEES E ON (E.EMPLOYEE_ID=VARY.EMPLOYEE_ID)
-                LEFT JOIN HRIS_DEPARTMENTS D  ON (D.DEPARTMENT_ID=E.DEPARTMENT_ID)
-                LEFT JOIN HRIS_FUNCTIONAL_TYPES FUNT ON (E.FUNCTIONAL_TYPE_ID=FUNT.FUNCTIONAL_TYPE_ID)
-            WHERE 1=1 AND VARY.EMPLOYEE_ID IS NOT NULL {$searchCondition['sql']}
-            ";
+                                CUR.EMPLOYEE_ID, 
+                                CUR.PERMANENT_ADDRESS AS CUR_ADDRESS,
+                                CUR.ACCOUNT_NO AS CUR_ACCOUNT,
+
+                                PREV.PERMANENT_ADDRESS AS PRE_ADDRESS,
+                                PREV.ACCOUNT_NO AS PRE_ACCOUNT,
+
+                                CASE 
+                                    WHEN CUR.PERMANENT_ADDRESS != PREV.PERMANENT_ADDRESS THEN 'Changed'
+                                    ELSE 'Not Changed'
+                                END AS ADDRESS_REMARKS,
+
+                                CASE 
+                                    WHEN CUR.ACCOUNT_NO != PREV.ACCOUNT_NO THEN 'Changed'
+                                    ELSE 'Not Changed'
+                                END AS ACCOUNT_REMARKS
+
+                            FROM
+
+                                (SELECT * FROM 
+                                    HRIS_SALARY_SHEET SSC
+                                 
+                                 LEFT JOIN HRIS_SALARY_SHEET_EMP_DETAIL SEDC ON (SEDC.SHEET_NO=SSC.SHEET_NO)
+                                 WHERE SSC.month_id=:monthId) CUR
+            
+                            LEFT JOIN (SELECT 
+                                            * 
+                                      FROM HRIS_SALARY_SHEET SSP
+                                      LEFT JOIN HRIS_SALARY_SHEET_EMP_DETAIL SEDP ON (SEDP.SHEET_NO=SSP.SHEET_NO)
+                                      
+                                      WHERE SSP.month_id = (SELECT 
+                                                                MONTH_ID 
+                                                            FROM  HRIS_MONTH_CODE 
+                                                            WHERE TO_DATE = (SELECT 
+                                                                                FROM_DATE-1 
+                                                                             FROM HRIS_MONTH_CODE 
+                                                                             WHERE MONTH_ID={$monthId})
+                                                            )
+                                      ) PREV ON (CUR.EMPLOYEE_ID=PREV.EMPLOYEE_ID)
+                          ) AD ON (AD.EMPLOYEE_ID=VARY.EMPLOYEE_ID)
+                    
+                    LEFT JOIN HRIS_EMPLOYEES E ON (E.EMPLOYEE_ID=VARY.EMPLOYEE_ID)
+                    LEFT JOIN HRIS_DEPARTMENTS D  ON (D.DEPARTMENT_ID=E.DEPARTMENT_ID)
+                    LEFT JOIN HRIS_FUNCTIONAL_TYPES FUNT ON (E.FUNCTIONAL_TYPE_ID=FUNT.FUNCTIONAL_TYPE_ID)
+                    WHERE 1=1 AND VARY.EMPLOYEE_ID IS NOT NULL {$searchCondition['sql']}";
+
         return EntityHelper::rawQueryResult($this->adapter, $sql, $boundedParameter);
     }
 
@@ -977,7 +1025,8 @@ and Show_Default='Y'  AND VARIABLE_TYPE='O'";
             PS.PAY_ID,PS.PAY_CODE,PS.PAY_EDESC,PS.PAY_TYPE_FLAG
             ,CASE WHEN SUM(SD.VAL) IS NULL THEN 0 ELSE SUM(SD.VAL) END AS TOTAL
             FROM HRIS_PAY_SETUP PS 
-            LEFT JOIN HRIS_SALARY_SHEET SS ON (SS.MONTH_ID=? {$strSalaryType})
+            -- LEFT JOIN HRIS_SALARY_SHEET SS ON (SS.MONTH_ID=? {$strSalaryType})
+            LEFT JOIN HRIS_SALARY_SHEET SS ON (SS.MONTH_ID=:month_id {$strSalaryType})
             LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD ON (SS.SHEET_NO=SD.SHEET_NO AND PS.PAY_ID=SD.PAY_ID)
             LEFT JOIN Hris_Salary_Sheet_Emp_Detail SSED ON (SSED.SHEET_NO=SD.SHEET_NO AND SSED.EMPLOYEE_ID=SD.EMPLOYEE_ID)
             WHERE PS.PAY_Type_flag='{$type}'
@@ -1315,23 +1364,23 @@ from hris_variance
         $genderId = isset($data['genderId']) ? $data['genderId'] : -1;
         $functionalTypeId = isset($data['functionalTypeId']) ? $data['functionalTypeId'] : -1;
         $employeeId = isset($data['employeeId']) ? $data['employeeId'] : -1;
-        $groupId = ($data['groupId']) ? $data['groupId'] : -1;
+        $groupId = isset($data['groupId']) ? $data['groupId'] : -1;
         $fiscalId = $data['fiscalId'];
         $boundedParameter = [];
 
-        $boundedParameter['groupId'] = $groupId;
-        $groupJoinCondition = "";
-        if($groupId == -1){
-            $groupJoinCondition = "1=1";
-        }else{
-            foreach ($groupId as $g){
-                if ($groupJoinCondition == ""){
-                    $groupJoinCondition.="SS.GROUP_ID=".$g;
-                }else{
-                    $groupJoinCondition.=" OR SS.GROUP_ID=".$g;
-                }
-            }
-        }
+        // $boundedParameter['groupId'] = $groupId;
+        // $groupJoinCondition = "";
+        // if($groupId == -1){
+        //     $groupJoinCondition = "1=1";
+        // }else{
+        //     foreach ($groupId as $g){
+        //         if ($groupJoinCondition == ""){
+        //             $groupJoinCondition.="SS.GROUP_ID=".$g;
+        //         }else{
+        //             $groupJoinCondition.=" OR SS.GROUP_ID=".$g;
+        //         }
+        //     }
+        // }
 
         $boundedParameter['fiscalId'] = $fiscalId;
         $searchCondition = EntityHelper::getSearchConditonBoundedPayroll($companyId, $branchId, $departmentId, $positionId, $designationId, $serviceTypeId, $serviceEventTypeId, $employeeTypeId, $employeeId, $genderId, null, $functionalTypeId);
@@ -1340,69 +1389,57 @@ from hris_variance
         $varId = rtrim($variable, ',');
         $pivotValues = explode(',', $varId);
 
-        $startSql = " SELECT E.FULL_NAME,
-                      E.EMPLOYEE_CODE ,
-                      E.ID_PAN_NO ,
-                      E.ID_ACCOUNT_NO ,
-                      BR.BRANCH_NAME ,
-                      E.BIRTH_DATE ,
-                      E.JOIN_DATE ,
-                      D.DEPARTMENT_NAME ,
-                      FUNT.FUNCTIONAL_TYPE_EDESC ,
-                      SSED.SERVICE_TYPE_NAME ,
-                      SSED.DESIGNATION_TITlE ,
-                      SSED.POSITION_NAME ,
-                      SSED.ACCOUNT_NO,
-                      GB.*
-                    FROM
-                      (SELECT *
-                      FROM
-                        (SELECT SD.EMPLOYEE_ID ";
+        $startSql = " SELECT 
+                        E.FULL_NAME, E.EMPLOYEE_CODE, E.ID_PAN_NO, E.ID_ACCOUNT_NO, E.BIRTH_DATE, E.JOIN_DATE,
+                        BR.BRANCH_NAME,
+                        D.DEPARTMENT_NAME,
+                        FUNT.FUNCTIONAL_TYPE_EDESC ,
+                        SSED.SERVICE_TYPE_NAME, SSED.DESIGNATION_TITlE, SSED.POSITION_NAME, SSED.ACCOUNT_NO,
+                        GB.*,
+                        HL.LOCATION_EDESC
 
-        $endSql = " , SS.Month_ID ,
-                      SS.SHEET_NO ,
-                      MC.MONTH_NO ,
-                      MC.MONTH_EDESC ,
-                      MC.FISCAL_YEAR_ID,
-                      ST.SALARY_TYPE_NAME 
-                    FROM HRIS_VARIANCE V
-                    LEFT JOIN HRIS_VARIANCE_PAYHEAD VP
-                    ON (V.VARIANCE_ID=VP.VARIANCE_ID)
-                    LEFT JOIN HRIS_SALARY_SHEET SS
-                    ON ({$groupJoinCondition})
-                    LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD
-                    ON (SS.SHEET_NO=SD.SHEET_NO
-                    AND SD.Pay_Id  =VP.Pay_Id)
-                    LEFT JOIN HRIS_MONTH_CODE MC
-                    ON (MC.month_id = SS.month_id)
-                    LEFT JOIN HRIS_SALARY_TYPE ST
-                    ON (SS.SALARY_TYPE_ID = ST.SALARY_TYPE_ID)
-                    WHERE V.STATUS        ='E'
-                    AND V.VARIABLE_TYPE   ='{$variableType}'
-                    GROUP BY SD.EMPLOYEE_ID,
-                      SS.Month_ID,
-                      SS.SHEET_NO,
-                      MC.MONTH_NO,
-                      MC.MONTH_EDESC,
-                      MC.FISCAL_YEAR_ID,
-                      ST.SALARY_TYPE_NAME
-                    ) 
-                  )GB
-                JOIN HRIS_EMPLOYEES E
-                ON (E.EMPLOYEE_ID=GB.EMPLOYEE_ID)
-                LEFT JOIN Hris_Salary_Sheet_Emp_Detail SSED
-                ON (SSED.SHEET_NO   =GB.SHEET_NO
-                AND SSED.EMPLOYEE_ID=GB.EMPLOYEE_ID )
-                LEFT JOIN HRIS_DEPARTMENTS D
-                ON (D.DEPARTMENT_ID=E.DEPARTMENT_ID)
-                LEFT JOIN HRIS_FUNCTIONAL_TYPES FUNT
-                ON (E.FUNCTIONAL_TYPE_ID=FUNT.FUNCTIONAL_TYPE_ID)
-                LEFT JOIN HRIS_BRANCHES BR
-                ON ( E.BRANCH_ID   =BR.BRANCH_ID)
+                    FROM
+                      (SELECT 
+                        *
+                        FROM
+                            (SELECT SD.EMPLOYEE_ID ";
+
+                        $endSql = " , SS.Month_ID, SS.SHEET_NO,
+                                      MC.MONTH_NO, MC.MONTH_EDESC, MC.FISCAL_YEAR_ID,
+                                      ST.SALARY_TYPE_NAME 
+                            FROM HRIS_VARIANCE V
+                            
+                            LEFT JOIN HRIS_VARIANCE_PAYHEAD VP ON (V.VARIANCE_ID=VP.VARIANCE_ID)
+                            LEFT JOIN HRIS_SALARY_SHEET SS ON (1=1)
+                            LEFT JOIN HRIS_SALARY_SHEET_DETAIL SD ON (SS.SHEET_NO=SD.SHEET_NO AND SD.Pay_Id  =VP.Pay_Id)
+                            LEFT JOIN HRIS_MONTH_CODE MC ON (MC.month_id = SS.month_id)
+                            LEFT JOIN HRIS_SALARY_TYPE ST ON (SS.SALARY_TYPE_ID = ST.SALARY_TYPE_ID)
+                            
+                            WHERE V.STATUS = 'E' AND V.VARIABLE_TYPE   ='{$variableType}'
+                            
+                            GROUP BY SD.EMPLOYEE_ID,
+                                      SS.Month_ID,
+                                      SS.SHEET_NO,
+                                      MC.MONTH_NO,
+                                      MC.MONTH_EDESC,
+                                      MC.FISCAL_YEAR_ID,
+                                      ST.SALARY_TYPE_NAME
+                            ) 
+                      )GB
+
+                    JOIN HRIS_EMPLOYEES E ON (E.EMPLOYEE_ID=GB.EMPLOYEE_ID)
+                    LEFT JOIN Hris_Salary_Sheet_Emp_Detail SSED ON (SSED.SHEET_NO = GB.SHEET_NO AND SSED.EMPLOYEE_ID=GB.EMPLOYEE_ID )
+                    LEFT JOIN HRIS_DEPARTMENTS D ON (D.DEPARTMENT_ID=E.DEPARTMENT_ID)
+                    LEFT JOIN HRIS_FUNCTIONAL_TYPES FUNT ON (E.FUNCTIONAL_TYPE_ID=FUNT.FUNCTIONAL_TYPE_ID)
+                    LEFT JOIN HRIS_BRANCHES BR ON ( E.BRANCH_ID = BR.BRANCH_ID)
+                    LEFT JOIN HRIS_LOCATIONS HL ON (HL.LOCATION_ID = E.LOCATION_ID)
+
+
                 WHERE 1=1 AND GB.FISCAL_YEAR_ID = ?
+                
                 {$searchCondition['sql']} 
-                ORDER BY E.FULL_NAME,
-                  GB.SHEET_NO ";
+                
+                ORDER BY E.FULL_NAME, GB.SHEET_NO ";
 
 
         foreach ($pivotValues as $value) {
@@ -1575,75 +1612,75 @@ from hris_variance
                 return $this->rawQuery($sql);
         
     }
-    public function getPfReport($data)
-    {
-        $condition="";
-        if($data['employeeType'])
-        {
-            $csvEmployeeType = implode("','",$data['employeeType']);
-            $condition = $condition. " and E.Employee_type in ('{$csvEmployeeType}')";
-        }
-        if($data['employeeId'])
-        {
-            $csvEmployeeId = implode("','",$data['employeeId']);
-            $condition = $condition." and E.Employee_id in ('{$csvEmployeeId}')";
-        }
-        $sql=" SELECT 
-        row_number() over (order by E.full_name) as Serial, D.designation_title, E.full_name, E.ID_PROVIDENT_FUND_NO,
-        (select ssd.val from hris_salary_sheet_detail ssd
-        left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
-        where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 36)
-        as total_fund_deduction,
-        (select ssd.val from hris_salary_sheet_detail ssd
-        left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
-        where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 34)
-        as PF_Deduction_from_employee,
-        (select ssd.val from hris_salary_sheet_detail ssd
-        left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
-        where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 34)
-        as PF_contribution_by_employee
-        from hris_employees E
-        left join hris_designations D on (D.designation_id = E.designation_id)
-        left join hris_functional_levels F on (F.functional_level_id = E.functional_level_id)
-        where E.employee_id in 
-        (select distinct employee_id from hris_salary_sheet_detail where
-        sheet_no in (select sheet_no from hris_salary_sheet where month_id = {$data['monthId']} and salary_type_id = 1)) 
-        {$condition}";
-        // print_r($sql);die;
+    // public function getPfReport($data)
+    // {
+    //     $condition="";
+    //     if($data['employeeType'])
+    //     {
+    //         $csvEmployeeType = implode("','",$data['employeeType']);
+    //         $condition = $condition. " and E.Employee_type in ('{$csvEmployeeType}')";
+    //     }
+    //     if($data['employeeId'])
+    //     {
+    //         $csvEmployeeId = implode("','",$data['employeeId']);
+    //         $condition = $condition." and E.Employee_id in ('{$csvEmployeeId}')";
+    //     }
+    //     $sql=" SELECT 
+    //     row_number() over (order by E.full_name) as Serial, D.designation_title, E.full_name, E.ID_PROVIDENT_FUND_NO,
+    //     (select ssd.val from hris_salary_sheet_detail ssd
+    //     left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
+    //     where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 36)
+    //     as total_fund_deduction,
+    //     (select ssd.val from hris_salary_sheet_detail ssd
+    //     left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
+    //     where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 34)
+    //     as PF_Deduction_from_employee,
+    //     (select ssd.val from hris_salary_sheet_detail ssd
+    //     left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
+    //     where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 34)
+    //     as PF_contribution_by_employee
+    //     from hris_employees E
+    //     left join hris_designations D on (D.designation_id = E.designation_id)
+    //     left join hris_functional_levels F on (F.functional_level_id = E.functional_level_id)
+    //     where E.employee_id in 
+    //     (select distinct employee_id from hris_salary_sheet_detail where
+    //     sheet_no in (select sheet_no from hris_salary_sheet where month_id = {$data['monthId']} and salary_type_id = 1)) 
+    //     {$condition}";
+    //     // print_r($sql);die;
 
-        return $this->rawQuery($sql);
+    //     return $this->rawQuery($sql);
         
-    }
+    // }
 
-    public function getCitReport($data)
-    {   
-        $condition="";
-        if($data['employeeType'])
-        {
-            $csvEmployeeType = implode("','",$data['employeeType']);
-            $condition = $condition. " and E.Employee_type in ('{$csvEmployeeType}')";
-        }
-        if($data['employeeId'])
-        {
-            $csvEmployeeId = implode("','",$data['employeeId']);
-            $condition = $condition." and E.Employee_id in ('{$csvEmployeeId}')";
-        }
-        $sql=" SELECT 
-        row_number() over (order by E.full_name) as Serial, P.position_name, E.full_name,
-        (select ssd.val from hris_salary_sheet_detail ssd
-        left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
-        where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 18)
-        as Cit_deduction, E.ID_RETIREMENT_NO as cit_no, E.id_account_no
-        from hris_employees E
-        left join hris_positions P on (P.position_id= E.position_id)
-        left join hris_functional_levels F on (F.functional_level_id = E.functional_level_id)
-        where  E.employee_id in 
-        (select distinct employee_id from hris_salary_sheet_detail where
-        sheet_no in (select sheet_no from hris_salary_sheet where month_id = {$data['monthId']} and salary_type_id = 1))
-        {$condition}";
+    // public function getCitReport($data)
+    // {   
+    //     $condition="";
+    //     if($data['employeeType'])
+    //     {
+    //         $csvEmployeeType = implode("','",$data['employeeType']);
+    //         $condition = $condition. " and E.Employee_type in ('{$csvEmployeeType}')";
+    //     }
+    //     if($data['employeeId'])
+    //     {
+    //         $csvEmployeeId = implode("','",$data['employeeId']);
+    //         $condition = $condition." and E.Employee_id in ('{$csvEmployeeId}')";
+    //     }
+    //     $sql=" SELECT 
+    //     row_number() over (order by E.full_name) as Serial, P.position_name, E.full_name,
+    //     (select ssd.val from hris_salary_sheet_detail ssd
+    //     left join hris_salary_sheet hss on (hss.sheet_no = ssd.sheet_no)
+    //     where hss.salary_type_id = 1 and hss.month_id = {$data['monthId']} and ssd.employee_id = E.employee_id and ssd.pay_id = 18)
+    //     as Cit_deduction, E.ID_RETIREMENT_NO as cit_no, E.id_account_no
+    //     from hris_employees E
+    //     left join hris_positions P on (P.position_id= E.position_id)
+    //     left join hris_functional_levels F on (F.functional_level_id = E.functional_level_id)
+    //     where  E.employee_id in 
+    //     (select distinct employee_id from hris_salary_sheet_detail where
+    //     sheet_no in (select sheet_no from hris_salary_sheet where month_id = {$data['monthId']} and salary_type_id = 1))
+    //     {$condition}";
 
-        return $this->rawQuery($sql);
-    }
+    //     return $this->rawQuery($sql);
+    // }
 
     public function getGradeSankhyaReport($data){
         $condition=" and E.employee_type in ('C', 'R')";

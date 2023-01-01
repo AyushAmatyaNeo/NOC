@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><?php echo 'Admit_card_'.$vacancydata['FIRST_NAME'].'_'.$vacancydata['MIDDLE_NAME'].'_'.$vacancydata['LAST_NAME']; ?></title>
+    </head>
+    <style>
+        
+        body{
+            font-size: 14px;
+        }
+        .admit-card-wrapper{
+            padding: 0 30px;
+        }
+        .header{
+            text-align: center;
+            margin: 60px 0;
+        }
+        .header h2{
+            margin: 0;
+        }
+        .header h3{
+            margin: 0;
+        }
+        .header p{
+            margin: 0;
+        }
+        .header img{
+            width: 120px;
+            float: right;
+        }
+        .flex-box{
+            display: flex;
+            justify-content: space-between;
+            /* padding: 0 30px; */
+        }
+        .applicant-info{
+            width: 60%;
+        }
+        .table {
+            width: 90%;
+            margin-bottom: 8px;
+        }
+        .table td, .table th{
+            padding: 5px;
+            font-size: 13px;
+        }
+        .name-table {
+            width: 70%;
+        }
+        .name-table > tbody > tr > td {
+            border-top: 0;
+        }
+        .table>thead>tr>th, 
+        .table>thead>tr>td, 
+        .table>tbody>tr>th, 
+        .table>tbody>tr>td, 
+        .table>tfoot>tr>th, 
+        .table>tfoot>tr>td {
+            line-height: 1.2;
+        }
+        .bordered-table{
+            border-spacing: 0;
+        }
+        .bordered-table td, .bordered-table th{
+            border: 1px solid;
+        }
+        .document-img {
+            margin-top: 50px;
+            margin-right: -50px;
+        }
+        .document-img img{
+/*            width: 300px;*/
+/*            height: 200px;*/
+            width: 260px;
+            height: 160px;
+        }
+        .applicant-info p{
+            margin:  30px 0 40px;
+            font-size: 13px;
+            line-height: 1.6;
+            font-weight: 500;
+        }
+        /*.signature-box{
+            display: flex;
+            justify-content: flex-end;
+        }
+        .signature-box .sign1{
+            margin-right: 145px;
+        }*/
+        .signature-box {
+/*            float: left;*/
+/*            text-align: right;*/
+            margin-top: -100px;
+        }
+
+        .signature-box ul {
+/*               text-align: right;*/
+            display: flex;
+            margin-left: 800px;
+        }
+
+        .signature-box ul li {
+            display: inline;
+        }
+
+        .rules-wrapper {
+            margin-top: 30px;
+        }
+        .rules-wrapper ol{
+            padding-left: 10px;
+        }
+        .noc-stamp{
+            position: absolute;
+            right: 120px;
+        }
+
+        .sign1, .sign2 {
+            text-align: center;
+        }
+
+        .sign1 img,
+        .sign2 img {
+            width: 150px;
+            height: 80px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        @media print{
+
+            body{
+                font-size: 11px;
+            }
+            .header {
+                margin-top: 20px;
+            }
+            .table td, .table th{
+                padding: 5px;
+                font-size: 11px;
+            }
+            .applicant-info p {
+                font-size: 11px;
+                margin: 15px 0 18px;
+            }
+            .document-img {
+                margin-top: 50px;
+                margin-right: -50px;
+            }
+            .document-img img {
+                width: 220px;
+                height: 120px;
+            }
+
+            .signature-box ul {
+                margin-left: 400px;
+            }
+
+            .sign1 img,
+            .sign2 img {
+                width: 120px;
+                height: 50px;
+            }
+
+            .rules-wrapper {
+                margin-top: 50px;
+            }
+
+            .document-button {
+                display: none;
+            }
+
+            @page {
+                margin: 0;
+                page-break-after: avoid;
+            }
+
+        }
+    </style>
+    <body>
+        <div class="document-button">
+            <button class="button" onclick="printDiv('printableArea')">Download</button>
+        </div>
+        <div class="admit-card-wrapper" id="printableArea">
+            <div class="header"> 
+                <img src="<?php echo $this->basePath('img/noc.png')?>" class="noc-stamp">
+                <img src="<?php echo $this->basePath('uploads/').$vacancydata['PROFILE']?>">
+                <h2>नेपाल आयल निगम लिमिटेड</h1>
+                <h3>केन्द्रिय कार्यालय, टेकु</h6>
+                <p>लिखित अन्तर्वार्ता</p>
+            </div>
+            <div class="flex-box">
+                <div class="applicant-info">
+                    <table class="table name-table">
+                        <tr>
+                            <td>रोल नं.</td>
+                            <td>80</td>
+                        </tr>
+                        <tr>
+                            <td>नाम, थर :</td>
+                            <td><?php echo ucfirst($vacancydata['FIRST_NAME']).' '.ucfirst($vacancydata['MIDDLE_NAME']).' '.ucfirst($vacancydata['LAST_NAME']); ?></td> 
+                        </tr>
+                        <tr>
+                            <td>Name :</td>
+                            <td><?php echo ucfirst($vacancydata['FIRST_NAME']).' '.ucfirst($vacancydata['MIDDLE_NAME']).' '.ucfirst($vacancydata['LAST_NAME']); ?></td> 
+                        </tr>
+                    </table>
+                    <table class="table bordered-table">
+                        <tr>
+                            <td>विज्ञापन नं. </td>
+                            <td><?php echo $vacancydata['AD_NO']; ?></td>
+                        </tr>
+                        <tr>
+                            <td>पद / तह</td>
+                            <td><?php echo ucfirst($vacancydata['DESIGNATION_TITLE']).' / '.$vacancydata['FUNCTIONAL_LEVEL_EDESC']; ?></td> 
+                        </tr>
+                        <tr>
+                            <td>सेवा / समुह</td>
+                            <td><?php echo ucfirst($vacancydata['SERVICE_TYPE_NAME']).' / '.ucfirst($vacancydata['SERVICE_EVENT_NAME']); ?></td> 
+                        </tr>
+                        <tr>
+                            <td>खुला / समावेशी</td>
+                            <td><?php echo $vacancydata['OPTION_EDESC'];?></td>
+                        </tr>
+                        <tr>
+                            <td>नागरिता नं.</td>
+
+                            <td><?php echo $vacancydata['ID_CITIZENSHIP_NO']; ?></td>
+                        </tr>
+                    </table>
+                    <!-- <p>यस निगमबाट देहाय बमोजिमको मिति तथा केन्द्रमा लिइने उपयुक्त पदको परीक्षामा तपाईंलाई सम्मिलित हुन अनुमती दिइएको छ । विज्ञापनमा तोकिएको शर्त पुरा नभएको ठहर भएको जुनसुकै अवस्थामा पनि यो अनुमती पत्र रद्द हुनेछ । </p>p -->
+                    <?php echo base64_decode($vacancyterm['DECLARATION_TEXT']); ?>
+                    <table class="table bordered-table">
+                        <tr>
+                            <td style="width: 50px">क्र. नं.</td>
+                            <!-- <td>Patra</td> -->
+                            <td style="width: 60px">पत्र</td>
+                            <!-- <td>Miti, Samaya, Sthan</td> -->
+                            <td>मिति, समय, स्थान</td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">१</td>
+                            <td>प्रथम</td>
+                            <td>
+                                <?php 
+                                    echo "<strong>".base64_decode($vacancydata['FIRST_PAPER_VENUE'])."</strong>".', '.
+                                        date('j - M - Y',strtotime($vacancydata['FIRST_EXAM_DATE'])).', '.
+                                        date('H:i A', strtotime($vacancydata['FIRST_START_TIME'])).' - '.
+                                        date('H:i A', strtotime($vacancydata['FIRST_END_TIME'])); 
+                                ?>
+                            </td> 
+                        </tr>
+                        <tr>
+                            <td style="text-align: center;">२</td>
+                            <td>द्वितिय</td>
+                            <td>
+                                <?php 
+                                    echo "<strong>".base64_decode($vacancydata['SECOND_PAPER_VENUE'])."</strong>".', '.
+                                        date('j - M - Y',strtotime($vacancydata['SECOND_EXAM_DATE'])).', '.
+                                        date('H:i A', strtotime($vacancydata['SECOND_START_TIME'])).' - '.
+                                        date('H:i A', strtotime($vacancydata['SECOND_END_TIME'])); 
+                                ?>        
+
+                            </td> 
+                        </tr>
+                        <tr style="height: 26px;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr style="height: 26px;">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="document-img">
+                    <div class="idcard-front">
+                        <img src="<?php echo $this->basePath($vacancydocument['CitizenshipF']['DOC_FOLDER']); ?>">
+                    </div>
+                    <div class="idcard-back" style="margin-top:10px;">
+                        <img src="<?php echo $this->basePath($vacancydocument['CitizenshipB']['DOC_FOLDER']); ?>">
+                    </div>
+                </div>
+            </div>
+            <div class="signature-box">
+                <ul>
+                    <li class="sign1">
+                        <img src="<?php echo $this->basePath($vacancydocument['Signature']['DOC_FOLDER']); ?>">
+                        <span>Applicant's Sign</span>
+                    </li>
+                    <li class="sign2">
+                        <img src="<?php echo $this->basePath('uploads/admit/'.$vacancyterm['FILE_NAME']); ?>">
+                        <span>Director's Sign</span>
+                    </li>
+                </ul>
+               <!--  <p class="sign1">
+                    <img src="<?php echo $this->basePath($vacancydocument['Signature']['DOC_FOLDER']); ?>">
+                    <span>Applicant's Sign</span>
+                </p>
+                <p class="sign2">
+                    <img src="<?php echo $this->basePath($vacancydocument['Signature']['DOC_FOLDER']); ?>">
+                    Director's Sign
+                </p> -->
+            </div>
+            <div class="rules-wrapper">
+               <!--  <p><b>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको:</b></p>
+                <ol>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
+                </ol> -->
+                <?php echo base64_decode($vacancyterm['TERMS']); ?>
+            </div>
+        </div>
+    </body>
+
+    <script type="text/javascript">
+        function printDiv(divName) {
+             var printContents    = document.getElementById(divName).innerHTML;
+             var originalContents = document.body.innerHTML;
+
+             window.print();
+             document.body.innerHTML = printContents;
+
+             document.body.innerHTML = originalContents;
+        }
+    </script>
+</html>

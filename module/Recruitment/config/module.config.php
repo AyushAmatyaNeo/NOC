@@ -18,6 +18,12 @@ use Recruitment\Controller\CalendarController;
 use Recruitment\Controller\ReportController;
 use Recruitment\Controller\InstructionController;
 use Recruitment\Controller\OnboardController;
+use Recruitment\Controller\UserAdvanceController;
+use Recruitment\Controller\VenueController;
+use Recruitment\Controller\UserInformationController;
+use Recruitment\Controller\AdmitController;
+use Recruitment\Controller\RollnoController;
+
 
 return [
     'router' => [
@@ -214,6 +220,90 @@ return [
                     ],
                     'defaults' => [
                         'controller' => OnboardController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'excel' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/recruitment/excel[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => ExcelController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'venue' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/recruitment/venue[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => VenueController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'userinformation' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/recruitment/userinformation[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => UserInformationController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'useradvance' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/recruitment/useradvance[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => UserAdvanceController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'admit' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/recruitment/admit[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => AdmitController::class,
+                        'action' => 'index',
+                    ]
+                ],
+            ],
+            'rollno' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/recruitment/rollno[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => RollnoController::class,
                         'action' => 'index',
                     ]
                 ],
@@ -590,6 +680,74 @@ return [
                 ]
             ]
         ],
+        'venue' => [
+            [
+                'label' => 'venue',
+                'route' => 'venue',
+            ],
+                [
+                'label' => 'venue',
+                'route' => 'venue',
+                'pages' => [
+                    [
+                        'label' => 'Details',
+                        'route' => 'venue',
+                        'action' => 'index',
+                    ],
+                ]
+            ]
+        ],
+        'userinformation' => [
+            [
+                'label' => 'userinformation',
+                'route' => 'userinformation',
+            ],
+                [
+                'label' => 'User Information',
+                'route' => 'userinformation',
+                'pages' => [
+                    [
+                        'label' => 'Details',
+                        'route' => 'userinformation',
+                        'action' => 'index',
+                    ],
+                    [
+                        'label' => 'Edit',
+                        'route' => 'userinformation',
+                        'action' => 'edit',
+                    ],
+                ]
+            ]
+        ],
+        'useradvance' => [
+            [
+                'label' => 'useradvance',
+                'route' => 'useradvance',
+            ],
+                [
+                'label' => 'User Advance',
+                'route' => 'useradvance',
+                'pages' => [
+                    [
+                        'label' => 'Details',
+                        'route' => 'useradvance',
+                        'action' => 'index',
+                    ],
+                ]
+            ]
+        ],
+        'admit' => [
+            [
+                'label' => 'Admit Setup',
+                'route' => 'admit',
+            ],
+        ],
+        'rollno' => [
+            [
+                'label' => 'Roll No Upload',
+                'route' => 'rollno',
+            ],
+        ],
     ],
     'controllers' => [
         'factories' => [
@@ -607,7 +765,11 @@ return [
             ReportController::class => ControllerFactory::class,
             InstructionController::class => ControllerFactory::class,
             OnboardController::class => ControllerFactory::class,
-
+            VenueController::class => ControllerFactory::class,
+            UserInformationController::class => ControllerFactory::class,
+            UserAdvanceController::class => ControllerFactory::class,
+            AdmitController::class => ControllerFactory::class,
+            RollnoController::class => ControllerFactory::class,
 
         ],
     ],

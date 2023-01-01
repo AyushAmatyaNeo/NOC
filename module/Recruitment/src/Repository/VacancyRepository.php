@@ -84,7 +84,7 @@ class VacancyRepository extends HrisRepository{
             ]);
         }
 
-        $select->order("REC.VACANCY_ID ASC");
+        $select->order("REC.VACANCY_ID ASC"); 
         $boundedParameter = [];
         
         $statement = $sql->prepareStatementForSqlObject($select);

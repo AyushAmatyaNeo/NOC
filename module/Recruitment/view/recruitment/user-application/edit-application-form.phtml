@@ -1,6 +1,7 @@
 <?php
 $this->headLink()
-    ->appendStylesheet($this->basePath('css/custom.css'));
+    ->appendStylesheet($this->basePath('css/custom.css'))
+    ->appendStylesheet($this->basePath('css/nepali.datepicker.v4.0.min.css'));
 
 $this->headScript()
     ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
@@ -8,7 +9,9 @@ $this->headScript()
     ->appendFile($this->basePath('js/setup/employee/view.js'))
     ->appendFile($this->basePath('js/recruitment/application/view.js'))
     ->appendFile($this->basePath('js/recruitment/application/apply.js'))
-    ->appendFile($this->basePath('assets/global/plugins/jsPDF-master/dist/jspdf.debug.js'));
+    ->appendFile($this->basePath('js/recruitment/application/edit.js'))
+    ->appendFile($this->basePath('assets/global/plugins/jsPDF-master/dist/jspdf.debug.js'))
+    ->appendFile($this->basePath('js/nepali.datepicker.v4.0.min.js'));
 ?>
 
 <script type="text/javascript">
@@ -89,6 +92,12 @@ $this->headScript()
         alert('There should be atleast one row');
       }
     }
+
+    window.onload = function () {
+        var mainInput = document.getElementById("nepali-datepicker");
+        mainInput.nepaliDatePicker();
+    };       
+
 </script>
 
 <?php
@@ -359,7 +368,7 @@ if ($this->messages) {
                                     <label for="firstName">Issue Date:</label>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                    <input type="date" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>" class="selectNepaliDate" disabled></div>
+                                    <input type="text" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>" id="nepali-datepicker"></div>
                             </div>
                         </div>
                         <div class="row bottomgap">
@@ -1663,7 +1672,8 @@ if ($this->messages) {
                                     <label for="firstName">Issue Date:</label>
                                 </div>
                                 <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                    <input type="date" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>">
+                                    <!-- <input type="date" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>"> -->
+                                    <input type="text" name="ctz_issue_date" value="<?php echo $applicationData['CTZ_ISSUE_DATE']; ?>" id="nepali-datepicker"></div>
                                 </div>
                             </div>
                         </div>

@@ -28,6 +28,7 @@ use Exception;
 use Zend\View\Model\JsonModel;
 use Zend\Authentication\Storage\StorageInterface;
 use Zend\Db\Adapter\AdapterInterface;
+use Throwable;
 
 class VacancyController extends HrisController
 {
@@ -44,14 +45,13 @@ class VacancyController extends HrisController
         $this->initializeForm(InternalApplicationForm::class);
         $this->initializeForm(RecruitmentVacancyForm::class);
         date_default_timezone_set("Asia/Kathmandu");
-
     }
 
     public function indexAction()
     {
 
         $request = $this->getRequest();
-        if ($request->isPost()) {
+        if ($request->isPost()) { 
             try {
                 $data = (array) $request->getPost();
                 // print_r($this->employeeId);die;
@@ -62,8 +62,7 @@ class VacancyController extends HrisController
                 return new JsonModel(['success' => false, 'data' => [], 'error' => $e->getMessage()]);
             }
         }
-
-       
+        
         return $this->stickFlashMessagesTo([
             // 'status' => $statusSE,
             // 'Gender' => $GenderSE,
@@ -74,9 +73,9 @@ class VacancyController extends HrisController
             'openingId'      => EntityHelper::getTableList($this->adapter, 'HRIS_REC_OPENINGS',['OPENING_ID','OPENING_NO'], ["STATUS" => "E"]),
         ]);
     }
-
     public function viewAction()
-    {   
+    {
+
         $request = $this->getRequest();
         if ($request->isPost()) {
 
@@ -295,46 +294,50 @@ class VacancyController extends HrisController
 
            
         }
+
         $id = (int) $this->params()->fromRoute('id');
-
         if ($id === 0) {
-
             return $this->redirect()->toRoute("vacancy");
-
         }
 
-        $detail     = $this->repository->fetchById($id);
-        $inclusion  = Helper::extractDbData($this->VacancyInclusionRepository->fetchById($id));
+        $detail = $this->repository->fetchById($id);
+        // echo('<pre>');print_r($detail);die;
+        $inclusion = Helper::extractDbData($this->VacancyInclusionRepository->fetchById($id));
+        $skills =  explode(',', $detail['SKILL_ID']);
         $Inclusions =  explode(',', $detail['INCLUSION_ID']);
-        $skills     =  explode(',', $detail['SKILL_ID']);
-
-
-        $model      = new RecruitmentVacancyModel();
-        
+        $model = new RecruitmentVacancyModel();
         $model->exchangeArrayFromDB($detail);
-        
-        $model->SkillId     = $skills;
+        $model->SkillId = $skills;
         $model->InclusionId = $Inclusions;
-
         $this->form->bind($model);
-
-        $Vacancy_types     = array("OPEN" => "OPEN", "INTERNAL_FORM" => "INTERNAL-FORM","INTERNAL_APPRAISAL" => "INTERNAL-APPRAISAL", );
-        $empId             = $this->employeeId;
-        $user_id           = $this->repository->userId($empId);
+        $Vacancy_types = array("OPEN" => "OPEN", "INTERNAL_FORM" => "INTERNAL-FORM","INTERNAL_APPRAISAL" => "INTERNAL-APPRAISAL", );
+        $empId = $this->employeeId;
+        $user_id = $this->repository->userId($empId);
         $employeeFirstJoin = $this->repository->inclusionAppliedCheck($empId);
-        $employeeLastJoin  = $this->repository->inclusionPromoCheck($empId);
+        $employeeLastJoin = $this->repository->inclusionPromoCheck($empId);
         $vacancyApplyStage = $this->repository->checkVacancyStatus($id, $user_id[0]['USER_ID']);
-        $applicationApplied= $this->repository->checkVacancyApplicationApplied($id, $user_id[0]['USER_ID'], $vacancyApplyStage[0]['APPLICATION_ID']);
+        $applicationApplied = $this->repository->checkVacancyApplicationApplied($id, $user_id[0]['USER_ID'], $vacancyApplyStage[0]['APPLICATION_ID']);
 
-        $getApplicationStage = $this->repository->checkApplicationStages($applicationApplied['STAGE_ID']);
 
-        
+        // echo('<pre>');print_r($applicationApplied);die;
+
+
+        // Exception handling if the user hasn't applied for vacancy
+        try{
+            $getApplicationStage = $this->repository->checkApplicationStages($applicationApplied['STAGE_ID']);
+        }catch(Throwable $e){
+            $this->flashMessenger()->addMessage('<p style="color:red;">You havent applied for this vacancy </p>');
+            // Redirect if error
+            return $this->redirect()->toRoute('vacancies');
+        }
+
 
         $paymentGateways   = $this->repository->getPaymentGateway();
         $inclusionLists    = $this->repository->getInclusionsAll('internal');
         $employeeInclusionUsedForm = $this->repository->getEmployeeInclusion($empId, 'form');
         $employeeInclusionUsedAppraisal = $this->repository->getEmployeeInclusion($empId, 'appraisal');
         $openingAdInfo     = $this->repository->getOpening($detail['OPENING_ID']);
+       
 
         /**
          * IF INCLUSION USES AS FEMALE, DALIT , MADESHI ETC
@@ -367,100 +370,66 @@ class VacancyController extends HrisController
             
         }
 
+
+        //print_r($applicationApplied);die;
         $inc = 'N';
         
-        $employeeFirstJoinDate        = $employeeFirstJoin['JOIN_DATE'];
+        $employeeFirstJoinDate = $employeeFirstJoin['JOIN_DATE'];
         $employeeFirstFunctionalLevel = $employeeFirstJoin['FUNCTIONAL_LEVEL_NO'];
-        
-        if ( $employeeFirstJoin['INCLUSION'] == 'Y' ) {
-            
+        if ($employeeFirstJoin['INCLUSION'] == 'Y') {
             $inc = 'Y';
-        
         } else {
-            
-            foreach ( $employeeLastJoin as $value ) {
-            
-                if ( $value['INCLUSION'] == 'Y' ) {
-
+            foreach ($employeeLastJoin as $value) {
+                if ($value['INCLUSION'] == 'Y') {
                     $inc = 'Y';
-
                 }
             }
-
         }
-
-        $curentJob['StartDate']           = $employeeFirstJoinDate;
+        $curentJob['StartDate'] = $employeeFirstJoinDate;
         $curentJob['FUNCTIONAL_LEVEL_NO'] = $employeeFirstFunctionalLevel;
         $curentJob['INCLUSION'] = $inc;
-
-
-        if ( count($employeeLastJoin) != null ) {
-
-            foreach ( $employeeLastJoin as $value ) {
-
-                if ( $employeeFirstJoinDate < $value['START_DATE'] ) {
-
+        if (count($employeeLastJoin) != null) {
+            foreach ($employeeLastJoin as $value) {
+                if ($employeeFirstJoinDate < $value['START_DATE']) {
                     $curentJob['StartDate'] = $value['START_DATE'];
-
-                    if ( $value['FUNCTIONAL_LEVEL_NO'] != null ) {
-                        
+                    if ($value['FUNCTIONAL_LEVEL_NO'] != null) {
                         $curentJob['FUNCTIONAL_LEVEL_NO'] = $value['FUNCTIONAL_LEVEL_NO'];
-
                     }
-
+                   
                 }
             }
         }
-
-        /* CHECKING DURATION */
-        $date                  = date('Y-m-d');
-        // $curentJob['DURATION'] =  $date - $curentJob['StartDate'];
-
+        $date = date('Y-m-d');
         $curentJob['DURATION'] =  $employeeFirstJoin['DURATION'];
         // print_r($curentJob); die;
         $applicantsDocumentInernalForm = [];
-        $appliedDataInternalForm       = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
-
-        if ( $appliedDataInternalForm ) {
-
+        $appliedDataInternalForm = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
+        if($appliedDataInternalForm){
             $applicationStoredDocumentsInternalForm = $this->repository->getAppliedStoredDocuments($appliedDataInternalForm['aid'], $user_id[0]['USER_ID']);
-
+            // echo('<pre>');print_r($applicationStoredDocuments);die;
             foreach ($applicationStoredDocumentsInternalForm as $applicationStoredDocument) {
-
-                if ( $applicationStoredDocument['DOC_FOLDER'] == "Signature " ) {
-
+                if ($applicationStoredDocument['DOC_FOLDER'] == "Signature") {
                     $applicantsDocumentInernalForm['signature'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-
-                } elseif ( $applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR" ) {
-
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR") {
                     $applicantsDocumentInernalForm['FingerPrintR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-
-                } elseif ( $applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL" ) {
-
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL") {
                     $applicantsDocumentInernalForm['FingerPrintL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-
-                } elseif ( $applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF" ) {
-
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF") {
                     $applicantsDocumentInernalForm['CitizenshipF'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-
-                } elseif ( $applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB" ) {
-
+                }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB") {
                     $applicantsDocumentInernalForm['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-
                 }
             }
         }
         
-        
-
-        /**
+        // echo('<pre>');print_r($detail);die;
+          /**
          * FOR CONNECTIPS FORM DATA
          * 
          * a : APPLICATION ID     v: VACANCY ID
          * 
          * */
         if ($applicationApplied) {
-
             $connectips_data = [
                 
                 'merchant_id' => 212,
@@ -476,13 +445,11 @@ class VacancyController extends HrisController
                 'reference_id'=> 'REF'.rand(0, 10000000).'aid'.$applicationApplied['APPLICATION_ID'].'vid'.$applicationApplied['AD_NO'],
                 'remarks'     => 'for payment registration no '. $applicationApplied['REGISTRATION_NO'],
                 'particulars' => 'PART-001'
-
             ];
-
             $connectips_data['token'] = $this->_generateTokenConnectIPS($connectips_data);
         }
-
         $connectips_data = ($connectips_data) ? $connectips_data : '';
+
 
         return Helper::addFlashMessagesToArray($this, [
             'id' => $id,
@@ -517,36 +484,27 @@ class VacancyController extends HrisController
             // 'detail' => $detail
         ]);
     }
-
+    
+        
     private function _generateTokenConnectIPS($data) 
     {
         ini_set('display_errors', '1');
         date_default_timezone_set("Asia/Kathmandu");
         // sessionCheck(); 
-
         if ( isset($data['token_for']) && $data['token_for'] == 'verify' ) {
             
             $string = "MERCHANTID=".$data['merchant_id'].",APPID=".$data['app_id'].",REFERENCEID=".$data['txn_id'].",TXNAMT=".$data['txn_amount'];
         
         } else {
-
             $string  = "MERCHANTID=".$data['merchant_id'].",APPID=".$data['app_id'].",APPNAME=".$data['app_name'].",TXNID=".$data['txn_id'].",TXNDATE=".$data['txn_date'].",TXNCRNCY=".$data['txn_currency'].",TXNAMT=".$data['txn_amount'].",REFERENCEID=".$data['reference_id'].",REMARKS=".$data['remarks'].",PARTICULARS=".$data['particulars'].",TOKEN=TOKEN";
-
-
-
         }
         
-
         $hash = hash('sha256', $string);
-
-
         if (!$cert_store = file_get_contents("CREDITOR/NOC.pfx")) {
             echo "Error: Unable to read the cert file\n";
             exit;
         }
-
         
-
         if (openssl_pkcs12_read($cert_store, $cert_info, "N0c@c3rt")) 
         {
            
@@ -555,34 +513,25 @@ class VacancyController extends HrisController
                 $array = openssl_pkey_get_details($private_key);
                 // print_r($array);
             }
-
         } else {
-
             echo "Error: Unable to read the cert store.\n";
             exit;
-
         }
-
         $hash = "";
-
         if (openssl_sign($string, $signature , $private_key, "sha256WithRSAEncryption"))
         {
            
             $hash = base64_encode($signature);
             openssl_free_key($private_key);
-
         } else {
             
             echo "Error: Unable openssl_sign";
             exit;
-
         } 
       // echo $hash; die;
-
         return $hash;
-
     }
-
+    
     public function applyAction()
     {
         $request = $this->getRequest();    
@@ -795,14 +744,11 @@ class VacancyController extends HrisController
             )
         );
     }
-
     public function perfomanceAction()
     {
         // print_r('asdf');die;
         $request = $this->getRequest();
         $postData = $request->getPost();
-
-
 
         $vacancy_id = (int) $this->params()->fromRoute('id');
         $user_id = $this->repository->userId($this->employeeId);
@@ -810,25 +756,19 @@ class VacancyController extends HrisController
         $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
         $detail['form_no'] = $detail['AD_NO'].'-'.($regno['APP_ID']+1);
         $Inclusions =  explode(',', $detail['INCLUSION_ID']);
-       
-        foreach($Inclusions as $Inclusion) {
-
+        foreach($Inclusions as $Inclusion){
             $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
-        
         }
-        
         // var_dump($detail);die;
 
         if ($request->isPost()) {
-
             $postData = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             ); 
 
-
             $this->form->setData($request->getPost());
-            // echo('<pre>');print_r($postData);die;
+       // echo('<pre>');print_r($postData);die;
             $eduCount = count($postData['level_id']);
             if ($eduCount > 0) {
                 for($i=0; $i < $eduCount; $i++){
@@ -847,7 +787,7 @@ class VacancyController extends HrisController
                     );
                     // echo '<pre>'; print_r($eduEmpData); die;
                     // $this->repository->insertEdu($eduData);
-                     $this->repository->insertEmpEdu($eduEmpData);
+                    $this->repository->insertEmpEdu($eduEmpData);
 
                 }     
             }
@@ -860,8 +800,6 @@ class VacancyController extends HrisController
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['signature'], 'Signature');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_trascript'], 'qualification_trascript');
             $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_character'], 'qualification_character');
-
-            
             if($postData['qualification_equivalent']['name']){
                 $storingDocumentDatas[] = Helper::uploadFilesVacancy($postData['qualification_equivalent'], 'qualification_equivalent');
             }
@@ -885,9 +823,7 @@ class VacancyController extends HrisController
                 move_uploaded_file( $profilePic['tmp_name'], $movingPathPp);
                 $this->repository->updateProfilePic($profilePic, $this->employeeId);
              }
-
             $incs = implode(',',$postData['inclusion']);
-
             // echo('<pre>');print_r($postData);die;
 
             foreach ($storingDocumentDatas as $storingDocumentData) {
@@ -939,7 +875,6 @@ class VacancyController extends HrisController
             return $this->redirect()->toRoute("vacancy");
         }        
         $detail = $this->repository->InternalVacancyData($id);
-
         $eid = (int) $this->employeeId;
         $employeeData = $this->repository->empData($eid);
         // Education Data
@@ -986,7 +921,7 @@ class VacancyController extends HrisController
     }
 
 
-    public function updateAction() 
+    public function updateAction()
     {
         $request = $this->getRequest();    
         
@@ -1189,7 +1124,6 @@ class VacancyController extends HrisController
             )
         );
     }
-
     // AJAX Call method (apply.js) for inclusion Amount in Internal Vacancy
     public function inclusionamountAction()
     {
@@ -1204,7 +1138,6 @@ class VacancyController extends HrisController
             return new JsonModel(['success' => false, 'data' => null, 'message' => $e->getMessage()]);
         }
     }
-
     public function viewPerformanceFormAction()
     {
         $request = $this->getRequest();
@@ -1215,10 +1148,11 @@ class VacancyController extends HrisController
         $detail = $this->repository->InternalVacancyData($vacancy_id);
         $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
         $detail['form_no'] = $detail['AD_NO'].'-'.($regno['APP_ID']+1);
+        $Inclusions =  explode(',', $detail['INCLUSION_ID']);
         foreach($Inclusions as $Inclusion){
             $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
         }
-
+        
         $id = (int) $this->params()->fromRoute('id');
         if ($id === 0) {
             return $this->redirect()->toRoute("vacancy");
@@ -1250,8 +1184,6 @@ class VacancyController extends HrisController
         $getInclusion          = $this->repository->fetchInclusionById($employeeInclusionUsed['INCLUSION_ID_APPRAISAL']);
         $openingAdInfo         = $this->repository->getOpening($detail['OPENING_ID']);
 
-
-
         $applicationStoredDocuments = $this->repository->getAppliedStoredDocuments($appliedData['aid'], $user_id[0]['USER_ID']);
         $applicantsDocument = [];
         // echo('<pre>');print_r($applicationStoredDocuments);die;
@@ -1277,7 +1209,7 @@ class VacancyController extends HrisController
             }
         }
         // echo('<pre>');print_r($applicantsDocument);
-        // echo "<pre>"; print_r($employeeInclusionUsed);die;
+        // print_r($applicantsDocumentNew);die;
         return new ViewModel(
             Helper::addFlashMessagesToArray(
                 $this,
@@ -1296,7 +1228,133 @@ class VacancyController extends HrisController
                     'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
                     'messages' => $this->flashmessenger()->getMessages(),
                     'applicantsDocumentNew' => $applicantsDocumentNew,
+                    'inclusions' => $inclusions,
+                    'inclusionIds' => $inclusionIds,
+                    'application_amount' => $applicationAmount,
                     'employeeInclusionUsed' => $employeeInclusionUsed,
+                    'getInclusion' => $getInclusion,
+                    'baseurl' => $this->getRequest()->getBasePath(),
+                    'openingAdInfo' => $openingAdInfo
+                ]
+            )
+        );
+    }
+    public function viewApplicationFormAction()
+    {
+        // print_r($this->profile);die;
+        $request = $this->getRequest();    
+        
+        $id = (int) $this->params()->fromRoute('id');
+        if ($id === 0) {
+            return $this->redirect()->toRoute("vacancies");
+        }        
+        $detail = $this->repository->InternalVacancyData($id);
+        
+        $eid = (int) $this->employeeId;
+        $detail['EMPLOYEE_ID'] = $eid;
+        $employeeData = $this->repository->empData($eid);
+        $EducationData = $this->repository->empEdu($eid);
+        // var_dump($employeeData);die;
+        $certificates = $this->repository->academicCertificates($detail['CODE']);
+        $EducationData = Helper::extractDbData($EducationData);
+        $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
+        $detail['form_no'] = $detail['AD_NO'].'-'.($regno['APP_ID']+1);
+        $Inclusions =  explode(',', $detail['INCLUSION_ID']);
+        foreach($Inclusions as $Inclusion){
+            $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
+        }
+        
+        // echo "<pre>";
+        // print_r($employeeData);
+        // die;
+        $documentsEducation = $this->repository->eduDocuments($eid);
+
+        $user_id = $this->repository->userId($eid);
+
+        // var_dump($user_id[0]['USER_ID']);die;
+        // print_r($certificates);
+        // print_r('<pre>');print_r($documentsEducation);
+        $existingDocuments = [];
+        foreach ($documentsEducation as $document) {
+            $existingDocuments[] = array($document['FILE_NAME']=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // if ($document['FILE_NAME'] == 'SLC Certificate') {
+            //     $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }
+            // if ($document['FILE_NAME'] == 'Intermediate Certificate') {
+            //     $existingDocuments[] = array("+2/Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }    
+            // if ($document['FILE_NAME'] == 'Bachelor Certificate') {
+            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }       
+            // if ($document['FILE_NAME'] == 'Master Certificate') {
+            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // } 
+            // if ($document['FILE_NAME'] == 'M.Phil Certificate') {
+            //     $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }      
+            // if ($document['FILE_NAME'] == 'P.HD. Certificate') {
+            //     $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
+            // }  
+        }
+        // print_r($certificates);
+        // print_r($existingDocuments);die;
+        
+        $appliedData = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
+        $inclusionIds = (explode(',',$appliedData['application_personal'][0]['INCLUSION_ID']));
+        $applicationAmount = $appliedData['application'][0]['APPLICATION_AMOUNT'];
+
+        $form_type  = ($detail['VACANCY_TYPE'] == 'INTERNAL_APPRAISAL') ? 'appraisal' : 'form';
+        $employeeInclusionUsed = $this->repository->getEmployeeInclusion($eid, $form_type);
+        $getInclusion          = $this->repository->fetchInclusionById($employeeInclusionUsed['INCLUSION_ID_FORM']);
+        $openingAdInfo         = $this->repository->getOpening($detail['OPENING_ID']);
+
+        $applicationStoredDocuments = $this->repository->getAppliedStoredDocuments($appliedData['aid'], $user_id[0]['USER_ID']);
+        $applicantsDocument = [];
+        // echo('<pre>');print_r($applicationStoredDocuments);die;
+        foreach ($applicationStoredDocuments as $applicationStoredDocument) {
+            if ($applicationStoredDocument['DOC_FOLDER'] == "Signature") {
+                $applicantsDocument['signature'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR") {
+                $applicantsDocument['FingerPrintR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL") {
+                $applicantsDocument['FingerPrintL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF") {
+                $applicantsDocument['CitizenshipF'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB") {
+                $applicantsDocument['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }
+        }
+
+        $applicantsDocumentNew = [];
+
+        if ($applicationStoredDocuments) {
+            foreach($applicationStoredDocuments as $applicationStoredDocument){
+                $applicantsDocumentNew[$applicationStoredDocument['DOC_FOLDER']] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
+            }
+        }
+
+
+        // echo('<pre>');print_r($applicantsDocument);
+        // print_r($applicantsDocumentNew);die;
+        return new ViewModel(
+            Helper::addFlashMessagesToArray(
+                $this,
+                [
+                    'customRenderer' => Helper::renderCustomView(),
+                    'form' => $this->form,
+                    'detail' => $detail,
+                    'inclusions' => $inclusions,
+                    'EducationData' => $EducationData,
+                    'EmployeeData' => $employeeData,           
+                    'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
+                    'messages' => $this->flashmessenger()->getMessages(),
+                   'certificates'=> $certificates,
+                   'existingDocuments' => $existingDocuments,
+                   'inclusionIds' => $inclusionIds,
+                   'application_amount' => $applicationAmount,
+                   'applicantsDocument' => $applicantsDocument,
+                   'applicantsDocumentNew' => $applicantsDocumentNew,
+                   'employeeInclusionUsed' => $employeeInclusionUsed,
                     'getInclusion' => $getInclusion,
                     'baseurl' => $this->getRequest()->getBasePath(),
                     'openingAdInfo'=>$openingAdInfo
@@ -1605,6 +1663,13 @@ class VacancyController extends HrisController
                 }
             }
 
+            $updateData = array(
+               'STAGE_ID' => $postData['stage_id']
+            );
+
+            $this->repository->getUpdateById('HRIS_REC_VACANCY_APPLICATION', $updateData, 'APPLICATION_ID', $postData['application_id']);
+
+
             $this->flashmessenger()->addMessage("Data Updated Successfully");
             return $this->redirect()->toRoute('vacancies', ['action' => 'edit-performance-form', 'id' => $postData['vacancy_id']]);
 
@@ -1748,7 +1813,7 @@ class VacancyController extends HrisController
                    'eduDegrees' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_DEGREES', ['ACADEMIC_DEGREE_ID' => "ACADEMIC_DEGREE_ID", 'ACADEMIC_DEGREE_NAME'=>"ACADEMIC_DEGREE_NAME"], ["STATUS" => "E"]),
                     'eduFaculty' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_PROGRAMS', ['ACADEMIC_PROGRAM_ID' => "ACADEMIC_PROGRAM_ID", 'ACADEMIC_PROGRAM_NAME'=>"ACADEMIC_PROGRAM_NAME"], ["STATUS" => "E"]),
                     'eduUniversity' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_UNIVERSITY', ['ACADEMIC_UNIVERSITY_ID' => "ACADEMIC_UNIVERSITY_ID", 'ACADEMIC_UNIVERSITY_NAME'=>"ACADEMIC_UNIVERSITY_NAME"], ["STATUS" => "E"]),
-                    'eduCourses' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_COURSES', ['ACADEMIC_COURSE_ID' => "ACADEMIC_COURSE_ID", 'ACADEMIC_COURSE_NAME'=>"ACADEMIC_COURSE_NAME"], ["STATUS" => "E"]), 
+                    'eduCourses' => EntityHelper::getTableList($this->adapter, 'HRIS_ACADEMIC_COURSES', ['ACADEMIC_COURSE_ID' => "ACADEMIC_COURSE_ID", 'ACADEMIC_COURSE_NAME'=>"ACADEMIC_COURSE_NAME"], ["STATUS" => "E"]),
                    'inclusionLists'=>$inclusionLists,
                    'employeeInclusionUsed' => $employeeInclusionUsed,
                    'employeeId'=> $eid,
@@ -1814,8 +1879,6 @@ class VacancyController extends HrisController
         $getInclusion          = $this->repository->fetchInclusionById($employeeInclusionUsed['INCLUSION_ID_FORM']);
         $openingAdInfo         = $this->repository->getOpening($detail['OPENING_ID']);
 
-
-
         $applicationStoredDocuments = $this->repository->getAppliedStoredDocuments($appliedData['aid'], $user_id[0]['USER_ID']);
 
         $applicantsDocumentNew = [];
@@ -1848,6 +1911,7 @@ class VacancyController extends HrisController
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
+
 
             /**
              * FOR EDUCATION DATA
@@ -2180,6 +2244,14 @@ class VacancyController extends HrisController
                 }
             }
 
+
+
+            $updateData = array(
+               'STAGE_ID' => $postData['stage_id']
+            );
+
+            $this->repository->getUpdateById('HRIS_REC_VACANCY_APPLICATION', $updateData, 'APPLICATION_ID', $postData['application_id']);
+
             $this->flashmessenger()->addMessage("Data Updated Successfully");
             return $this->redirect()->toRoute('vacancies', ['action' => 'editApplicationForm', 'id' => $postData['has_vacancy_idf']]);
             
@@ -2214,244 +2286,69 @@ class VacancyController extends HrisController
                     'getInclusion' => $getInclusion,
                     'employeeId'=> $eid,
                     'baseurl' => $this->getRequest()->getBasePath(),
-                    'openingAdInfo'=>$openingAdInfo
+                    'openingAdInfo'=>$openingAdInfo,
+                    'appliedData'=>$appliedData
                 ]
             )
         );
     }
-
-    public function removedocumentAction()
-    {
-
-        try {
-            $request = $this->getRequest();
-            $data = $request->getPost();
-
-            /**
-             * GET DATA
-             * */
-            $document = $this->repository->getRowId('HRIS_REC_APPLICATION_DOCUMENTS', 'REC_DOC_ID', $data['rec_doc_id']);
-
-            // REMOVE OLD FILE
-            $oldFile = Helper::UPLOAD_DIR . '/documents/'. $document['DOC_FOLDER'] .'/'. $document['DOC_NEW_NAME'];
-            unlink($oldFile);
-
-            $this->repository->deleteRowId('HRIS_REC_APPLICATION_DOCUMENTS', 'REC_DOC_ID', $data['rec_doc_id']);
-
-            return new JsonModel(['success' => true, 'message' => 'Document Removed Successfully']);
-
-        } catch (Exception $e) {
-
-            return new JsonModel(['success' => false, 'message' => $e->getMessage()]);
-        }
-    }
-
-    public function viewApplicationFormAction()
-    {
-        // print_r($this->profile);die;
-        $request = $this->getRequest();    
-        
-        $id = (int) $this->params()->fromRoute('id');
-        if ($id === 0) {
-            return $this->redirect()->toRoute("vacancies");
-        }        
-        $detail = $this->repository->InternalVacancyData($id);
-
-        
-        $eid = (int) $this->employeeId;
-        $detail['EMPLOYEE_ID'] = $eid;
-        $employeeData = $this->repository->empData($eid);
-        $EducationData = $this->repository->empEdu($eid);
-        // var_dump($employeeData);die;
-        $certificates = $this->repository->academicCertificates($detail['CODE']);
-        $EducationData = Helper::extractDbData($EducationData);
-        $regno = $this->repository->getRegNo($detail['VACANCY_ID']);
-        $detail['form_no'] = $detail['AD_NO'].'-'.($regno['APP_ID']+1);
-        $Inclusions =  explode(',', $detail['INCLUSION_ID']);
-        foreach($Inclusions as $Inclusion){
-            $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
-        }
-        
-        $documentsEducation = $this->repository->eduDocuments($eid);
-        $user_id = $this->repository->userId($eid);
-        // var_dump($user_id[0]['USER_ID']);die;
-        // print_r($certificates);
-        // print_r('<pre>');print_r($documentsEducation);
-        $existingDocuments = [];
-        foreach ($documentsEducation as $document) {
-            $existingDocuments[] = array($document['FILE_NAME']=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // if ($document['FILE_NAME'] == 'SLC Certificate') {
-            //     $existingDocuments[] = array("SLC"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // }
-            // if ($document['FILE_NAME'] == 'Intermediate Certificate') {
-            //     $existingDocuments[] = array("+2/Intermediate"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // }    
-            // if ($document['FILE_NAME'] == 'Bachelor Certificate') {
-            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // }       
-            // if ($document['FILE_NAME'] == 'Master Certificate') {
-            //     $existingDocuments[] = array("Bachelor"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // } 
-            // if ($document['FILE_NAME'] == 'M.Phil Certificate') {
-            //     $existingDocuments[] = array("M.Phil"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // }      
-            // if ($document['FILE_NAME'] == 'P.HD. Certificate') {
-            //     $existingDocuments[] = array("PHD"=> $document['FILE_PATH'],"path" => $document['FILE_PATH'],'name'=>$document['FILE_NAME']);
-            // }  
-        }
-        // print_r($certificates);
-        // print_r($existingDocuments);die;
-        
-        $appliedData = $this->repository->getInclusions($user_id[0]['USER_ID'], 'Internal-form',$id);
-        $inclusionIds = (explode(',',$appliedData['application_personal'][0]['INCLUSION_ID']));
-        $applicationAmount = $appliedData['application'][0]['APPLICATION_AMOUNT'];
-
-
-        $form_type  = ($detail['VACANCY_TYPE'] == 'INTERNAL_APPRAISAL') ? 'appraisal' : 'form';
-
-        $employeeInclusionUsed = $this->repository->getEmployeeInclusion($eid, $form_type);
-        $getInclusion          = $this->repository->fetchInclusionById($employeeInclusionUsed['INCLUSION_ID_FORM']);
-        $openingAdInfo         = $this->repository->getOpening($detail['OPENING_ID']);
-
-        $applicationStoredDocuments = $this->repository->getAppliedStoredDocuments($appliedData['aid'], $user_id[0]['USER_ID']);
-        $applicantsDocument = [];
-        // echo('<pre>');print_r($applicationStoredDocuments);die;
-        foreach ($applicationStoredDocuments as $applicationStoredDocument) {
-            if ($applicationStoredDocument['DOC_FOLDER'] == "Signature") {
-                $applicantsDocument['signature'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintR") {
-                $applicantsDocument['FingerPrintR'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "FingerPrintL") {
-                $applicantsDocument['FingerPrintL'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipF") {
-                $applicantsDocument['CitizenshipF'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }elseif ($applicationStoredDocument['DOC_FOLDER'] == "CitizenshipB") {
-                $applicantsDocument['CitizenshipB'] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }
-        }
-
-        $applicantsDocumentNew = [];
-
-        if ($applicationStoredDocuments) {
-            foreach($applicationStoredDocuments as $applicationStoredDocument){
-                $applicantsDocumentNew[$applicationStoredDocument['DOC_FOLDER']] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
-            }
-        }
-        // echo('<pre>');print_r($applicantsDocument);
-        // print_r($applicantsDocumentNew);die;
-
-
-        return new ViewModel(
-            Helper::addFlashMessagesToArray(
-                $this,
-                [
-                    'customRenderer' => Helper::renderCustomView(),
-                    'form' => $this->form,
-                    'detail' => $detail,
-                    'inclusions' => $inclusions,
-                    'EducationData' => $EducationData,
-                    'EmployeeData' => $employeeData,           
-                    'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
-                    'messages' => $this->flashmessenger()->getMessages(),
-                   'certificates'=> $certificates,
-                   'existingDocuments' => $existingDocuments,
-                   'inclusionIds' => $inclusionIds,
-                   'application_amount' => $applicationAmount,
-                   'applicantsDocument' => $applicantsDocument,
-                   'applicantsDocumentNew' => $applicantsDocumentNew,
-                   'employeeInclusionUsed' => $employeeInclusionUsed,
-                    'getInclusion' => $getInclusion,
-                    'baseurl' => $this->getRequest()->getBasePath(),
-                    'openingAdInfo'=>$openingAdInfo
-                ]
-            )
-        );
-    }
-
+    
     public function paymentsAction()
     {
         $allInfo =  $this->params()->fromRoute('id');
-
         $splits = explode('&', $allInfo);
-
         $arr = [];
-
         foreach ($splits as $split) {
             
             $arr[substr($split,0,3)] .= substr($split, 3);
-
         } 
-
         $data = [
             'vacancy_id' => $arr['vid'],
             'application_id' => $arr['aid'],
             'payment_id' => $arr['pid'],
             'user_id' => $arr['uid']
         ];
-
         // echo "<pre>";
-
         // print_r($data);
-
-
         // die;
-
         /**
          * PAYMENT ID  [1:ESEWA  2:KHALTI  3:CONNECTIPS]
          * 
          * */
         $this->paymentProcess($data);
-
-
         
         
     }
-
+    
     public function paymentProcess($data)
     {
-
         $applicationDetail = $this->repository->checkVacancyApplicationApplied($data['vacancy_id'], $data['user_id'], $data['application_id']);
-
-
-        $path = 'http://localhost/NOC1/public/selfservice/vacancies/success';
-
-
+        $path = 'https://hr.nepaloil.org.np/selfservice/vacancies/success';
         if ($data['payment_id'] == 2) {
-
                 // echo "here"; die;
-
-                $return_url          = 'http://localhost/NOC1/public/selfservice/vacancies/success';
+                $return_url          = 'https://hr.nepaloil.org.np/selfservice/vacancies/success';
                 $base_url            = 'https://khalti.com/api/v2/epayment/initiate/';
                 $purchase_order_id   = 'NOC'.rand(0, 10000).time().'aid'.$data['application_id'].'vid'.$data['vacancy_id']; // example 123567;
-                // $purchase_order_name = $applicationDetail['recruitment_post'].' level:'.$applicationDetail['recruitment_post_level'];
-                $purchase_order_name = 'Internal'; // example Transaction: 1234,
+                $purchase_order_name = $applicationDetail['recruitment_post'].' level:'.$applicationDetail['recruitment_post_level'];
+                //$purchase_order_name = 'Internal'; // example Transaction: 1234,
                 $amount_in_paisa     = $applicationDetail['APPLICATION_AMOUNT'] * 100; // Your total amount in paisa Rs 1 = 100 paisa
                 //$amount_in_paisa     = 10 * 100; // Your total amount in paisa Rs 1 = 100 paisa
-
                 $data['actual_amount'] = $applicationDetail['APPLICATION_AMOUNT'];
-
-
                 /* khalti payment*/
-
                 $private_key = 'live_secret_key_a7071610f28b47448abb9731884db925';
-
-
                 $request_data = [
-
                     'return_url' => $return_url,
                     'website_url' => $path,
                     'amount' => $amount_in_paisa,
                     'purchase_order_id' => $purchase_order_id,
                     'purchase_order_name' => $purchase_order_name,
-
                 ];
-
+                
+    
+                
                 // $base_url = config_item('khalti_request_url');
-
                 $curl = curl_init();
-
                 curl_setopt_array($curl, array(
-
                     CURLOPT_URL => $base_url,
                     CURLOPT_RETURNTRANSFER => true,
                     CURLOPT_ENCODING => '',
@@ -2461,54 +2358,39 @@ class VacancyController extends HrisController
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_CUSTOMREQUEST => 'POST',
                     CURLOPT_POSTFIELDS => json_encode($request_data),
-
                     CURLOPT_HTTPHEADER => array(
                         "Authorization: Key ${private_key}",
                         "Content-Type: application/json",
-
                     ),
-
                     CURLOPT_SSL_VERIFYPEER => false,
                     CURLOPT_SSL_VERIFYHOST => false,
-
                 ));
-
                 $status_code = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
                 $response = curl_exec($curl);
                 curl_close($curl);
-
-
-                $response = json_decode($response); // response in php object
-
+                $response = json_decode($response); // response in php object/
+                
                 /* khalti payment */
                 // $baseUrl = new Zend_View_Helper_BaseUrl();
                 // echo $this->getResponse()->setRedirect($response['payment_url']);
-
                 if ( isset($response->payment_url) ) {
-
-
                     /**
                      *  INSERTING PAYMENT DATA IN HRIS_REC_APPLICATION_PAYMENT
                      * 
                      * */
-
                     /*
                      * GETTING MAX ROW COUNT OF TABLE 
                      *
                      */
-
                     $paymentId = $this->repository->getMaxIds('PAYMENT_ID','HRIS_REC_APPLICATION_PAYMENT');
-
                     $insert_data = [
-
                         'payment_id'         => $paymentId['MAXID'] + 1,
                         'application_id'     => $data['application_id'],
                         'user_id'            => $data['user_id'],
                         'vacancy_id'         => $data['vacancy_id'], 
                         'payment_gateway_id' => $data['payment_id'],
-                        // 'payment_amount'     => $data['actual_amount'],
-                        'payment_amount'     => 10,
+                        'payment_amount'     => $data['actual_amount'],
+                        //'payment_amount'     => 10,
                         'payment_unique_id'  => $response->pidx,
                         'payment_order_id'   => $request_data['purchase_order_id'],
                         'payment_order_name' => $request_data['purchase_order_name'],
@@ -2516,36 +2398,24 @@ class VacancyController extends HrisController
                         'created_date'       => date('Y-m-d H:i:s.v')
                         
                     ];
-
                     // CHECK IF SAME PIDX INSERTED
                     $pidx = $insert_data['payment_unique_id'];
-
                     $checkPidx = $this->repository->checkVacancyApplicationPaymentByColumn(['PAYMENT_UNIQUE_ID' => $pidx]);
-
                     if ( !$checkPidx )
                     {     
-
                         $this->repository->insertApplicationPayment($insert_data);
-
                         header('Location: '.$response->payment_url);
-
                         exit;
-
-                    } else {
-
-                        return $this->redirect()->toRoute("vacancies", ['action' => 'view', 'id' => $data['vacancy_id']]);
-
-                    }
-
-
-                }
-
-
+                    } 
+                } else {
+                    
+                    return $this->redirect()->toRoute("vacancies", ['action' => 'view', 'id'=>$data['vacancy_id']]);
+                    
+                } 
         }
-
        
     }
-
+    
     public function successAction()
     {
 
@@ -2715,14 +2585,12 @@ class VacancyController extends HrisController
      *  CONNECTI IPS SUCCESS
      * 
      *  vacancies/successIPS?TXNID=1667039604a8v77
-        https://hr.nepaloil.org.np/selfservice/vacancies/successIPS?TXNID=1667200104a143v41
      * */
-    public function successIPS()
+    public function successIPSAction()
     {
 
-        $transaction_id = $_GET['TXNID'];
-        echo $transaction_id;
-        die;
+        $transaction_id =  $_GET['TXNID'];
+        
         // $transaction_id = '1667039604a8v77';
 
         /* a POSITION and v POSITION */
@@ -2734,12 +2602,15 @@ class VacancyController extends HrisController
 
         // GET VACANCY ID
         $vacancy_id     = substr($transaction_id, $v + 1);
+        
+        
 
 
         /* GET APPLICANT DETAIL */
 
         $applicantDetail = $this->repository->checkVacancyApplicationByAidVid($application_id, $vacancy_id);
-
+        
+        
         $paymentId       = $this->repository->getMaxIds('PAYMENT_ID', 'HRIS_REC_APPLICATION_PAYMENT');
 
         $gateway         = $this->repository->getPaymentGatewayByWhere(['GATEWAY_COMPANY' => 'connectips']);
@@ -2764,15 +2635,19 @@ class VacancyController extends HrisController
             'particulars'            => 'PART-001',
             'created_date'           => date('Y-m-d H:i:s.v'),
         ];
+        
+
 
 
         $this->repository->insertApplicationPayment($insert_data);
 
         $result = $this->repository->updateVacancyApplicationArray(['PAYMENT_ID' => $insert_data['payment_id'], 'PAYMENT_PAID' => 'Y'] , $application_id, $vacancy_id);
-
+        
 
         if ( $result ) {
 
+            
+        
 
             /* FOR VERIFYING TRANSACTION */
             $connectips_data = [
@@ -2785,6 +2660,7 @@ class VacancyController extends HrisController
                 "token_for" => 'verify'
             
             ];
+            
 
             $connectips_data['token'] = $this->_generateTokenConnectIPS($connectips_data);
 
@@ -2797,7 +2673,7 @@ class VacancyController extends HrisController
                 "token" => $connectips_data['token']
             
             ];
-
+            
 
             /* HERE STARTS PROCESS */
             ini_set('display_errors', 1);
@@ -2835,7 +2711,8 @@ class VacancyController extends HrisController
             $response = curl_exec($curl);
             curl_close($curl);
             $responseObj = json_decode($response, true);
-
+            
+            
            
             if ( $responseObj['status'] == 'SUCCESS' ) {
                 
@@ -2848,18 +2725,21 @@ class VacancyController extends HrisController
 
                 $this->repository->updateApplicationPaymentArray($payment_verified_data,  ['PAYMENT_TRANSACTION_ID' => $transaction_id]);
 
+                
                 $result = $this->repository->updateVacancyApplicationArray(['PAYMENT_VERIFIED' => 'Y'] , $application_id, $vacancy_id);
 
-                return $this->redirect()->toRoute('vacancies', ['action' => 'view', 'id' => $vacancy_id]);
+                $this->redirect()->toRoute('vacancies', ['action' => 'view', 'id' => $vacancy_id]);
 
             
             } else {
-
-                return $this->redirect()->toRoute('vacancies', ['action' => 'view', 'id' => $vacancy_id]);
+                
+                $this->redirect()->toRoute('vacancies', ['action' => 'view', 'id' => $vacancy_id]);
 
             }
 
 
+        } else {
+                $this->redirect()->toRoute('vacancies', ['action' => 'view', 'id' => $vacancy_id]);
         }
 
     }
@@ -2869,5 +2749,55 @@ class VacancyController extends HrisController
         return $this->redirect()->toRoute('vacancies');
     }
 
-    
+
+    public function admitcardAction()
+    {
+        $app_id = (int) $this->params()->fromRoute('id');
+        if ($app_id === 0) {
+            return $this->redirect()->toRoute("vacancy");
+        }
+
+        $empId   = $this->employeeId;
+        $user_id = $this->repository->userId($empId);
+
+        $vacancyData = $this->repository->admitCardVacancy($user_id[0]['USER_ID'], $app_id);
+        $vacancyDoc  = $this->repository->admitCardDocument($user_id[0]['USER_ID'], $app_id);
+        $vacancyTerm = $this->repository->admitCardTerm();
+
+        // echo "<pre>";
+        // print_r($vacancyData);
+        // die;
+        
+        $doc_folder = [];
+
+        $x = 0;
+        foreach($vacancyDoc as $document) {
+
+            $folder = $document['DOC_FOLDER'];
+            $doc_folder[$folder]['DOC_FOLDER'] = $document['DOC_PATH'].$document['DOC_NEW_NAME'];
+
+            $x++;
+
+        }
+        
+        // echo "<pre>";
+        // print_r($doc_folder);
+        // die;
+        
+
+        return Helper::addFlashMessagesToArray($this, [
+            'vacancydata' => $vacancyData,
+            'vacancydocument' => $doc_folder,
+            'vacancyterm'=> $vacancyTerm,
+        ]);
+
+
+
+
+        // var_dump($uid); die;
+        // $data['vacancydata'] = $this->VacancyModel->admitCardVacancy($uid,$appid);
+        // $data['documentdata'] = $this->VacancyModel->admitCardDocument($uid,$appid);
+        // $data['inclusiondata']   = $this->VacancyModel->admitCardInclusion($uid, $appid);
+    }
+
 }

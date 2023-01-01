@@ -252,7 +252,7 @@ class UserApplicationRepository extends HrisRepository{
         $select->order("AD_NO_ORDER ASC");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
-        // print_r($statement->getSql()); die();
+        print_r($statement->getSql()); die();
         $result = $statement->execute($boundedParameter);
         return $result;
     }
@@ -788,6 +788,7 @@ class UserApplicationRepository extends HrisRepository{
         $select->Where("EXP.APPLICATION_ID = $id");
         $boundedParameter = [];
         $statement = $sql->prepareStatementForSqlObject($select);
+          // print_r($statement->getSql()); die();
         $result = $statement->execute($boundedParameter);
         return $result;
     }
@@ -820,7 +821,7 @@ class UserApplicationRepository extends HrisRepository{
         $select->columns([
             new Expression("DOC.REC_DOC_ID           AS   REC_DOC_ID"),
             new Expression("DOC.USER_ID              AS   USER_ID"),
-            new Expression("DOC.DOC_OLD_NAME         AS   DOC_OLD_NAME"),      
+            // new Expression("DOC.DOC_OLD_NAME         AS   DOC_OLD_NAME      
             new Expression("DOC.DOC_NEW_NAME         AS   DOC_NEW_NAME"),
             new Expression("DOC.DOC_PATH             AS   DOC_PATH"),
             new Expression("DOC.DOC_TYPE             AS   DOC_TYPE"),
@@ -837,11 +838,12 @@ class UserApplicationRepository extends HrisRepository{
         return $result;
     }
     public function registrationDocById($id){
+
         $sql = new Sql($this->adapter);
         $select = $sql->select();
         $select->columns([
             new Expression("DOC.USER_ID              AS   USER_ID"),
-            new Expression("DOC.DOC_OLD_NAME         AS   DOC_OLD_NAME"),      
+            // new Expression("DOC.DOC_OLD_NAME         AS   DOC_OLD_NAME"),      
             new Expression("DOC.DOC_NEW_NAME         AS   DOC_NEW_NAME"),
             new Expression("DOC.DOC_PATH             AS   DOC_PATH"),
             new Expression("DOC.DOC_TYPE             AS   DOC_TYPE"),
@@ -1007,13 +1009,24 @@ class UserApplicationRepository extends HrisRepository{
         $value  = implode("','", array_values($data));
 
         $sql = "UPDATE {$table} SET ($column) = ('$value') WHERE {$where} = {$where_value}";
-
+        // echo "<pre>";
+        // print_r($sql);
+        // die;
         $result = $this->rawQuery($sql);
 
         return true;
     }
 
     public function getAllRow($table)
+    {
+        $sql = "SELECT * FROM {$table} WHERE STATUS = 'E'";
+
+        $result = $this->rawQuery($sql);
+        return $result;
+
+    } 
+
+    public function getAllRowTest($table)
     {
         $sql = "SELECT * FROM {$table}";
 
@@ -1044,10 +1057,11 @@ class UserApplicationRepository extends HrisRepository{
 
         $sql   = "INSERT INTO {$table} ($key) VALUES ('$value')";
 
+        // return $sql;
         $result = $this->rawQuery($sql);
 
         return true;
-    } 
+    }
 
     public function applicationDataByIdInternalEdit($id)
     {
@@ -1212,5 +1226,21 @@ class UserApplicationRepository extends HrisRepository{
         $result = Helper::extractDbData($statement->execute());
         // print_r($result);die;
         return $result;
+    }
+
+    public function getRowId($table, $where, $where_value) {
+        
+        $result = '';
+        if ($where_value) {
+
+            $sql = "SELECT * FROM {$table} WHERE {$where} = {$where_value}";
+
+            $statement = $this->adapter->query($sql);
+            $result    = $statement->execute();
+
+        }
+        
+
+        return ($result) ? $result->current() : false;
     }
 }

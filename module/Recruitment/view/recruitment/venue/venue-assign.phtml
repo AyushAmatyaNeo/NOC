@@ -1,0 +1,74 @@
+<?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'));
+
+$this->headScript()
+    // ->appendFile($this->basePath('js/recruitment/application/search.js'))
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/js-xlsx-master/dist/xlsx.full.min.js'))
+    ->appendFile($this->basePath('js/recruitment/venue/venue-assign.js'));
+// ->appendFile($this->basePath('js/recruitment/application/view.js'));
+?>
+
+<script>
+    document.editLink = '<?= $this->url("venue", ["action" => "venueAssignEdit"]) ?>';
+    document.uploadUrl = '<?php echo $this->url("venue", ["action" => "excelUpload"]); ?>';
+</script>
+
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+
+<div class="row">
+        <div class="col-sm-12 ">
+            <div class="portlet light bg-inverse">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-paper-plane font-green-haze"></i>
+                        <span class="caption-subject bold font-green-haze uppercase"> Import From Excel For Venue Assign</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <label>Browse File:
+                            <input type="file" name="excelImport" id="excelImport">
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <input type="button" name="submit" id="submit" value="Submit" class="btn btn-primary">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div class="portlet light bg-inverse">
+    <div class="row margin-top-10">
+
+        <a href="<?= $this->url('venue', ['action' => 'venueAssignAdd']) ?>" class="btn default btn-sm">
+            <i class="fa fa-plus-square icon-black"></i> Assign Venue
+        </a>
+
+        <div class="col-sm-offset-8 col-sm-4">
+
+            <button id="search" class="btn btn-default btn-sm pull-right">
+                Search
+                <i class="fa fa-search"></i>
+            </button>
+
+        </div>
+    </div>
+</div>
+
+<div class="margin-top-50">
+    <div id="venueAssignTable">
+    </div>
+</div>

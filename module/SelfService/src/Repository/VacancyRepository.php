@@ -148,7 +148,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
         $boundedParameter = [];
       
         $statement = $sql->prepareStatementForSqlObject($select);
-        
+
         $result = $statement->execute($boundedParameter);
         // print_r ($statement->getSql()); die();
         return $result->current();
@@ -474,11 +474,18 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     }
     public function checkVacancyStatus($v_id, $e_id)
     {
-        $sql = "SELECT HRIS_REC_VACANCY_APPLICATION.APPLICATION_ID,HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, HRIS_REC_VACANCY_APPLICATION.USER_ID, HRIS_REC_VACANCY_APPLICATION.APPLICATION_ID, 
+        $sql = "SELECT 
+                    HRIS_REC_VACANCY_APPLICATION.APPLICATION_ID,
+                    HRIS_REC_VACANCY_APPLICATION.APPLICATION_TYPE, 
+                    HRIS_REC_VACANCY_APPLICATION.USER_ID, 
+                    HRIS_REC_VACANCY_APPLICATION.APPLICATION_ID, 
+                
                 CASE WHEN
 	                stage_id in (
                         SELECT rec_stage_id from hris_rec_stages where order_no >= (select order_no from hris_rec_stages where rec_stage_id = 8))
                     then 'Y' else 'N' END as ADMIN_CARD_GENERATED  from HRIS_REC_VACANCY_APPLICATION  WHERE USER_ID = {$e_id} AND AD_NO = {$v_id} and status='E'";
+
+        // echo "<pre>"; print_r($sql); die;
         $result = $this->rawQuery($sql);
         // var_dump($sql); die;
         return $result;
@@ -554,8 +561,9 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
     public function checkVacancyApplicationApplied($v_id, $e_id, $a_id = NULL)
     {
         if ($a_id !== NULL) {
-            $sql = "SELECT * FROM HRIS_REC_VACANCY_APPLICATION
-                    WHERE APPLICATION_ID = {$a_id} AND USER_ID = {$e_id} AND AD_NO = {$v_id} AND STATUS='E'";
+            $sql = "SELECT * FROM HRIS_REC_VACANCY_APPLICATION A
+                    LEFT JOIN HRIS_REC_APPLICATION_PERSONAL P ON P.APPLICATION_ID = A.APPLICATION_ID
+                    WHERE A.APPLICATION_ID = {$a_id} AND A.USER_ID = {$e_id} AND A.AD_NO = {$v_id} AND A.STATUS='E'";
             $statement = $this->adapter->query($sql);
             $result    = $statement->execute();
             
@@ -827,4 +835,122 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
         return true;
 
     }
+
+    public function admitCardVacancy($uid, $appid){
+
+        $sql  = "SELECT 
+                    AP.ROLL_NO,
+                    OP.OPTION_EDESC, OP.OPTION_NDESC,
+                    RV.AD_NO,
+                    HUR.FIRST_NAME,HUR.MIDDLE_NAME,HUR.LAST_NAME,
+                    HUR.ID_CITIZENSHIP_NO, HUR.ID_CITIZENSHIP_ISSUE_DATE,
+                    VU.USER_ID,
+                    HUR.EMPLOYEE_ID,
+
+                    HD.DESIGNATION_TITLE,
+                    HFL.FUNCTIONAL_LEVEL_EDESC,
+                    HST.SERVICE_TYPE_NAME,
+                    HET.SERVICE_EVENT_NAME,
+
+                    FPV.VENUE_NAME AS FIRST_PAPER_VENUE,
+                    
+                    FPVA.START_TIME AS FIRST_START_TIME, 
+                    FPVA.END_TIME   AS FIRST_END_TIME,
+                    FPVA.EXAM_DATE  AS FIRST_EXAM_DATE,
+                    FPVA.EXAM_TYPE  AS FIRST_EXAM_TYPE,
+                    FPVA.VENUE_SETUP_ID AS FIRST_VENUE_SETUP_ID,
+
+                    SPVA.START_TIME AS SECOND_START_TIME, 
+                    SPVA.END_TIME   AS SECOND_END_TIME, 
+                    SPVA.EXAM_DATE  AS SECOND_EXAM_DATE, 
+                    SPVA.EXAM_TYPE  AS SECOND_EXAM_TYPE,
+                    SPVA.VENUE_SETUP_ID AS SECOND_VENUE_SETUP_ID,
+
+                    SPV.VENUE_NAME AS SECOND_PAPER_VENUE,
+
+                    F.FILE_PATH AS PROFILE
+
+                FROM HRIS_REC_VACANCY_APPLICATION AS NV
+
+                LEFT JOIN HRIS_REC_VENUE_SETUP FPV ON FPV.VENUE_SETUP_ID = NV.FIRST_PAPER_VENUE_ID
+
+                LEFT JOIN HRIS_REC_VENUE_ASSIGN FPVA ON (FPVA.VENUE_SETUP_ID = NV.FIRST_PAPER_VENUE_ID AND ({$appid} BETWEEN FPVA.START_INDEX AND FPVA.END_INDEX) AND FPVA.EXAM_TYPE = 'FIRST_PAPER')
+
+                LEFT JOIN HRIS_REC_VENUE_SETUP SPV ON SPV.VENUE_SETUP_ID = NV.SECOND_PAPER_VENUE_ID
+
+                LEFT JOIN HRIS_REC_VENUE_ASSIGN SPVA ON (SPVA.VENUE_SETUP_ID = NV.SECOND_PAPER_VENUE_ID AND ({$appid} BETWEEN SPVA.START_INDEX AND SPVA.END_INDEX) AND SPVA.EXAM_TYPE = 'SECOND_PAPER')
+
+                LEFT JOIN HRIS_REC_VACANCY AS RV ON RV.VACANCY_ID = NV.AD_NO
+                LEFT JOIN HRIS_REC_APPLICATION_PERSONAL AS AP ON AP.APPLICATION_ID = NV.APPLICATION_ID
+                LEFT JOIN HRIS_REC_OPTIONS AS OP ON OP.OPTION_ID = AP.INCLUSION_ID
+                LEFT JOIN HRIS_DESIGNATIONS AS HD ON RV.POSITION_ID = HD.DESIGNATION_ID
+                LEFT JOIN HRIS_DEPARTMENTS AS HVD ON RV.DEPARTMENT_ID = HVD.DEPARTMENT_ID
+                LEFT JOIN HRIS_SERVICE_TYPES AS HST ON HST.SERVICE_TYPE_ID = RV.SERVICE_TYPES_ID
+                LEFT JOIN HRIS_REC_SERVICE_EVENTS_TYPES AS HET ON HET.SERVICE_EVENT_ID = RV.SERVICE_EVENTS_ID
+                LEFT JOIN HRIS_FUNCTIONAL_LEVELS AS HFL ON HFL.FUNCTIONAL_LEVEL_ID = RV.LEVEL_ID
+                LEFT JOIN HRIS_USERS AS VU ON VU.USER_ID = NV.USER_ID       
+                LEFT JOIN HRIS_EMPLOYEES AS HUR ON HUR.EMPLOYEE_ID = VU.EMPLOYEE_ID
+                LEFT JOIN HRIS_EMPLOYEE_FILE AS F ON F.FILE_CODE = HUR.PROFILE_PICTURE_ID
+
+                WHERE NV.USER_ID = $uid AND NV.APPLICATION_ID = $appid ORDER BY NV.APPLICATION_ID";
+
+        // $sql   = "SELECT *
+        //           FROM HRIS_USERS AS U
+        //           LEFT JOIN HRIS_EMPLOYEES AS E ON E.EMPLOYEE_ID = U.EMPLOYEE_ID
+        //           LEFT JOIN HRIS_EMPLOYEE_FILE AS F ON F.FILE_CODE = E.PROFILE_PICTURE_ID
+        //           LEFT JOIN HRIS_REC_VACANCY_APPLICATION AS A ON A.USER_ID = U.USER_ID
+        //           LEFT JOIN HRIS_REC_VACANCY AS V ON V.VACANCY_ID = A.AD_NO
+        //           LEFT JOIN HRIS_REC_APPLICATION_PERSONAL AS P ON P.APPLICATION_ID = A.APPLICATION_ID
+        //           LEFT JOIN HRIS_DESIGNATIONS AS HD ON V.POSITION_ID = HD.DESIGNATION_ID
+        //           LEFT JOIN HRIS_DEPARTMENTS AS HVD ON V.DEPARTMENT_ID = HVD.DEPARTMENT_ID
+        //           LEFT JOIN HRIS_SERVICE_TYPES AS HST ON HST.SERVICE_TYPE_ID = V.SERVICE_TYPES_ID
+        //           LEFT JOIN HRIS_REC_SERVICE_EVENTS_TYPES AS HET ON HET.SERVICE_EVENT_ID = V.SERVICE_EVENTS_ID
+                  
+
+        //           WHERE A.USER_ID = {$uid} AND A.APPLICATION_ID = {$appid}
+        //          ";
+
+        // $sql = "SELECT * FROM HRIS_USERS WHERE USER_ID = {$uid}";
+        // echo "<pre>";
+        // print_r($sql);
+        // die;
+
+
+        // $result = $this->rawQuery($sql);
+        // return $result;
+        $statement = $this->adapter->query($sql);
+        $result    = $statement->execute();
+        return $result->current();        
+    }
+
+    public function admitCardDocument($uid,$appid){
+        $query  = "SELECT * FROM HRIS_REC_APPLICATION_DOCUMENTS 
+                   WHERE DOC_FOLDER NOT IN ('skills','certificates') AND USER_ID = {$uid} AND APPLICATION_ID = {$appid} 
+                   ORDER BY REC_DOC_ID";
+        $result = $this->rawQuery($query);
+        return $result;
+    }
+
+    public function admitCardTerm()
+    {
+        $query  = "SELECT * FROM HRIS_REC_ADMIT_SETUP WHERE ADMIT_SETUP_ID = 1";
+        $statement = $this->adapter->query($query);
+        $result    = $statement->execute();
+        return $result->current();  
+    }
+
+
+    // public function checkVacancyApplicationAdmitCardReady($v_id, $e_id, $a_id = NULL)
+    // {
+    //     if ($a_id !== NULL) {
+    //         $sql = "SELECT * FROM HRIS_REC_APPLICATION_PERSONAL
+    //                 WHERE APPLICATION_ID = {$a_id} AND USER_ID = {$e_id} AND AD_NO = {$v_id} AND STATUS='E'";
+    //         $statement = $this->adapter->query($sql);
+    //         $result    = $statement->execute();
+            
+    //         return $result->current();
+    //     } 
+    //     return false;
+    // }
+
 }   

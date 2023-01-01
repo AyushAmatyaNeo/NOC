@@ -15,7 +15,7 @@ $this->headScript()
         ->appendFile($this->basePath('js/recruitment/vacancy/edit.js'));
 
 
-$form->setAttribute('role', 'form');
+$form->setAttribute('role', 'form'); 
 $form->setAttribute('id', 'RecruitmentVacancy');
 $openingId = $form->get('OpeningId');
 $openingId->setValueOptions($Openings);
