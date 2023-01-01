@@ -1,0 +1,84 @@
+<?php
+$this->headScript()->appendFile($this->basePath('js/setup/designation/add.js'));
+
+$jobResEngName = $form->get("jobResEngName");
+$jobResNepName = $form->get("jobResNepName");
+$jobResEngDescription = $form->get('jobResEngDescription');
+$jobResNepDescription = $form->get("jobResNepDescription");
+$submit = $form->get("submit");
+
+$form->setAttribute('action', $this->url('jobResponsibility', ['action' => 'edit', 'id' => $id]));
+$form->prepare();
+
+?>
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\jobResponsibility')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>Update
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <?php print $this->form()->openTag($form); ?>
+
+                <div class=" row">
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($jobResEngName) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($jobResEngName); ?>
+                            <?= $this->formElementErrors()->render($jobResEngName, ['class' => 'help-block']) ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($jobResNepName) ?>
+                            <?= $this->formElement($jobResNepName); ?>
+                            <?= $this->formElementErrors()->render($jobResNepName, ['class' => 'help-block']) ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($jobResEngDescription) ?>
+                            <span class="required" aria-required="true">*</span>
+                            <?= $this->formElement($jobResEngDescription); ?>
+                            <?= $this->formElementErrors()->render($jobResEngDescription, ['class' => 'help-block']) ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                        <div class="form-group">
+                            <?= $this->formLabel($jobResNepDescription) ?>
+                            <?= $this->formElement($jobResNepDescription); ?>
+                            <?= $this->formElementErrors()->render($jobResNepDescription, ['class' => 'help-block']) ?>
+                            <span class="errorMsg" style="font-size:11px; color:red;"></span>
+                        </div>
+                    </div>
+
+                </div>
+
+
+
+                <?php
+                print $this->formSubmit($submit);
+                print $this->form()->closeTag();
+
+                ?>
+            </div>
+        </div>
+    </div>
+</div>
+

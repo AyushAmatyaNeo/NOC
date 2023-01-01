@@ -1,0 +1,106 @@
+<?php
+    
+$this->headScript()
+        ->appendFile($this->basePath('js/recruitment/stage/assignEmployeeStages.js'));
+?>
+<script>
+    document.getEmpStageList = '<?= $this->url("stage", ["action" => "getEmpStageList"]) ?>';
+</script>
+<?php /*
+<div class="page-bar">
+    <?= $this->navigation('Zend\Navigation\Branch')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
+</div> */ ?>
+<?php
+if ($this->messages && (sizeof($this->messages) > 1)) {
+    print '<div class="alert alert-warning alert-dismissable">
+    <button type="button" class="close" data-dismiss="alert" aria-hidden="true"></button>
+    <strong>Warning!</strong> ';
+    print $this->messages[1];
+    print '</div>';
+}
+
+?>
+<?php if ($this->messages) { ?>
+    <script>
+        document.messages =<?php echo json_encode($this->messages); ?>
+    </script>
+<?php } ?>
+<div class="row margin-top-20">
+    <div class="col-sm-12">
+        <div class="portlet box custom-box">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-plus"></i>
+                    Assign Stages to Employee
+                </div>
+                <div class="actions">
+                    <a class="btn btn-circle btn-icon-only btn-default fullscreen" href="javascript:;" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body">
+            <form method="POST" name="stage" role="form" id="stage" action='<?= $this->url('stage', ['action' => 'assignEmployeeStages']); ?>'>   
+                <div class=" row">
+                    <div class="col-sm-4" id= "employeeDiv">
+                        <div class="form-group">
+                            <label for="employeeId">Employee</label>
+                            <select name="employeeId" id="employeeId" class="form-control" required>                          
+                                <option value=""  selected="">Please select</option>                           
+                                    <?php foreach ($employees as $key => $value) { ?>
+                                        <option value="<?php echo $key; ?>"><?php echo $value; ?></option> 
+                                    <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="stageId">Stages</label>
+                            <select name="stageId[]" id="stageId" class="form-control" multiple required>                          
+                                    <?php foreach ($stages as $key => $value) { 
+                                        $selected = ""; ?>
+                                        <option <?=$selected?>  value="<?php echo $key; ?>" id="<?php echo 'select'.$key; ?>"><?php echo $value; ?></option> 
+                                    <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="vacancyId">Vacancies</label>
+                            <select name="vacancyId[]" id="vacancyId" class="form-control" multiple required>                          
+                                    <?php foreach ($vacancyList as $key => $value) { 
+                                        $selected = ""; ?>
+                                        <option <?=$selected?>  value="<?php echo $key; ?>" id="<?php echo 'select'.$key; ?>"><?php echo $value; ?></option> 
+                                    <?php } ?>
+                            </select>
+                        </div>  
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="accessAs">Access As:</label>
+                            <div class="md-radio-inline">
+                                <div class="md-radio"> 
+                                    <input type="radio" value="V" name="accessAs" id="accessAsV" class="md-radiobtn radioButton">
+                                    <label for="accessAsV">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Verifier
+                                    </label> 
+                                </div>
+                                <div class="md-radio"> 
+                                    <input type="radio" value="A" name="accessAs" id="accessAsA" class="md-radiobtn radioButton">
+                                        <label for="accessAsA">
+                                        <span></span>
+                                        <span class="check"></span>
+                                        <span class="box"></span> Approver
+                                    </label> 
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+                <input class="btn btn-success" type="submit"/>
+            </form>
+            </div>
+        </div>
+    </div>
+</div>

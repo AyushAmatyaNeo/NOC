@@ -51,7 +51,6 @@ class UserApplicationController extends HrisController
                 } elseif ($getInfo['ACCESS_AS'] == 'V') {
 
                     $allowStage = '2,6,7,9';
-
                 } else {
 
                      $allowStage = '1,2,3,4,5,6,7,8,9';
@@ -361,6 +360,132 @@ class UserApplicationController extends HrisController
                     'totalExperienceYMD' => $totalExperienceYMD
         ]);
     }
+    public function viewtestAction(){
+        $id = (int) $this->params()->fromRoute('id');
+        if ($id === 0)
+        {
+            return $this->redirect()->toRoute("userapplication");
+        }
+        $VacancyData = iterator_to_array($this->repository->VacancyDataById($id), false);
+
+
+        // Vacancy Skills AND inclusion
+        if ($VacancyData[0]['SKILL_ID'] != null) {
+            $Vskill_names = $this->SkillIdToData($VacancyData[0]['SKILL_ID']);
+        }
+        
+        $VInclusion_names = $this->repository->applicationInclusionsbyId($VacancyData[0]['INCLUSION_ID']);
+        // echo '<pre>'; print_r($VInclusion_names); die;
+        $VacancyData[0]['SKILL_ID'] = $Vskill_names;
+        $VacancyData[0]['INCLUSIONS'] = $VInclusion_names;
+
+        if ($VacancyData[0]['VACANCY_TYPE'] != 'OPEN') {
+            $applicationData = iterator_to_array($this->repository->applicationDataByIdInternal($id), false);
+            $eduDatas = $this->repository->applicationEduByIdInternal($id);
+        } else {
+           $applicationData = iterator_to_array($this->repository->applicationDataById($id), false);
+           $eduDatas = iterator_to_array($this->repository->applicationEduById($id), false);
+
+        }
+
+        // Application Skills  AND inclusion
+        $skill_names = '';
+        $inc_names = '';
+        if ($applicationData[0]['SKILL_ID'] != null) {
+            $skill_names = $this->SkillIdToData($applicationData[0]['SKILL_ID']);
+        }
+        if ($applicationData[0]['INCLUSION_ID'] != null) {
+            $inc_names = $this->repository->applicationInclusionsbyId($applicationData[0]['INCLUSION_ID']);
+        }
+        if ($applicationData[0]['CANCELLED_INCLUSION_ID'] != null) {
+            $cancelled_inc_names = $this->repository->applicationInclusionsbyId($applicationData[0]['CANCELLED_INCLUSION_ID']);
+        }
+        $applicationData[0]['SKILL_ID'] = $skill_names;
+        $applicationData[0]['INCLUSIONS'] = $inc_names;
+        $applicationData[0]['CANCELLED_INCLUSION_ID'] = $cancelled_inc_names;
+        $addressData = iterator_to_array($this->repository->applicationaddressById($id), false);
+        $expDatas = iterator_to_array($this->repository->applicationExpById($id), false);
+        // echo "<pre>";
+        // print_r($expDatas); die;
+        $totalExperienceDays = 0;
+        if($expDatas){
+            foreach($expDatas as $expData){
+                $totalExperienceDays += $expData['TOTAL_DAYS'];
+                $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['EXTENDED_DATE_AD']);
+            }
+        }
+        // print_r($totalExperienceDays);die;
+
+        $totalExperienceYMD = AppHelper::DateDiffWithDays($totalExperienceDays);
+        $TrDatas = iterator_to_array($this->repository->applicationTrById($id), false);
+        $DocDatas = iterator_to_array($this->repository->applicationDocById($id), false);
+        $RegDatas = iterator_to_array($this->repository->registrationDocById($applicationData[0]['USER_ID']), false);
+        $DocDatas = array_merge($DocDatas,$RegDatas);
+        $applicationData[0]['FULL_NAME'] = $applicationData[0]['FIRST_NAME'].$applicationData[0]['MIDDLE_NAME'].$applicationData[0]['LAST_NAME'];
+        // echo '<pre>'; print_r($VacancyData[0]);die;
+        // echo '<pre>'; print_r($addressData[0]);
+        // echo '<pre>'; print_r( $eduDatas);
+        // echo '<pre>'; print_r($VacancyData[0]);
+        if ($applicationData[0]['APPLICATION_TYPE'] == 'OPEN') {
+
+            foreach ($applicationData as $app)
+            {
+                $folder = 'photograph';
+                if ($app['DOC_FOLDER'] == $folder) {
+
+                    $applicationData[0]['PROFILE_IMG'] = $app['PROFILE_IMG'];
+                    break;
+
+                }
+
+            }
+
+            /**
+             * FOR AGE
+             */
+            // $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB_AD'], $VacancyData[0]['END_DATE_AD']);
+
+            $applicationData[0]['AGE'] = AppHelper::DateDiffByNepaliDate($applicationData[0]['DOB'], $VacancyData[0]['END_DATE']);
+
+        } else {
+
+            $applicationData[0]['PROFILE_IMG'] = $this->getRequest()->getBasePath().'/uploads/'.$applicationData[0]['PROFILE_IMG'];
+
+            for ($i=0; $i < count($DocDatas) ; $i++) { 
+                
+                $DocDatas[$i]['DOC_PATH_NEW'] = $DocDatas[$i]['DOC_PATH'] . $DocDatas[$i]['DOC_NEW_NAME'] ;
+
+            }
+
+            /**
+             * FOR AGE
+             */
+            $applicationData[0]['AGE'] = AppHelper::DateDiff($applicationData[0]['DOB'], $VacancyData[0]['END_DATE_AD']);
+
+        }
+
+        // echo '<pre>'; print_r($DocDatas); die;
+        $stageIds = EntityHelper::rawQueryResult($this->adapter, "select stage_ids from HRIS_REC_EMPLOYEE_STAGE_PERMISSION where employee_id = {$this->employeeId}");
+        $stageIdsArr = iterator_to_array($stageIds);
+        if($stageIdsArr){
+            $stageIdsCsv=$stageIdsArr[1]['STAGE_IDS'];
+        }else{
+            $stageIdsCsv='0';
+        }
+        // print_r($totalExperienceYMD);die;
+        return Helper::addFlashMessagesToArray($this, [
+            'applicationStageHistory'=>$applicationStageHistory,
+                    'vacancyData' => $VacancyData[0],
+                    'applicationData' => $applicationData[0],
+                    'addressData' => $addressData[0],
+                    'eduDatas' => $eduDatas,
+                    'expDatas' => $expDatas,
+                    'trDatas'  => $TrDatas,
+                    'docDatas'  => $DocDatas,
+                    'Stages' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_STAGES', ['REC_STAGE_ID','STAGE_EDESC'], ['STATUS' => 'E', 'rec_stage_id in ('.$stageIdsCsv.')'],'','ORDER_NO'),
+                    'totalExperienceYMD' => $totalExperienceYMD
+        ]);
+    }
     public function bulkStageIdWSAction() {
         try {
             $request = $this->getRequest();
@@ -434,7 +559,6 @@ class UserApplicationController extends HrisController
             
             $model->remarksNp = base64_encode($postedData['remarksNp']);
 
-
             $VacancyData = iterator_to_array($this->repository->VacancyDataById($postedData['id']), false);
 
             if ($VacancyData[0]['VACANCY_TYPE'] != 'OPEN') {
@@ -442,7 +566,6 @@ class UserApplicationController extends HrisController
             } else {
                 $applicationData = iterator_to_array($this->repository->applicationDataById($postedData['id']), false);
             }
-
 
             if ($postedData['StageId'] == 6 ){
                 // $htmlDescription = self::mailHeader();

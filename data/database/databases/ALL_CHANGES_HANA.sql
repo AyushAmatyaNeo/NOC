@@ -1251,5 +1251,12 @@ alter table hris_employee_loan_request alter(
 MONTHLY_INTEREST_RATE decimal(7,2));
 
 
->>>>>>> origin/ayush-nepal
+
 ---------------------------------------------------------------------------------------------------------
+
+----OVERTIME CHANGE FESTIVE LEAVE-------
+alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (REQ_FESTIVE_OT_DAYS DECIMAL(7,2));
+alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_REQ_OT_DAYS DECIMAL(7,2));
+alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (APP_FESTIVE_OT_DAYS DECIMAL(7,2));
+alter table HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST add (GRAND_TOTAL_APP_OT_DAYS DECIMAL(7,2));
+-----------------------------------

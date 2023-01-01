@@ -332,13 +332,15 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
                 ->join(['DEP' => 'HRIS_DEPARTMENTS'],'DEP.DEPARTMENT_ID=REC.TO_DEPARTMENT_ID', 'status', 'left');
 
 
-        $select->where(["REC.EMPLOYEE_ID= $eid and REC.SERVICE_EVENT_TYPE_ID in (SELECT service_event_type_id 
-                        from HRIS_SERVICE_EVENT_TYPES where service_event_type_code in ('APP', 'PRO') ) "]);
-
+        $select->where(["REC.EMPLOYEE_ID= $eid and
+        REC.SERVICE_EVENT_TYPE_ID in (SELECT
+        service_event_type_id 
+       from HRIS_SERVICE_EVENT_TYPES 
+       where service_event_type_code in ('APP',
+       'PRO') )  "]);
         $select->order("REC.START_DATE DESC");
         $boundedParameter = [];      
         $statement = $sql->prepareStatementForSqlObject($select); 
-        // print_r ($statement->getSql()); die();
         $result = $statement->execute();
         return $result;
     }
@@ -445,7 +447,7 @@ select functional_level_id from hris_employees where employee_id = $empId)))"]);
         $sql = ("SELECT COUNT (HRIS_ATTENDANCE_DETAIL.ATTENDANCE_DT) as TOTALLEAVE from HRIS_ATTENDANCE_DETAIL WHERE OVERALL_STATUS = 'LV' AND EMPLOYEE_ID = {$eid} AND ATTENDANCE_DT < '2021-11-19'  and leave_id in 
         (select leave_id from hris_leave_master_setup where leave_code = 'EXTRLEV')");
         $result = $this->rawQuery($sql);
-        // var_dump($result); die;
+        // var_dump($sql); die;
         return $result;
     }
     public function casLeaveLater($eid)

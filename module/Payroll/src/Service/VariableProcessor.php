@@ -350,6 +350,12 @@ class VariableProcessor {
                 $processedValue = $this->payrollRepo->getLoanFinalTest($this->employeeId);
                 break;
 
+            /*
+             * FESTIVE_OT_DAYS
+             */
+            case PayrollGenerator::VARIABLES[50]:
+                $processedValue = $this->payrollRepo->getOvertimeFestiveDays($this->employeeId, $this->monthId);
+                break;
 
             default:
                 break;

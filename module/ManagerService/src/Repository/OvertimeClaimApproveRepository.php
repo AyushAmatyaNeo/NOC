@@ -110,6 +110,8 @@ class OvertimeClaimApproveRepository extends HrisRepository  implements Reposito
       OCR.TOTAL_APP_NIGHT_ALLOWANCE,
       OCR.TOTAL_APP_LOCKING_ALLOWANCE,
       OCR.TOTAL_APP_OT_DAYS,
+      OCR.APP_FESTIVE_OT_DAYS,
+      OCR.GRAND_TOTAL_APP_OT_DAYS,
       OCR.created_dt as requested_dt_ad,
       BS_DATE(OCR.created_dt) as requested_dt_bs,
       OCR.TOTAL_APP_SUBSTITUTE_LEAVE,
@@ -166,33 +168,38 @@ L.location_edesc,
 			'GP',
 			'SAP',
 			'DH1',
-			'DH2')) then 
-			case when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR >= 6)
-          THEN 2 
-          when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR < 6 AND OCD.OT_HOUR >= 4.5) 
-          THEN 1
-          ELSE
-          0
-          END 
+			'DH2',
+      'TH1','TH2')) then 
+			case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            2
+            else 
+            1
+            end
 			when (HHM.holiday_code in ('BT',
 			'NAW',
 			'AST',
 			'DAS')) then 
-case when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR >= 6)
-          THEN 3 
-          when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR < 6 AND OCD.OT_HOUR >= 4.5) 
-          THEN 1.5
-          ELSE
-          0
-          END
-		else case when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR >= 6)
+			case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            3
+            else 
+            2
+            end
+			ELSE
+			0
+		END as BONUS_MULTI,
+		case when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR >= 6)
           THEN 1 
           when (OCD.TYPE_FLAG = 'O' AND OCD.CANCELED_BY_RA = 'N' AND OCD.OT_HOUR < 6 AND OCD.OT_HOUR >= 4.5) 
           THEN 0.5
           ELSE
           0
-          END
-		END as OT_DAYS
+          END AS OT_DAYS,
+          case when E.employee_id in (select employee_id from hris_employees where location_id = 18) then
+            'Y'
+            else 
+            'N'
+            end as manual_zero
+          
       FROM HRIS_EMPLOYEE_OVERTIME_CLAIM_DETAIL OCD 
       LEFT JOIN HRIS_EMPLOYEE_OVERTIME_CLAIM_REQUEST OCR ON (OCR.OVERTIME_CLAIM_ID = OCD.OVERTIME_CLAIM_ID)
       LEFT JOIN HRIS_EMPLOYEES E ON (E.EMPLOYEE_ID = OCR.EMPLOYEE_ID) 

@@ -34,6 +34,8 @@
             { field: "IN_TIME", title: "In Time", width:"100px" },
             { field: "OUT_TIME", title:"Out Time", width:"100px"},
             { field: "LEAVE_REWARD", title:"Satta Bida", width:"100px"},
+            { field: "OT_DAYS", title:"OT Days", width:"100px"},
+            { field: "FESTIVE_OT_DAYS", title:"Festive OT Days", width:"100px"},
             { field: "TOTAL_HOUR", title:"Total Hour", width:"100px"},
             { field: "OT_HOUR", title:"Overtime Hour", width:"100px"},
             { field: "LUNCH_EXPENSE", title:"Lunch Expense", width:"100px"},
@@ -54,6 +56,7 @@
             var dashainTiharSattaBida = 0;
             var leaveCount = 0;
             var totalOtDays = 0;
+            var festiveDays = 0;
             var nightAllowance = 0;
             var lockAllowance = 0;
             for (var i in list){
@@ -76,6 +79,7 @@
                     totalOtDays += parseFloat(list[i]['otDays']);
                     nightAllowance += parseFloat(list[i]['nightExpense']);
                     lockAllowance += parseFloat(list[i]['lockingExpense']);
+                    festiveDays += parseFloat(list[i]['festiveOtDays']);
                 }
             }
             $('#lunchExpense').val(lunchExpenseSum.toFixed(2));
@@ -84,6 +88,8 @@
             $('#dashainTiharLeave').val(dashainTiharSattaBida.toFixed(2));
             $('#grandTotalLeave').val((leaveSum+dashainTiharSattaBida).toFixed(2));
             $('#totalOtDays').val(totalOtDays);
+            $('#festiveOtDays').val(festiveDays);
+            $('#grandTotalOtDays').val(totalOtDays + festiveDays);
             $('#nightAllowance').val(nightAllowance.toFixed(2));
             $('#lockingAllowance').val(lockAllowance.toFixed(2));
         }
@@ -128,7 +134,8 @@
                                                                 'nightExpense':data[i]['NIGHT_EXPENSE'],
                                                                 'lockingExpense':data[i]['LOCKING_EXPENSE'],
                                                                 'otRemarks':'',
-                                                                'otDays':data[i]['OT_DAYS']
+                                                                'otDays':data[i]['OT_DAYS'],
+                                                                'festiveOtDays':data[i]['FESTIVE_OT_DAYS'],
                                                             };
     
                         if(data[i]['CHECKBOX_STATUS']!='disabled'){
@@ -235,6 +242,8 @@
                 App.blockUI({target: "#hris-page-content"});
             
                 details.push({totalOtDays: $('#totalOtDays').val(),
+                            festiveOtDays: $('#festiveOtDays').val(),
+                            grandTotalOtDays: $('#grandTotalOtDays').val(),
                             totalOtHour: $('#totalOtHour').val(),
                             lunchExpense: $('#lunchExpense').val(),
                             nightAllowance: $('#nightAllowance').val(),

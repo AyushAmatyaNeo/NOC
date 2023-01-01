@@ -60,6 +60,7 @@ class OvertimeClaimApproveController extends HrisController {
         }
         $detail = $this->repository->fetchById($id);
         $subDetails = $this->repository->fetchSubDetailById($id);
+        // echo('<pre>');print_r($subDetails);die;
         // for($i =0;$i<sizeof($subDetails);$i++){
         //     if($subDetails[$i]['TYPE_FLAG']=='O' && $subDetails[$i]['TOTAL_HOUR'] >= 6){
         //         $subDetails[$i]['OT_DAYS']=1;
@@ -468,6 +469,9 @@ class OvertimeClaimApproveController extends HrisController {
             $overtimeClaimModel->appSubstituteLeaveNo = $data['appSattaBida'];
             $overtimeClaimModel->appDashainTiharLeave = $data['appTiharBida'];
             $overtimeClaimModel->appGrandTotalLeavel = $data['appTotalBida'];
+
+            $overtimeClaimModel->appFestiveOtDays = $data['festiveOtDays'];
+            $overtimeClaimModel->grandTotalAppOtDays = $data['grandTotalOtDays'];
             $messageSuccess = '';
             if($data['btnId']=='btnApprove'){
                 if($role == 2){

@@ -702,7 +702,9 @@ class EmployeeRepository extends HrisRepository implements RepositoryInterface {
                   LOC.LOCATION_EDESC                                                AS LOCATION_EDESC,
                   FUNT.FUNCTIONAL_TYPE_EDESC                                        AS FUNCTIONAL_TYPE_EDESC,
                   FUNL.FUNCTIONAL_LEVEL_NO                                          AS FUNCTIONAL_LEVEL_NO,
-                  FUNL.FUNCTIONAL_LEVEL_EDESC                                       AS FUNCTIONAL_LEVEL_EDESC,
+                  CASE WHEN AFUNL.FUNCTIONAL_LEVEL_EDESC = FUNL.FUNCTIONAL_LEVEL_EDESC
+                  THEN FUNL.FUNCTIONAL_LEVEL_EDESC  ELSE
+                  'ACTING-'||AFUNL.FUNCTIONAL_LEVEL_EDESC END                       AS FUNCTIONAL_LEVEL_EDESC,
                   E.SALARY                                                          AS SALARY,
                   E.SALARY_PF                                                       AS SALARY_PF,
                   E.REMARKS                                                         AS REMARKS,

@@ -17,6 +17,8 @@ class OvertimeClaim extends Model{
     const TOTAL_REQ_NIGHT_ALLOWANCE = "TOTAL_REQ_NIGHT_ALLOWANCE";
     const TOTAL_REQ_LOCKING_ALLOWANCE = "TOTAL_REQ_LOCKING_ALLOWANCE";
     const TOTAL_REQ_OT_DAYS = "TOTAL_REQ_OT_DAYS";
+    const REQ_FESTIVE_OT_DAYS = "REQ_FESTIVE_OT_DAYS";
+    const GRAND_TOTAL_REQ_OT_DAYS = "GRAND_TOTAL_REQ_OT_DAYS";
     const TOTAL_APP_OT_HOURS = "TOTAL_APP_OT_HOURS";
     const TOTAL_APP_SUBSTITUTE_LEAVE = "TOTAL_APP_SUBSTITUTE_LEAVE";
     const TOTAL_APP_DASHAIN_TIHAR_LEAVE = "TOTAL_APP_DASHAIN_TIHAR_LEAVE";
@@ -25,6 +27,8 @@ class OvertimeClaim extends Model{
     const TOTAL_APP_NIGHT_ALLOWANCE = "TOTAL_APP_NIGHT_ALLOWANCE";
     const TOTAL_APP_LOCKING_ALLOWANCE = "TOTAL_APP_LOCKING_ALLOWANCE";
     const TOTAL_APP_OT_DAYS = "TOTAL_APP_OT_DAYS";
+    const APP_FESTIVE_OT_DAYS = "APP_FESTIVE_OT_DAYS";
+    const GRAND_TOTAL_APP_OT_DAYS = "GRAND_TOTAL_APP_OT_DAYS";
     const REMARKS = "REMARKS";
     const STATUS = "STATUS";
     const RECOMMENDED_BY = "RECOMMENDED_BY";
@@ -69,6 +73,10 @@ class OvertimeClaim extends Model{
     public $modifiedBy;
     public $createdDt;
     public $modifiedDt;
+    public $reqFestiveOtDays;
+    public $grandTotalReqOtDays;
+    public $appFestiveOtDays;
+    public $grandTotalAppOtDays;
     
     public $mappings = [
         'overtimeClaimId'=>self::OVERTIME_CLAIM_ID,
@@ -102,5 +110,9 @@ class OvertimeClaim extends Model{
         'appNightAllowance'=>self::TOTAL_APP_NIGHT_ALLOWANCE,
         'appLockingAllowance'=>self::TOTAL_APP_LOCKING_ALLOWANCE,
         'appOtDays'=>self::TOTAL_APP_OT_DAYS,
+        'reqFestiveOtDays'=>self::REQ_FESTIVE_OT_DAYS,
+        'grandTotalReqOtDays'=>self::GRAND_TOTAL_REQ_OT_DAYS,
+        'appFestiveOtDays'=>self::APP_FESTIVE_OT_DAYS,
+        'grandTotalAppOtDays'=>self::GRAND_TOTAL_APP_OT_DAYS
     ];
 }

@@ -861,18 +861,7 @@ class UserApplicationRepository extends HrisRepository{
         $result = $statement->execute($boundedParameter);
         return $result;
     }
-
-    public function manuallyStageId($stageId, $aid){
-
-        $sql = "UPDATE HRIS_REC_VACANCY_APPLICATION SET STAGE_ID = $stageId where APPLICATION_ID = $aid";
-
-        $statement = $this->adapter->query($sql); 
-        $result1 = Helper::extractDbData($statement->execute());
-
-    }
-
     public function manualStageId($stageId,$remarks, $aid, $selectedInclusion = null, $unselectedInclusion = null){
-
         $sql = "UPDATE HRIS_REC_VACANCY_APPLICATION SET STAGE_ID = $stageId , REMARKS = '$remarks' where APPLICATION_ID = $aid";
         // echo $sql; die;
         $statement = $this->adapter->query($sql); 

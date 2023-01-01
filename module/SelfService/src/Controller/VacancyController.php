@@ -1152,7 +1152,7 @@ class VacancyController extends HrisController
         foreach($Inclusions as $Inclusion){
             $inclusions[] = ($this->repository->fetchInclusionById($Inclusion[0]));
         }
-        
+
         $id = (int) $this->params()->fromRoute('id');
         if ($id === 0) {
             return $this->redirect()->toRoute("vacancy");
@@ -1208,6 +1208,8 @@ class VacancyController extends HrisController
                 $applicantsDocumentNew[$applicationStoredDocument['DOC_FOLDER']] = $applicationStoredDocument['DOC_PATH'].$applicationStoredDocument['DOC_NEW_NAME'];
             }
         }
+        // echo('<pre>');print_r($employeeData['EMPLOYEE_CODE']);die;
+        // print_r($applicantsDocumentNew);die;
         // echo('<pre>');print_r($applicantsDocument);
         // print_r($applicantsDocumentNew);die;
         return new ViewModel(
@@ -1228,9 +1230,6 @@ class VacancyController extends HrisController
                     'Openings' => EntityHelper::getTableKVListWithSortOption($this->adapter, OpeningVacancy::TABLE_NAME, OpeningVacancy::OPENING_ID, [OpeningVacancy::OPENING_NO], ["STATUS" => "E"], OpeningVacancy::OPENING_NO, "ASC", null, [null => '---'], true),
                     'messages' => $this->flashmessenger()->getMessages(),
                     'applicantsDocumentNew' => $applicantsDocumentNew,
-                    'inclusions' => $inclusions,
-                    'inclusionIds' => $inclusionIds,
-                    'application_amount' => $applicationAmount,
                     'employeeInclusionUsed' => $employeeInclusionUsed,
                     'getInclusion' => $getInclusion,
                     'baseurl' => $this->getRequest()->getBasePath(),

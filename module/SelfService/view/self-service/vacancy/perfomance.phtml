@@ -409,6 +409,47 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 							</tbody>
 						</table>
 					</div>
+                    <div class="row clearfix e-setup">
+                    <!-- Select inclusion -->
+                    <div>
+                       
+                    </div>
+                </div>
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-4 col-md-4 col-box">
+                        <h5><strong>समावेशीकरण छान्नुहोस्</strong> </h5>
+
+                    </div>
+                </div>
+
+                <div class="row clearfix e-setup">
+                    <div class="col-xs-12 col-sm-3 col-md-8 col-box">
+                        <div class="row bottomgap">
+                            <div class="form-group">
+                            <div class="col-xs-6 col-sm-6 col-md-2 col-box">
+                            </div>
+                                <?php foreach($inclusions as $inclusion) {?>
+                                <div class="col-xs-6 col-sm-6 col-md-2 col-box">
+                                    <input required class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                    <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
+                                </div>
+                                <?php } ?>
+                            </div>
+                            <div class="col-xs-12 col-sm-3 col-md-2 col-box">
+                                <div class="row bottomgap">
+                                    <div class="form-group">
+                                        <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
+                                            <label for="amount">रकम :</label>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-6 cgap">
+                                            <input type="text" class="form-control form-control-sm" name="inclusion_amount" id="inclusion_amount" value="" readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                    
                 <hr>
                     <div class="row clearfix e-setup">

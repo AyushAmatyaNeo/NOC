@@ -80,14 +80,17 @@ $this->headScript()->appendFile($this->basePath('js/SelfService/overtime-claim/v
                     <label class="control-label">OT Days</label>
                     <input disabled type="text" id = "appOtDays" class="form-control" value="<?php echo $detail['TOTAL_APP_OT_DAYS']?>">
                 </div>
+
                 <div class="col-sm-3">
-                    <label class="control-label">Lunch Allowance</label>
-                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_LUNCH_ALLOWANCE']?>">
+                    <label class="control-label">Festive OT Days</label>
+                    <input disabled type="text" id = "festiveOtDays" class="form-control" value="<?php echo $detail['APP_FESTIVE_OT_DAYS']?>">
                 </div>
+
                 <div class="col-sm-3">
-                    <label class="control-label">Night Allowance</label>
-                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_NIGHT_ALLOWANCE']?>">
+                    <label class="control-label">Total OT Days</label>
+                    <input disabled type="text" id = "grandTotalOtDays" class="form-control" value="<?php echo $detail['GRAND_TOTAL_APP_OT_DAYS']?>">
                 </div>
+                
             </div>
 
             <div class="row" style="margin-top:30px;">
@@ -110,6 +113,14 @@ $this->headScript()->appendFile($this->basePath('js/SelfService/overtime-claim/v
                 </div>
             </div>
             <div class="row" style="margin-top:30px;">
+                <div class="col-sm-3">
+                    <label class="control-label">Lunch Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_LUNCH_ALLOWANCE']?>">
+                </div>
+                <div class="col-sm-3">
+                    <label class="control-label">Night Allowance</label>
+                    <input disabled type="text" class="form-control" value="<?php echo $detail['TOTAL_APP_NIGHT_ALLOWANCE']?>">
+                </div>
                 <div class="col-sm-3">
                     <label class="control-label">Recommender</label>
                     <input disabled type="text" class="form-control" value="<?php echo $detail['RECOMMENDER']?>">

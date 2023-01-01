@@ -267,19 +267,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-3 col-md-2 col-box">
-                                <div class="row bottomgap">
-                                    <div class="form-group">
-                                        <div class="col-xs-6 col-sm-6 col-md-6 rightalign">
-                                            <label for="firstName">समुह :</label>
-                                        </div>
-                                        <div class="col-xs-6 col-sm-6 col-md-6 cgap">
-                                            <input type="hidden" name="current_service_event" value="<?php echo $EmployeeData['SERVICE_EVENTS_ID'] ?>">
-                                            <?php echo $EmployeeData['SERVICE_EVENT_NAME'] ?>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            
                         </div>
                     </div>
                     <hr>
@@ -491,7 +479,7 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
                             </div>
                                 <?php foreach($inclusions as $inclusion) {?>
                                 <div class="col-xs-6 col-sm-6 col-md-2 col-box">
-                                    <input class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
+                                    <input required class="form-check-input inclusion" type="checkbox" name="inclusion[]" value="<?php echo $inclusion['INCLUSION_ID']; ?>"> 
                                     <label class="form-check-label"><?php echo $inclusion['OPTION_EDESC']; ?></label>
                                 </div>
                                 <?php } ?>

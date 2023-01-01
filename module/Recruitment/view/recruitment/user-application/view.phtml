@@ -24,8 +24,8 @@ if ($this->messages) {
 ?>
 <script>
     document.userData = <?php echo json_encode($applicationData); ?>;
-    // document.bulkStageIdWSWithInclusion = '<?php echo $this->url('userapplication', ['action' => 'bulkStageIdWS']); ?>';
-    // document.bulkStageIdWS = '<?php echo $this->url('userapplication', ['action' => 'updateStage']); ?>';
+    document.bulkStageIdWSWithInclusion = '<?php echo $this->url('userapplication', ['action' => 'bulkStageIdWS']); ?>';
+    document.bulkStageIdWS = '<?php echo $this->url('userapplication', ['action' => 'updateStage']); ?>';
 </script>
 
 <div class="page-bar">
@@ -1055,7 +1055,7 @@ if ($this->messages) {
                                                         "
                                                         value='.$inc['INCLUSION_ID'].'
                                                         checked
-                                                        type="checkbox" name="approvedInclusion[]"  class="approvedInclusion" id="approvedInclusion">
+                                                        type="checkbox" name="approvedInclusion"  class="approvedInclusion" id="approvedInclusion">
                                                         </br> </td></tr>';
                                                         $S++;
                                                     } 
@@ -1109,8 +1109,39 @@ if ($this->messages) {
         </div>
     </div>
     <div class="row margin-top-20">
-        
-            <div class="col-sm-12">
+        <div class="col-sm-12">
+            <div class="col-sm-2">
+                <label>Stages</label>
+                <select id="StageId" name="StageId" class="StageId">
+                    <option value="0" selected="selected">Please Select Stage</option>
+                    <?php foreach ($Stages as $Stage) { ?>
+                        <option value="<?= $Stage['REC_STAGE_ID'] ?>"><?= $Stage['STAGE_EDESC'] ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <?php /* <div class="col-sm-2">
+                <label>Inclusion</label>
+                <select id="InclusionId" name="InclusionId"  multiple required>
+                   
+                    <?php foreach ($applicationData['INCLUSIONS'] as $inclusions) { ?>
+                        <option value="<?= $inclusions['INCLUSION_ID'] ?>"><?= $inclusions['INCLUSION_NAME'] ?></option>
+                    <?php } ?>
+                </select>
+            </div> */ ?>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label for="remarksNp">Remarks </label>
+                    <textarea class="form-control" name="remarksNp" id="remarksNp" style="min-height: 45px; resize: none !important;"></textarea>
+                </div>
+            </div>
+            <!-- <div class="col-sm-2">
+                <div class="form-group">
+                    <label for="remarksEn">Remarks (English)</label>
+                    <textarea class="form-control" name="remarksEn" id="remarksEn" style="min-height: 45px; resize: none !important;"></textarea>
+                </div>
+            </div> -->
+            </div>
+            <div class="cols-sm-4 col-sm-offset-4">
                 <div class="col-sm-2">
                     <label>Stages</label>
                     <select id="StageId" name="StageId" class="StageId">
@@ -2157,7 +2188,7 @@ if ($this->messages) {
                 <label>Stages</label>
                 <!-- <select id="StageId" name="StageId" id="SelectstageChange" class="StageId"> -->
                     <select id="StageId" name="StageId" class="StageId">
-                    <option value="0">---</option>
+                    <option value="0" selected="selected">---</option>
                     <?php foreach ($Stages as $Stage) { ?>
                         <option value="<?= $Stage['REC_STAGE_ID'] ?>" <?php echo ($applicationData['REC_STAGE_ID'] == 8) ? 'disabled' : ''; ?>><?= $Stage['STAGE_EDESC'] ?></option>
                     <?php } ?>
