@@ -62,8 +62,7 @@ return [
     'SapApi',
     'TransferSettlement',
     //'Grade',
-    'Gratuity',
-    'JobResponsibilityManagement',
+    'Gratuity'
 ];
 
 

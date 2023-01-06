@@ -24,32 +24,6 @@ class VenueAssignForm {
      */
     public $venueSetupId;
 
-     /**
-     * @Annotation\Type("Zend\Form\Element\Number")
-     * @Annotation\Required(true)
-     * @Annotation\Options({"label":"Start Index"})
-     * @Annotation\Attributes({ "id":"startIndex", "class":"form-control", "min": "1"})
-     */
-    public $startIndex;
-
-
-    /**
-     * @Annotation\Type("Zend\Form\Element\Number")
-     * @Annotation\Required(true)
-     * @Annotation\Options({"label":"End Index"})
-     * @Annotation\Attributes({ "id":"endIndex", "class":"form-control", "min": "1"})
-     */
-    public $endIndex;
-
-
-    /**
-     * @Annotation\Type("Zend\Form\Element\Select")
-     * @Annotation\Required(true)
-     * @Annotation\Options({"disable_inarray_validator":"true","label":"Assign Type"})
-     * @Annotation\Attributes({ "id":"assignType","class":"form-control"})
-     */
-    public $assignType;
-
     /**
      * @Annotation\Type("Zend\Form\Element\Select")
      * @Annotation\Required(true)
@@ -74,10 +48,10 @@ class VenueAssignForm {
     public $endTime;
 
     /**
-     * @Annotation\Type("Zend\Form\Element\Date")
+     * @Annotation\Type("Zend\Form\Element\Text")
      * @Annotation\Required(true)
      * @Annotation\Options({"disable_inarray_validator":"true","label":"Exam Date"})
-     * @Annotation\Attributes({ "id":"examDate","class":"form-control"})
+     * @Annotation\Attributes({ "class":"form-control", "id":"nepali-datepicker"})
      */
     public $examDate;
 
@@ -91,7 +65,7 @@ class VenueAssignForm {
     
     /**
      * @Annotation\Type("Zend\Form\Element\Submit")
-     * @Annotation\Attributes({"value":"Submit","class":"btn btn-success"})
+     * @Annotation\Attributes({"value":"Submit","class":"btn btn-success", "id":"btn-submit"})
      */
     public $submit;
 

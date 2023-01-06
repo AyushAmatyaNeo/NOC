@@ -45,7 +45,7 @@ class VenueController extends HrisController {
             $list = iterator_to_array($this->repository->allVenue(), false);
 
             return new JsonModel(['success' => true, 'data' => $this->decodeBase64List($list, 'VENUE_NAME'), 'error' => '']);
-        }   
+        }
     }
 
     public function venueSetupAddAction()
@@ -158,7 +158,7 @@ class VenueController extends HrisController {
         if ($request->isPost()) 
         {
 
-            $postData = $request->getPost();
+            $postData = (array) $request->getPost();
 
             $this->assignForm->setData($postData);
 
@@ -179,10 +179,13 @@ class VenueController extends HrisController {
                 $venueAssignData->createdDate = Helper::getcurrentExpressionDate();
                 $venueAssignData->status = 'E';
 
+                $vacancyIds = implode(',', $postData['vacancies']);
+                $venueAssignData->vacancyIds = $vacancyIds;
+
                 $this->repository->addVenueAssign($venueAssignData);
 
                 // Update each individual's application data
-                $this->repository->updateUserVenueData($venueAssignData->startIndex, $venueAssignData->endIndex, $this->assignForm->getData()['examType'].'_VENUE_ID', $venueAssignData->assignType, $venueAssignData->venueAssignId);
+                $this->repository->updateUserVenueData($vacancyIds, $this->assignForm->getData()['examType'].'_VENUE_ID', $venueAssignData->venueAssignId);
 
                 $this->flashmessenger()->addMessage("Venue Successfully Assigned!!");
                 return $this->redirect()->toRoute("venue", array("action"=>"venueAssign"));
@@ -197,6 +200,7 @@ class VenueController extends HrisController {
                 $this, [
                     'form' => $this->assignForm,
                     'venueList' => $this->decodeBase64List($venueList, null, 1),
+                    'Adno' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_VACANCY', ['VACANCY_ID','AD_NO'], ['STATUS' => 'E'],'',"TO_INT(SUBSTR_BEFORE(AD_NO,'/'))", 'ASC'),
                 ]
             )
         );
@@ -230,17 +234,21 @@ class VenueController extends HrisController {
 
                 // Revert previous data in vacancy application table
                 $prevData = iterator_to_array($this->repository->fetchVenueAssignById($id));
-                $this->repository->updateUserVenueData($prevData['START_INDEX'], $prevData['END_INDEX'], $prevData['EXAM_TYPE'].'_VENUE_ID', $prevData['ASSIGN_TYPE'], 'null');
+                //$this->repository->updateUserVenueData($prevData['START_INDEX'], $prevData['END_INDEX'], $prevData['EXAM_TYPE'].'_VENUE_ID', $prevData['ASSIGN_TYPE'], 'null');
+                $this->repository->updateUserVenueData($prevData['VACANCY_IDS'], $prevData['EXAM_TYPE'].'_VENUE_ID', 'null');
 
                 // Update actual assign model
                 $venueAssignData = new VenueAssignModel();
                 $venueAssignData->exchangeArrayFromForm($this->assignForm->getData());
                 $venueAssignData->modifiedDate = Helper::getcurrentExpressionDate();
 
+                $vacancyIds = implode(',', $postData['vacancies']);
+                $venueAssignData->vacancyIds = $vacancyIds;
+
                 $this->repository->editVenueAssign($venueAssignData, $id);
 
-                // Update vacancy application data based on new data
-                $this->repository->updateUserVenueData($venueAssignData->startIndex, $venueAssignData->endIndex, $this->assignForm->getData()['examType'].'_VENUE_ID', $venueAssignData->assignType, $venueAssignData->venueAssignId);
+                // Update each individual's application data
+                $this->repository->updateUserVenueData($vacancyIds, $this->assignForm->getData()['examType'].'_VENUE_ID', $venueAssignData->venueAssignId);
 
                 $this->flashmessenger()->addMessage("Venue Assign Edited Successfully!");
                 return $this->redirect()->toRoute("venue", array("action"=>"venueAssign"));
@@ -256,10 +264,14 @@ class VenueController extends HrisController {
 
         $venueList = EntityHelper::getTableKVListWithSortOption($this->adapter, VenueSetupModel::TABLE_NAME, VenueSetupModel::VENUE_SETUP_ID, [VenueSetupModel::VENUE_NAME], ["STATUS" => "E"], VenueSetupModel::VENUE_NAME, "ASC", null, [null => '---'], true);
 
+        $selectedArray = explode(',', $model->vacancyIds);
+
         return Helper::addFlashMessagesToArray($this, [
             'form' => $this->assignForm,
             'id' => $id,
             'venueList' => $this->decodeBase64List($venueList, null, 1),
+            'Adno' => EntityHelper::getTableList($this->adapter, 'HRIS_REC_VACANCY', ['VACANCY_ID','AD_NO'], ['STATUS' => 'E'],'',"TO_INT(SUBSTR_BEFORE(AD_NO,'/'))", 'ASC'),
+            'selectedArray' => $selectedArray,
         ]);
     }
 
@@ -272,26 +284,6 @@ class VenueController extends HrisController {
         // TODO: Validate start time and end time
 
         return null;
-    }
-
-    public function excelUploadAction()
-    {
-        $excelData = $_POST['data'];
-
-        $count = count($excelData);
-
-        $uniqueVenue = array();
-        $storeData = array();
-
-        for ($i=1; $i < $count ; $i++) { 
-
-            if(!in_array($excelData[$i]['B'], $uniqueVenue)){
-                array_push($venueName, $excelData[$i]['B']);
-            }
-
-        }
-
-        return new JsonModel(['success' => true, 'data' => $storeData]);
     }
 
     // Start at variable is used to by pass certain useless data at beginning index

@@ -1,19 +1,25 @@
 <?php
+$this->headLink()
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.common.min.css'))
+    ->appendStylesheet($this->basePath('telerik_kendoui/styles/kendo.default.min.css'))
+    ->appendStylesheet($this->basePath('css/custom.css'))
+    ->appendStylesheet($this->basePath('css/nepali.datepicker.v4.0.min.css'));;
+
+$this->headScript()
+    ->appendFile($this->basePath('jszip/dist/jszip.min.js'))
+    ->appendFile($this->basePath('telerik_kendoui/js/kendo.all.min.js'))
+    ->appendFile($this->basePath('assets/global/plugins/js-xlsx-master/dist/xlsx.full.min.js'))
+    ->appendFile($this->basePath('js/recruitment/venue/venue-assign.js'))
+    ->appendFile($this->basePath('js/nepali.datepicker.v4.0.min.js'));
+?>
+
+<?php
 
 $form->setAttribute('role', 'form');
 $form->setAttribute('id', 'venueAssignForm');
 
 $venueSetupId = $form->get('venueSetupId');
 $venueSetupId->setValueOptions($venueList);
-
-$startIndex = $form->get('startIndex');
-$endIndex = $form->get('endIndex');
-
-$assignType = $form->get('assignType');
-$assignType->setValueOptions([
-    'ROLL_NO' => 'ROLL NO',
-    'APPLICATION_ID' => 'Application Id',
-]);
 
 $startTime = $form->get('startTime');
 $endTime = $form->get('endTime');
@@ -34,6 +40,10 @@ $form->setAttribute('action', $this->url('venue', ['action' => 'venueAssignAdd']
 $form->prepare();
 ?>
 
+<script>
+    document.adno = <?php echo json_encode($Adno); ?>;
+</script>
+
 <div class="page-bar">
     <?= $this->navigation('Zend\Navigation\venue')->breadcrumbs()->setMinDepth(0)->setPartial('partial/breadcrumb') ?>
 </div>
@@ -51,6 +61,13 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
         document.messages =<?php echo json_encode($this->messages); ?>
     </script>
 <?php } ?>
+
+<script>
+    window.onload = function () {
+        var mainInput = document.getElementById("nepali-datepicker");
+        mainInput.nepaliDatePicker();
+    };
+</script>
 
 <div class="row margin-top-20">
     <div class="col-sm-12">
@@ -80,37 +97,18 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 
                         <div class="col-sm-2">
                             <div class="form-group">
-                                <?php print $this->formLabel($assignType); ?>
-                                <span class="required" aria-required="true">*</span>
-                                <?php print $this->formElement($assignType); ?>
-                                <?php print $this->formElementErrors()->render($assignType, ['class' => 'help-block']); ?>
-                            </div>
-                        </div>
-                                 
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <?php print $this->formLabel($startIndex); ?>
-                                <span class="required" aria-required="true">*</span>
-                                <?php print $this->formElement($startIndex); ?>
-                                <?php print $this->formElementErrors()->render($startIndex, ['class' => 'help-block']); ?>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <div class="form-group">
-                                <?php print $this->formLabel($endIndex); ?>
-                                <span class="required" aria-required="true">*</span>
-                                <?php print $this->formElement($endIndex); ?>
-                                <?php print $this->formElementErrors()->render($endIndex, ['class' => 'help-block']); ?>
-                            </div>
-                        </div>
-
-                        <div class="col-sm-2">
-                            <div class="form-group">
                                 <?php print $this->formLabel($examType); ?>
                                 <span class="required" aria-required="true">*</span>
                                 <?php print $this->formElement($examType); ?>
                                 <?php print $this->formElementErrors()->render($examType, ['class' => 'help-block']); ?>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label>Ad Numbers:</label>
+                                <select multiple class="form-control" name="vacancies[]" id="vacancies">
+                                </select>
                             </div>
                         </div>
 
