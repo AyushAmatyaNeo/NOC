@@ -9,20 +9,17 @@ use Exception;
 use Notification\Controller\HeadNotification;
 use Notification\Model\NotificationEvents;
 use Overtime\Repository\OvertimeStatusRepository;
-use PHPUnit\TextUI\Help;
 use SelfService\Form\OvertimeRequestForm;
 use SelfService\Model\Overtime;
 use SelfService\Model\OvertimeDetail;
 use SelfService\Repository\OvertimeDetailRepository;
 use SelfService\Repository\OvertimeRepository;
 use Setup\Repository\EmployeeRepository;
-use Setup\Model\HrEmployees;
 use System\Repository\PreferenceSetupRepo;
 use Zend\Authentication\Storage\StorageInterface;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\View\Model\JsonModel;
 use ManagerService\Repository\OvertimeClaimApproveRepository;
-use SelfService\Repository\LeaveRequestRepository;
 use SelfService\Model\OvertimeClaim as OvertimeClaimModel;
 use SelfService\Model\OvertimeClaimDetail; 
 use Application\Custom\CustomViewModel;
@@ -30,6 +27,7 @@ use Application\Custom\CustomViewModel;
 class OvertimeStatus extends HrisController {
 
     private $detailRepo;
+    private $statusCode;
 
     public function __construct(AdapterInterface $adapter, StorageInterface $storage) {
         parent::__construct($adapter, $storage);
@@ -37,6 +35,11 @@ class OvertimeStatus extends HrisController {
         $this->detailRepo = new OvertimeDetailRepository($this->adapter);
         $this->approveRepo = new OvertimeClaimApproveRepository($this->adapter);
         $this->initializeForm(OvertimeRequestForm::class);
+
+        $this->statusCode = [
+            'reject'  => 'R',
+            'cancel' => 'C'
+        ];
     }
 
     public function indexAction() {
@@ -229,8 +232,8 @@ class OvertimeStatus extends HrisController {
                         $this->approveRepo->editDetail($detailModel, $subDetail['ID']);
                     }
                     $this->approveRepo->edit($overtimeClaimModel, $data['id']);
-                }else if($btnAction=='btnReject'){
-                    $overtimeClaimModel->status = 'R';
+                }else{
+                    $overtimeClaimModel->status = $this->statusCode[$btnAction];
                     
                     foreach($subDetails as $subDetail){
                         $detailModel = new OvertimeClaimDetail();
@@ -239,11 +242,11 @@ class OvertimeStatus extends HrisController {
                         $detailModel->modifiedDt = Helper::getcurrentExpressionDate();
                         $this->approveRepo->editDetail($detailModel, $subDetail['ID']);
                     }
+    
                     $overtimeClaimModel->modifiedBy= $this->employeeId;
                     $overtimeClaimModel->modifiedDt = Helper::getcurrentExpressionDate();
-                    $this->approveRepo->edit($overtimeClaimModel, $data['id']);
-                    $messageSuccess = 'Rejected';
-    
+                    $this->approveRepo->edit($overtimeClaimModel, $data['OVERTIME_CLAIM_ID']);
+                    $messageSuccess = ucfirst($btnAction)."ed";
                 }
             }
             $this->flashmessenger()->addMessage("Overtime Claim Successfully ".$messageSuccess." !!!");

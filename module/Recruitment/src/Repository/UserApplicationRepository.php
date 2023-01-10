@@ -1041,12 +1041,13 @@ class UserApplicationRepository extends HrisRepository{
     }
 
     public function insertData($table, $data) {
+        
         $key   = implode(',', array_keys($data));
+        
         $value = implode("','", array_values($data));
 
         $sql   = "INSERT INTO {$table} ($key) VALUES ('$value')";
-
-        // return $sql;
+        
         $result = $this->rawQuery($sql);
 
         return true;

@@ -412,4 +412,74 @@ class Helper {
         ];
         return $filesStoring;
     }
+
+    /**
+     * Converts english number to nepali and viceversa
+     */
+    public static function numConverter($number, $to="english"){
+        $eng_number = array(
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        );
+        $nep_number = array(
+            "०",
+            "१",
+            "२",
+            "३",
+            "४",
+            "५",
+            "६",
+            "७",
+            "८",
+            "९"
+        );
+
+        if($to=="english"){
+            return str_replace($nep_number, $eng_number, $number);
+        }else{
+            return str_replace($eng_number, $nep_number, $number);
+        }
+    }
+
+    /**
+     * Converts Nepali date to english and vice versa
+    */
+    public static function convertDateLanguage($date, $language){
+
+        if($date){
+            if($language =="nepali"){
+                $dateArray = explode('/', date_format(date_create($date), "Y/m/d"));
+            }else{
+                $dateArray = explode('/', $date);
+            }
+
+            $dateConversion = Helper::numConverter($dateArray[0], $language) . '/' . 
+                                Helper::numConverter($dateArray[1], $language)  . '/' . 
+                                Helper::numConverter($dateArray[2], $language);
+
+            return $dateConversion;
+        }
+    }
+
+    /**
+     * Converts Nepali time to english and vice versa
+    */
+    public static function convertTimeLanguage($time, $language){
+        if($time){
+            $timeArr = explode(':', $time);
+
+            $timeConversion = Helper::numConverter($timeArr[0], $language) . ':' . 
+                                Helper::numConverter($timeArr[1], $language);
+
+            return $timeConversion;
+        }
+    }
 }

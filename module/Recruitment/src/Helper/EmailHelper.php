@@ -10,23 +10,24 @@ class EmailHelper {
     const maxMassMail = 50;
     const massEmailId = '';
 
-//     public static function getSmtpTransport(): Smtp {
-//         $transport = new Smtp();
-//         $options = new SmtpOptions([
-//             'host' => 'namesmtp.zoho.com',
-//             'port' => 465,
-//             'connection_class' => 'login',
-//             'connection_config' => [
-// // 'username' => 'ukesh.gaiju@itnepal.com',
-// // 'password' => 'ukesh@123',
-//                 'username' => 'noreply@nepaloil.org.np',
-//                 'password' => 'Erpnocnepal@1',
-//                 'ssl' => 'ssl',
-//             ],
-//         ]);
-//         $transport->setOptions($options);
-//         return $transport;
-//     }
+    /**
+     * ZOHO config
+     */
+    public static function getSmtpTransportZOHO(): Smtp {
+        $transport = new Smtp();
+        $options = new SmtpOptions([
+            'host' => 'smtp.zoho.com',
+            'port' => 465,
+            'connection_class' => 'login',
+            'connection_config' => [
+                'username' => 'noreply@nepaloil.org.np',
+                'password' => 'Erpnocnepal@1',
+                'ssl' => 'ssl',
+            ],
+        ]);
+        $transport->setOptions($options);
+        return $transport;
+    }
 
     // public static function getSmtpTransport(): Smtp {
     //     $transport = new Smtp();
@@ -44,6 +45,9 @@ class EmailHelper {
     //     return $transport;
     // }
 
+    /**
+     * Gmail config
+     */
     public static function getSmtpTransport(): Smtp {
         $transport = new Smtp();
         $options = new SmtpOptions([
@@ -60,6 +64,19 @@ class EmailHelper {
         ]);
         $transport->setOptions($options);
         return $transport;
+    }
+
+    public static function sendEmailZOHO(Message $mail) {
+        if ('development' == APPLICATION_ENV || 'staging' == APPLICATION_ENV) {
+            return true;
+        }
+
+        $transport = self::getSmtpTransportZOHO();
+        $connectionConfig = $transport->getOptions()->getConnectionConfig();
+        $mail->setFrom($connectionConfig['username'], "Nepal Oil Corporation");
+        $transport->send($mail);
+        
+        return true;
     }
 
     public static function sendEmail(Message $mail) {

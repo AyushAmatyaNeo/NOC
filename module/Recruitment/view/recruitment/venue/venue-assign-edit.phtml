@@ -67,8 +67,11 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
 <?php } ?>
 
 <script>
+    document.adno = <?php echo json_encode($Adno); ?>;
+</script>
+
+<script>
     window.onload = function () {
-        document.adno = <?php echo json_encode($Adno); ?>;
         var mainInput = document.getElementById("nepali-datepicker");
         mainInput.nepaliDatePicker();
     };

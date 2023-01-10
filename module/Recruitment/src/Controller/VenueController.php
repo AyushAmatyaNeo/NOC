@@ -147,7 +147,9 @@ class VenueController extends HrisController {
             // Get data from database
             $list = iterator_to_array($this->repository->allVenueAssign(), false);
 
-            return new JsonModel(['success' => true, 'data' => $this->decodeBase64List($list, 'VENUE_NAME'), 'error' => '']);
+            $decodedData = $this->decodeBase64List($list, 'VENUE_NAME');
+
+            return new JsonModel(['success' => true, 'data' => $decodedData, 'error' => '']);
         }
     }
 
@@ -185,7 +187,7 @@ class VenueController extends HrisController {
                 $this->repository->addVenueAssign($venueAssignData);
 
                 // Update each individual's application data
-                $this->repository->updateUserVenueData($vacancyIds, $this->assignForm->getData()['examType'].'_VENUE_ID', $venueAssignData->venueAssignId);
+                $this->repository->updateUserVenueData($vacancyIds, $this->assignForm->getData()['examType'].'_VENUE_ASSIGN_ID', $venueAssignData->venueAssignId);
 
                 $this->flashmessenger()->addMessage("Venue Successfully Assigned!!");
                 return $this->redirect()->toRoute("venue", array("action"=>"venueAssign"));
@@ -234,8 +236,7 @@ class VenueController extends HrisController {
 
                 // Revert previous data in vacancy application table
                 $prevData = iterator_to_array($this->repository->fetchVenueAssignById($id));
-                //$this->repository->updateUserVenueData($prevData['START_INDEX'], $prevData['END_INDEX'], $prevData['EXAM_TYPE'].'_VENUE_ID', $prevData['ASSIGN_TYPE'], 'null');
-                $this->repository->updateUserVenueData($prevData['VACANCY_IDS'], $prevData['EXAM_TYPE'].'_VENUE_ID', 'null');
+                $this->repository->updateUserVenueData($prevData['VACANCY_IDS'], $prevData['EXAM_TYPE'].'_VENUE_ASSIGN_ID', 'null');
 
                 // Update actual assign model
                 $venueAssignData = new VenueAssignModel();
@@ -248,7 +249,7 @@ class VenueController extends HrisController {
                 $this->repository->editVenueAssign($venueAssignData, $id);
 
                 // Update each individual's application data
-                $this->repository->updateUserVenueData($vacancyIds, $this->assignForm->getData()['examType'].'_VENUE_ID', $venueAssignData->venueAssignId);
+                $this->repository->updateUserVenueData($vacancyIds, $this->assignForm->getData()['examType'].'_VENUE_ASSIGN_ID', $venueAssignData->venueAssignId);
 
                 $this->flashmessenger()->addMessage("Venue Assign Edited Successfully!");
                 return $this->redirect()->toRoute("venue", array("action"=>"venueAssign"));
@@ -302,4 +303,5 @@ class VenueController extends HrisController {
 
         return $list;
     }
+
 }

@@ -53,7 +53,6 @@
             });
 
         });
-
     });
     
 })(window.jQuery, window.app);

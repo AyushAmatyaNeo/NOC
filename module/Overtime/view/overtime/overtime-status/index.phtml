@@ -180,6 +180,12 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
         <div class="col-sm-2 ">
             <button action="reject" class="btn btn-danger btnApproveReject">Reject</button>
         </div>
+        <!-- Allow cancel only for admin -->
+        <?php if($this->acl['ROLE_ID']==1){ ?>
+        <div class="col-sm-2 ">
+            <button action="cancel" class="btn btn-danger btnApproveReject">Cancel</button>
+        </div>
+        <?php } ?>
         <div class="col-sm-2 col-sm-offset-8">
             <button action="approve" class="btn btn-info btnApproveReject pull-right">Approve</button>
         </div>
