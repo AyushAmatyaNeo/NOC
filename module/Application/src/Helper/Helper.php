@@ -482,4 +482,47 @@ class Helper {
             return $timeConversion;
         }
     }
+
+    /**
+     * Convert english ad no into nepali
+     */
+
+     public static function convertAdNo($adNo){
+
+        $eng_number = array(
+            "0",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        );
+
+        $currentNumber = null;
+        $convertedNumber = null;
+
+        for($i = 0; $i<strlen($adNo); $i++){
+
+            if(in_array($adNo[$i], $eng_number)){
+                $currentNumber = $currentNumber . $adNo[$i];
+            }else{
+                $conversion = Helper::numConverter($currentNumber, 'nepali');
+                $currentNumber = null;
+                $convertedNumber = $convertedNumber . $conversion . $adNo[$i];
+            }
+            
+            if($i == strlen($adNo) - 1){
+                $conversion = Helper::numConverter($currentNumber, 'nepali');
+                $convertedNumber = $convertedNumber . $conversion;
+            }
+
+        }
+
+        return $convertedNumber;
+
+    }
 }

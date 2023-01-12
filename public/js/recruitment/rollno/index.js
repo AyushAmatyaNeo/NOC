@@ -11,7 +11,11 @@
 
             var reader = new FileReader();
 
-            app.serverRequest(document.uploadUrl, {data : excelData}).then(function(){
+            var sendMail = $("#sendMail").is(':checked');
+            var generateAdmit = $("#generateAdmit").is(':checked');
+
+
+            app.serverRequest(document.uploadUrl, {data : excelData, sendMail: sendMail, generateAdmit:generateAdmit}).then(function(){
                     app.showMessage('Operation successfull', 'success');
 
             }, function (error) {

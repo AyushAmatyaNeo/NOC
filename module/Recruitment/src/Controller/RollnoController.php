@@ -29,6 +29,11 @@ Class RollnoController extends HrisController{
 
     public function excelUploadAction()
     {
+
+        // Convert string 'true/false' into boolean
+        $sendMail = $_POST['sendMail'] === 'true'? true: false;
+        $generateAdmit = $_POST['generateAdmit'] === 'true'? true: false;
+
         $excelData = $_POST['data'];
         $count = count($excelData);
 
@@ -58,8 +63,11 @@ Class RollnoController extends HrisController{
                  * IF CELL DATA HAS UNICODE THEN USE base64_encode BEFORE ASSIGNING
                  * */
                 'ROLL_NO' => base64_encode($excelData[$i]['B']),
-                'IS_ADMIT_GENERATED' => 'Y'
             ];
+
+            if($generateAdmit){
+                $update['IS_ADMIT_GENERATED'] = 'Y';
+            }
 
             /**
              * UPDATING DATA
@@ -70,26 +78,16 @@ Class RollnoController extends HrisController{
 
             $result = $this->repository->getUpdateById('HRIS_REC_APPLICATION_PERSONAL', $update, 'APPLICATION_ID', $applicationId);
 
-            $name = explode(" ", $excelData[$i]['C']);
-            if(count($name) == 2){
-                $firstName = $name[0];
-                $middleName = null;
-                $lastName = $name[1];
-            }else{
-                $firstName = $name[0];
-                $middleName = $name[1];
-                $lastName = $name[2];
-            }
+            $applicationType = $applicationInfo['APPLICATION_TYPE'] == 'OPEN' ? 'OPEN' : 'INTERNAL';
 
             $nepaliData = [
                 "ID" => ((int) Helper::getMaxId($this->adapter, 'HRIS_REC_VACANCY_USER_NEPALI', 'ID')) + 1,
                 "USER_ID" => $applicationInfo["USER_ID"],
-                "FIRST_NAME" => base64_encode($firstName),
-                "MIDDLE_NAME" => base64_encode($middleName),
-                "LAST_NAME" => base64_encode($lastName),
-                "FATGER_NAME" => base64_encode($excelData[$i]['F']),
+                "NAME" => base64_encode($excelData[$i]['C']),
+                "FATHER_NAME" => base64_encode($excelData[$i]['F']),
                 "MOTHER_NAME" => base64_encode($excelData[$i]['G']),
                 "GRANDFATHER_NAME" => base64_encode($excelData[$i]['H']),
+                "APPLICATION_TYPE" => $applicationType,
                 "CREATED_DATE" => date('Y-m-d'),
                 "CREATED_BY" => $this->employeeId,
                 "STATUS" => 'E'
@@ -98,7 +96,7 @@ Class RollnoController extends HrisController{
             $insertResult = $this->repository->insertData('HRIS_REC_VACANCY_USER_NEPALI', $nepaliData);
 
 
-            if ($result && $insertResult) {
+            if ($result && $insertResult && $sendMail) {
 
                 /**
                  * SENDING EMAIL WITH MESSAGE OF ADMIT CARD HAS BEEN GENERATED
@@ -138,10 +136,11 @@ Class RollnoController extends HrisController{
                     $mail->setBody($body);
                     $mail->setFrom('nepaloil.noreply@gmail.com', 'NOC');
                     if($applicationData[0]['EMAIL_ID'] != null){
-                    // $mail->addTo($applicationData[0]['EMAIL_ID'], $applicationData[0]['FIRST_NAME']);
+                        $mail->addTo($applicationData[0]['EMAIL_ID'], $applicationData[0]['FIRST_NAME']);
+                        // $mail->addTo('srbunitydeveloper@gmail.com', $applicationData[0]['FIRST_NAME']);
 
-                    // Commented for testing purpose
-                    // EmailHelper::sendEmailZOHO($mail);
+                        // Commented for testing purpose
+                        // EmailHelper::sendEmailZOHO($mail);
                     }else{
                         continue;
                     }
@@ -155,5 +154,28 @@ Class RollnoController extends HrisController{
 
         return new JsonModel(['success' => true, 'data' => 'Successfully Excel File Uploaded']);
     }
+
+    /**
+     * Helper function to assist in ad_no nepali
+     */
+    // public function excelUploadAction(){
+    //     $excelData = $_POST['data'];
+    //     $count = count($excelData);
+
+    //     for ($i=1; $i < $count ; $i++) {
+    //         $id = $excelData[$i]['A'];
+    //         $adNo = $excelData[$i]['B'];
+    //         $conversion = Helper::convertAdNo($adNo);
+
+    //         $update = [
+    //             'AD_NO_NEPALI' => base64_encode($conversion),
+    //         ];
+            
+    //         $result = $this->repository->getUpdateById('HRIS_REC_VACANCY', $update, 'VACANCY_ID', $id);
+    //     }
+
+    //     var_dump("success");
+    //     die;
+    // }
     
 }
