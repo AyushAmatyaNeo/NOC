@@ -66,14 +66,6 @@ if ($this->messages && (sizeof($this->messages) > 1)) {
     </script>
 <?php } ?>
 
-<script>
-    window.onload = function () {
-        document.adno = <?php echo json_encode($Adno); ?>;
-        var mainInput = document.getElementById("nepali-datepicker");
-        mainInput.nepaliDatePicker();
-    };
-</script>
-
 <div class="row margin-top-20">
     <div class="col-sm-12">
         <div class="portlet box custom-box">

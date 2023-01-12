@@ -13,6 +13,8 @@ data/cache/*
 data/logs/*
 composer.lock
 .vscode
+config_depr/*
+config/*
 #config/autoload/global.php
 #config/autoload/doctrine.global.php
 composer.phar

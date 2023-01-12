@@ -487,7 +487,7 @@ class Helper {
      * Convert english ad no into nepali
      */
 
-    public static function convertAdNo($adNo){
+     public static function convertAdNo($adNo){
 
         $eng_number = array(
             "0",
@@ -523,22 +523,6 @@ class Helper {
         }
 
         return $convertedNumber;
-
-    }
-
-    public static function nepaliAmPm($start_time, $end_time) {
-
-        if (strpos($start_time, 'AM')) {
-
-
-            return 'बिहान '. str_replace('AM', '',$start_time) . ' बजे देखि '.str_replace('AM', '',$end_time).' बजे सम्म';
-
-
-        } else {
-
-            return 'दिउसो '. str_replace('PM', '',$start_time) . ' बजे देखि '.str_replace('PM', '',$end_time).' बजे सम्म';
-
-        }
 
     }
 }
