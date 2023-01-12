@@ -442,7 +442,7 @@ $form->prepare();
 
                             <td class="text-center bold"> जेष्ठता र कार्यसम्पादन मुल्याहंन बढुवाका लागि दरखास्त फारम </td>
                             
-                            <?php } ?>
+                            <?php } ?> 
                         </tr>
                     </thead>
 
@@ -456,7 +456,7 @@ $form->prepare();
                         ?>
 
                         <td class="text-center">
-                            <?php if ($applicationApplied['IS_ADMIT_GENERATED'] == 'Y') { ?>
+                            <?php if ($applicationApplied['IS_ADMIT_GENERATED'] == 'N') { ?>
                             <a class="btn btn-success" id="downloadAdminCard1" href="<?php echo $this->basePath().'/selfservice/vacancies/admitcard/'.$applicationApplied['APPLICATION_ID']; ?>" target="_blank">Admit Card</a>
                             <?php } ?>
                             <?php

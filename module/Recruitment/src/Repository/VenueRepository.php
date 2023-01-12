@@ -59,12 +59,13 @@ class VenueRepository extends HrisRepository{
         $this->assignGateway->insert($array);
     }
 
-    public function updateUserVenueData($from, $to, $column, $assignType, $venueId)
+    public function updateUserVenueData($vacancyIds, $column, $venueId)
     {
         $sql = "
             UPDATE {$this->vacancyTable}
             SET {$column} = {$venueId}
-            WHERE {$assignType} BETWEEN {$from} AND {$to}
+            WHERE ad_no IN ({$vacancyIds})
+            and stage_id = 8 and payment_paid = 'Y' and payment_verified = 'Y'
         ";
 
         $this->adapter->query($sql)->execute();
@@ -79,15 +80,13 @@ class VenueRepository extends HrisRepository{
 
         $select->columns([
             new Expression("VENUE.VENUE_NAME AS VENUE_NAME"),
-            new Expression("ASSIGN.ASSIGN_TYPE AS ASSIGN_TYPE"),
             new Expression("ASSIGN.EXAM_TYPE AS EXAM_TYPE"),
-            new Expression("ASSIGN.START_INDEX AS START_INDEX"),
-            new Expression("ASSIGN.END_INDEX AS END_INDEX"),
             new Expression("ASSIGN.START_TIME AS START_TIME"),
             new Expression("ASSIGN.END_TIME AS END_TIME"),
             new Expression("ASSIGN.EXAM_DATE AS EXAM_DATE"),
             new Expression("ASSIGN.STATUS AS STATUS"),
-            new Expression("ASSIGN.VENUE_ASSIGN_ID AS VENUE_ASSIGN_ID")
+            new Expression("ASSIGN.VENUE_ASSIGN_ID AS VENUE_ASSIGN_ID"),
+            new Expression("GET_VACANCY_ASSIGN(ASSIGN.VENUE_ASSIGN_ID) AS ASSIGNED_VACANCIES"),
         ], true);
 
         $select->from(['ASSIGN' => VenueAssignModel::TABLE_NAME])

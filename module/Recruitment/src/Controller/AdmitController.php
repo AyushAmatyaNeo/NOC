@@ -44,7 +44,7 @@ Class AdmitController extends HrisController{
         return new ViewModel(Helper::addFlashMessagesToArray(
                 $this, [
                     'form' => $this->form,
-                    'data' => $data,
+                    // 'data' => $data,
                     'prevFile'=>$file,
                     'prevId' => $id
                 ]

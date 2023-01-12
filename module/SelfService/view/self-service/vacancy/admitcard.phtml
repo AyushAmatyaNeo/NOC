@@ -4,10 +4,12 @@
         <title><?php echo 'Admit_card_'.$vacancydata['FIRST_NAME'].'_'.$vacancydata['MIDDLE_NAME'].'_'.$vacancydata['LAST_NAME']; ?></title>
     </head>
     <style>
-        
+        @import url('https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;600&display=swap');
         body{
+            font-family: 'Mukta', sans-serif;
             font-size: 14px;
         }
+        
         .admit-card-wrapper{
             padding: 0 30px;
         }
@@ -126,6 +128,14 @@
             margin: 0 auto;
         }
 
+        ul {
+            padding-left: 20px;
+        }
+
+        ul li {
+            list-style: none;
+        }
+
         @media print{
 
             body{
@@ -186,18 +196,20 @@
                 <img src="<?php echo $this->basePath('uploads/').$vacancydata['PROFILE']?>">
                 <h2>नेपाल आयल निगम लिमिटेड</h1>
                 <h3>केन्द्रिय कार्यालय, टेकु</h6>
-                <p>लिखित अन्तर्वार्ता</p>
+                <!-- <p>लिखित अन्तर्वार्ता</p> -->
+                <p>प्रवेश पत्र</p>
             </div>
+            
             <div class="flex-box">
                 <div class="applicant-info">
                     <table class="table name-table">
                         <tr>
                             <td>रोल नं.</td>
-                            <td>80</td>
+                            <td><?php echo $vacancydata['ROLL_NO']; ?></td>
                         </tr>
                         <tr>
                             <td>नाम, थर :</td>
-                            <td><?php echo ucfirst($vacancydata['FIRST_NAME']).' '.ucfirst($vacancydata['MIDDLE_NAME']).' '.ucfirst($vacancydata['LAST_NAME']); ?></td> 
+                            <td><?php echo base64_decode($vacancydata['NEPALI_NAME']); ?></td> 
                         </tr>
                         <tr>
                             <td>Name :</td>
@@ -207,24 +219,24 @@
                     <table class="table bordered-table">
                         <tr>
                             <td>विज्ञापन नं. </td>
-                            <td><?php echo $vacancydata['AD_NO']; ?></td>
+                            <td><?php echo base64_decode($vacancydata['AD_NO_NEPALI']); ?></td>
                         </tr>
                         <tr>
                             <td>पद / तह</td>
-                            <td><?php echo ucfirst($vacancydata['DESIGNATION_TITLE']).' / '.$vacancydata['FUNCTIONAL_LEVEL_EDESC']; ?></td> 
+                            <td><?php echo base64_decode($vacancydata['DESIGNATION_NTITLE']).' / '.$conversion['functional_level']; ?></td> 
                         </tr>
                         <tr>
                             <td>सेवा / समुह</td>
-                            <td><?php echo ucfirst($vacancydata['SERVICE_TYPE_NAME']).' / '.ucfirst($vacancydata['SERVICE_EVENT_NAME']); ?></td> 
+                            <td><?php echo base64_decode($vacancydata['SERVICE_TYPE_NAME_NEPALI']).' / '.base64_decode($vacancydata['SERVICE_EVENT_NAME_NEPALI']); ?></td> 
                         </tr>
                         <tr>
                             <td>खुला / समावेशी</td>
-                            <td><?php echo $vacancydata['OPTION_EDESC'];?></td>
+                            <td><?php echo $vacancydata['OPTION_NDESC'];?></td>
                         </tr>
                         <tr>
                             <td>नागरिता नं.</td>
 
-                            <td><?php echo $vacancydata['ID_CITIZENSHIP_NO']; ?></td>
+                            <td><?php echo $conversion['citizen_no']; ?></td>
                         </tr>
                     </table>
                     <!-- <p>यस निगमबाट देहाय बमोजिमको मिति तथा केन्द्रमा लिइने उपयुक्त पदको परीक्षामा तपाईंलाई सम्मिलित हुन अनुमती दिइएको छ । विज्ञापनमा तोकिएको शर्त पुरा नभएको ठहर भएको जुनसुकै अवस्थामा पनि यो अनुमती पत्र रद्द हुनेछ । </p>p -->
@@ -237,31 +249,35 @@
                             <!-- <td>Miti, Samaya, Sthan</td> -->
                             <td>मिति, समय, स्थान</td>
                         </tr>
+                        <?php if ($conversion['first_venue_setup_id'] > 0) { ?>
                         <tr>
                             <td style="text-align: center;">१</td>
                             <td>प्रथम</td>
                             <td>
-                                <?php 
-                                    echo "<strong>".base64_decode($vacancydata['FIRST_PAPER_VENUE'])."</strong>".', '.
-                                        date('j - M - Y',strtotime($vacancydata['FIRST_EXAM_DATE'])).', '.
-                                        date('H:i A', strtotime($vacancydata['FIRST_START_TIME'])).' - '.
-                                        date('H:i A', strtotime($vacancydata['FIRST_END_TIME'])); 
+                                <?php
+                                        echo "<strong>".$conversion['first_exam_date']."</strong>".", ".
+                                             " ( ".$conversion['first_start_time']." - ".$conversion['first_end_time']." ) ".
+                                             "<strong>".$conversion['first_paper_venue']."</strong>";
+
                                 ?>
                             </td> 
                         </tr>
+                        <?php } ?>
+                        <?php if ($conversion['second_venue_setup_id'] > 0) { ?>
                         <tr>
                             <td style="text-align: center;">२</td>
                             <td>द्वितिय</td>
                             <td>
-                                <?php 
-                                    echo "<strong>".base64_decode($vacancydata['SECOND_PAPER_VENUE'])."</strong>".', '.
-                                        date('j - M - Y',strtotime($vacancydata['SECOND_EXAM_DATE'])).', '.
-                                        date('H:i A', strtotime($vacancydata['SECOND_START_TIME'])).' - '.
-                                        date('H:i A', strtotime($vacancydata['SECOND_END_TIME'])); 
-                                ?>        
+                                <?php
+                                        echo "<strong>".$conversion['second_exam_date']."</strong>".", ".
+                                             " ( ".$conversion['second_start_time']." - ".$conversion['second_end_time']." ) ".
+                                             "<strong>".$conversion['second_paper_venue']."</strong>";
+
+                                ?>       
 
                             </td> 
                         </tr>
+                        <?php } ?>
                         <tr style="height: 26px;">
                             <td></td>
                             <td></td>
@@ -287,11 +303,13 @@
                 <ul>
                     <li class="sign1">
                         <img src="<?php echo $this->basePath($vacancydocument['Signature']['DOC_FOLDER']); ?>">
-                        <span>Applicant's Sign</span>
+                        <!-- <span>Applicant's Sign</span> -->
+                        <span>उम्मेदवार दस्तखत</span>
                     </li>
                     <li class="sign2">
                         <img src="<?php echo $this->basePath('uploads/admit/'.$vacancyterm['FILE_NAME']); ?>">
-                        <span>Director's Sign</span>
+                        <!-- <span>Authorized Signature</span> -->
+                        <span>अधिकृत दस्तखत</span>
                     </li>
                 </ul>
                <!--  <p class="sign1">
@@ -304,18 +322,23 @@
                 </p> -->
             </div>
             <div class="rules-wrapper">
-               <!--  <p><b>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको:</b></p>
-                <ol>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                    <li>प्लेसहोल्डर पाठ हो जुन सामान्यतया कागजात वा टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग गरिन्छ। अन्तिम प्रतिलिपि उपलब्ध हुनु अघि टाईपफेसको भिजुअल रूप देखाउनको लागि अर्थपूर्ण सामग्रीमा भरोसा नगरी प्रयोग टाईपफेसको</li>
-                </ol> -->
-                <?php echo base64_decode($vacancyterm['TERMS']); ?>
+                <p><b>उम्मेदवारले पालन गर्नुपर्ने नियमहरु :</b></p>
+               <ul>
+                    <li>१ परिक्षा दिन आउदा अनिवार्य रुपमा प्रवेशपत्र ल्याउनु पर्नेछ । प्रवेशपत्र विना परिक्षमा बस्न पाइने छैन । </li>
+                    <li>२. परिक्षा भवनमा मोबाइल फोन ल्याउन पाइने छैन ।</li>
+                    <li>३. लिखित परिक्षाको नतिजा प्रकाशित भएपछी अन्तर्वाता हुने दिनमा पनि प्रवेशपत्र ल्याउनुपर्नेछ ।</li>
+                    <li>४. परिक्षा शुरु हुने ३० मिनेट अगावै घण्टीद्वारा सुचना गरेपछी परिक्षा हलमा प्रवेश गर्न दिइने छ । बस्तुगत परिक्षा शुरु भएको १५ मिनेट पछी र बिषयगत परिक्षा शुरु भएको आधा घण्टा पछी आउने र बस्तुगत दुबै परिक्षासँग हुनेमा २० मिनेट पछी आउने उम्मेदवारले परिक्षामा बस्ने पाउने छैन ।</li>
+                    <li>५. परिक्षा हलमा प्रवेश गर्न पाउने समय अवधि (बुँदा नं ४ मा उल्लेख गरिएको) बितेको १० मिनेट पछी मात्र उम्मेदवारलाई परिक्षा हल बाहिर जाने अनुमती दिइने छ ।</li>
+                    <li>६. परिक्षा हलमा प्रवेश गरेपछी किताब, कापि, कागज, चिट आदि आफु साथ राख्नु हुँदैन । उम्मेदवारले आपसमा कुराकानी र संकेत गर्नु हुँदैन । </li>
+                    <li>७. परिक्षा हलमा उम्मेदवारले परिक्षाको मर्यादा विपरित कुनै काम गरेमा केन्द्राध्यक्षले परिक्षा हलबाट निष्काशन गरी तुरुन्त कानुन बमोजिमको कारबाही गर्नेछ र त्यसरी निष्काशन गरिएको उम्मेदवारको सो विज्ञापनको परिक्षा  स्वत: रद्द भएको मानिने छ । </li>
+                    <li>८. बिरामी भएको उम्मेदवारले परिक्षा  हलमा प्रवेश गरी परिक्षा दिने क्रममा निजलाई केही भएको प्राधिकरण जवाफदेही हुने छैन ।</li>
+                    <li>९. उम्मेदवारले परिक्षा दिएको दिनमा हाजिर अनिवार्य रुपमा गर्नुपर्ने छ ।</li>
+                    <li>१०. प्राधिकरणले सुचनाद्वारा निर्धारण  गरेको कार्यक्रम अनुसार परीक्षा सञ्चालन हुनेछ |</li>
+                    <li>११. उम्मेदवारले बस्तुगत परीक्षामा आफुलाई प्राप्त प्रश्नको "कि" उत्तरपुस्तिकामा अनिवार्य रुपले लेख्नुपर्नेछ | नलेखेमा उत्तरपुस्तिका स्वत: रद्द हुनेछ |</li>
+                    <li>१२. ल्याकत (आइ । क्यु ।) परीक्षामा क्यालकुलेटर प्रयोग गर्ने पाइने छैन | </li>
+                    <li>१३. कुनै उम्मेदवारले प्रश्नपत्रमा रहेको अष्पष्टताको सम्बन्धमा सोध्नु पर्दा पनि परीक्षामा सम्मिलित अन्य उम्मेदवारलाई बाधा नपर्ने गरी निरिक्षकलाई सोध्नु पर्नेछ |</li>
+                </ul>
+                <?php #echo base64_decode($vacancyterm['TERMS']); ?>
             </div>
         </div>
     </body>

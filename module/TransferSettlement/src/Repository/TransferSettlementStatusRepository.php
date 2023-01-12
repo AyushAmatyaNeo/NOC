@@ -196,7 +196,7 @@ TR.TRAVEL_ID                   AS TRAVEL_ID,
         AND AD.STATUS           ='AP'
         AND ((EP.status not in (select case when count(distinct status)>0 then 'C' else '' end as status 
         from hris_employee_travel_request where reference_travel_id = AD.travel_id and status not in ('C', 'R')) and EP.status not in ('AP'))
-        or EP.status is null)
+        or EP.status is null))
 
           
           
