@@ -525,4 +525,20 @@ class Helper {
         return $convertedNumber;
 
     }
+
+    public static function nepaliAmPm($start_time, $end_time) {
+
+        if (strpos($start_time, 'AM')) {
+
+
+            return 'बिहान '. str_replace('AM', '',$start_time) . ' बजे देखि '.str_replace('AM', '',$end_time).' बजे सम्म';
+
+
+        } else {
+
+            return 'दिउसो '. str_replace('PM', '',$start_time) . ' बजे देखि '.str_replace('PM', '',$end_time).' बजे सम्म';
+
+        }
+
+    }
 }

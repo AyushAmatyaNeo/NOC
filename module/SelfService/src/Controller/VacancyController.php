@@ -2768,16 +2768,15 @@ class VacancyController extends HrisController
         // die;
 
         $conversion = [
+            'roll_no'=> Helper::numConverter(base64_decode($vacancyData['ROLL_NO']),'nepali'),
             'functional_level' => Helper::numConverter($vacancyData['FUNCTIONAL_LEVEL_EDESC'], 'nepali'),
             'citizen_no'           => Helper::numConverter($vacancyData['ID_CITIZENSHIP_NO'], 'nepali'),
             'first_venue_setup_id'   => $vacancyData['FIRST_VENUE_SETUP_ID'],
-            'first_start_time' => Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['FIRST_START_TIME'])), 'nepali'),
-            'first_end_time' => Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['FIRST_END_TIME'])), 'nepali'),
+            'first_paper_time' => Helper::nepaliAmPm(Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['FIRST_START_TIME'])), 'nepali'), Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['FIRST_END_TIME'])), 'nepali')),
             'first_exam_date' => Helper::numConverter($vacancyData['FIRST_EXAM_DATE'], 'nepali'),
             'first_paper_venue' => base64_decode($vacancyData['FIRST_PAPER_VENUE']),
             'second_venue_setup_id'   => $vacancyData['SECOND_VENUE_SETUP_ID'],
-            'second_start_time' => Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['SECOND_START_TIME'])), 'nepali'),
-            'second_end_time' => Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['SECOND_END_TIME'])), 'nepali'),
+            'second_paper_time' => Helper::nepaliAmPm(Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['SECOND_START_TIME'])), 'nepali'),Helper::convertTimeLanguage(date('H:i A', strtotime($vacancyData['SECOND_END_TIME'])), 'nepali')),
             'second_exam_date' => Helper::numConverter($vacancyData['SECOND_EXAM_DATE'], 'nepali'),
             'second_paper_venue' => base64_decode($vacancyData['SECOND_PAPER_VENUE'])
         ];
@@ -2786,7 +2785,7 @@ class VacancyController extends HrisController
         /* FIRST PAPER TIME PLACE DATE*/
         /* SECOND PAPER TIME PLACE DATE*/
         // echo "<pre>";
-        // print_r($vacancyData);
+        // print_r($conversion);
         // die;
 
         
